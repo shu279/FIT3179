@@ -1,0 +1,90 @@
+[
+  {
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "club_seasons": 28,
+    "finals": 19,
+    "finals_rate": 67.86,
+    "premierships": 1,
+    "coverage": "Clubs in study"
+  },
+  {
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "club_seasons": 140,
+    "finals": 60,
+    "finals_rate": 42.86,
+    "premierships": 10,
+    "coverage": "Clubs in study"
+  },
+  {
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "club_seasons": 28,
+    "finals": 8,
+    "finals_rate": 28.57,
+    "premierships": 2,
+    "coverage": "Clubs in study"
+  },
+  {
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "club_seasons": 28,
+    "finals": 12,
+    "finals_rate": 42.86,
+    "premierships": 0,
+    "coverage": "Clubs in study"
+  },
+  {
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "club_seasons": 28,
+    "finals": 13,
+    "finals_rate": 46.43,
+    "premierships": 1,
+    "coverage": "Clubs in study"
+  },
+  {
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "club_seasons": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "premierships": 0,
+    "coverage": "No club based here in study period"
+  },
+  {
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "club_seasons": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "premierships": 0,
+    "coverage": "No club based here in study period"
+  },
+  {
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "club_seasons": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "premierships": 0,
+    "coverage": "No club based here in study period"
+  }
+]
