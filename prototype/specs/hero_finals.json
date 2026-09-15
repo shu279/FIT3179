@@ -1,0 +1,107 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 100,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "labelPadding": 7,
+      "titlePadding": 14,
+      "labelLimit": 130
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Geelong finals participation in each completed season from 2012 to 2025.",
+  "data": {
+    "url": "data/team_seasons.json"
+  },
+  "transform": [
+    {
+      "filter": "datum.team === 'Geelong'"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "season",
+      "type": "ordinal",
+      "axis": {
+        "title": null,
+        "labelAngle": 0,
+        "labelExpr": "datum.value == 2012 || datum.value == 2015 || datum.value == 2020 || datum.value == 2025 ? datum.label : ''",
+        "domain": false,
+        "ticks": false
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusTopLeft": 1,
+        "cornerRadiusTopRight": 1
+      },
+      "encoding": {
+        "y": {
+          "value": 5
+        },
+        "y2": {
+          "value": 60
+        },
+        "color": {
+          "condition": {
+            "test": "datum.finalist === 1",
+            "value": "#31553b"
+          },
+          "value": "#d6dace"
+        },
+        "tooltip": [
+          {
+            "field": "season",
+            "title": "Season",
+            "type": "quantitative"
+          },
+          {
+            "field": "finalist",
+            "type": "nominal",
+            "title": "Played finals (1 = yes)"
+          }
+        ]
+      }
+    }
+  ]
+}

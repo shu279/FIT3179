@@ -1,0 +1,180 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 395,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "labelPadding": 7,
+      "titlePadding": 14,
+      "labelLimit": 130
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Four contrasting clubs: regular-season ladder positions across 14 seasons. Lower ranks are better.",
+  "data": {
+    "url": "data/team_seasons.json"
+  },
+  "transform": [
+    {
+      "filter": {
+        "field": "team",
+        "oneOf": [
+          "Geelong",
+          "Hawthorn",
+          "Richmond",
+          "Brisbane Lions"
+        ]
+      }
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "season",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          2012,
+          2026.2
+        ],
+        "nice": false
+      },
+      "axis": {
+        "title": null,
+        "format": "d",
+        "values": [
+          2012,
+          2015,
+          2018,
+          2021,
+          2025
+        ],
+        "grid": false
+      }
+    },
+    "y": {
+      "field": "rank",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          18.5,
+          0.5
+        ],
+        "nice": false
+      },
+      "axis": {
+        "title": "Ladder position · 1st is best",
+        "values": [
+          1,
+          4,
+          8,
+          12,
+          18
+        ]
+      }
+    },
+    "color": {
+      "field": "team",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Geelong",
+          "Hawthorn",
+          "Richmond",
+          "Brisbane Lions"
+        ],
+        "range": [
+          "#31553b",
+          "#ad8b42",
+          "#777f76",
+          "#c96636"
+        ]
+      },
+      "legend": null
+    },
+    "tooltip": [
+      {
+        "field": "team",
+        "title": "Club",
+        "type": "nominal"
+      },
+      {
+        "field": "season",
+        "title": "Season",
+        "type": "quantitative"
+      },
+      {
+        "field": "rank",
+        "title": "Ladder position",
+        "type": "quantitative"
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.8,
+        "point": {
+          "filled": true,
+          "size": 36
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.season === 2025"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 8,
+        "fontSize": 11,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "text": {
+          "field": "team",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}

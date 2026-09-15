@@ -1,0 +1,165 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 475,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "labelPadding": 7,
+      "titlePadding": 14,
+      "labelLimit": 130
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Number of seasons in which each club played finals, out of 14.",
+  "data": {
+    "url": "data/team_summary.json"
+  },
+  "params": [
+    {
+      "name": "focusTeam",
+      "value": "All clubs"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "team",
+      "type": "nominal",
+      "sort": [
+        "Geelong",
+        "Sydney",
+        "Hawthorn",
+        "Collingwood",
+        "Richmond",
+        "GWS Giants",
+        "Port Adelaide",
+        "Western Bulldogs",
+        "Brisbane Lions",
+        "West Coast",
+        "Fremantle",
+        "Adelaide",
+        "Essendon",
+        "Melbourne",
+        "North Melbourne",
+        "Carlton",
+        "St Kilda",
+        "Gold Coast"
+      ],
+      "axis": {
+        "title": null,
+        "ticks": false
+      }
+    },
+    "x": {
+      "field": "finals",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          0,
+          14
+        ]
+      },
+      "axis": {
+        "title": "Seasons reaching finals",
+        "tickCount": 8
+      }
+    },
+    "opacity": {
+      "condition": {
+        "test": "focusTeam === 'All clubs' || datum.team === focusTeam",
+        "value": 1
+      },
+      "value": 0.22
+    },
+    "tooltip": [
+      {
+        "field": "team",
+        "title": "Club",
+        "type": "nominal"
+      },
+      {
+        "field": "finals",
+        "title": "Finals seasons",
+        "type": "quantitative"
+      },
+      {
+        "field": "finals_rate",
+        "title": "Share of seasons (%)",
+        "format": ".1f",
+        "type": "quantitative"
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 2,
+        "color": "#b8c4af"
+      },
+      "encoding": {
+        "x2": {
+          "datum": 0
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 95,
+        "color": "#31553b"
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 9,
+        "fontSize": 11,
+        "color": "#21372b"
+      },
+      "encoding": {
+        "text": {
+          "field": "finals",
+          "type": "quantitative"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 475,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "labelPadding": 7,
+      "titlePadding": 14,
+      "labelLimit": 130
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Consecutive runs of finals appearances, with gaps for seasons without finals.",
+  "data": {
+    "url": "data/streaks.json"
+  },
+  "encoding": {
+    "x": {
+      "field": "start",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          2011.5,
+          2025.5
+        ],
+        "nice": false
+      },
+      "axis": {
+        "title": null,
+        "format": "d",
+        "values": [
+          2012,
+          2015,
+          2018,
+          2021,
+          2025
+        ]
+      }
+    },
+    "x2": {
+      "field": "end",
+      "type": "quantitative"
+    },
+    "y": {
+      "field": "team",
+      "type": "nominal",
+      "sort": [
+        "Geelong",
+        "Sydney",
+        "Hawthorn",
+        "Collingwood",
+        "Richmond",
+        "GWS Giants",
+        "Port Adelaide",
+        "Western Bulldogs",
+        "Brisbane Lions",
+        "West Coast",
+        "Fremantle",
+        "Adelaide",
+        "Essendon",
+        "Melbourne",
+        "North Melbourne",
+        "Carlton",
+        "St Kilda",
+        "Gold Coast"
+      ],
+      "axis": {
+        "title": null,
+        "ticks": false
+      }
+    },
+    "color": {
+      "field": "length",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          1,
+          7
+        ],
+        "range": [
+          "#b5c6a7",
+          "#31553b"
+        ]
+      },
+      "legend": null
+    },
+    "tooltip": [
+      {
+        "field": "team",
+        "title": "Club",
+        "type": "nominal"
+      },
+      {
+        "field": "first",
+        "title": "First season",
+        "format": "d",
+        "type": "quantitative"
+      },
+      {
+        "field": "last",
+        "title": "Last season",
+        "format": "d",
+        "type": "quantitative"
+      },
+      {
+        "field": "length",
+        "title": "Consecutive finals seasons",
+        "type": "quantitative"
+      }
+    ]
+  },
+  "mark": {
+    "type": "bar",
+    "size": 13,
+    "cornerRadius": 2
+  }
+}
