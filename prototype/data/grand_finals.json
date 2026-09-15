@@ -1,0 +1,128 @@
+[
+  {
+    "season": 2012,
+    "winner": "Sydney",
+    "runner_up": "Hawthorn",
+    "winner_city": "Sydney",
+    "runner_city": "Melbourne",
+    "winner_rank": 3,
+    "runner_rank": 1
+  },
+  {
+    "season": 2013,
+    "winner": "Hawthorn",
+    "runner_up": "Fremantle",
+    "winner_city": "Melbourne",
+    "runner_city": "Perth",
+    "winner_rank": 1,
+    "runner_rank": 3
+  },
+  {
+    "season": 2014,
+    "winner": "Hawthorn",
+    "runner_up": "Sydney",
+    "winner_city": "Melbourne",
+    "runner_city": "Sydney",
+    "winner_rank": 2,
+    "runner_rank": 1
+  },
+  {
+    "season": 2015,
+    "winner": "Hawthorn",
+    "runner_up": "West Coast",
+    "winner_city": "Melbourne",
+    "runner_city": "Perth",
+    "winner_rank": 3,
+    "runner_rank": 2
+  },
+  {
+    "season": 2016,
+    "winner": "Western Bulldogs",
+    "runner_up": "Sydney",
+    "winner_city": "Melbourne",
+    "runner_city": "Sydney",
+    "winner_rank": 7,
+    "runner_rank": 1
+  },
+  {
+    "season": 2017,
+    "winner": "Richmond",
+    "runner_up": "Adelaide",
+    "winner_city": "Melbourne",
+    "runner_city": "Adelaide",
+    "winner_rank": 3,
+    "runner_rank": 1
+  },
+  {
+    "season": 2018,
+    "winner": "West Coast",
+    "runner_up": "Collingwood",
+    "winner_city": "Perth",
+    "runner_city": "Melbourne",
+    "winner_rank": 2,
+    "runner_rank": 3
+  },
+  {
+    "season": 2019,
+    "winner": "Richmond",
+    "runner_up": "GWS Giants",
+    "winner_city": "Melbourne",
+    "runner_city": "Sydney",
+    "winner_rank": 3,
+    "runner_rank": 6
+  },
+  {
+    "season": 2020,
+    "winner": "Richmond",
+    "runner_up": "Geelong",
+    "winner_city": "Melbourne",
+    "runner_city": "Geelong",
+    "winner_rank": 3,
+    "runner_rank": 4
+  },
+  {
+    "season": 2021,
+    "winner": "Melbourne",
+    "runner_up": "Western Bulldogs",
+    "winner_city": "Melbourne",
+    "runner_city": "Melbourne",
+    "winner_rank": 1,
+    "runner_rank": 5
+  },
+  {
+    "season": 2022,
+    "winner": "Geelong",
+    "runner_up": "Sydney",
+    "winner_city": "Geelong",
+    "runner_city": "Sydney",
+    "winner_rank": 1,
+    "runner_rank": 3
+  },
+  {
+    "season": 2023,
+    "winner": "Collingwood",
+    "runner_up": "Brisbane Lions",
+    "winner_city": "Melbourne",
+    "runner_city": "Brisbane",
+    "winner_rank": 1,
+    "runner_rank": 2
+  },
+  {
+    "season": 2024,
+    "winner": "Brisbane Lions",
+    "runner_up": "Sydney",
+    "winner_city": "Brisbane",
+    "runner_city": "Sydney",
+    "winner_rank": 5,
+    "runner_rank": 1
+  },
+  {
+    "season": 2025,
+    "winner": "Brisbane Lions",
+    "runner_up": "Geelong",
+    "winner_city": "Brisbane",
+    "runner_city": "Geelong",
+    "winner_rank": 3,
+    "runner_rank": 2
+  }
+]

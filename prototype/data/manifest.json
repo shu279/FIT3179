@@ -1,0 +1,142 @@
+{
+  "title": "The Long Game",
+  "competition": "AFL men",
+  "complete_seasons": [
+    2012,
+    2025
+  ],
+  "retrieved": "2026-09-14",
+  "club_seasons": 252,
+  "clubs": 18,
+  "seasons": 14,
+  "premierships": 14,
+  "distinct_premiers": 9,
+  "leading_club": {
+    "id": "GEE",
+    "team": "Geelong",
+    "state": "VIC",
+    "state_code": "2",
+    "city": "Geelong",
+    "seasons": 14,
+    "finals": 12,
+    "finals_rate": 85.71,
+    "premierships": 1,
+    "grand_finals": 3,
+    "win_rate": 68.85,
+    "average_rank": 4.21,
+    "top_four": 10,
+    "longest_streak": 7,
+    "early_rate": 69.28,
+    "recent_rate": 68.42,
+    "change": -0.86,
+    "source_url": "https://afltables.com/afl/teams/geelong/season.html"
+  },
+  "same_city_grand_finals": 1,
+  "sources": {
+    "afl_tables": [
+      {
+        "team": "Adelaide",
+        "url": "https://afltables.com/afl/teams/adelaide/season.html"
+      },
+      {
+        "team": "Brisbane Lions",
+        "url": "https://afltables.com/afl/teams/brisbanel/season.html"
+      },
+      {
+        "team": "Carlton",
+        "url": "https://afltables.com/afl/teams/carlton/season.html"
+      },
+      {
+        "team": "Collingwood",
+        "url": "https://afltables.com/afl/teams/collingwood/season.html"
+      },
+      {
+        "team": "Essendon",
+        "url": "https://afltables.com/afl/teams/essendon/season.html"
+      },
+      {
+        "team": "Fremantle",
+        "url": "https://afltables.com/afl/teams/fremantle/season.html"
+      },
+      {
+        "team": "Geelong",
+        "url": "https://afltables.com/afl/teams/geelong/season.html"
+      },
+      {
+        "team": "Gold Coast",
+        "url": "https://afltables.com/afl/teams/goldcoast/season.html"
+      },
+      {
+        "team": "GWS Giants",
+        "url": "https://afltables.com/afl/teams/gws/season.html"
+      },
+      {
+        "team": "Hawthorn",
+        "url": "https://afltables.com/afl/teams/hawthorn/season.html"
+      },
+      {
+        "team": "Melbourne",
+        "url": "https://afltables.com/afl/teams/melbourne/season.html"
+      },
+      {
+        "team": "North Melbourne",
+        "url": "https://afltables.com/afl/teams/kangaroos/season.html"
+      },
+      {
+        "team": "Port Adelaide",
+        "url": "https://afltables.com/afl/teams/padelaide/season.html"
+      },
+      {
+        "team": "Richmond",
+        "url": "https://afltables.com/afl/teams/richmond/season.html"
+      },
+      {
+        "team": "St Kilda",
+        "url": "https://afltables.com/afl/teams/stkilda/season.html"
+      },
+      {
+        "team": "Sydney",
+        "url": "https://afltables.com/afl/teams/swans/season.html"
+      },
+      {
+        "team": "West Coast",
+        "url": "https://afltables.com/afl/teams/westcoast/season.html"
+      },
+      {
+        "team": "Western Bulldogs",
+        "url": "https://afltables.com/afl/teams/bullldogs/season.html"
+      }
+    ],
+    "abs": "https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-4-july-2026-june-2031/access-and-downloads/digital-boundary-files",
+    "wikidata": [
+      {
+        "city": "Melbourne",
+        "url": "https://www.wikidata.org/wiki/Q3141"
+      },
+      {
+        "city": "Sydney",
+        "url": "https://www.wikidata.org/wiki/Q3130"
+      },
+      {
+        "city": "Brisbane",
+        "url": "https://www.wikidata.org/wiki/Q34932"
+      },
+      {
+        "city": "Adelaide",
+        "url": "https://www.wikidata.org/wiki/Q5112"
+      },
+      {
+        "city": "Perth",
+        "url": "https://www.wikidata.org/wiki/Q3183"
+      },
+      {
+        "city": "Geelong",
+        "url": "https://www.wikidata.org/wiki/Q231765"
+      },
+      {
+        "city": "Gold Coast",
+        "url": "https://www.wikidata.org/wiki/Q140075"
+      }
+    ]
+  }
+}

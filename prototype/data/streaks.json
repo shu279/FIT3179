@@ -1,0 +1,425 @@
+[
+  {
+    "team": "Geelong",
+    "id": "GEE",
+    "start": 2011.65,
+    "end": 2014.35,
+    "first": 2012,
+    "last": 2014,
+    "length": 3
+  },
+  {
+    "team": "Geelong",
+    "id": "GEE",
+    "start": 2015.65,
+    "end": 2022.35,
+    "first": 2016,
+    "last": 2022,
+    "length": 7
+  },
+  {
+    "team": "Geelong",
+    "id": "GEE",
+    "start": 2023.65,
+    "end": 2025.35,
+    "first": 2024,
+    "last": 2025,
+    "length": 2
+  },
+  {
+    "team": "Sydney",
+    "id": "SYD",
+    "start": 2011.65,
+    "end": 2018.35,
+    "first": 2012,
+    "last": 2018,
+    "length": 7
+  },
+  {
+    "team": "Sydney",
+    "id": "SYD",
+    "start": 2020.65,
+    "end": 2024.35,
+    "first": 2021,
+    "last": 2024,
+    "length": 4
+  },
+  {
+    "team": "Hawthorn",
+    "id": "HAW",
+    "start": 2011.65,
+    "end": 2016.35,
+    "first": 2012,
+    "last": 2016,
+    "length": 5
+  },
+  {
+    "team": "Hawthorn",
+    "id": "HAW",
+    "start": 2017.65,
+    "end": 2018.35,
+    "first": 2018,
+    "last": 2018,
+    "length": 1
+  },
+  {
+    "team": "Hawthorn",
+    "id": "HAW",
+    "start": 2023.65,
+    "end": 2025.35,
+    "first": 2024,
+    "last": 2025,
+    "length": 2
+  },
+  {
+    "team": "Collingwood",
+    "id": "COL",
+    "start": 2011.65,
+    "end": 2013.35,
+    "first": 2012,
+    "last": 2013,
+    "length": 2
+  },
+  {
+    "team": "Collingwood",
+    "id": "COL",
+    "start": 2017.65,
+    "end": 2020.35,
+    "first": 2018,
+    "last": 2020,
+    "length": 3
+  },
+  {
+    "team": "Collingwood",
+    "id": "COL",
+    "start": 2021.65,
+    "end": 2023.35,
+    "first": 2022,
+    "last": 2023,
+    "length": 2
+  },
+  {
+    "team": "Collingwood",
+    "id": "COL",
+    "start": 2024.65,
+    "end": 2025.35,
+    "first": 2025,
+    "last": 2025,
+    "length": 1
+  },
+  {
+    "team": "Richmond",
+    "id": "RIC",
+    "start": 2012.65,
+    "end": 2015.35,
+    "first": 2013,
+    "last": 2015,
+    "length": 3
+  },
+  {
+    "team": "Richmond",
+    "id": "RIC",
+    "start": 2016.65,
+    "end": 2020.35,
+    "first": 2017,
+    "last": 2020,
+    "length": 4
+  },
+  {
+    "team": "Richmond",
+    "id": "RIC",
+    "start": 2021.65,
+    "end": 2022.35,
+    "first": 2022,
+    "last": 2022,
+    "length": 1
+  },
+  {
+    "team": "GWS Giants",
+    "id": "GWS",
+    "start": 2015.65,
+    "end": 2019.35,
+    "first": 2016,
+    "last": 2019,
+    "length": 4
+  },
+  {
+    "team": "GWS Giants",
+    "id": "GWS",
+    "start": 2020.65,
+    "end": 2021.35,
+    "first": 2021,
+    "last": 2021,
+    "length": 1
+  },
+  {
+    "team": "GWS Giants",
+    "id": "GWS",
+    "start": 2022.65,
+    "end": 2025.35,
+    "first": 2023,
+    "last": 2025,
+    "length": 3
+  },
+  {
+    "team": "Port Adelaide",
+    "id": "PTA",
+    "start": 2012.65,
+    "end": 2014.35,
+    "first": 2013,
+    "last": 2014,
+    "length": 2
+  },
+  {
+    "team": "Port Adelaide",
+    "id": "PTA",
+    "start": 2016.65,
+    "end": 2017.35,
+    "first": 2017,
+    "last": 2017,
+    "length": 1
+  },
+  {
+    "team": "Port Adelaide",
+    "id": "PTA",
+    "start": 2019.65,
+    "end": 2021.35,
+    "first": 2020,
+    "last": 2021,
+    "length": 2
+  },
+  {
+    "team": "Port Adelaide",
+    "id": "PTA",
+    "start": 2022.65,
+    "end": 2024.35,
+    "first": 2023,
+    "last": 2024,
+    "length": 2
+  },
+  {
+    "team": "Western Bulldogs",
+    "id": "WBD",
+    "start": 2014.65,
+    "end": 2016.35,
+    "first": 2015,
+    "last": 2016,
+    "length": 2
+  },
+  {
+    "team": "Western Bulldogs",
+    "id": "WBD",
+    "start": 2018.65,
+    "end": 2022.35,
+    "first": 2019,
+    "last": 2022,
+    "length": 4
+  },
+  {
+    "team": "Western Bulldogs",
+    "id": "WBD",
+    "start": 2023.65,
+    "end": 2024.35,
+    "first": 2024,
+    "last": 2024,
+    "length": 1
+  },
+  {
+    "team": "Brisbane Lions",
+    "id": "BRL",
+    "start": 2018.65,
+    "end": 2025.35,
+    "first": 2019,
+    "last": 2025,
+    "length": 7
+  },
+  {
+    "team": "West Coast",
+    "id": "WCE",
+    "start": 2011.65,
+    "end": 2012.35,
+    "first": 2012,
+    "last": 2012,
+    "length": 1
+  },
+  {
+    "team": "West Coast",
+    "id": "WCE",
+    "start": 2014.65,
+    "end": 2020.35,
+    "first": 2015,
+    "last": 2020,
+    "length": 6
+  },
+  {
+    "team": "Fremantle",
+    "id": "FRE",
+    "start": 2011.65,
+    "end": 2015.35,
+    "first": 2012,
+    "last": 2015,
+    "length": 4
+  },
+  {
+    "team": "Fremantle",
+    "id": "FRE",
+    "start": 2021.65,
+    "end": 2022.35,
+    "first": 2022,
+    "last": 2022,
+    "length": 1
+  },
+  {
+    "team": "Fremantle",
+    "id": "FRE",
+    "start": 2024.65,
+    "end": 2025.35,
+    "first": 2025,
+    "last": 2025,
+    "length": 1
+  },
+  {
+    "team": "Adelaide",
+    "id": "ADE",
+    "start": 2011.65,
+    "end": 2012.35,
+    "first": 2012,
+    "last": 2012,
+    "length": 1
+  },
+  {
+    "team": "Adelaide",
+    "id": "ADE",
+    "start": 2014.65,
+    "end": 2017.35,
+    "first": 2015,
+    "last": 2017,
+    "length": 3
+  },
+  {
+    "team": "Adelaide",
+    "id": "ADE",
+    "start": 2024.65,
+    "end": 2025.35,
+    "first": 2025,
+    "last": 2025,
+    "length": 1
+  },
+  {
+    "team": "Essendon",
+    "id": "ESS",
+    "start": 2013.65,
+    "end": 2014.35,
+    "first": 2014,
+    "last": 2014,
+    "length": 1
+  },
+  {
+    "team": "Essendon",
+    "id": "ESS",
+    "start": 2016.65,
+    "end": 2017.35,
+    "first": 2017,
+    "last": 2017,
+    "length": 1
+  },
+  {
+    "team": "Essendon",
+    "id": "ESS",
+    "start": 2018.65,
+    "end": 2019.35,
+    "first": 2019,
+    "last": 2019,
+    "length": 1
+  },
+  {
+    "team": "Essendon",
+    "id": "ESS",
+    "start": 2020.65,
+    "end": 2021.35,
+    "first": 2021,
+    "last": 2021,
+    "length": 1
+  },
+  {
+    "team": "Melbourne",
+    "id": "MEL",
+    "start": 2017.65,
+    "end": 2018.35,
+    "first": 2018,
+    "last": 2018,
+    "length": 1
+  },
+  {
+    "team": "Melbourne",
+    "id": "MEL",
+    "start": 2020.65,
+    "end": 2023.35,
+    "first": 2021,
+    "last": 2023,
+    "length": 3
+  },
+  {
+    "team": "North Melbourne",
+    "id": "NME",
+    "start": 2011.65,
+    "end": 2012.35,
+    "first": 2012,
+    "last": 2012,
+    "length": 1
+  },
+  {
+    "team": "North Melbourne",
+    "id": "NME",
+    "start": 2013.65,
+    "end": 2016.35,
+    "first": 2014,
+    "last": 2016,
+    "length": 3
+  },
+  {
+    "team": "Carlton",
+    "id": "CAR",
+    "start": 2012.65,
+    "end": 2013.35,
+    "first": 2013,
+    "last": 2013,
+    "length": 1
+  },
+  {
+    "team": "Carlton",
+    "id": "CAR",
+    "start": 2022.65,
+    "end": 2024.35,
+    "first": 2023,
+    "last": 2024,
+    "length": 2
+  },
+  {
+    "team": "St Kilda",
+    "id": "STK",
+    "start": 2019.65,
+    "end": 2020.35,
+    "first": 2020,
+    "last": 2020,
+    "length": 1
+  },
+  {
+    "team": "St Kilda",
+    "id": "STK",
+    "start": 2022.65,
+    "end": 2023.35,
+    "first": 2023,
+    "last": 2023,
+    "length": 1
+  },
+  {
+    "team": "Gold Coast",
+    "id": "GCS",
+    "start": 2024.65,
+    "end": 2025.35,
+    "first": 2025,
+    "last": 2025,
+    "length": 1
+  }
+]

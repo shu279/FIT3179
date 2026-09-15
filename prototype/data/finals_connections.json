@@ -1,0 +1,186 @@
+[
+  {
+    "type": "Feature",
+    "properties": {
+      "pair": "Melbourne – Sydney",
+      "from": "Melbourne",
+      "to": "Sydney",
+      "count": 4,
+      "years": "2012, 2014, 2016, 2019"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ],
+        [
+          151.21,
+          -33.867777777777775
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "pair": "Melbourne – Perth",
+      "from": "Melbourne",
+      "to": "Perth",
+      "count": 3,
+      "years": "2013, 2015, 2018"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ],
+        [
+          115.85972222222222,
+          -31.955833333333334
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "pair": "Adelaide – Melbourne",
+      "from": "Adelaide",
+      "to": "Melbourne",
+      "count": 1,
+      "years": "2017"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          138.6,
+          -34.9275
+        ],
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "pair": "Geelong – Melbourne",
+      "from": "Geelong",
+      "to": "Melbourne",
+      "count": 1,
+      "years": "2020"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.35,
+          -38.15
+        ],
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "pair": "Geelong – Sydney",
+      "from": "Geelong",
+      "to": "Sydney",
+      "count": 1,
+      "years": "2022"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.35,
+          -38.15
+        ],
+        [
+          151.21,
+          -33.867777777777775
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "pair": "Brisbane – Melbourne",
+      "from": "Brisbane",
+      "to": "Melbourne",
+      "count": 1,
+      "years": "2023"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          153.02777777778,
+          -27.467777777778
+        ],
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "pair": "Brisbane – Sydney",
+      "from": "Brisbane",
+      "to": "Sydney",
+      "count": 1,
+      "years": "2024"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          153.02777777778,
+          -27.467777777778
+        ],
+        [
+          151.21,
+          -33.867777777777775
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "pair": "Brisbane – Geelong",
+      "from": "Brisbane",
+      "to": "Geelong",
+      "count": 1,
+      "years": "2025"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          153.02777777778,
+          -27.467777777778
+        ],
+        [
+          144.35,
+          -38.15
+        ]
+      ]
+    }
+  }
+]
