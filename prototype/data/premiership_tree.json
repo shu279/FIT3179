@@ -1,0 +1,52 @@
+[
+  {
+    "team": "AFL",
+    "parent": null,
+    "premierships": 0
+  },
+  {
+    "team": "Geelong",
+    "parent": "AFL",
+    "premierships": 1
+  },
+  {
+    "team": "Sydney",
+    "parent": "AFL",
+    "premierships": 1
+  },
+  {
+    "team": "Hawthorn",
+    "parent": "AFL",
+    "premierships": 3
+  },
+  {
+    "team": "Collingwood",
+    "parent": "AFL",
+    "premierships": 1
+  },
+  {
+    "team": "Richmond",
+    "parent": "AFL",
+    "premierships": 3
+  },
+  {
+    "team": "Western Bulldogs",
+    "parent": "AFL",
+    "premierships": 1
+  },
+  {
+    "team": "Brisbane Lions",
+    "parent": "AFL",
+    "premierships": 2
+  },
+  {
+    "team": "West Coast",
+    "parent": "AFL",
+    "premierships": 1
+  },
+  {
+    "team": "Melbourne",
+    "parent": "AFL",
+    "premierships": 1
+  }
+]

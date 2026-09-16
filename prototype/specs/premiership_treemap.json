@@ -1,0 +1,196 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Every rectangle represents a premiership-winning club; its area is proportional to titles in 2012–2025.",
+  "width": 600,
+  "height": 330,
+  "padding": 0,
+  "autosize": {
+    "type": "none",
+    "resize": true
+  },
+  "background": "transparent",
+  "data": [
+    {
+      "name": "tree",
+      "url": "data/premiership_tree.json",
+      "transform": [
+        {
+          "type": "stratify",
+          "key": "team",
+          "parentKey": "parent"
+        },
+        {
+          "type": "treemap",
+          "field": "premierships",
+          "sort": {
+            "field": "value",
+            "order": "descending"
+          },
+          "method": "squarify",
+          "ratio": 1.4,
+          "size": [
+            {
+              "signal": "width"
+            },
+            {
+              "signal": "height"
+            }
+          ],
+          "paddingInner": 5
+        }
+      ]
+    },
+    {
+      "name": "leaves",
+      "source": "tree",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "!datum.children"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "fill",
+      "type": "ordinal",
+      "domain": [
+        "Hawthorn",
+        "Richmond",
+        "Brisbane Lions",
+        "Geelong",
+        "Sydney",
+        "Collingwood",
+        "Western Bulldogs",
+        "West Coast",
+        "Melbourne"
+      ],
+      "range": [
+        "#a07740",
+        "#31553b",
+        "#a14e36",
+        "#496c4d",
+        "#65845d",
+        "#72876b",
+        "#839278",
+        "#506b51",
+        "#6b7e5c"
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "enter": {
+          "stroke": {
+            "value": "#f3f2e9"
+          },
+          "strokeWidth": {
+            "value": 1
+          }
+        },
+        "update": {
+          "x": {
+            "field": "x0"
+          },
+          "y": {
+            "field": "y0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y2": {
+            "field": "y1"
+          },
+          "fill": {
+            "scale": "fill",
+            "field": "team"
+          },
+          "tooltip": {
+            "signal": "{'Club':datum.team,'Premierships':datum.premierships,'Share of titles':format(datum.premierships/14,'.0%')}"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "enter": {
+          "fill": {
+            "value": "#fffdf4"
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 32
+          },
+          "fontWeight": {
+            "value": 700
+          },
+          "baseline": {
+            "value": "top"
+          }
+        },
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 12"
+          },
+          "y": {
+            "signal": "datum.y0 + 12"
+          },
+          "text": {
+            "field": "premierships"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "enter": {
+          "fill": {
+            "value": "#fffdf4"
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fontWeight": {
+            "value": 500
+          },
+          "baseline": {
+            "value": "bottom"
+          }
+        },
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 12"
+          },
+          "y": {
+            "signal": "datum.y1 - 13"
+          },
+          "text": {
+            "field": "team"
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 22"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 360,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "labelPadding": 7,
+      "titlePadding": 14,
+      "labelLimit": 130
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Overall regular-season win rate versus seasons reaching finals. Highlights the relationship between sustained winning and finals participation.",
+  "data": {
+    "url": "data/team_summary.json"
+  },
+  "encoding": {
+    "x": {
+      "field": "win_rate",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          20,
+          77
+        ],
+        "zero": false
+      },
+      "axis": {
+        "title": "Regular-season games won (%)",
+        "tickCount": 6
+      }
+    },
+    "y": {
+      "field": "finals",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          0,
+          14
+        ]
+      },
+      "axis": {
+        "title": "Seasons reaching finals",
+        "tickCount": 8
+      }
+    },
+    "tooltip": [
+      {
+        "field": "team",
+        "title": "Club",
+        "type": "nominal"
+      },
+      {
+        "field": "win_rate",
+        "title": "Win rate (%)",
+        "format": ".1f",
+        "type": "quantitative"
+      },
+      {
+        "field": "finals",
+        "title": "Finals seasons",
+        "type": "quantitative"
+      },
+      {
+        "field": "premierships",
+        "title": "Premierships",
+        "type": "quantitative"
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 115,
+        "stroke": "#f3f2e9",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.premierships > 0",
+            "value": "#c96636"
+          },
+          "value": "#31553b"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": {
+            "field": "team",
+            "oneOf": [
+              "Geelong",
+              "Sydney",
+              "Hawthorn",
+              "Brisbane Lions",
+              "Gold Coast"
+            ]
+          }
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 8,
+        "dy": -8,
+        "color": "#21372b",
+        "fontSize": 10
+      },
+      "encoding": {
+        "text": {
+          "field": "team",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}
