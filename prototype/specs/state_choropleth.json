@@ -1,0 +1,220 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 400,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "labelPadding": 7,
+      "titlePadding": 14,
+      "labelLimit": 130
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Finalist club-seasons divided by all club-seasons in each home state. Territories without an AFL club in 2012–2025 are not applicable.",
+  "projection": {
+    "type": "conicEqualArea",
+    "rotate": [
+      -134,
+      0,
+      0
+    ],
+    "center": [
+      0,
+      -28
+    ],
+    "parallels": [
+      -18,
+      -36
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/australia_states.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "transform": [
+        {
+          "lookup": "properties.state_code",
+          "from": {
+            "data": {
+              "url": "data/states.json"
+            },
+            "key": "state_code",
+            "fields": [
+              "finals_rate",
+              "clubs",
+              "club_seasons",
+              "finals",
+              "coverage"
+            ]
+          }
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#f7f6ef",
+        "strokeWidth": 1.5,
+        "invalid": null
+      },
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.clubs > 0",
+            "field": "finals_rate",
+            "type": "quantitative",
+            "scale": {
+              "domain": [
+                0,
+                70
+              ],
+              "range": [
+                "#edf0de",
+                "#acbf94",
+                "#31553b"
+              ]
+            },
+            "legend": {
+              "title": "Club-seasons reaching finals (%)",
+              "gradientLength": 190
+            }
+          },
+          "value": "#dedfd5"
+        },
+        "tooltip": [
+          {
+            "field": "properties.state_name",
+            "title": "State / territory",
+            "type": "nominal"
+          },
+          {
+            "field": "clubs",
+            "title": "Clubs",
+            "type": "quantitative"
+          },
+          {
+            "field": "finals",
+            "title": "Finalist club-seasons",
+            "type": "quantitative"
+          },
+          {
+            "field": "club_seasons",
+            "title": "Club-seasons",
+            "type": "quantitative"
+          },
+          {
+            "field": "finals_rate",
+            "title": "Finals rate (%)",
+            "format": ".1f",
+            "type": "quantitative"
+          },
+          {
+            "field": "coverage",
+            "type": "nominal",
+            "title": "Coverage"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "label": "WA",
+            "lon": 122,
+            "lat": -26
+          },
+          {
+            "label": "NT",
+            "lon": 133,
+            "lat": -21
+          },
+          {
+            "label": "SA",
+            "lon": 135,
+            "lat": -30
+          },
+          {
+            "label": "QLD",
+            "lon": 145,
+            "lat": -22
+          },
+          {
+            "label": "NSW",
+            "lon": 147,
+            "lat": -32
+          },
+          {
+            "label": "VIC",
+            "lon": 143,
+            "lat": -36.7
+          },
+          {
+            "label": "TAS",
+            "lon": 146.5,
+            "lat": -42
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": 700,
+        "color": "#253f30"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}

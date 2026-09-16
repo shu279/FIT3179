@@ -1,0 +1,246 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 360,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "labelPadding": 7,
+      "titlePadding": 14,
+      "labelLimit": 130
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Premiership totals aggregated by club home city. Circle area, not radius, represents title count. Melbourne and Geelong are separate cities.",
+  "projection": {
+    "type": "conicEqualArea",
+    "rotate": [
+      -134,
+      0,
+      0
+    ],
+    "center": [
+      0,
+      -28
+    ],
+    "parallels": [
+      -18,
+      -36
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/australia_states.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#e3e6d9",
+        "stroke": "#f7f6ef",
+        "strokeWidth": 1.2
+      }
+    },
+    {
+      "data": {
+        "url": "data/cities.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.premierships > 0"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "color": "#c96636",
+        "opacity": 0.65,
+        "stroke": "#c96636",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "size": {
+          "field": "premierships",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              9
+            ],
+            "range": [
+              0,
+              1700
+            ]
+          },
+          "legend": {
+            "title": "Premierships",
+            "values": [
+              1,
+              3,
+              9
+            ],
+            "orient": "bottom"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "city",
+            "title": "Home city",
+            "type": "nominal"
+          },
+          {
+            "field": "clubs",
+            "title": "Clubs",
+            "type": "quantitative"
+          },
+          {
+            "field": "premierships",
+            "title": "Premierships",
+            "type": "quantitative"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/cities.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.grand_finals > 0 && datum.city !== 'Geelong' && datum.city !== 'Melbourne'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 7,
+        "dy": -8,
+        "fontSize": 10,
+        "color": "#21372b"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "city",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/cities.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.city === 'Melbourne'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 15,
+        "dy": -6,
+        "fontSize": 10,
+        "color": "#21372b"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "city",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/cities.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.city === 'Geelong'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -7,
+        "dy": 20,
+        "fontSize": 10,
+        "color": "#21372b"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "city",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}
