@@ -4333,7 +4333,7 @@
     "points_for": 2011,
     "points_against": 1752,
     "percentage": 114.78,
-    "rank": 3,
+    "rank": 2,
     "finals_games": 3,
     "finals_wins": 1,
     "premier": 0,
@@ -4341,7 +4341,9 @@
     "minor_premier": 0,
     "finalist": 1,
     "win_rate": 69.57,
-    "band": "Top four"
+    "band": "Top four",
+    "source_rank": 3,
+    "rank_source": "https://afltables.com/afl/seas/2024.html#lad"
   },
   {
     "id": "PTA",

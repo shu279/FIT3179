@@ -37,6 +37,9 @@ for(const [id,team,slug,state,city] of clubs){
     rows.push({id,team,season:year,state,state_code:stateCodes[state],city,played:n(1),wins:n(2),draws:n(3),losses:n(4),points_for:points(5),points_against:points(6),percentage:n(7),rank,finals_games:n(8),finals_wins:n(9),premier:cells[15]==='X'?1:0,runner_up:cells[16]==='X'?1:0,minor_premier:cells[17]==='X'?1:0,finalist:cells[18]==='X'?1:0,win_rate:round(n(2)/n(1)*100),band:rank<=4?'Top four':rank<=8?'5th–8th':'9th–18th'});
   }
 }
+// Retain the source discrepancy and independently verified replacement.
+const rankCorrections=[{id:'PTA',season:2024,source_value:3,verified_value:2,field:'rank',reason:'Club summary duplicates third place; the full season ladder and official AFL report identify Port Adelaide as second.',source_url:'https://afltables.com/afl/teams/padelaide/season.html',verification_urls:['https://afltables.com/afl/seas/2024.html#lad','https://www.afl.com.au/news/1203020/whose','https://www.portadelaidefc.com.au/news/1641192/one-campaign-ends-another-begins']}];
+for(const fix of rankCorrections){const d=rows.find(d=>d.id===fix.id&&d.season===fix.season);if(!d)throw Error('Missing correction row');d.source_rank=d.rank;d.rank=fix.verified_value;d.rank_source=fix.verification_urls[0];}
 const complete=rows.filter(d=>d.season<=2025).sort((a,b)=>a.team.localeCompare(b.team)||a.season-b.season);
 if(complete.length!==252)throw Error(`Expected 252 complete club-seasons, got ${complete.length}`);
 for(const d of complete){if(d.played!==d.wins+d.draws+d.losses)throw Error(`Record mismatch ${d.team} ${d.season}`);}
@@ -88,5 +91,5 @@ for(const club of summaries){
 }
 const manifest={title:'The Long Game',competition:'AFL men',complete_seasons:[2012,2025],retrieved:'2026-09-14',club_seasons:complete.length,clubs:18,seasons:14,premierships:14,distinct_premiers:summaries.filter(d=>d.premierships>0).length,leading_club:summaries[0],same_city_grand_finals:grandFinals.filter(d=>d.winner_city===d.runner_city).length,sources:{afl_tables:sourceList,abs:'https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-4-july-2026-june-2031/access-and-downloads/digital-boundary-files',wikidata:cityData.map(d=>({city:d.city,url:d.source_url}))}};
 write('team_seasons',complete);write('team_summary',summaries);write('states',states);write('cities',cityData);write('grand_finals',grandFinals);write('finals_connections',flows);write('streaks',streaks);write('manifest',manifest);
-write('season_2026_snapshot',rows.filter(d=>d.season===2026));
+write('season_2026_snapshot',rows.filter(d=>d.season===2026));write('corrections',rankCorrections);
 console.log(JSON.stringify({club_seasons:complete.length,leading:summaries.slice(0,3),premiers:summaries.filter(d=>d.premierships).map(d=>[d.team,d.premierships]),cityData},null,2));

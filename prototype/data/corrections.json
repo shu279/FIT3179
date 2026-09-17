@@ -1,0 +1,16 @@
+[
+  {
+    "id": "PTA",
+    "season": 2024,
+    "source_value": 3,
+    "verified_value": 2,
+    "field": "rank",
+    "reason": "Club summary duplicates third place; the full season ladder and official AFL report identify Port Adelaide as second.",
+    "source_url": "https://afltables.com/afl/teams/padelaide/season.html",
+    "verification_urls": [
+      "https://afltables.com/afl/seas/2024.html#lad",
+      "https://www.afl.com.au/news/1203020/whose",
+      "https://www.portadelaidefc.com.au/news/1641192/one-campaign-ends-another-begins"
+    ]
+  }
+]
