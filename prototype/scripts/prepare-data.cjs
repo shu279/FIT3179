@@ -90,6 +90,9 @@ for(const club of summaries){
  }
 }
 const manifest={title:'The Long Game',competition:'AFL men',complete_seasons:[2012,2025],retrieved:'2026-09-14',club_seasons:complete.length,clubs:18,seasons:14,premierships:14,distinct_premiers:summaries.filter(d=>d.premierships>0).length,leading_club:summaries[0],same_city_grand_finals:grandFinals.filter(d=>d.winner_city===d.runner_city).length,sources:{afl_tables:sourceList,abs:'https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-4-july-2026-june-2031/access-and-downloads/digital-boundary-files',wikidata:cityData.map(d=>({city:d.city,url:d.source_url}))}};
+manifest.home_city_groupings=cityData.map(d=>({city:d.city,clubs:clubs.filter(c=>c[4]===d.city).map(c=>c[1])}));
+manifest.location_method='Author-assigned home-city groups represent club bases, not stadiums or match venues. Fremantle is grouped with Perth; Geelong is separate from Melbourne.';
+manifest.corrections='corrections.json';
 write('team_seasons',complete);write('team_summary',summaries);write('states',states);write('cities',cityData);write('grand_finals',grandFinals);write('finals_connections',flows);write('streaks',streaks);write('manifest',manifest);
 write('season_2026_snapshot',rows.filter(d=>d.season===2026));write('corrections',rankCorrections);
 console.log(JSON.stringify({club_seasons:complete.length,leading:summaries.slice(0,3),premiers:summaries.filter(d=>d.premierships).map(d=>[d.team,d.premierships]),cityData},null,2));

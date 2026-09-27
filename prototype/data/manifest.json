@@ -138,5 +138,62 @@
         "url": "https://www.wikidata.org/wiki/Q140075"
       }
     ]
-  }
+  },
+  "home_city_groupings": [
+    {
+      "city": "Melbourne",
+      "clubs": [
+        "Carlton",
+        "Collingwood",
+        "Essendon",
+        "Hawthorn",
+        "Melbourne",
+        "North Melbourne",
+        "Richmond",
+        "St Kilda",
+        "Western Bulldogs"
+      ]
+    },
+    {
+      "city": "Sydney",
+      "clubs": [
+        "GWS Giants",
+        "Sydney"
+      ]
+    },
+    {
+      "city": "Brisbane",
+      "clubs": [
+        "Brisbane Lions"
+      ]
+    },
+    {
+      "city": "Adelaide",
+      "clubs": [
+        "Adelaide",
+        "Port Adelaide"
+      ]
+    },
+    {
+      "city": "Perth",
+      "clubs": [
+        "Fremantle",
+        "West Coast"
+      ]
+    },
+    {
+      "city": "Geelong",
+      "clubs": [
+        "Geelong"
+      ]
+    },
+    {
+      "city": "Gold Coast",
+      "clubs": [
+        "Gold Coast"
+      ]
+    }
+  ],
+  "location_method": "Author-assigned home-city groups represent club bases, not stadiums or match venues. Fremantle is grouped with Perth; Geelong is separate from Melbourne.",
+  "corrections": "corrections.json"
 }
