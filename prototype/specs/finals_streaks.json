@@ -21,17 +21,18 @@
       "labelColor": "#747c6f",
       "titleColor": "#747c6f",
       "titleFontWeight": "normal",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
-      "labelPadding": 7,
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "labelPadding": 9,
       "titlePadding": 14,
-      "labelLimit": 130
+      "labelOverlap": true,
+      "labelLimit": 150
     },
     "legend": {
       "labelColor": "#21372b",
       "titleColor": "#747c6f",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
+      "labelFontSize": 15,
+      "titleFontSize": 15,
       "orient": "bottom",
       "titleFontWeight": "normal",
       "padding": 8

@@ -21,17 +21,18 @@
       "labelColor": "#747c6f",
       "titleColor": "#747c6f",
       "titleFontWeight": "normal",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
-      "labelPadding": 7,
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "labelPadding": 9,
       "titlePadding": 14,
-      "labelLimit": 130
+      "labelOverlap": true,
+      "labelLimit": 150
     },
     "legend": {
       "labelColor": "#21372b",
       "titleColor": "#747c6f",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
+      "labelFontSize": 15,
+      "titleFontSize": 15,
       "orient": "bottom",
       "titleFontWeight": "normal",
       "padding": 8
@@ -63,8 +64,8 @@
       "axis": {
         "title": null,
         "labelAngle": 0,
-        "labelFontSize": 10,
-        "labelExpr": "width < 500 && datum.index % 2 ? '' : datum.label"
+        "labelFontSize": 15,
+        "labelExpr": "width < 420 ? (datum.value == 2012 || datum.value == 2018 || datum.value == 2025 ? datum.label : '') : datum.label"
       }
     },
     "y": {
@@ -92,9 +93,9 @@
       ],
       "axis": {
         "title": null,
-        "labelFontSize": 11,
+        "labelFontSize": 15,
         "ticks": false,
-        "labelLimit": 125
+        "labelLimit": 150
       }
     }
   },
@@ -169,13 +170,17 @@
     {
       "mark": {
         "type": "text",
-        "fontSize": 11,
+        "fontSize": 15,
         "fontWeight": 500
       },
       "encoding": {
         "text": {
-          "field": "rank",
-          "type": "quantitative"
+          "condition": {
+            "test": "width >= 420",
+            "field": "rank",
+            "type": "quantitative"
+          },
+          "value": ""
         },
         "color": {
           "condition": {
@@ -208,10 +213,10 @@
       },
       "encoding": {
         "xOffset": {
-          "value": 9
+          "value": 0
         },
         "yOffset": {
-          "value": -7
+          "value": -10
         }
       }
     }
