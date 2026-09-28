@@ -47,10 +47,28 @@
       ]
     }
   },
-  "description": "Consecutive runs of finals appearances, with gaps for seasons without finals.",
+  "description": "Consecutive runs of finals appearances. Use the slider to show runs of at least the selected number of seasons.",
   "data": {
     "url": "data/streaks.json"
   },
+  "params": [
+    {
+      "name": "minimumRun",
+      "value": 1,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 7,
+        "step": 1,
+        "name": "Minimum run (seasons): "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "datum.length >= minimumRun"
+    }
+  ],
   "encoding": {
     "x": {
       "field": "start",
@@ -71,7 +89,8 @@
           2018,
           2021,
           2025
-        ]
+        ],
+        "labelExpr": "width >= 300 || datum.value == 2012 || datum.value == 2018 || datum.value == 2025 ? datum.label : ''"
       }
     },
     "x2": {
@@ -101,6 +120,28 @@
         "St Kilda",
         "Gold Coast"
       ],
+      "scale": {
+        "domain": [
+          "Geelong",
+          "Sydney",
+          "Hawthorn",
+          "Collingwood",
+          "Richmond",
+          "GWS Giants",
+          "Port Adelaide",
+          "Western Bulldogs",
+          "Brisbane Lions",
+          "West Coast",
+          "Fremantle",
+          "Adelaide",
+          "Essendon",
+          "Melbourne",
+          "North Melbourne",
+          "Carlton",
+          "St Kilda",
+          "Gold Coast"
+        ]
+      },
       "axis": {
         "title": null,
         "ticks": false

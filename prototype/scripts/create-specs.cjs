@@ -91,13 +91,34 @@ const finalsReturn={
 };
 fs.writeFileSync(path.join(root,'specs/finals_return.json'),JSON.stringify(finalsReturn,null,2)+'\n');
 
-save('hero_finals',{description:'Geelong finals participation in each completed season from 2012 to 2025.',height:100,data:data('team_seasons'),transform:[{filter:"datum.team === 'Geelong'"}],encoding:{x:field('season','ordinal',{axis:{title:null,labelAngle:0,labelExpr:"datum.value == 2012 || datum.value == 2025 || (width >= 280 && (datum.value == 2015 || datum.value == 2020)) ? datum.label : ''",domain:false,ticks:false}})},layer:[{mark:{type:'bar',cornerRadiusTopLeft:1,cornerRadiusTopRight:1},encoding:{y:{value:5},y2:{value:60},color:{condition:{test:'datum.finalist === 1',value:green},value:'#d6dace'},tooltip:[tip('season','Season'),{field:'finalist',type:'nominal',title:'Played finals (1 = yes)'}]}}]});
+save('hero_finals',{description:'Geelong finals participation in each completed season from 2012 to 2025.',height:100,data:data('team_seasons'),transform:[{filter:"datum.team === 'Geelong'"},{calculate:"datum.finalist === 1 ? 'Yes' : 'No'",as:'played_finals'}],encoding:{x:field('season','ordinal',{axis:{title:null,labelAngle:0,labelExpr:"datum.value == 2012 || datum.value == 2025 || (width >= 280 && (datum.value == 2015 || datum.value == 2020)) ? datum.label : ''",domain:false,ticks:false}})},layer:[{mark:{type:'bar',cornerRadiusTopLeft:1,cornerRadiusTopRight:1},encoding:{y:{value:5},y2:{value:60},color:{condition:{test:'datum.finalist === 1',value:green},value:'#d6dace'},tooltip:[tip('season','Season'),{field:'played_finals',type:'nominal',title:'Played finals'}]}}]});
 
-save('ladder_heatmap',{description:'Regular-season ladder position, sorted by seasons reaching finals. Highlight a club using the page control.',height:530,data:data('team_seasons'),params:focus,encoding:{x:field('season','ordinal',{axis:{title:null,labelAngle:0,labelFontSize:15,labelExpr:"width < 420 ? (datum.value == 2012 || datum.value == 2018 || datum.value == 2025 ? datum.label : '') : datum.label"}}),y:field('team','nominal',{sort:order,axis:{title:null,labelFontSize:15,ticks:false,labelLimit:150}})},layer:[{mark:{type:'rect',stroke:'#f4f3eb',strokeWidth:3,cornerRadius:2},encoding:{color:field('band','nominal',{scale:{domain:['Top four','5th–8th','9th–18th'],range:[green,sage,'#e4e6da']},legend:null}),opacity:focused,tooltip:[tip('team','Club'),tip('season','Season'),tip('rank','Ladder position'),tip('wins','Wins'),tip('win_rate','Win rate (%)','.1f'),{field:'premier',type:'nominal',title:'Premier (1 = yes)'}]}},{mark:{type:'text',fontSize:15,fontWeight:500},encoding:{text:{condition:{test:'width >= 420',field:'rank',type:'quantitative'},value:''},color:{condition:{test:'datum.rank <= 4',value:'#ffffff'},value:'#324533'},opacity:focused}},{transform:[{filter:'datum.premier === 1'}],mark:{type:'point',shape:'diamond',filled:true,size:19,color:orange},encoding:{xOffset:{value:0},yOffset:{value:-10}}}]});
+save('ladder_heatmap',{description:'Regular-season ladder position, sorted by seasons reaching finals. Highlight a club using the bound dropdown.',height:530,data:data('team_seasons'),
+ // Week 9: a JSON parameter creates the dropdown; opacity highlights the selected club.
+ params:[{...focus[0],bind:{input:'select',options:['All clubs',...order.slice().sort()],name:'Highlight a club: '}}],
+ transform:[{calculate:"datum.premier === 1 ? 'Yes' : 'No'",as:'won_premiership'}],
+ encoding:{x:field('season','ordinal',{axis:{title:null,labelAngle:0,labelFontSize:15,labelExpr:"width < 420 ? (datum.value == 2012 || datum.value == 2018 || datum.value == 2025 ? datum.label : '') : datum.label"}}),y:field('team','nominal',{sort:order,axis:{title:null,labelFontSize:15,ticks:false,labelLimit:150}})},layer:[{mark:{type:'rect',stroke:'#f4f3eb',strokeWidth:3,cornerRadius:2},encoding:{color:field('band','nominal',{scale:{domain:['Top four','5th–8th','9th–18th'],range:[green,sage,'#e4e6da']},legend:null}),opacity:focused,tooltip:[tip('team','Club'),tip('season','Season'),tip('rank','Ladder position'),tip('wins','Wins'),tip('win_rate','Win rate (%)','.1f'),{field:'won_premiership',type:'nominal',title:'Premier'}]}},{mark:{type:'text',fontSize:15,fontWeight:500},encoding:{text:{condition:{test:'width >= 420',field:'rank',type:'quantitative'},value:''},color:{condition:{test:'datum.rank <= 4',value:'#ffffff'},value:'#324533'},opacity:focused}},{transform:[{filter:'datum.premier === 1'}],mark:{type:'point',shape:'diamond',filled:true,size:19,color:orange},encoding:{opacity:focused,xOffset:{value:0},yOffset:{value:-10}}}]});
 
 save('finals_frequency',{description:'Number of seasons in which each club played finals, out of 14.',height:475,data:data('team_summary'),params:focus,encoding:{y:field('team','nominal',{sort:order,axis:{title:null,ticks:false}}),x:field('finals','quantitative',{scale:{domain:[0,14]},axis:{title:'Seasons reaching finals',tickCount:8}}),opacity:focused,tooltip:[tip('team','Club'),tip('finals','Finals seasons'),tip('finals_rate','Share of seasons (%)','.1f')]},layer:[{mark:{type:'rule',strokeWidth:2,color:'#b8c4af'},encoding:{x2:{datum:0}}},{mark:{type:'point',filled:true,size:95,color:green}},{mark:{type:'text',align:'left',dx:9,fontSize:15,color:ink},encoding:{text:field('finals')}}]});
 
-save('ladder_bump',{description:'Four contrasting clubs: regular-season ladder positions across 14 seasons. Lower ranks are better.',height:395,data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:['Geelong','Hawthorn','Richmond','Brisbane Lions']}}],encoding:{x:field('season','quantitative',{scale:{domain:[2012,2026.2],nice:false},axis:{title:null,format:'d',values:years,grid:false}}),y:field('rank','quantitative',{scale:{domain:[18.5,0.5],nice:false},axis:{title:'Ladder position · 1st is best',values:[1,4,8,12,18]}}),color:field('team','nominal',{scale:{domain:['Geelong','Hawthorn','Richmond','Brisbane Lions'],range:[green,'#ad8b42','#777f76',orange]},legend:null}),tooltip:[tip('team','Club'),tip('season','Season'),tip('rank','Ladder position')]},layer:[{mark:{type:'line',strokeWidth:2.8,point:{filled:true,size:36}}},{transform:[{filter:'datum.season === 2025'}],mark:{type:'text',align:'left',dx:8,fontSize:15,fontWeight:600},encoding:{text:field('team','nominal')}}]});
+// Week 9: clicking the colour legend changes a point selection and mark opacity.
+save('ladder_bump',{
+ description:'Four contrasting clubs: regular-season ladder positions across 14 seasons. Click a legend label to highlight a club.',
+ height:430,data:data('team_seasons'),
+ transform:[{filter:{field:'team',oneOf:['Geelong','Hawthorn','Richmond','Brisbane Lions']}}],
+ encoding:{
+  x:field('season','quantitative',{scale:{domain:[2012,2026.2],nice:false},axis:{title:null,format:'d',values:years,grid:false}}),
+  y:field('rank','quantitative',{scale:{domain:[18.5,0.5],nice:false},axis:{title:'Ladder position · 1st is best',values:[1,4,8,12,18]}}),
+  color:field('team','nominal',{scale:{domain:['Geelong','Hawthorn','Richmond','Brisbane Lions'],range:[green,'#ad8b42','#777f76',orange]},legend:{title:null,columns:2,symbolType:'stroke',symbolStrokeWidth:3,labelLimit:200}}),
+  opacity:{condition:{param:'journeyClub',value:1},value:0.15},
+  tooltip:[tip('team','Club'),tip('season','Season'),tip('rank','Ladder position')]
+ },
+ layer:[
+  {params:[{name:'journeyClub',select:{type:'point',fields:['team']},bind:'legend'}],mark:{type:'line',strokeWidth:2.8}},
+  {mark:{type:'point',filled:true,size:36}},
+  {transform:[{filter:'datum.season === 2025'}],mark:{type:'text',align:'left',dx:8,fontSize:15,fontWeight:600},encoding:{text:{condition:{test:'width >= 520',field:'team',type:'nominal'},value:''}}}
+ ]
+});
 
 const projection={type:'conicEqualArea',rotate:[-134,0,0],center:[0,-28],parallels:[-18,-36]};
 const borders={url:'data/australia_states.topojson',format:{type:'topojson',feature:'states'}};
@@ -112,7 +133,21 @@ save('grand_final_flows',{description:'Connections between the home cities of Gr
 
 save('season_boxplot',{description:'Distribution of regular-season win rates for each club over 14 seasons. Box covers the middle half; line is median; whiskers cover the full range.',height:490,data:data('team_seasons'),encoding:{y:field('team','nominal',{sort:order,axis:{title:null,ticks:false}}),x:field('win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:'Regular-season games won (%)',tickCount:6}})},mark:{type:'boxplot',extent:'min-max',size:13,color:sage,median:{color:green,strokeWidth:2},rule:{color:'#8f9f84'},ticks:{color:'#8f9f84'}}});
 
-save('finals_streaks',{description:'Consecutive runs of finals appearances, with gaps for seasons without finals.',height:475,data:data('streaks'),encoding:{x:field('start','quantitative',{scale:{domain:[2011.5,2025.5],nice:false},axis:{title:null,format:'d',values:years}}),x2:field('end'),y:field('team','nominal',{sort:order,axis:{title:null,ticks:false}}),color:field('length','quantitative',{scale:{domain:[1,7],range:['#b5c6a7',green]},legend:null}),tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('length','Consecutive finals seasons')]},mark:{type:'bar',size:13,cornerRadius:2}});
+// Week 9: a range binding filters the data while keeping the club and year axes fixed.
+save('finals_streaks',{
+ description:'Consecutive runs of finals appearances. Use the slider to show runs of at least the selected number of seasons.',
+ height:475,data:data('streaks'),
+ params:[{name:'minimumRun',value:1,bind:{input:'range',min:1,max:7,step:1,name:'Minimum run (seasons): '}}],
+ transform:[{filter:'datum.length >= minimumRun'}],
+ encoding:{
+  x:field('start','quantitative',{scale:{domain:[2011.5,2025.5],nice:false},axis:{title:null,format:'d',values:years,labelExpr:"width >= 300 || datum.value == 2012 || datum.value == 2018 || datum.value == 2025 ? datum.label : ''"}}),
+  x2:field('end'),
+  y:field('team','nominal',{sort:order,scale:{domain:order},axis:{title:null,ticks:false}}),
+  color:field('length','quantitative',{scale:{domain:[1,7],range:['#b5c6a7',green]},legend:null}),
+  tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('length','Consecutive finals seasons')]
+ },
+ mark:{type:'bar',size:13,cornerRadius:2}
+});
 
 save('era_change',{
  description:'Change in aggregate regular-season win rate from 2012–2018 to 2019–2025, in percentage points. Positive values indicate improvement.',

@@ -37,26 +37,24 @@ async function renderChart(element) {
 }
 
 async function initialiseClubControl() {
-  const control=document.querySelector('#club-select');
+  const heatmap=chartViews.get('ladder_heatmap');
   const status=document.querySelector('#club-summary');
+  if(!heatmap)return;
   try {
     const response=await fetch('data/team_summary.json');
     if(!response.ok)throw new Error('Club summary unavailable');
     const clubs=await response.json();
-    [...clubs].sort((a,b)=>a.team.localeCompare(b.team)).forEach(club=>{
-      const option=document.createElement('option');option.value=club.team;option.textContent=club.team;control.append(option);
-    });
-    control.disabled=false;
-    control.addEventListener('change',async()=>{
-      const value=control.value;
+    // Vega-Lite creates the dropdown from params.bind in ladder_heatmap.json.
+    // This small bridge shares its value with the separately embedded chart and prose.
+    const updateClub=(_name,value)=>{
       const club=clubs.find(d=>d.team===value);
       status.textContent=club?`${club.team}: ${club.finals} of 14 seasons in finals · ${club.win_rate.toFixed(1)}% of regular-season games won · ${club.premierships} premiership${club.premierships===1?'':'s'}.`:'Geelong and Sydney set the standard for returning to finals.';
-      await Promise.all(['ladder_heatmap','finals_frequency'].map(name=>{
-        const entry=chartViews.get(name);
-        return entry?entry.view.signal('focusTeam',value).runAsync():Promise.resolve();
-      }));
-    });
-  } catch(error) {console.error(error);status.textContent='Club highlighting is unavailable. The charts show all clubs.';}
+      const frequency=chartViews.get('finals_frequency');
+      if(frequency)frequency.view.signal('focusTeam',value).runAsync().catch(error=>console.error('Club highlighting:',error));
+    };
+    heatmap.view.addSignalListener('focusTeam',updateClub);
+    updateClub('focusTeam',heatmap.view.signal('focusTeam'));
+  } catch(error) {console.error(error);status.textContent='The club summary and linked highlighting are unavailable.';}
 }
 
 function initialiseResize() {

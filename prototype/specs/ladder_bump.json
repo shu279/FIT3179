@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
-  "height": 395,
+  "height": 430,
   "autosize": {
     "type": "fit",
     "contains": "padding",
@@ -47,7 +47,7 @@
       ]
     }
   },
-  "description": "Four contrasting clubs: regular-season ladder positions across 14 seasons. Lower ranks are better.",
+  "description": "Four contrasting clubs: regular-season ladder positions across 14 seasons. Click a legend label to highlight a club.",
   "data": {
     "url": "data/team_seasons.json"
   },
@@ -126,7 +126,20 @@
           "#c96636"
         ]
       },
-      "legend": null
+      "legend": {
+        "title": null,
+        "columns": 2,
+        "symbolType": "stroke",
+        "symbolStrokeWidth": 3,
+        "labelLimit": 200
+      }
+    },
+    "opacity": {
+      "condition": {
+        "param": "journeyClub",
+        "value": 1
+      },
+      "value": 0.15
     },
     "tooltip": [
       {
@@ -148,13 +161,28 @@
   },
   "layer": [
     {
+      "params": [
+        {
+          "name": "journeyClub",
+          "select": {
+            "type": "point",
+            "fields": [
+              "team"
+            ]
+          },
+          "bind": "legend"
+        }
+      ],
       "mark": {
         "type": "line",
-        "strokeWidth": 2.8,
-        "point": {
-          "filled": true,
-          "size": 36
-        }
+        "strokeWidth": 2.8
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 36
       }
     },
     {
@@ -172,8 +200,12 @@
       },
       "encoding": {
         "text": {
-          "field": "team",
-          "type": "nominal"
+          "condition": {
+            "test": "width >= 520",
+            "field": "team",
+            "type": "nominal"
+          },
+          "value": ""
         }
       }
     }

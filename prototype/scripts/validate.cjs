@@ -95,6 +95,35 @@ async function main(){
        await view.signal('focusTeam','Geelong').runAsync();assert.equal(view.signal('focusTeam'),'Geelong');
        await view.signal('focusTeam','All clubs').runAsync();
      }
+     if(name==='finals_streaks.json'){
+       const allRuns=read('data/streaks.json');
+       for(const minimum of [3,7,1]){
+         await view.signal('minimumRun',minimum).runAsync();
+         const visible=view.data('source_0');
+         assert.equal(visible.length,allRuns.filter(d=>d.length>=minimum).length);
+         assert.ok(visible.every(d=>d.length>=minimum));
+         assert.equal(view.scale('y').domain().length,18,'Keep all club rows when filtering');
+         if(minimum===7)assert.deepEqual(visible.map(d=>d.team).sort(),['Brisbane Lions','Geelong','Sydney']);
+       }
+     }
+     if(name==='ladder_bump.json'){
+       const lineItems=()=>{
+         const items=[];
+         function visit(item){
+           if(item.mark?.marktype==='line'&&item.datum?.team)items.push(item);
+           for(const child of item.items||[])visit(child);
+         }
+         visit(view.scenegraph().root);
+         return items;
+       };
+       await view.signal('journeyClub_team_legend','Geelong').runAsync();
+       assert.ok(lineItems().length>0);
+       for(const item of lineItems())assert.equal(item.opacity,item.datum.team==='Geelong'?1:0.15);
+       await view.signal('journeyClub_toggle',true).signal('journeyClub_team_legend','Hawthorn').runAsync();
+       for(const item of lineItems())assert.equal(item.opacity,['Geelong','Hawthorn'].includes(item.datum.team)?1:0.15);
+       await view.signal('journeyClub_toggle',false).signal('journeyClub_team_legend',null).runAsync();
+       assert.ok(lineItems().every(item=>item.opacity===1),'Clearing the legend restores every line');
+     }
      // Save render output only as a local QA artifact, outside the webpage.
      fs.mkdirSync('/private/tmp/ass2-chart-renders',{recursive:true});
      fs.writeFileSync(`/private/tmp/ass2-chart-renders/${name.replace('.json','')}-${width}.svg`,svg);
@@ -105,6 +134,6 @@ async function main(){
  }
  const total=fs.readdirSync(path.join(root,'data')).reduce((s,f)=>s+fs.statSync(path.join(root,'data',f)).size,0);
  assert.ok(total<1000000,`Prepared data over budget: ${total}`);
- console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',data_bytes:total,charts:report},null,2));
+ console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',streak_filter:'passed',legend_highlighting:'passed',data_bytes:total,charts:report},null,2));
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

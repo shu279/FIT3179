@@ -47,14 +47,45 @@
       ]
     }
   },
-  "description": "Regular-season ladder position, sorted by seasons reaching finals. Highlight a club using the page control.",
+  "description": "Regular-season ladder position, sorted by seasons reaching finals. Highlight a club using the bound dropdown.",
   "data": {
     "url": "data/team_seasons.json"
   },
   "params": [
     {
       "name": "focusTeam",
-      "value": "All clubs"
+      "value": "All clubs",
+      "bind": {
+        "input": "select",
+        "options": [
+          "All clubs",
+          "Adelaide",
+          "Brisbane Lions",
+          "Carlton",
+          "Collingwood",
+          "Essendon",
+          "Fremantle",
+          "GWS Giants",
+          "Geelong",
+          "Gold Coast",
+          "Hawthorn",
+          "Melbourne",
+          "North Melbourne",
+          "Port Adelaide",
+          "Richmond",
+          "St Kilda",
+          "Sydney",
+          "West Coast",
+          "Western Bulldogs"
+        ],
+        "name": "Highlight a club: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "calculate": "datum.premier === 1 ? 'Yes' : 'No'",
+      "as": "won_premiership"
     }
   ],
   "encoding": {
@@ -160,9 +191,9 @@
             "type": "quantitative"
           },
           {
-            "field": "premier",
+            "field": "won_premiership",
             "type": "nominal",
-            "title": "Premier (1 = yes)"
+            "title": "Premier"
           }
         ]
       }
@@ -212,6 +243,13 @@
         "color": "#c96636"
       },
       "encoding": {
+        "opacity": {
+          "condition": {
+            "test": "focusTeam === 'All clubs' || datum.team === focusTeam",
+            "value": 1
+          },
+          "value": 0.22
+        },
         "xOffset": {
           "value": 0
         },

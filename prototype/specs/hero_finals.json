@@ -54,6 +54,10 @@
   "transform": [
     {
       "filter": "datum.team === 'Geelong'"
+    },
+    {
+      "calculate": "datum.finalist === 1 ? 'Yes' : 'No'",
+      "as": "played_finals"
     }
   ],
   "encoding": {
@@ -97,9 +101,9 @@
             "type": "quantitative"
           },
           {
-            "field": "finalist",
+            "field": "played_finals",
             "type": "nominal",
-            "title": "Played finals (1 = yes)"
+            "title": "Played finals"
           }
         ]
       }

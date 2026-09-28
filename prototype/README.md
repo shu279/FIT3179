@@ -21,7 +21,20 @@ Then visit <http://127.0.0.1:8000/>. Serve the folder over HTTP: double-clicking
 - Vega-Embed 6.26.0 and Pure.css 3.0.0, stored in `vendor/` so the page does not need a CDN connection.
 - JSON data and a simplified ABS TopoJSON boundary file for the maps.
 
-This follows the Week 7 embedding pattern and Week 8 mapping concepts in `../lecture/`. There is no build step or package installation required to run the page. Optional scripts in `scripts/` prepare data, generate specs and validate the results; they do not run in the webpage.
+This follows the Week 7 embedding pattern, Week 8 mapping concepts and Week 9 interaction examples in the local lecture materials. There is no build step or package installation required to run the page. Optional scripts in `scripts/` prepare data, generate specs and validate the results; they do not run in the webpage.
+
+### Week 9 studio patterns
+
+| Studio topic | Implementation |
+| --- | --- |
+| Dropdown, pp. 21–25 | `ladder_heatmap.json`: `params` with `bind.input: "select"`; conditional opacity highlights the chosen club. |
+| Legend selection, pp. 15–20 | `ladder_bump.json`: a point selection bound to the colour legend highlights one or more clubs. |
+| Slider filter, pp. 26–29 | `finals_streaks.json`: `bind.input: "range"` and `transform.filter` show runs of at least 1–7 seasons; the axes stay fixed. |
+| Tooltips and calculations, pp. 11–14 | Tooltips use readable labels and number formats. `calculate` turns finals/premiership flags into Yes/No text. |
+| Text annotations, pp. 30–36 | Text layers label the heatmap, finals totals and ladder line endpoints; map labels also use layers. |
+| Multiple charts, pp. 37–39 | HTML containers, Pure.css plus custom CSS, separate JSON files and `vegaEmbed` with `actions: false`. |
+
+The studio includes older `selection` syntax and a Vega-Lite 5 `params` example; this project uses the latter. The club dropdown is defined in JSON, with a small JavaScript signal listener to update the separately embedded finals-frequency chart and summary text. That cross-chart bridge is an extension of the studio's individual-chart controls. The radar, Sankey and treemap are also extensions, written in Vega JSON rather than covered by the Week 9 exercises. The studio's logarithmic COVID axes and population size classes are data-specific examples, so they are not applied to AFL ranks or percentages.
 
 ## Where to edit
 
@@ -34,7 +47,7 @@ This follows the Week 7 embedding pattern and Week 8 mapping concepts in `../lec
 | `data/manifest.json` | Source URLs, coverage and home-city groupings |
 | `data/corrections.json` | Documented source discrepancy and verification URLs |
 
-The club selector highlights the ladder heatmap and finals-frequency chart. The radar compares Geelong and Hawthorn on five fixed 0–100% axes; it does not combine the measures into an overall score. Diverging bars show the change in win rate between the two seven-season periods. Hover or tap chart marks for details.
+The dropdown below the heatmap highlights the ladder heatmap and finals-frequency chart. The finals-streak slider hides shorter runs; return it to 1 to restore all runs. Click a ladder-journey legend label to highlight a club, Shift-click to compare several, or click the chart background to reset. The radar compares Geelong and Hawthorn on five fixed 0–100% axes; it does not combine the measures into an overall score. Diverging bars show the change in win rate between the two seven-season periods. Hover or tap chart marks for details.
 
 ## Data and definitions
 
