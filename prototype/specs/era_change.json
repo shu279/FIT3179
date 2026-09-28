@@ -1,0 +1,150 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 475,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "labelPadding": 9,
+      "titlePadding": 14,
+      "labelOverlap": true,
+      "labelLimit": 150
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Change in aggregate regular-season win rate from 2012–2018 to 2019–2025, in percentage points. Positive values indicate improvement.",
+  "data": {
+    "url": "data/team_summary.json"
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "size": 17
+      },
+      "encoding": {
+        "y": {
+          "field": "team",
+          "type": "nominal",
+          "sort": {
+            "field": "change",
+            "order": "descending"
+          },
+          "axis": {
+            "title": null,
+            "ticks": false
+          }
+        },
+        "x": {
+          "field": "change",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -45,
+              45
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": [
+              "Change in win rate",
+              "(percentage points)"
+            ],
+            "values": [
+              -40,
+              -20,
+              0,
+              20,
+              40
+            ],
+            "format": "+d"
+          }
+        },
+        "color": {
+          "condition": {
+            "test": "datum.change >= 0",
+            "value": "#31553b"
+          },
+          "value": "#c96636"
+        },
+        "tooltip": [
+          {
+            "field": "team",
+            "title": "Club",
+            "type": "nominal"
+          },
+          {
+            "field": "early_rate",
+            "title": "2012–2018 win rate (%)",
+            "format": ".1f",
+            "type": "quantitative"
+          },
+          {
+            "field": "recent_rate",
+            "title": "2019–2025 win rate (%)",
+            "format": ".1f",
+            "type": "quantitative"
+          },
+          {
+            "field": "change",
+            "title": "Change (percentage points)",
+            "format": "+.1f",
+            "type": "quantitative"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1.2
+      },
+      "encoding": {
+        "x": {
+          "datum": 0
+        }
+      }
+    }
+  ]
+}

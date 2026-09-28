@@ -1,0 +1,292 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Five measures of sustained success for Geelong and Hawthorn in 2012–2025. All axes use percentages from zero at the centre to 100 at the outer ring.",
+  "width": 700,
+  "height": 420,
+  "padding": 0,
+  "autosize": {
+    "type": "none",
+    "resize": true
+  },
+  "background": "transparent",
+  "signals": [
+    {
+      "name": "cx",
+      "update": "width / 2"
+    },
+    {
+      "name": "cy",
+      "update": "height / 2"
+    },
+    {
+      "name": "radius",
+      "update": "max(50, min(160, (width - 160) / 2))"
+    }
+  ],
+  "data": [
+    {
+      "name": "profiles",
+      "url": "data/team_summary.json",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === 'Geelong' || datum.team === 'Hawthorn'"
+        },
+        {
+          "type": "formula",
+          "expr": "datum.top_four / datum.seasons * 100",
+          "as": "top_four_rate"
+        },
+        {
+          "type": "formula",
+          "expr": "datum.grand_finals / datum.seasons * 100",
+          "as": "grand_final_rate"
+        },
+        {
+          "type": "formula",
+          "expr": "datum.premierships / datum.seasons * 100",
+          "as": "premiership_rate"
+        }
+      ]
+    },
+    {
+      "name": "metrics",
+      "values": [
+        {
+          "field": "win_rate",
+          "label": "Games won",
+          "angle": -1.5707963267948966
+        },
+        {
+          "field": "finals_rate",
+          "label": "Finals",
+          "angle": -0.3141592653589793
+        },
+        {
+          "field": "top_four_rate",
+          "label": "Top four",
+          "angle": 0.9424777960769379
+        },
+        {
+          "field": "grand_final_rate",
+          "label": "Grand Finals",
+          "angle": 2.199114857512855
+        },
+        {
+          "field": "premiership_rate",
+          "label": "Premierships",
+          "angle": 3.4557519189487724
+        }
+      ]
+    },
+    {
+      "name": "rings",
+      "values": [
+        {
+          "value": 25
+        },
+        {
+          "value": 50
+        },
+        {
+          "value": 75
+        },
+        {
+          "value": 100
+        }
+      ]
+    },
+    {
+      "name": "tickLabels",
+      "source": "rings",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.value === 50 || datum.value === 100"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "clubColor",
+      "type": "ordinal",
+      "domain": [
+        "Geelong",
+        "Hawthorn"
+      ],
+      "range": [
+        "#31553b",
+        "#c96636"
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "type": "path",
+      "from": {
+        "data": "rings"
+      },
+      "encode": {
+        "update": {
+          "path": {
+            "signal": "'M' + (cx + radius * (datum.value / 100) * cos(-1.5707963267948966)) + ',' + (cy + radius * (datum.value / 100) * sin(-1.5707963267948966)) + ' ' + 'L' + (cx + radius * (datum.value / 100) * cos(-0.3141592653589793)) + ',' + (cy + radius * (datum.value / 100) * sin(-0.3141592653589793)) + ' ' + 'L' + (cx + radius * (datum.value / 100) * cos(0.9424777960769379)) + ',' + (cy + radius * (datum.value / 100) * sin(0.9424777960769379)) + ' ' + 'L' + (cx + radius * (datum.value / 100) * cos(2.199114857512855)) + ',' + (cy + radius * (datum.value / 100) * sin(2.199114857512855)) + ' ' + 'L' + (cx + radius * (datum.value / 100) * cos(3.4557519189487724)) + ',' + (cy + radius * (datum.value / 100) * sin(3.4557519189487724)) + ' Z'"
+          },
+          "fill": {
+            "value": null
+          },
+          "stroke": {
+            "value": "#dedfd4"
+          },
+          "strokeWidth": {
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "type": "rule",
+      "from": {
+        "data": "metrics"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "cx"
+          },
+          "y": {
+            "signal": "cy"
+          },
+          "x2": {
+            "signal": "cx + radius * cos(datum.angle)"
+          },
+          "y2": {
+            "signal": "cy + radius * sin(datum.angle)"
+          },
+          "stroke": {
+            "value": "#dedfd4"
+          },
+          "strokeWidth": {
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "type": "path",
+      "name": "clubProfiles",
+      "from": {
+        "data": "profiles"
+      },
+      "encode": {
+        "update": {
+          "path": {
+            "signal": "'M' + (cx + radius * (datum.win_rate / 100) * cos(-1.5707963267948966)) + ',' + (cy + radius * (datum.win_rate / 100) * sin(-1.5707963267948966)) + ' ' + 'L' + (cx + radius * (datum.finals_rate / 100) * cos(-0.3141592653589793)) + ',' + (cy + radius * (datum.finals_rate / 100) * sin(-0.3141592653589793)) + ' ' + 'L' + (cx + radius * (datum.top_four_rate / 100) * cos(0.9424777960769379)) + ',' + (cy + radius * (datum.top_four_rate / 100) * sin(0.9424777960769379)) + ' ' + 'L' + (cx + radius * (datum.grand_final_rate / 100) * cos(2.199114857512855)) + ',' + (cy + radius * (datum.grand_final_rate / 100) * sin(2.199114857512855)) + ' ' + 'L' + (cx + radius * (datum.premiership_rate / 100) * cos(3.4557519189487724)) + ',' + (cy + radius * (datum.premiership_rate / 100) * sin(3.4557519189487724)) + ' Z'"
+          },
+          "fill": {
+            "scale": "clubColor",
+            "field": "team"
+          },
+          "fillOpacity": {
+            "value": 0.1
+          },
+          "stroke": {
+            "scale": "clubColor",
+            "field": "team"
+          },
+          "strokeWidth": {
+            "value": 3
+          },
+          "strokeDash": {
+            "signal": "datum.team === 'Hawthorn' ? [7,4] : [1,0]"
+          },
+          "tooltip": {
+            "signal": "{'Club':datum.team,'Games won':format(datum.win_rate / 100,'.1%'),'Seasons reaching finals':format(datum.finals / datum.seasons,'.1%'),'Seasons in top four':format(datum.top_four_rate / 100,'.1%'),'Seasons reaching Grand Final':format(datum.grand_final_rate / 100,'.1%'),'Seasons winning premiership':format(datum.premiership_rate / 100,'.1%')}"
+          }
+        },
+        "hover": {
+          "fillOpacity": {
+            "value": 0.22
+          },
+          "strokeWidth": {
+            "value": 4
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "tickLabels"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "cx - 7"
+          },
+          "align": {
+            "value": "right"
+          },
+          "y": {
+            "signal": "cy - radius * datum.value / 100"
+          },
+          "text": {
+            "signal": "datum.value + '%'"
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fill": {
+            "value": "#747c6f"
+          },
+          "baseline": {
+            "value": "middle"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "metrics"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "cx + (radius + 30) * cos(datum.angle)"
+          },
+          "y": {
+            "signal": "cy + (radius + 30) * sin(datum.angle)"
+          },
+          "text": {
+            "field": "label"
+          },
+          "lineBreak": {
+            "value": "\n"
+          },
+          "lineHeight": {
+            "value": 18
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fill": {
+            "value": "#21372b"
+          }
+        }
+      }
+    }
+  ]
+}

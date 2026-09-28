@@ -114,9 +114,72 @@ save('season_boxplot',{description:'Distribution of regular-season win rates for
 
 save('finals_streaks',{description:'Consecutive runs of finals appearances, with gaps for seasons without finals.',height:475,data:data('streaks'),encoding:{x:field('start','quantitative',{scale:{domain:[2011.5,2025.5],nice:false},axis:{title:null,format:'d',values:years}}),x2:field('end'),y:field('team','nominal',{sort:order,axis:{title:null,ticks:false}}),color:field('length','quantitative',{scale:{domain:[1,7],range:['#b5c6a7',green]},legend:null}),tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('length','Consecutive finals seasons')]},mark:{type:'bar',size:13,cornerRadius:2}});
 
-save('era_dumbbell',{description:'Aggregate regular-season win rate in 2012–2018 compared with 2019–2025. Denominators use games played in each period.',height:475,data:data('team_summary'),encoding:{y:field('team','nominal',{sort:{field:'change',order:'descending'},axis:{title:null,ticks:false}}),x:field('early_rate','quantitative',{scale:{domain:[0,100]},axis:{title:'Regular-season games won (%)',tickCount:6}}),tooltip:[tip('team','Club'),tip('early_rate','2012–2018 win rate (%)','.1f'),tip('recent_rate','2019–2025 win rate (%)','.1f'),tip('change','Change (percentage points)','+.1f')]},layer:[{mark:{type:'rule',strokeWidth:2.5,color:'#b5c3a8'},encoding:{x2:field('recent_rate')}},{mark:{type:'point',filled:true,fill:'#f3f2e9',stroke:green,strokeWidth:1.5,size:60}},{mark:{type:'point',filled:true,size:80},encoding:{x:field('recent_rate'),color:{condition:{test:'datum.change >= 0',value:green},value:orange}}}]});
+save('era_change',{
+ description:'Change in aggregate regular-season win rate from 2012–2018 to 2019–2025, in percentage points. Positive values indicate improvement.',
+ height:475,data:data('team_summary'),layer:[
+  {mark:{type:'bar',size:17},encoding:{
+   y:field('team','nominal',{sort:{field:'change',order:'descending'},axis:{title:null,ticks:false}}),
+   x:field('change','quantitative',{scale:{domain:[-45,45],nice:false},axis:{title:['Change in win rate','(percentage points)'],values:[-40,-20,0,20,40],format:'+d'}}),
+   color:{condition:{test:'datum.change >= 0',value:green},value:orange},
+   tooltip:[tip('team','Club'),tip('early_rate','2012–2018 win rate (%)','.1f'),tip('recent_rate','2019–2025 win rate (%)','.1f'),tip('change','Change (percentage points)','+.1f')]
+  }},
+  {data:{values:[{}]},mark:{type:'rule',color:ink,strokeWidth:1.2},encoding:{x:{datum:0}}}
+ ]
+});
 
-save('success_scatter',{description:'Overall regular-season win rate versus seasons reaching finals. Highlights the relationship between sustained winning and finals participation.',height:360,data:data('team_summary'),encoding:{x:field('win_rate','quantitative',{scale:{domain:[20,77],zero:false},axis:{title:'Regular-season games won (%)',tickCount:6}}),y:field('finals','quantitative',{scale:{domain:[0,14]},axis:{title:'Seasons reaching finals',tickCount:8}}),tooltip:[tip('team','Club'),tip('win_rate','Win rate (%)','.1f'),tip('finals','Finals seasons'),tip('premierships','Premierships')]},layer:[{mark:{type:'point',filled:true,size:115,stroke:'#f3f2e9',strokeWidth:1},encoding:{color:{condition:{test:'datum.premierships > 0',value:orange},value:green}}},{transform:[{filter:{field:'team',oneOf:['Geelong','Sydney','Hawthorn','Brisbane Lions','Gold Coast']}}],mark:{type:'text',align:'left',dx:8,dy:-8,color:ink,fontSize:15},encoding:{text:field('team','nominal')}}]});
+// Radar axes all use percentages with a fixed 0–100 scale, never per-axis maxima.
+const radarMetrics=[
+ {field:'win_rate',label:'Games won'},
+ {field:'finals_rate',label:'Finals'},
+ {field:'top_four_rate',label:'Top four'},
+ {field:'grand_final_rate',label:'Grand Finals'},
+ {field:'premiership_rate',label:'Premierships'}
+].map((d,i)=>({...d,angle:i*2*Math.PI/5-Math.PI/2}));
+const polygonPath=ratio=>radarMetrics.map((d,i)=>
+ `'${i?'L':'M'}' + (cx + radius * (${ratio(d)}) * cos(${d.angle})) + ',' + (cy + radius * (${ratio(d)}) * sin(${d.angle}))`
+).join(" + ' ' + ")+" + ' Z'";
+const successRadar={
+ '$schema':'https://vega.github.io/schema/vega/v5.json',
+ description:'Five measures of sustained success for Geelong and Hawthorn in 2012–2025. All axes use percentages from zero at the centre to 100 at the outer ring.',
+ width:700,height:420,padding:0,autosize:{type:'none',resize:true},background:'transparent',
+ signals:[{name:'cx',update:'width / 2'},{name:'cy',update:'height / 2'},
+  {name:'radius',update:'max(50, min(160, (width - 160) / 2))'}],
+ data:[
+  {name:'profiles',url:'data/team_summary.json',transform:[
+   {type:'filter',expr:"datum.team === 'Geelong' || datum.team === 'Hawthorn'"},
+   {type:'formula',expr:'datum.top_four / datum.seasons * 100',as:'top_four_rate'},
+   {type:'formula',expr:'datum.grand_finals / datum.seasons * 100',as:'grand_final_rate'},
+   {type:'formula',expr:'datum.premierships / datum.seasons * 100',as:'premiership_rate'}
+  ]},
+  {name:'metrics',values:radarMetrics},
+  {name:'rings',values:[{value:25},{value:50},{value:75},{value:100}]},
+  {name:'tickLabels',source:'rings',transform:[{type:'filter',expr:'datum.value === 50 || datum.value === 100'}]}
+ ],
+ scales:[{name:'clubColor',type:'ordinal',domain:['Geelong','Hawthorn'],range:[green,orange]}],
+ marks:[
+  {type:'path',from:{data:'rings'},encode:{update:{
+   path:{signal:polygonPath(()=> 'datum.value / 100')},fill:{value:null},stroke:{value:grid},strokeWidth:{value:1}
+  }}},
+  {type:'rule',from:{data:'metrics'},encode:{update:{
+   x:{signal:'cx'},y:{signal:'cy'},x2:{signal:'cx + radius * cos(datum.angle)'},y2:{signal:'cy + radius * sin(datum.angle)'},stroke:{value:grid},strokeWidth:{value:1}
+  }}},
+  {type:'path',name:'clubProfiles',from:{data:'profiles'},encode:{update:{
+   path:{signal:polygonPath(d=>`datum.${d.field} / 100`)},
+   fill:{scale:'clubColor',field:'team'},fillOpacity:{value:0.1},stroke:{scale:'clubColor',field:'team'},strokeWidth:{value:3},
+   strokeDash:{signal:"datum.team === 'Hawthorn' ? [7,4] : [1,0]"},
+   tooltip:{signal:"{'Club':datum.team,'Games won':format(datum.win_rate / 100,'.1%'),'Seasons reaching finals':format(datum.finals / datum.seasons,'.1%'),'Seasons in top four':format(datum.top_four_rate / 100,'.1%'),'Seasons reaching Grand Final':format(datum.grand_final_rate / 100,'.1%'),'Seasons winning premiership':format(datum.premiership_rate / 100,'.1%')}"}
+  },hover:{fillOpacity:{value:0.22},strokeWidth:{value:4}}}},
+  {type:'text',from:{data:'tickLabels'},encode:{update:{
+   x:{signal:'cx - 7'},align:{value:'right'},y:{signal:'cy - radius * datum.value / 100'},text:{signal:"datum.value + '%'"},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:muted},baseline:{value:'middle'}
+  }}},
+  {type:'text',from:{data:'metrics'},encode:{update:{
+   x:{signal:'cx + (radius + 30) * cos(datum.angle)'},y:{signal:'cy + (radius + 30) * sin(datum.angle)'},
+   text:{field:'label'},lineBreak:{value:'\n'},lineHeight:{value:18},align:{value:'center'},baseline:{value:'middle'},
+   font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:ink}
+  }}}
+ ]
+};
+fs.writeFileSync(path.join(root,'specs/success_radar.json'),JSON.stringify(successRadar,null,2)+'\n');
 
 const tree=[{team:'AFL',parent:null,premierships:0},...summary.filter(d=>d.premierships).map(d=>({team:d.team,parent:'AFL',premierships:d.premierships}))];
 fs.writeFileSync(path.join(root,'data/premiership_tree.json'),JSON.stringify(tree,null,2)+'\n');

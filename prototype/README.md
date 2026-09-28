@@ -17,7 +17,7 @@ Then visit <http://127.0.0.1:8000/>. Serve the folder over HTTP: double-clicking
 
 - HTML, Pure.css grids and custom CSS for the page.
 - Plain JavaScript and `vegaEmbed` to embed separate, readable JSON specifications.
-- Vega-Lite 5.20.1 for thirteen charts, including the small introductory chart; Vega 5.30.0 for the treemap and finals-return flow diagram.
+- Vega-Lite 5.20.1 for twelve charts, including the small introductory chart; Vega 5.30.0 for the treemap, finals-return flow diagram and radar chart.
 - Vega-Embed 6.26.0 and Pure.css 3.0.0, stored in `vendor/` so the page does not need a CDN connection.
 - JSON data and a simplified ABS TopoJSON boundary file for the maps.
 
@@ -34,7 +34,7 @@ This follows the Week 7 embedding pattern and Week 8 mapping concepts in `../lec
 | `data/manifest.json` | Source URLs, coverage and home-city groupings |
 | `data/corrections.json` | Documented source discrepancy and verification URLs |
 
-The club selector highlights the ladder heatmap and finals-frequency chart. Hover or tap chart marks for details.
+The club selector highlights the ladder heatmap and finals-frequency chart. The radar compares Geelong and Hawthorn on five fixed 0–100% axes; it does not combine the measures into an overall score. Diverging bars show the change in win rate between the two seven-season periods. Hover or tap chart marks for details.
 
 ## Data and definitions
 

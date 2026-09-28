@@ -69,6 +69,23 @@ async function main(){
        assert.equal(view.data('nodes').length,4);
        assert.equal(sum(view.data('links'),'count'),234);
      }
+     if(name==='success_radar.json'){
+       const profiles=view.data('profiles');
+       assert.deepEqual(profiles.map(d=>d.team).sort(),['Geelong','Hawthorn']);
+       assert.equal(view.data('metrics').length,5);
+       assert.deepEqual(view.data('rings').map(d=>d.value),[25,50,75,100]);
+       for(const d of profiles){
+         const clubRows=rows.filter(r=>r.team===d.team);
+         assert.ok(Math.abs(d.win_rate-sum(clubRows,'wins')/sum(clubRows,'played')*100)<0.006);
+         assert.ok(Math.abs(d.finals_rate-sum(clubRows,'finalist')/clubRows.length*100)<0.006);
+         assert.equal(d.top_four_rate,clubRows.filter(r=>r.rank<=4).length/clubRows.length*100);
+         assert.equal(d.grand_final_rate,(sum(clubRows,'premier')+sum(clubRows,'runner_up'))/clubRows.length*100);
+         assert.equal(d.premiership_rate,sum(clubRows,'premier')/clubRows.length*100);
+       }
+       await view.width(300).runAsync();
+       assert.ok(view.signal('radius')>0);
+       await view.width(width).runAsync();
+     }
      if(name==='state_choropleth.json'){
        const table=view.data('source_0');
        assert.equal(table.length,8,'Preserve states without clubs');
