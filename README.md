@@ -4,12 +4,11 @@
 
 - [Prototype and setup instructions](prototype/README.md)
 - [Page](prototype/index.html)
-- [Data sources](data_sources.md)
-- [Project notes](specification.md)
+- [Data source manifest](prototype/data/manifest.json)
 
 From the repository root, run `python3 -m http.server 8000` and open `http://localhost:8000/prototype/`. No build step is required.
 
-The repository includes source attribution and an AI-assistance acknowledgement. Lecture slides and assessment PDFs are kept locally.
+The repository includes source attribution and an AI-assistance acknowledgement. The source research notes, project specification, lecture slides and assessment PDFs are kept locally.
 
 ## History
 
