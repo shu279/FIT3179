@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname,'..');
 const summary = require('../data/team_summary.json');
+const seasons = require('../data/team_seasons.json');
 const order=summary.map(d=>d.team);
 const ink='#21372b',green='#31553b',sage='#a8bd9c',orange='#c96636',muted='#747c6f',grid='#dedfd4';
 const config={background:'transparent',font:'Helvetica Neue, Arial, sans-serif',view:{stroke:null},axis:{domain:false,tickColor:grid,gridColor:grid,labelColor:muted,titleColor:muted,titleFontWeight:'normal',labelFontSize:15,titleFontSize:15,labelPadding:9,titlePadding:14,labelOverlap:true,labelLimit:150},legend:{labelColor:ink,titleColor:muted,labelFontSize:15,titleFontSize:15,orient:'bottom',titleFontWeight:'normal',padding:8},range:{category:[green,orange,'#aa9148','#838c76','#637963']}};
@@ -15,6 +16,80 @@ const save=(name,spec)=>fs.writeFileSync(path.join(root,'specs',name+'.json'),JS
 const focus=[{name:'focusTeam',value:'All clubs'}];
 const focused={condition:{test:"focusTeam === 'All clubs' || datum.team === focusTeam",value:1},value:0.22};
 const years=[2012,2015,2018,2021,2025];
+
+// Each observation compares the same club in consecutive completed seasons.
+const byClubSeason=new Map(seasons.map(d=>[`${d.id}:${d.season}`,d]));
+const transitions=seasons.flatMap(d=>{
+ const previous=byClubSeason.get(`${d.id}:${d.season-1}`);
+ return previous?[{team:d.team,from_season:previous.season,season:d.season,previous_rank:previous.rank,rank:d.rank,change:previous.rank-d.rank,from_finals:previous.finalist,to_finals:d.finalist}]:[];
+});
+fs.writeFileSync(path.join(root,'data/season_transitions.json'),JSON.stringify(transitions,null,2)+'\n');
+const transitionLinks=[];
+const sourceOffsets={1:0,0:0},targetOffsets={1:0,0:0};
+for(const from of [1,0])for(const to of [1,0]){
+ const count=transitions.filter(d=>d.from_finals===from&&d.to_finals===to).length;
+ transitionLinks.push({from,to,count,source_offset:sourceOffsets[from],target_offset:targetOffsets[to],label:from?(to?'Reached finals again':'Missed finals next year'):(to?'Returned to finals':'Missed finals both years'),color:from?(to?green:orange):(to?sage:'#d6dace')});
+ sourceOffsets[from]+=count;targetOffsets[to]+=count;
+}
+fs.writeFileSync(path.join(root,'data/finals_transition_totals.json'),JSON.stringify(transitionLinks,null,2)+'\n');
+
+save('rank_profiles',{
+ description:'Number of seasons each club spent in the top four, fifth to eighth, or ninth to eighteenth on the regular-season ladder.',height:550,
+ data:data('team_seasons'),
+ transform:[{calculate:"datum.rank <= 4 ? 0 : datum.rank <= 8 ? 1 : 2",as:'band_order'}],
+ mark:{type:'bar',stroke:'#f3f2e9',strokeWidth:1.5,size:20},
+ encoding:{
+  y:field('team','nominal',{sort:order,axis:{title:null,ticks:false}}),
+  x:{aggregate:'count',type:'quantitative',stack:'zero',scale:{domain:[0,14]},axis:{title:'Seasons',values:[0,2,4,6,8,10,12,14]}},
+  color:field('band','nominal',{scale:{domain:['Top four','5th–8th','9th–18th'],range:[green,sage,'#d6dace']},legend:null}),
+  order:field('band_order'),
+  tooltip:[tip('team','Club'),tip('band','Ladder group'),{aggregate:'count',type:'quantitative',title:'Seasons'}]
+ }
+});
+
+save('rank_changes',{
+ description:'Distribution of 234 year-to-year ladder changes across 18 clubs and 13 consecutive-season pairs. Positive values indicate improvement.',height:340,
+ data:data('season_transitions'),
+ mark:{type:'bar',stroke:'#f3f2e9',strokeWidth:1},
+ encoding:{
+  x:field('change','ordinal',{sort:'ascending',scale:{domain:Array.from({length:31},(_,i)=>i-15)},axis:{title:'Change in ladder places',labelAngle:0,labelExpr:"datum.value % 5 === 0 ? (datum.value > 0 ? '+' + datum.value : datum.value) : ''"}}),
+  y:{aggregate:'count',type:'quantitative',axis:{title:'Club-season changes',tickMinStep:1}},
+  color:{condition:[{test:'datum.change > 0',value:green},{test:'datum.change < 0',value:orange}],value:sage},
+  tooltip:[tip('change','Places gained / lost','+d'),{aggregate:'count',type:'quantitative',title:'Club-season changes'}]
+ }
+});
+
+// A two-stage Sankey: band width represents actual club-season transitions.
+const finalsReturn={
+ '$schema':'https://vega.github.io/schema/vega/v5.json',description:'Finals participation in one season and the next, pooling 2012–2013 through 2024–2025. Every link counts club-season transitions.',
+ width:700,height:420,padding:0,autosize:{type:'none',resize:true},background:'transparent',
+ signals:[
+  {name:'top',value:66},{name:'gap',value:56},
+  {name:'unit',update:`(height - top - gap - 12) / ${transitions.length}`},
+  {name:'left',value:12},{name:'right',update:'width - 12'},{name:'barWidth',value:10},
+  {name:'missedStart',update:`top + ${sourceOffsets[1]} * unit + gap`}
+ ],
+ data:[
+  {name:'links',url:'data/finals_transition_totals.json',transform:[
+   {type:'formula',expr:'(datum.from ? top : missedStart) + datum.source_offset * unit',as:'sy'},
+   {type:'formula',expr:'(datum.to ? top : missedStart) + datum.target_offset * unit',as:'ty'},
+   {type:'formula',expr:'datum.count * unit',as:'thickness'}
+  ]},
+  {name:'nodes',values:[0,1].flatMap(stage=>[1,0].map(finalist=>({stage,finalist,count:sourceOffsets[finalist],label:finalist?'Played finals':'Missed finals'})))},
+  {name:'headers',values:[{stage:0,label:'This season'},{stage:1,label:'Next season'}]}
+ ],
+ marks:[
+  {type:'path',from:{data:'links'},encode:{update:{
+   path:{signal:"'M' + (left+barWidth) + ',' + datum.sy + ' C' + (width*.45) + ',' + datum.sy + ' ' + (width*.55) + ',' + datum.ty + ' ' + (right-barWidth) + ',' + datum.ty + ' L' + (right-barWidth) + ',' + (datum.ty+datum.thickness) + ' C' + (width*.55) + ',' + (datum.ty+datum.thickness) + ' ' + (width*.45) + ',' + (datum.sy+datum.thickness) + ' ' + (left+barWidth) + ',' + (datum.sy+datum.thickness) + ' Z'"},
+   fill:{field:'color'},fillOpacity:{value:0.82},stroke:{value:'#f3f2e9'},strokeWidth:{value:1},
+   tooltip:{signal:"{'Outcome':datum.label,'Club-season transitions':datum.count,'Share of starting group':format(datum.count / (datum.from ? "+sourceOffsets[1]+" : "+sourceOffsets[0]+"),'.1%')}"}
+  },hover:{fillOpacity:{value:1}}}},
+  {type:'rect',from:{data:'nodes'},encode:{update:{x:{signal:'datum.stage ? right-barWidth : left'},width:{signal:'barWidth'},y:{signal:'datum.finalist ? top : missedStart'},height:{signal:'datum.count * unit'},fill:{signal:"datum.finalist ? '#31553b' : '#a8bd9c'"}}}},
+  {type:'text',from:{data:'headers'},encode:{update:{x:{signal:'datum.stage ? right : left'},y:{value:15},align:{signal:"datum.stage ? 'right' : 'left'"},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:600},fill:{value:ink},text:{field:'label'}}}},
+  {type:'text',from:{data:'nodes'},encode:{update:{x:{signal:'datum.stage ? right : left'},y:{signal:'(datum.finalist ? top : missedStart) - 13'},align:{signal:"datum.stage ? 'right' : 'left'"},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:ink},text:{field:'label'}}}}
+ ]
+};
+fs.writeFileSync(path.join(root,'specs/finals_return.json'),JSON.stringify(finalsReturn,null,2)+'\n');
 
 save('hero_finals',{description:'Geelong finals participation in each completed season from 2012 to 2025.',height:100,data:data('team_seasons'),transform:[{filter:"datum.team === 'Geelong'"}],encoding:{x:field('season','ordinal',{axis:{title:null,labelAngle:0,labelExpr:"datum.value == 2012 || datum.value == 2025 || (width >= 280 && (datum.value == 2015 || datum.value == 2020)) ? datum.label : ''",domain:false,ticks:false}})},layer:[{mark:{type:'bar',cornerRadiusTopLeft:1,cornerRadiusTopRight:1},encoding:{y:{value:5},y2:{value:60},color:{condition:{test:'datum.finalist === 1',value:green},value:'#d6dace'},tooltip:[tip('season','Season'),{field:'finalist',type:'nominal',title:'Played finals (1 = yes)'}]}}]});
 
@@ -54,4 +129,4 @@ const treemap={
  {type:'text',from:{data:'leaves'},encode:{enter:{fill:{value:'#fffdf4'},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:500},baseline:{value:'bottom'}},update:{x:{signal:'datum.x0 + 12'},y:{signal:'datum.y1 - 13'},text:{field:'team'},limit:{signal:'datum.x1 - datum.x0 - 22'}}}}
  ]};
 fs.writeFileSync(path.join(root,'specs/premiership_treemap.json'),JSON.stringify(treemap,null,2)+'\n');
-console.log('Created 11 main chart specs and the hero mini-chart.');
+console.log('Created 14 main chart specs and the hero mini-chart.');

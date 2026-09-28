@@ -1,0 +1,158 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 550,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "labelPadding": 9,
+      "titlePadding": 14,
+      "labelOverlap": true,
+      "labelLimit": 150
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Number of seasons each club spent in the top four, fifth to eighth, or ninth to eighteenth on the regular-season ladder.",
+  "data": {
+    "url": "data/team_seasons.json"
+  },
+  "transform": [
+    {
+      "calculate": "datum.rank <= 4 ? 0 : datum.rank <= 8 ? 1 : 2",
+      "as": "band_order"
+    }
+  ],
+  "mark": {
+    "type": "bar",
+    "stroke": "#f3f2e9",
+    "strokeWidth": 1.5,
+    "size": 20
+  },
+  "encoding": {
+    "y": {
+      "field": "team",
+      "type": "nominal",
+      "sort": [
+        "Geelong",
+        "Sydney",
+        "Hawthorn",
+        "Collingwood",
+        "Richmond",
+        "GWS Giants",
+        "Port Adelaide",
+        "Western Bulldogs",
+        "Brisbane Lions",
+        "West Coast",
+        "Fremantle",
+        "Adelaide",
+        "Essendon",
+        "Melbourne",
+        "North Melbourne",
+        "Carlton",
+        "St Kilda",
+        "Gold Coast"
+      ],
+      "axis": {
+        "title": null,
+        "ticks": false
+      }
+    },
+    "x": {
+      "aggregate": "count",
+      "type": "quantitative",
+      "stack": "zero",
+      "scale": {
+        "domain": [
+          0,
+          14
+        ]
+      },
+      "axis": {
+        "title": "Seasons",
+        "values": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ]
+      }
+    },
+    "color": {
+      "field": "band",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Top four",
+          "5th–8th",
+          "9th–18th"
+        ],
+        "range": [
+          "#31553b",
+          "#a8bd9c",
+          "#d6dace"
+        ]
+      },
+      "legend": null
+    },
+    "order": {
+      "field": "band_order",
+      "type": "quantitative"
+    },
+    "tooltip": [
+      {
+        "field": "team",
+        "title": "Club",
+        "type": "nominal"
+      },
+      {
+        "field": "band",
+        "title": "Ladder group",
+        "type": "nominal"
+      },
+      {
+        "aggregate": "count",
+        "type": "quantitative",
+        "title": "Seasons"
+      }
+    ]
+  }
+}

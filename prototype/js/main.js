@@ -2,10 +2,11 @@
 'use strict';
 const chartViews = new Map();
 const chartNames = {
-  hero_finals:'Geelong finals record',ladder_heatmap:'01 · Ladder heatmap',finals_frequency:'02 · Finals appearances',
-  finals_streaks:'03 · Finals streaks',ladder_bump:'04 · Ladder journeys',state_choropleth:'05 · State choropleth',
-  premiership_symbols:'06 · Premiership symbols',grand_final_flows:'07 · Grand Final connections',
-  premiership_treemap:'08 · Premiership share',success_scatter:'09 · Winning and finals',season_boxplot:'10 · Season spread',era_dumbbell:'11 · Changing eras'
+  hero_finals:'Geelong finals record',ladder_heatmap:'Ladder heatmap',finals_frequency:'Finals appearances',
+  finals_streaks:'Finals streaks',ladder_bump:'Ladder journeys',state_choropleth:'State choropleth',
+  premiership_symbols:'Premiership symbols',grand_final_flows:'Grand Final connections',
+  premiership_treemap:'Premiership share',success_scatter:'Winning and finals',season_boxplot:'Season spread',era_dumbbell:'Changing eras',
+  rank_profiles:'Ladder groups',finals_return:'Returning to finals',rank_changes:'Year-to-year ladder changes'
 };
 
 async function renderChart(element) {

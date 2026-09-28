@@ -1,0 +1,140 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 340,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "labelPadding": 9,
+      "titlePadding": 14,
+      "labelOverlap": true,
+      "labelLimit": 150
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Distribution of 234 year-to-year ladder changes across 18 clubs and 13 consecutive-season pairs. Positive values indicate improvement.",
+  "data": {
+    "url": "data/season_transitions.json"
+  },
+  "mark": {
+    "type": "bar",
+    "stroke": "#f3f2e9",
+    "strokeWidth": 1
+  },
+  "encoding": {
+    "x": {
+      "field": "change",
+      "type": "ordinal",
+      "sort": "ascending",
+      "scale": {
+        "domain": [
+          -15,
+          -14,
+          -13,
+          -12,
+          -11,
+          -10,
+          -9,
+          -8,
+          -7,
+          -6,
+          -5,
+          -4,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ]
+      },
+      "axis": {
+        "title": "Change in ladder places",
+        "labelAngle": 0,
+        "labelExpr": "datum.value % 5 === 0 ? (datum.value > 0 ? '+' + datum.value : datum.value) : ''"
+      }
+    },
+    "y": {
+      "aggregate": "count",
+      "type": "quantitative",
+      "axis": {
+        "title": "Club-season changes",
+        "tickMinStep": 1
+      }
+    },
+    "color": {
+      "condition": [
+        {
+          "test": "datum.change > 0",
+          "value": "#31553b"
+        },
+        {
+          "test": "datum.change < 0",
+          "value": "#c96636"
+        }
+      ],
+      "value": "#a8bd9c"
+    },
+    "tooltip": [
+      {
+        "field": "change",
+        "title": "Places gained / lost",
+        "format": "+d",
+        "type": "quantitative"
+      },
+      {
+        "aggregate": "count",
+        "type": "quantitative",
+        "title": "Club-season changes"
+      }
+    ]
+  }
+}

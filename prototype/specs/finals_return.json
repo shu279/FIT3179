@@ -1,0 +1,232 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Finals participation in one season and the next, pooling 2012–2013 through 2024–2025. Every link counts club-season transitions.",
+  "width": 700,
+  "height": 420,
+  "padding": 0,
+  "autosize": {
+    "type": "none",
+    "resize": true
+  },
+  "background": "transparent",
+  "signals": [
+    {
+      "name": "top",
+      "value": 66
+    },
+    {
+      "name": "gap",
+      "value": 56
+    },
+    {
+      "name": "unit",
+      "update": "(height - top - gap - 12) / 234"
+    },
+    {
+      "name": "left",
+      "value": 12
+    },
+    {
+      "name": "right",
+      "update": "width - 12"
+    },
+    {
+      "name": "barWidth",
+      "value": 10
+    },
+    {
+      "name": "missedStart",
+      "update": "top + 104 * unit + gap"
+    }
+  ],
+  "data": [
+    {
+      "name": "links",
+      "url": "data/finals_transition_totals.json",
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "(datum.from ? top : missedStart) + datum.source_offset * unit",
+          "as": "sy"
+        },
+        {
+          "type": "formula",
+          "expr": "(datum.to ? top : missedStart) + datum.target_offset * unit",
+          "as": "ty"
+        },
+        {
+          "type": "formula",
+          "expr": "datum.count * unit",
+          "as": "thickness"
+        }
+      ]
+    },
+    {
+      "name": "nodes",
+      "values": [
+        {
+          "stage": 0,
+          "finalist": 1,
+          "count": 104,
+          "label": "Played finals"
+        },
+        {
+          "stage": 0,
+          "finalist": 0,
+          "count": 130,
+          "label": "Missed finals"
+        },
+        {
+          "stage": 1,
+          "finalist": 1,
+          "count": 104,
+          "label": "Played finals"
+        },
+        {
+          "stage": 1,
+          "finalist": 0,
+          "count": 130,
+          "label": "Missed finals"
+        }
+      ]
+    },
+    {
+      "name": "headers",
+      "values": [
+        {
+          "stage": 0,
+          "label": "This season"
+        },
+        {
+          "stage": 1,
+          "label": "Next season"
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "type": "path",
+      "from": {
+        "data": "links"
+      },
+      "encode": {
+        "update": {
+          "path": {
+            "signal": "'M' + (left+barWidth) + ',' + datum.sy + ' C' + (width*.45) + ',' + datum.sy + ' ' + (width*.55) + ',' + datum.ty + ' ' + (right-barWidth) + ',' + datum.ty + ' L' + (right-barWidth) + ',' + (datum.ty+datum.thickness) + ' C' + (width*.55) + ',' + (datum.ty+datum.thickness) + ' ' + (width*.45) + ',' + (datum.sy+datum.thickness) + ' ' + (left+barWidth) + ',' + (datum.sy+datum.thickness) + ' Z'"
+          },
+          "fill": {
+            "field": "color"
+          },
+          "fillOpacity": {
+            "value": 0.82
+          },
+          "stroke": {
+            "value": "#f3f2e9"
+          },
+          "strokeWidth": {
+            "value": 1
+          },
+          "tooltip": {
+            "signal": "{'Outcome':datum.label,'Club-season transitions':datum.count,'Share of starting group':format(datum.count / (datum.from ? 104 : 130),'.1%')}"
+          }
+        },
+        "hover": {
+          "fillOpacity": {
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "nodes"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.stage ? right-barWidth : left"
+          },
+          "width": {
+            "signal": "barWidth"
+          },
+          "y": {
+            "signal": "datum.finalist ? top : missedStart"
+          },
+          "height": {
+            "signal": "datum.count * unit"
+          },
+          "fill": {
+            "signal": "datum.finalist ? '#31553b' : '#a8bd9c'"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "headers"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.stage ? right : left"
+          },
+          "y": {
+            "value": 15
+          },
+          "align": {
+            "signal": "datum.stage ? 'right' : 'left'"
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fontWeight": {
+            "value": 600
+          },
+          "fill": {
+            "value": "#21372b"
+          },
+          "text": {
+            "field": "label"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "nodes"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.stage ? right : left"
+          },
+          "y": {
+            "signal": "(datum.finalist ? top : missedStart) - 13"
+          },
+          "align": {
+            "signal": "datum.stage ? 'right' : 'left'"
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fill": {
+            "value": "#21372b"
+          },
+          "text": {
+            "field": "label"
+          }
+        }
+      }
+    }
+  ]
+}

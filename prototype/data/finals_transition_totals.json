@@ -1,0 +1,38 @@
+[
+  {
+    "from": 1,
+    "to": 1,
+    "count": 65,
+    "source_offset": 0,
+    "target_offset": 0,
+    "label": "Reached finals again",
+    "color": "#31553b"
+  },
+  {
+    "from": 1,
+    "to": 0,
+    "count": 39,
+    "source_offset": 65,
+    "target_offset": 0,
+    "label": "Missed finals next year",
+    "color": "#c96636"
+  },
+  {
+    "from": 0,
+    "to": 1,
+    "count": 39,
+    "source_offset": 0,
+    "target_offset": 65,
+    "label": "Returned to finals",
+    "color": "#a8bd9c"
+  },
+  {
+    "from": 0,
+    "to": 0,
+    "count": 91,
+    "source_offset": 39,
+    "target_offset": 39,
+    "label": "Missed finals both years",
+    "color": "#d6dace"
+  }
+]

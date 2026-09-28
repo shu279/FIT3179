@@ -35,7 +35,22 @@ async function main(){
  const flows=read('data/finals_connections.json');assert.equal(flows.reduce((s,d)=>s+d.properties.count,0),13);
  const topo=read('data/australia_states.topojson');assert.equal(topo.objects.states.geometries.length,8);
  const specs=fs.readdirSync(path.join(root,'specs')).filter(f=>f.endsWith('.json'));
- assert.equal(specs.length,12);
+ assert.equal(specs.length,15);
+ const transitions=read('data/season_transitions.json');
+ assert.equal(transitions.length,18*13);
+ for(const d of transitions){
+   const before=rows.find(r=>r.team===d.team&&r.season===d.from_season);
+   const after=rows.find(r=>r.team===d.team&&r.season===d.season);
+   assert.equal(d.season,d.from_season+1);
+   assert.equal(d.change,before.rank-after.rank);
+   assert.equal(d.from_finals,before.finalist);assert.equal(d.to_finals,after.finalist);
+ }
+ assert.equal(transitions.filter(d=>Math.abs(d.change)<=3).length,129);
+ const links=read('data/finals_transition_totals.json');
+ assert.equal(sum(links,'count'),transitions.length);
+ for(const link of links)assert.equal(link.count,transitions.filter(d=>d.from_finals===link.from&&d.to_finals===link.to).length);
+ assert.equal(links.find(d=>d.from===1&&d.to===1).count,65);
+ assert.equal(links.find(d=>d.from===0&&d.to===1).count,39);
  const report=[];
  for(const name of specs){
    console.log('Render',name);
@@ -48,8 +63,15 @@ async function main(){
      await view.runAsync();
      const svg=await view.toSVG();
      assert.ok(svg.startsWith('<svg'));assert.ok(!/\bNaN\b|\bInfinity\b/.test(svg),`${name} invalid geometry`);
+     for(const match of svg.matchAll(/font-size="([\d.]+)(?:px)?"/g))assert.ok(+match[1]>=15,`${name}: text below 15px`);
+     if(name==='finals_return.json'){
+       assert.equal(view.data('links').length,4);
+       assert.equal(view.data('nodes').length,4);
+       assert.equal(sum(view.data('links'),'count'),234);
+     }
      if(name==='state_choropleth.json'){
        const table=view.data('source_0');
+       assert.equal(table.length,8,'Preserve states without clubs');
        assert.equal(table.filter(d=>d.clubs>0).length,5,'State joins must match five states');
      }
      if(['ladder_heatmap.json','finals_frequency.json'].includes(name)){

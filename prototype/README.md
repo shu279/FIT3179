@@ -1,6 +1,6 @@
 # The Long Game — AFL prototype
 
-A single scrolling visual story about consistency across the 18-club AFL era, 2012–2025. Includes 11 main visualisations (three map idioms) and one small introductory chart, using real data retrieved on 14 September 2026.
+A single scrolling visual story about consistency across the 18-club AFL era, 2012–2025. Includes 14 main visualisations (three map idioms) and one small introductory chart, using real data retrieved on 14 September 2026.
 
 ## Open the prototype
 
@@ -17,7 +17,7 @@ Then visit <http://127.0.0.1:8000/>. Serve the folder over HTTP: double-clicking
 
 - HTML, Pure.css grids and custom CSS for the page.
 - Plain JavaScript and `vegaEmbed` to embed separate, readable JSON specifications.
-- Vega-Lite 5.20.1 for eleven charts, including the small introductory chart; Vega 5.30.0 for the treemap.
+- Vega-Lite 5.20.1 for thirteen charts, including the small introductory chart; Vega 5.30.0 for the treemap and finals-return flow diagram.
 - Vega-Embed 6.26.0 and Pure.css 3.0.0, stored in `vendor/` so the page does not need a CDN connection.
 - JSON data and a simplified ABS TopoJSON boundary file for the maps.
 
@@ -58,7 +58,7 @@ node scripts/validate.cjs
 
 This checks records, ranks, finals totals, map joins and chart rendering at desktop and narrow widths, using the bundled libraries. It does not replace a visual check in the browser.
 
-`scripts/create-specs.cjs` rebuilds the chart JSON. `scripts/prepare-data.cjs` requires a folder of cached original AFL Tables HTML and Wikidata entity JSON; those temporary downloads are not bundled. The cleaned data is included, so these preparation scripts are unnecessary for viewing or hosting the prototype. Changing the study period also requires updating the scripts' explicit year ranges and the page's text.
+`scripts/create-specs.cjs` rebuilds the chart JSON and derives consecutive-season comparisons from the included club-season records. The added stacked bars show time in each ladder group; the flow diagram shows changes in finals participation; the histogram shows year-to-year ladder movement. There are 234 comparisons: 18 clubs × 13 adjacent-season pairs. `scripts/prepare-data.cjs` requires a folder of cached original AFL Tables HTML and Wikidata entity JSON; those temporary downloads are not bundled. The cleaned data is included, so these preparation scripts are unnecessary for viewing or hosting the prototype. Changing the study period also requires updating the scripts' explicit year ranges and the page's text.
 
 ## Publish and finish the assignment
 
