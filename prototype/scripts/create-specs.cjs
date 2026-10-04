@@ -101,24 +101,38 @@ save('ladder_heatmap',{description:'Regular-season ladder position, sorted by se
 
 save('finals_frequency',{description:'Number of seasons in which each club played finals, out of 14.',height:475,data:data('team_summary'),params:focus,encoding:{y:field('team','nominal',{sort:order,axis:{title:null,ticks:false}}),x:field('finals','quantitative',{scale:{domain:[0,14]},axis:{title:'Seasons reaching finals',tickCount:8}}),opacity:focused,tooltip:[tip('team','Club'),tip('finals','Finals seasons'),tip('finals_rate','Share of seasons (%)','.1f')]},layer:[{mark:{type:'rule',strokeWidth:2,color:'#b8c4af'},encoding:{x2:{datum:0}}},{mark:{type:'point',filled:true,size:95,color:green}},{mark:{type:'text',align:'left',dx:9,fontSize:15,color:ink},encoding:{text:field('finals')}}]});
 
-// Week 9: clicking the colour legend changes a point selection and mark opacity.
-save('ladder_bump',{
- description:'Four contrasting clubs: regular-season ladder positions across 14 seasons. Click a legend label to highlight a club.',
- height:430,data:data('team_seasons'),
- transform:[{filter:{field:'team',oneOf:['Geelong','Hawthorn','Richmond','Brisbane Lions']}}],
- encoding:{
-  x:field('season','quantitative',{scale:{domain:[2012,2026.2],nice:false},axis:{title:null,format:'d',values:years,grid:false}}),
-  y:field('rank','quantitative',{scale:{domain:[18.5,0.5],nice:false},axis:{title:'Ladder position · 1st is best',values:[1,4,8,12,18]}}),
-  color:field('team','nominal',{scale:{domain:['Geelong','Hawthorn','Richmond','Brisbane Lions'],range:[green,'#ad8b42','#777f76',orange]},legend:{title:null,columns:2,symbolType:'stroke',symbolStrokeWidth:3,labelLimit:200}}),
-  opacity:{condition:{param:'journeyClub',value:1},value:0.15},
-  tooltip:[tip('team','Club'),tip('season','Season'),tip('rank','Ladder position')]
- },
- layer:[
-  {params:[{name:'journeyClub',select:{type:'point',fields:['team']},bind:'legend'}],mark:{type:'line',strokeWidth:2.8}},
-  {mark:{type:'point',filled:true,size:36}},
-  {transform:[{filter:'datum.season === 2025'}],mark:{type:'text',align:'left',dx:8,fontSize:15,fontWeight:600},encoding:{text:{condition:{test:'width >= 520',field:'team',type:'nominal'},value:''}}}
+// Week 10: overview brush controls the detail domain and a separate aggregate view.
+const journeyTeams=['Geelong','Hawthorn','Richmond','Brisbane Lions'];
+const journeyColors=[green,'#ad8b42','#777f76',orange];
+const multiConfig={...config,title:{fontSize:15,fontWeight:600,anchor:'start',color:ink,offset:14},header:{labelFontSize:15,labelColor:ink,labelFontWeight:600,titleFontSize:15}};
+const saveMultiple=(name,spec)=>fs.writeFileSync(path.join(root,'specs',name+'.json'),JSON.stringify({
+ '$schema':base.$schema,padding:5,autosize:{type:'pad',resize:true},config:multiConfig,...spec
+},null,2)+'\n');
+const journeyColor={field:'team',type:'nominal',scale:{domain:journeyTeams,range:journeyColors},legend:{title:null,columns:{expr:'width < 385 ? 1 : 2'},symbolType:'stroke',symbolStrokeWidth:3,labelLimit:180}};
+const rankAxis={field:'rank',type:'quantitative',scale:{domain:[18.5,0.5],nice:false},axis:{title:'Ladder position',values:[1,4,8,12,18]}};
+const journeyOpacity={condition:{param:'journeyClub',value:1},value:0.15};
+saveMultiple('ladder_bump',{
+ description:'Drag a season range in the overview to zoom the rank detail and compare pooled win rates for the same seasons. Legend selection highlights clubs across views.',
+ data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:journeyTeams}}],spacing:32,
+ resolve:{scale:{x:'independent',y:'independent',color:'shared'}},
+ vconcat:[
+  {name:'journey_detail',title:['Ladder positions','in the selected period'],width:900,height:260,
+   encoding:{x:field('season','quantitative',{scale:{domain:{param:'seasonBrush'},nice:false,zero:false},axis:{title:null,format:'d',tickMinStep:1,tickCount:6,grid:false}}),y:rankAxis,color:journeyColor,opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('season','Season','d'),tip('rank','Ladder position')]},
+   layer:[
+    {params:[{name:'journeyClub',select:{type:'point',fields:['team']},bind:'legend'}],mark:{type:'line',clip:true,strokeWidth:2.8}},
+    {mark:{type:'point',clip:true,filled:true,size:42}}
+   ]},
+  {name:'journey_overview',title:['Drag to select','a season range'],width:900,height:90,
+   params:[{name:'seasonBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.12,stroke:green}}}],
+   mark:{type:'line',strokeWidth:1.8},
+   encoding:{x:field('season','quantitative',{scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:years,grid:false}}),y:{...rankAxis,axis:{title:null,values:[1,18]}},color:journeyColor,opacity:journeyOpacity}},
+  {name:'journey_summary',title:['Games won','in the selected seasons'],width:900,height:145,
+   transform:[{filter:{param:'seasonBrush'}},{aggregate:[{op:'sum',field:'wins',as:'wins'},{op:'sum',field:'played',as:'games'},{op:'count',as:'seasons'},{op:'min',field:'season',as:'first'},{op:'max',field:'season',as:'last'}],groupby:['team']},{calculate:'datum.wins / datum.games * 100',as:'period_win_rate'},{window:[{op:'rank',as:'period_rank'}],sort:[{field:'period_win_rate',order:'descending'}]}],
+   encoding:{y:field('team','nominal',{scale:{domain:journeyTeams},axis:{title:null,ticks:false,labelLimit:150}}),x:field('period_win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:['Games won','(%)'],values:[0,25,50,75,100]}}),color:journeyColor,opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('seasons','Seasons'),tip('wins','Wins'),tip('games','Games played'),tip('period_win_rate','Win rate (%)','.1f')]},
+   layer:[{mark:{type:'bar',size:19}},{transform:[{filter:'datum.period_rank === 1'}],mark:{type:'text',align:'right',dx:-7,fontSize:15,fontWeight:600,color:'#ffffff'},encoding:{text:{value:'Best'},color:{value:'#ffffff'}}}]}
  ]
 });
+
 
 const projection={type:'conicEqualArea',rotate:[-134,0,0],center:[0,-28],parallels:[-18,-36]};
 const borders={url:'data/australia_states.topojson',format:{type:'topojson',feature:'states'}};

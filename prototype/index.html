@@ -75,7 +75,14 @@
             <figcaption>Read from left to right. Wider bands represent more club-season transitions; hover or tap for counts. The 13 season pairs run from 2012–2013 to 2024–2025. Each club appears once per pair, giving 234 observations.</figcaption>
           </figure>
         </div>
-        <figure class="figure-wide journey-figure"><p class="chart-kicker">FOUR DIFFERENT JOURNEYS</p><h3>The ladder rarely stands still.</h3><p class="chart-deck">Geelong’s staying power sits alongside Hawthorn’s peak, Richmond’s rise and fall, and Brisbane’s climb.</p><div class="chart" data-spec="ladder_bump" aria-label="Bump chart of annual ladder positions for Geelong, Hawthorn, Richmond and Brisbane."></div><figcaption>Click a club in the legend to highlight its journey. Shift-click to compare several clubs; click the chart background to show all four again. Positions are regular-season ranks.</figcaption></figure>
+        <figure class="figure-wide journey-figure">
+          <p class="chart-kicker">FOUR DIFFERENT JOURNEYS</p><h3>Choose a period. Compare the same seasons.</h3>
+          <p class="chart-deck">Drag across the small timeline to zoom the ladder journeys and compare each club’s win rate for those seasons.</p>
+          <div class="chart-actions"><button type="button" id="reset-journey">Show all seasons</button></div>
+          <p id="journey-summary" class="micro" aria-live="polite">2012–2025 · 14 seasons included in the win-rate comparison.</p>
+          <div class="chart" data-spec="ladder_bump" aria-label="Linked views: drag a season range in the overview to zoom four clubs’ ladder journeys and update their win-rate bars."></div>
+          <figcaption>The upper chart shows regular-season ranks; first is best. The bars use total wins divided by actual games played in the selected seasons. “Best” updates with the highest win rate, including ties. Click a legend label to highlight a club; Shift-click to select more. Double-click the timeline or use “Show all seasons” to reset.</figcaption>
+        </figure>
       </section>
 
       <section class="chapter geography" aria-labelledby="chapter-two">

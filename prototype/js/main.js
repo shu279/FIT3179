@@ -28,6 +28,17 @@ async function renderChart(element) {
       mode:isVega?'vega':'vega-lite'
     });
     chartViews.set(name,{view:result.view,element,isVega,width:element.clientWidth,spec,layout});
+    if(name==='ladder_bump'){
+      const updatePeriod=(_signal,selection)=>{
+        const range=selection.season||[2012,2025];
+        const first=Math.max(2012,Math.ceil(range[0]));
+        const last=Math.min(2025,Math.floor(range[1]));
+        const status=document.querySelector('#journey-summary');
+        status.textContent=first>last?'This range falls between seasons. Widen the selection to include a year.':`${first}–${last} · ${last-first+1} season${last===first?'':'s'} included in the win-rate comparison.`;
+      };
+      result.view.addSignalListener('seasonBrush',updatePeriod);
+      updatePeriod('seasonBrush',result.view.signal('seasonBrush'));
+    }
     element.dataset.rendered='true';
   } catch(error) {
     console.error(`Could not render ${name}:`,error);
@@ -95,6 +106,10 @@ async function initialise() {
   // Render the opening charts first, then the rest in bounded groups.
   for(let i=0;i<figures.length;i+=3)await Promise.all(figures.slice(i,i+3).map(renderChart));
   await initialiseClubControl();
+  document.querySelector('#reset-journey').addEventListener('click',()=>{
+    const entry=chartViews.get('ladder_bump');
+    if(entry)renderChart(entry.element);
+  });
   initialiseResize();
   document.documentElement.dataset.chartsReady=String(chartViews.size);
 }
