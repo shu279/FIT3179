@@ -138,7 +138,31 @@ const projection={type:'conicEqualArea',rotate:[-134,0,0],center:[0,-28],paralle
 const borders={url:'data/australia_states.topojson',format:{type:'topojson',feature:'states'}};
 const mapBase={data:borders,mark:{type:'geoshape',fill:'#e3e6d9',stroke:'#f7f6ef',strokeWidth:1.2}};
 const cityLabelLayer={data:data('cities'),transform:[{filter:'datum.grand_finals > 0'}],mark:{type:'text',align:'left',dx:7,dy:-8,fontSize:15,color:ink},encoding:{longitude:field('longitude'),latitude:field('latitude'),text:field('city','nominal')}};
-save('state_choropleth',{description:'Finalist club-seasons divided by all club-seasons in each home state. Territories without an AFL club in 2012–2025 are not applicable.',height:400,projection,layer:[{data:borders,transform:[{lookup:'properties.state_code',from:{data:data('states'),key:'state_code',fields:['finals_rate','clubs','club_seasons','finals','coverage']}}],mark:{type:'geoshape',stroke:'#f7f6ef',strokeWidth:1.5,invalid:null},encoding:{color:{condition:{test:'datum.clubs > 0',field:'finals_rate',type:'quantitative',scale:{domain:[0,70],range:['#edf0de','#acbf94','#31553b']},legend:{title:'Club-seasons reaching finals (%)',gradientLength:190}},value:'#dedfd5'},tooltip:[{field:'properties.state_name',title:'State / territory',type:'nominal'},tip('clubs','Clubs'),tip('finals','Finalist club-seasons'),tip('club_seasons','Club-seasons'),tip('finals_rate','Finals rate (%)','.1f'),{field:'coverage',type:'nominal',title:'Coverage'}]}},{data:{values:[{label:'WA',lon:122,lat:-26},{label:'NT',lon:133,lat:-21},{label:'SA',lon:135,lat:-30},{label:'QLD',lon:145,lat:-22},{label:'NSW',lon:147,lat:-32},{label:'VIC',lon:143,lat:-36.7},{label:'TAS',lon:146.5,lat:-42}]},mark:{type:'text',fontSize:15,fontWeight:700,color:'#253f30'},encoding:{longitude:field('lon'),latitude:field('lat'),text:field('label','nominal')}}]});
+// Week 10: preserve every state-year row, then attach the matching geometry.
+const stateMetadata=require('../data/states.json');
+const stateSeasons=Array.from({length:14},(_,i)=>2012+i).flatMap(season=>stateMetadata.map(state=>{
+ const records=seasons.filter(d=>d.season===season&&d.state_code===state.state_code);
+ const finals=records.reduce((n,d)=>n+d.finalist,0);
+ return {season,state:state.state,state_name:state.state_name,state_code:state.state_code,clubs:records.length,finals,finals_rate:records.length?finals/records.length*100:null,coverage:records.length?'Clubs in this season':'No AFL club based here'};
+}));
+fs.writeFileSync(path.join(root,'data/state_seasons.json'),JSON.stringify(stateSeasons,null,2)+'\n');
+const stateLabels=[{label:'WA',lon:122,lat:-26},{label:'NT',lon:133,lat:-21},{label:'SA',lon:135,lat:-30},{label:'QLD',lon:145,lat:-22},{label:'NSW',lon:147,lat:-32},{label:'VIC',lon:143,lat:-36.7},{label:'TAS',lon:146.5,lat:-42}];
+save('state_choropleth',{
+ description:'State finals participation by season, using a fixed 0–100% scale. Year, zoom and centre controls follow the Week 10 studio.',height:400,
+ title:{text:{expr:"'Season ' + selectedSeason"},anchor:'start',fontSize:15,color:ink},
+ params:[
+  {name:'selectedSeason',value:2025,bind:{input:'range',min:2012,max:2025,step:1,name:'Season: '}},
+  {name:'mapZoom',value:1,bind:{input:'range',min:1,max:3,step:0.25,name:'Zoom: '}},
+  {name:'mapCentre',value:[0,-28],bind:{input:'select',options:[[0,-28],[13,-33],[-12,-26]],labels:['Australia','Eastern states','Western Australia'],name:'Centre: '}}
+ ],
+ projection:{...projection,center:{expr:'mapCentre'},scale:{expr:'mapZoom * min(width / 0.78, height / 0.66)'},translate:{expr:'[width / 2, height / 2]'}},
+ layer:[
+  {data:data('state_seasons'),transform:[{filter:'datum.season === selectedSeason'},{calculate:"datum.clubs > 0 ? format(datum.finals_rate, '.1f') + '%' : 'Not applicable'",as:'rate_label'},{lookup:'state_code',from:{data:borders,key:'properties.state_code'},as:'geo'}],
+   mark:{type:'geoshape',clip:true,stroke:'#f7f6ef',strokeWidth:1.5,invalid:null},
+   encoding:{shape:{field:'geo',type:'geojson'},color:{condition:{test:'datum.clubs === 0',value:'#dedfd5'},field:'finals_rate',type:'quantitative',scale:{domain:[0,100],range:['#edf0de','#acbf94','#31553b']},legend:{title:'Clubs reaching finals (%)',gradientLength:190}},tooltip:[{field:'state_name',type:'nominal',title:'State / territory'},tip('season','Season','d'),tip('clubs','Clubs'),tip('finals','Clubs reaching finals'),{field:'rate_label',title:'Finals rate',type:'nominal'},{field:'coverage',type:'nominal',title:'Coverage'}]}},
+  {data:data('state_seasons'),transform:[{filter:'datum.season === selectedSeason'},{lookup:'state',from:{data:{values:stateLabels},key:'label',fields:['lon','lat']}},{filter:'isValid(datum.lon)'}],mark:{type:'text',clip:true,fontSize:15,fontWeight:700},encoding:{longitude:field('lon'),latitude:field('lat'),text:field('state','nominal'),color:{condition:{test:'datum.clubs > 0 && datum.finals_rate >= 65',value:'#ffffff'},value:ink}}}
+ ]
+});
 
 const cityLabels=[{...cityLabelLayer,transform:[{filter:"datum.grand_finals > 0 && datum.city !== 'Geelong' && datum.city !== 'Melbourne'"}]},{...cityLabelLayer,transform:[{filter:"datum.city === 'Melbourne'"}],mark:{type:'text',align:'left',dx:15,dy:-6,fontSize:15,color:ink}},{...cityLabelLayer,transform:[{filter:"datum.city === 'Geelong'"}],mark:{type:'text',align:'right',dx:-7,dy:20,fontSize:15,color:ink}}];
 save('premiership_symbols',{description:'Premiership totals aggregated by club home city. Circle area, not radius, represents title count. Melbourne and Geelong are separate cities.',height:360,projection,layer:[mapBase,{data:data('cities'),transform:[{filter:'datum.premierships > 0'}],mark:{type:'circle',color:orange,opacity:0.65,stroke:orange,strokeWidth:1},encoding:{longitude:field('longitude'),latitude:field('latitude'),size:field('premierships','quantitative',{scale:{domain:[0,9],range:[0,1700]},legend:{title:'Premierships',values:[1,3,9],orient:'bottom'}}),tooltip:[tip('city','Home city'),tip('clubs','Clubs'),tip('premierships','Premierships')]}},...cityLabels]});

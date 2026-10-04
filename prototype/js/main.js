@@ -110,6 +110,10 @@ async function initialise() {
     const entry=chartViews.get('ladder_bump');
     if(entry)renderChart(entry.element);
   });
+  document.querySelector('#reset-map').addEventListener('click',()=>{
+    const entry=chartViews.get('state_choropleth');
+    if(entry)entry.view.signal('selectedSeason',2025).signal('mapZoom',1).signal('mapCentre',[0,-28]).runAsync().catch(console.error);
+  });
   initialiseResize();
   document.documentElement.dataset.chartsReady=String(chartViews.size);
 }

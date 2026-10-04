@@ -47,7 +47,69 @@
       ]
     }
   },
-  "description": "Finalist club-seasons divided by all club-seasons in each home state. Territories without an AFL club in 2012–2025 are not applicable.",
+  "description": "State finals participation by season, using a fixed 0–100% scale. Year, zoom and centre controls follow the Week 10 studio.",
+  "title": {
+    "text": {
+      "expr": "'Season ' + selectedSeason"
+    },
+    "anchor": "start",
+    "fontSize": 15,
+    "color": "#21372b"
+  },
+  "params": [
+    {
+      "name": "selectedSeason",
+      "value": 2025,
+      "bind": {
+        "input": "range",
+        "min": 2012,
+        "max": 2025,
+        "step": 1,
+        "name": "Season: "
+      }
+    },
+    {
+      "name": "mapZoom",
+      "value": 1,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 3,
+        "step": 0.25,
+        "name": "Zoom: "
+      }
+    },
+    {
+      "name": "mapCentre",
+      "value": [
+        0,
+        -28
+      ],
+      "bind": {
+        "input": "select",
+        "options": [
+          [
+            0,
+            -28
+          ],
+          [
+            13,
+            -33
+          ],
+          [
+            -12,
+            -26
+          ]
+        ],
+        "labels": [
+          "Australia",
+          "Eastern states",
+          "Western Australia"
+        ],
+        "name": "Centre: "
+      }
+    }
+  ],
   "projection": {
     "type": "conicEqualArea",
     "rotate": [
@@ -55,77 +117,94 @@
       0,
       0
     ],
-    "center": [
-      0,
-      -28
-    ],
+    "center": {
+      "expr": "mapCentre"
+    },
     "parallels": [
       -18,
       -36
-    ]
+    ],
+    "scale": {
+      "expr": "mapZoom * min(width / 0.78, height / 0.66)"
+    },
+    "translate": {
+      "expr": "[width / 2, height / 2]"
+    }
   },
   "layer": [
     {
       "data": {
-        "url": "data/australia_states.topojson",
-        "format": {
-          "type": "topojson",
-          "feature": "states"
-        }
+        "url": "data/state_seasons.json"
       },
       "transform": [
         {
-          "lookup": "properties.state_code",
+          "filter": "datum.season === selectedSeason"
+        },
+        {
+          "calculate": "datum.clubs > 0 ? format(datum.finals_rate, '.1f') + '%' : 'Not applicable'",
+          "as": "rate_label"
+        },
+        {
+          "lookup": "state_code",
           "from": {
             "data": {
-              "url": "data/states.json"
+              "url": "data/australia_states.topojson",
+              "format": {
+                "type": "topojson",
+                "feature": "states"
+              }
             },
-            "key": "state_code",
-            "fields": [
-              "finals_rate",
-              "clubs",
-              "club_seasons",
-              "finals",
-              "coverage"
-            ]
-          }
+            "key": "properties.state_code"
+          },
+          "as": "geo"
         }
       ],
       "mark": {
         "type": "geoshape",
+        "clip": true,
         "stroke": "#f7f6ef",
         "strokeWidth": 1.5,
         "invalid": null
       },
       "encoding": {
+        "shape": {
+          "field": "geo",
+          "type": "geojson"
+        },
         "color": {
           "condition": {
-            "test": "datum.clubs > 0",
-            "field": "finals_rate",
-            "type": "quantitative",
-            "scale": {
-              "domain": [
-                0,
-                70
-              ],
-              "range": [
-                "#edf0de",
-                "#acbf94",
-                "#31553b"
-              ]
-            },
-            "legend": {
-              "title": "Club-seasons reaching finals (%)",
-              "gradientLength": 190
-            }
+            "test": "datum.clubs === 0",
+            "value": "#dedfd5"
           },
-          "value": "#dedfd5"
+          "field": "finals_rate",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ],
+            "range": [
+              "#edf0de",
+              "#acbf94",
+              "#31553b"
+            ]
+          },
+          "legend": {
+            "title": "Clubs reaching finals (%)",
+            "gradientLength": 190
+          }
         },
         "tooltip": [
           {
-            "field": "properties.state_name",
-            "title": "State / territory",
-            "type": "nominal"
+            "field": "state_name",
+            "type": "nominal",
+            "title": "State / territory"
+          },
+          {
+            "field": "season",
+            "title": "Season",
+            "format": "d",
+            "type": "quantitative"
           },
           {
             "field": "clubs",
@@ -134,19 +213,13 @@
           },
           {
             "field": "finals",
-            "title": "Finalist club-seasons",
+            "title": "Clubs reaching finals",
             "type": "quantitative"
           },
           {
-            "field": "club_seasons",
-            "title": "Club-seasons",
-            "type": "quantitative"
-          },
-          {
-            "field": "finals_rate",
-            "title": "Finals rate (%)",
-            "format": ".1f",
-            "type": "quantitative"
+            "field": "rate_label",
+            "title": "Finals rate",
+            "type": "nominal"
           },
           {
             "field": "coverage",
@@ -158,49 +231,70 @@
     },
     {
       "data": {
-        "values": [
-          {
-            "label": "WA",
-            "lon": 122,
-            "lat": -26
-          },
-          {
-            "label": "NT",
-            "lon": 133,
-            "lat": -21
-          },
-          {
-            "label": "SA",
-            "lon": 135,
-            "lat": -30
-          },
-          {
-            "label": "QLD",
-            "lon": 145,
-            "lat": -22
-          },
-          {
-            "label": "NSW",
-            "lon": 147,
-            "lat": -32
-          },
-          {
-            "label": "VIC",
-            "lon": 143,
-            "lat": -36.7
-          },
-          {
-            "label": "TAS",
-            "lon": 146.5,
-            "lat": -42
-          }
-        ]
+        "url": "data/state_seasons.json"
       },
+      "transform": [
+        {
+          "filter": "datum.season === selectedSeason"
+        },
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "values": [
+                {
+                  "label": "WA",
+                  "lon": 122,
+                  "lat": -26
+                },
+                {
+                  "label": "NT",
+                  "lon": 133,
+                  "lat": -21
+                },
+                {
+                  "label": "SA",
+                  "lon": 135,
+                  "lat": -30
+                },
+                {
+                  "label": "QLD",
+                  "lon": 145,
+                  "lat": -22
+                },
+                {
+                  "label": "NSW",
+                  "lon": 147,
+                  "lat": -32
+                },
+                {
+                  "label": "VIC",
+                  "lon": 143,
+                  "lat": -36.7
+                },
+                {
+                  "label": "TAS",
+                  "lon": 146.5,
+                  "lat": -42
+                }
+              ]
+            },
+            "key": "label",
+            "fields": [
+              "lon",
+              "lat"
+            ]
+          }
+        },
+        {
+          "filter": "isValid(datum.lon)"
+        }
+      ],
       "mark": {
         "type": "text",
+        "clip": true,
         "fontSize": 15,
-        "fontWeight": 700,
-        "color": "#253f30"
+        "fontWeight": 700
       },
       "encoding": {
         "longitude": {
@@ -212,8 +306,15 @@
           "type": "quantitative"
         },
         "text": {
-          "field": "label",
+          "field": "state",
           "type": "nominal"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.clubs > 0 && datum.finals_rate >= 65",
+            "value": "#ffffff"
+          },
+          "value": "#21372b"
         }
       }
     }
