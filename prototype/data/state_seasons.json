@@ -1,0 +1,1122 @@
+[
+  {
+    "season": 2012,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2012,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 4,
+    "finals_rate": 40,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2012,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2012,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2012,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 2,
+    "finals_rate": 100,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2012,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2012,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2012,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2013,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2013,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 5,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2013,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2013,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2013,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2013,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2013,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2013,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2014,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2014,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 5,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2014,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2014,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2014,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2014,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2014,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2014,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2015,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2015,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 4,
+    "finals_rate": 40,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2015,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2015,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2015,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 2,
+    "finals_rate": 100,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2015,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2015,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2015,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2016,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 2,
+    "finals_rate": 100,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2016,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 4,
+    "finals_rate": 40,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2016,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2016,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2016,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2016,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2016,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2016,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2017,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 2,
+    "finals_rate": 100,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2017,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 3,
+    "finals_rate": 30,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2017,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2017,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 2,
+    "finals_rate": 100,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2017,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2017,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2017,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2017,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2018,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 2,
+    "finals_rate": 100,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2018,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 5,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2018,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2018,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2018,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2018,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2018,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2018,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2019,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2019,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 5,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2019,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2019,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2019,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2019,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2019,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2019,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2020,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2020,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 5,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2020,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2020,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2020,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2020,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2020,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2020,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2021,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 2,
+    "finals_rate": 100,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2021,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 4,
+    "finals_rate": 40,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2021,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2021,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2021,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2021,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2021,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2021,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2022,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2022,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 5,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2022,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2022,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2022,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2022,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2022,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2022,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2023,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 2,
+    "finals_rate": 100,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2023,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 4,
+    "finals_rate": 40,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2023,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2023,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2023,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2023,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2023,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2023,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2024,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 2,
+    "finals_rate": 100,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2024,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 4,
+    "finals_rate": 40,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2024,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2024,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2024,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 0,
+    "finals_rate": 0,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2024,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2024,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2024,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2025,
+    "state": "NSW",
+    "state_name": "New South Wales",
+    "state_code": "1",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2025,
+    "state": "VIC",
+    "state_name": "Victoria",
+    "state_code": "2",
+    "clubs": 10,
+    "finals": 3,
+    "finals_rate": 30,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2025,
+    "state": "QLD",
+    "state_name": "Queensland",
+    "state_code": "3",
+    "clubs": 2,
+    "finals": 2,
+    "finals_rate": 100,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2025,
+    "state": "SA",
+    "state_name": "South Australia",
+    "state_code": "4",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2025,
+    "state": "WA",
+    "state_name": "Western Australia",
+    "state_code": "5",
+    "clubs": 2,
+    "finals": 1,
+    "finals_rate": 50,
+    "coverage": "Clubs in this season"
+  },
+  {
+    "season": 2025,
+    "state": "TAS",
+    "state_name": "Tasmania",
+    "state_code": "6",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2025,
+    "state": "NT",
+    "state_name": "Northern Territory",
+    "state_code": "7",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  },
+  {
+    "season": 2025,
+    "state": "ACT",
+    "state_name": "Australian Capital Territory",
+    "state_code": "8",
+    "clubs": 0,
+    "finals": 0,
+    "finals_rate": null,
+    "coverage": "No AFL club based here"
+  }
+]
