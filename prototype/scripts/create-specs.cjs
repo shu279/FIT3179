@@ -133,6 +133,17 @@ saveMultiple('ladder_bump',{
  ]
 });
 
+// Week 10: one shared template, split into club panels with fixed comparison scales.
+const panelTeams=['Geelong','Sydney','Hawthorn','Richmond','Brisbane Lions','West Coast'];
+saveMultiple('club_small_multiples',{
+ description:'Six contrasting clubs on the same 2012–2025 time axis and 0–100% win-rate scale. A 50% reference line is shared by every panel.',
+ data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:panelTeams}}],
+ facet:{field:'team',type:'nominal',sort:panelTeams,header:{title:null,labelOrient:'top',labelAnchor:'start',labelPadding:10}},columns:3,spacing:30,
+ spec:{width:280,height:155,layer:[
+  {data:{values:[{}]},mark:{type:'rule',color:'#9aa58e',strokeDash:[4,4]},encoding:{y:{datum:50}}},
+  {mark:{type:'line',color:green,strokeWidth:2.5},encoding:{x:field('season','quantitative',{scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:[2012,2018,2025],grid:false}}),y:field('win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:null,values:[0,50,100],labelExpr:"datum.value + '%'"}}),tooltip:[tip('team','Club'),tip('season','Season','d'),tip('win_rate','Games won (%)','.1f'),tip('rank','Ladder position')]}}
+ ]}
+});
 
 const projection={type:'conicEqualArea',rotate:[-134,0,0],center:[0,-28],parallels:[-18,-36]};
 const borders={url:'data/australia_states.topojson',format:{type:'topojson',feature:'states'}};
@@ -265,4 +276,4 @@ const treemap={
  {type:'text',from:{data:'leaves'},encode:{enter:{fill:{value:'#fffdf4'},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:500},baseline:{value:'bottom'}},update:{x:{signal:'datum.x0 + 12'},y:{signal:'datum.y1 - 13'},text:{field:'team'},limit:{signal:'datum.x1 - datum.x0 - 22'}}}}
  ]};
 fs.writeFileSync(path.join(root,'specs/premiership_treemap.json'),JSON.stringify(treemap,null,2)+'\n');
-console.log('Created 14 main chart specs and the hero mini-chart.');
+console.log('Created 15 main chart specs and the hero mini-chart.');

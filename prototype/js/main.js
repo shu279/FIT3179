@@ -6,7 +6,8 @@ const chartNames = {
   finals_streaks:'Finals streaks',ladder_bump:'Ladder journeys',state_choropleth:'State choropleth',
   premiership_symbols:'Premiership symbols',grand_final_flows:'Grand Final connections',
   premiership_treemap:'Premiership share',success_radar:'Success profiles',season_boxplot:'Season spread',era_change:'Changing eras',
-  rank_profiles:'Ladder groups',finals_return:'Returning to finals',rank_changes:'Year-to-year ladder changes'
+  rank_profiles:'Ladder groups',finals_return:'Returning to finals',rank_changes:'Year-to-year ladder changes',
+  club_small_multiples:'Six club win-rate profiles'
 };
 
 async function renderChart(element) {

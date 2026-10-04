@@ -1,0 +1,199 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "padding": 5,
+  "autosize": {
+    "type": "pad",
+    "resize": true
+  },
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#747c6f",
+      "titleColor": "#747c6f",
+      "titleFontWeight": "normal",
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "labelPadding": 9,
+      "titlePadding": 14,
+      "labelOverlap": true,
+      "labelLimit": 150
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#747c6f",
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    },
+    "title": {
+      "fontSize": 15,
+      "fontWeight": 600,
+      "anchor": "start",
+      "color": "#21372b",
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 15,
+      "labelColor": "#21372b",
+      "labelFontWeight": 600,
+      "titleFontSize": 15
+    }
+  },
+  "description": "Six contrasting clubs on the same 2012–2025 time axis and 0–100% win-rate scale. A 50% reference line is shared by every panel.",
+  "data": {
+    "url": "data/team_seasons.json"
+  },
+  "transform": [
+    {
+      "filter": {
+        "field": "team",
+        "oneOf": [
+          "Geelong",
+          "Sydney",
+          "Hawthorn",
+          "Richmond",
+          "Brisbane Lions",
+          "West Coast"
+        ]
+      }
+    }
+  ],
+  "facet": {
+    "field": "team",
+    "type": "nominal",
+    "sort": [
+      "Geelong",
+      "Sydney",
+      "Hawthorn",
+      "Richmond",
+      "Brisbane Lions",
+      "West Coast"
+    ],
+    "header": {
+      "title": null,
+      "labelOrient": "top",
+      "labelAnchor": "start",
+      "labelPadding": 10
+    }
+  },
+  "columns": 3,
+  "spacing": 30,
+  "spec": {
+    "width": 280,
+    "height": 155,
+    "layer": [
+      {
+        "data": {
+          "values": [
+            {}
+          ]
+        },
+        "mark": {
+          "type": "rule",
+          "color": "#9aa58e",
+          "strokeDash": [
+            4,
+            4
+          ]
+        },
+        "encoding": {
+          "y": {
+            "datum": 50
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "line",
+          "color": "#31553b",
+          "strokeWidth": 2.5
+        },
+        "encoding": {
+          "x": {
+            "field": "season",
+            "type": "quantitative",
+            "scale": {
+              "domain": [
+                2012,
+                2025
+              ],
+              "nice": false,
+              "zero": false
+            },
+            "axis": {
+              "title": null,
+              "format": "d",
+              "values": [
+                2012,
+                2018,
+                2025
+              ],
+              "grid": false
+            }
+          },
+          "y": {
+            "field": "win_rate",
+            "type": "quantitative",
+            "scale": {
+              "domain": [
+                0,
+                100
+              ]
+            },
+            "axis": {
+              "title": null,
+              "values": [
+                0,
+                50,
+                100
+              ],
+              "labelExpr": "datum.value + '%'"
+            }
+          },
+          "tooltip": [
+            {
+              "field": "team",
+              "title": "Club",
+              "type": "nominal"
+            },
+            {
+              "field": "season",
+              "title": "Season",
+              "format": "d",
+              "type": "quantitative"
+            },
+            {
+              "field": "win_rate",
+              "title": "Games won (%)",
+              "format": ".1f",
+              "type": "quantitative"
+            },
+            {
+              "field": "rank",
+              "title": "Ladder position",
+              "type": "quantitative"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
