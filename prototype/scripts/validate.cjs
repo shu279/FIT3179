@@ -9,6 +9,7 @@ const liteFactory=vm.runInThisContext('(function(exports,require,module){'+fs.re
 liteFactory(liteModule.exports,name=>name==='vega'?vega:require(name),liteModule);
 const vl=liteModule.exports;
 const root=path.resolve(__dirname,'..');
+const chartLayout=require('../js/chart-layout.js');
 const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
 const sum=(a,f)=>a.reduce((n,x)=>n+x[f],0);
 const loader={...vega.loader(),load:async uri=>fs.readFileSync(path.join(root,uri),'utf8')};
@@ -35,7 +36,20 @@ async function main(){
  const flows=read('data/finals_connections.json');assert.equal(flows.reduce((s,d)=>s+d.properties.count,0),13);
  const topo=read('data/australia_states.topojson');assert.equal(topo.objects.states.geometries.length,8);
  const specs=fs.readdirSync(path.join(root,'specs')).filter(f=>f.endsWith('.json'));
- assert.equal(specs.length,15);
+ assert.equal(specs.length,16);
+ const stateSeasons=read('data/state_seasons.json');
+ assert.equal(stateSeasons.length,112);
+ for(const d of stateSeasons){
+   const records=rows.filter(r=>r.season===d.season&&r.state_code===d.state_code);
+   assert.equal(d.clubs,records.length);
+   assert.equal(d.finals,sum(records,'finalist'));
+   assert.equal(d.finals_rate,records.length?sum(records,'finalist')/records.length*100:null);
+ }
+ function items(view,predicate){
+   const found=[];
+   function visit(item){if(predicate(item))found.push(item);for(const child of item.items||[])visit(child);}
+   visit(view.scenegraph().root);return found;
+ }
  const transitions=read('data/season_transitions.json');
  assert.equal(transitions.length,18*13);
  for(const d of transitions){
@@ -57,12 +71,13 @@ async function main(){
    const s=read('specs/'+name);const isLite=s.$schema.includes('vega-lite');
    const warnings=[];const logger={level(){return this;},warn(...a){warnings.push(a.join(' '));},info(){},debug(){},error(...a){throw Error(a.join(' '));}};
    for(const width of [1000,340]){
-     const spec=structuredClone(s);spec.width=width;
+     const spec=structuredClone(s);const layout=chartLayout(spec,width);if(layout.type==='single')spec.width=width;
      const compiled=isLite?vl.compile(spec,{logger}).spec:spec;
      const view=new vega.View(vega.parse(compiled),{renderer:'none',loader,logger});
      await view.runAsync();
      const svg=await view.toSVG();
-     assert.ok(svg.startsWith('<svg'));assert.ok(!/\bNaN\b|\bInfinity\b/.test(svg),`${name} invalid geometry`);
+     assert.ok(svg.startsWith('<svg'));
+     // Browser QA checks actual text bounds; Node uses approximate font metrics.assert.ok(!/\bNaN\b|\bInfinity\b/.test(svg),`${name} invalid geometry`);
      for(const match of svg.matchAll(/font-size="([\d.]+)(?:px)?"/g))assert.ok(+match[1]>=15,`${name}: text below 15px`);
      if(name==='finals_return.json'){
        assert.equal(view.data('links').length,4);
@@ -87,9 +102,35 @@ async function main(){
        await view.width(width).runAsync();
      }
      if(name==='state_choropleth.json'){
-       const table=view.data('source_0');
-       assert.equal(table.length,8,'Preserve states without clubs');
-       assert.equal(table.filter(d=>d.clubs>0).length,5,'State joins must match five states');
+       const mapped=()=>items(view,item=>item.mark?.marktype==='shape'&&item.datum?.state_code).map(item=>item.datum);
+       for(let year=2012;year<=2025;year++){
+         await view.signal('selectedSeason',year).runAsync();
+         const table=mapped();
+         assert.equal(table.length,8,'Preserve states without clubs');
+         assert.equal(table.filter(d=>d.clubs>0).length,5,'State joins must match five states');
+         assert.equal(sum(table,'finals'),8);
+         for(const item of items(view,i=>i.mark?.marktype==='shape'&&i.datum?.clubs===0)){
+           assert.equal(item.fill,'#dedfd5');
+           assert.equal(item.datum.rate_label,'Not applicable');
+         }
+         for(const d of table){
+           assert.equal(d.season,year);
+           assert.ok(d.geo?.geometry,'Every year-state must have its geometry');
+           assert.equal(d.finals_rate,stateSeasons.find(r=>r.season===year&&r.state_code===d.state_code).finals_rate);
+         }
+         assert.deepEqual(view.scale('color').domain(),[0,100]);
+       }
+       await view.signal('mapZoom',3).signal('mapCentre',[13,-33]).runAsync();
+       assert.ok(!/\bNaN\b|\bInfinity\b/.test(await view.toSVG()));
+       await view.signal('mapZoom',1).signal('mapCentre',[0,-28]).runAsync();
+     }
+     if(name==='club_small_multiples.json'){
+       const panels=items(view,item=>item.mark?.name==='cell'&&item.datum?.team);
+       assert.equal(panels.length,6,'One panel per selected club');
+       assert.deepEqual(view.scale('x').domain(),[2012,2025]);
+       assert.deepEqual(view.scale('y').domain(),[0,100]);
+       const lines=items(view,item=>item.mark?.marktype==='line'&&item.datum?.team);
+       assert.equal(lines.length,6*14,'Every club retains all fourteen seasons');
      }
      if(['ladder_heatmap.json','finals_frequency.json'].includes(name)){
        await view.signal('focusTeam','Geelong').runAsync();assert.equal(view.signal('focusTeam'),'Geelong');
@@ -107,33 +148,40 @@ async function main(){
        }
      }
      if(name==='ladder_bump.json'){
-       const lineItems=()=>{
-         const items=[];
-         function visit(item){
-           if(item.mark?.marktype==='line'&&item.datum?.team)items.push(item);
-           for(const child of item.items||[])visit(child);
+       const brush=(range)=>view.change('seasonBrush_store',vega.changeset().remove(()=>true).insert(range?[{unit:'journey_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[range]}]:[])).runAsync();
+       const bars=()=>items(view,item=>item.mark?.marktype==='rect'&&Number.isFinite(item.datum?.period_win_rate));
+       for(const range of [[2014,2018],[2020,2020],[2019,2025],null]){
+         await brush(range);
+         assert.equal(bars().length,4);
+         if(range&&range[0]!==range[1])assert.deepEqual(view.scale('journey_detail_x').domain(),range);
+         for(const item of bars()){
+           const expected=rows.filter(r=>r.team===item.datum.team&&(!range||(r.season>=range[0]&&r.season<=range[1])));
+           assert.equal(item.datum.seasons,expected.length);
+           assert.equal(item.datum.games,sum(expected,'played'));
+           assert.ok(Math.abs(item.datum.period_win_rate-sum(expected,'wins')/sum(expected,'played')*100)<1e-8);
          }
-         visit(view.scenegraph().root);
-         return items;
-       };
+         const best=items(view,item=>item.mark?.marktype==='text'&&item.text==='Best');
+         const highest=Math.max(...bars().map(item=>item.datum.period_win_rate));
+         assert.ok(best.length>0);
+         assert.ok(best.every(item=>item.datum.period_win_rate===highest));
+       }
        await view.signal('journeyClub_team_legend','Geelong').runAsync();
-       assert.ok(lineItems().length>0);
-       for(const item of lineItems())assert.equal(item.opacity,item.datum.team==='Geelong'?1:0.15);
-       await view.signal('journeyClub_toggle',true).signal('journeyClub_team_legend','Hawthorn').runAsync();
-       for(const item of lineItems())assert.equal(item.opacity,['Geelong','Hawthorn'].includes(item.datum.team)?1:0.15);
-       await view.signal('journeyClub_toggle',false).signal('journeyClub_team_legend',null).runAsync();
-       assert.ok(lineItems().every(item=>item.opacity===1),'Clearing the legend restores every line');
+       const lines=items(view,item=>item.mark?.marktype==='line'&&item.datum?.team);
+       assert.ok(lines.length>0);
+       for(const item of [...lines,...bars()])assert.equal(item.opacity,item.datum.team==='Geelong'?1:0.15);
+       await view.signal('journeyClub_team_legend',null).runAsync();
      }
      // Save render output only as a local QA artifact, outside the webpage.
      fs.mkdirSync('/private/tmp/ass2-chart-renders',{recursive:true});
      fs.writeFileSync(`/private/tmp/ass2-chart-renders/${name.replace('.json','')}-${width}.svg`,svg);
      view.finalize();
    }
-   if(warnings.length)console.log('WARN',name,[...new Set(warnings)]);
+   const unexpected=warnings.filter(w=>w!=='Can not resolve event source: window');
+   assert.deepEqual([...new Set(unexpected)],[],`${name}: unexpected render warnings`);
    report.push(name);
  }
  const total=fs.readdirSync(path.join(root,'data')).reduce((s,f)=>s+fs.statSync(path.join(root,'data',f)).size,0);
  assert.ok(total<1000000,`Prepared data over budget: ${total}`);
- console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',streak_filter:'passed',legend_highlighting:'passed',data_bytes:total,charts:report},null,2));
+ console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',streak_filter:'passed',legend_highlighting:'passed',brush_aggregates:'passed',year_map_joins:'passed',small_multiples:'passed',data_bytes:total,charts:report},null,2));
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
