@@ -1,4 +1,4 @@
-/* Plain JavaScript: load standalone specs, render Vega charts, and link one club selector. */
+/* Plain JavaScript: embed JSON specs, link the club selector and size compound views. */
 'use strict';
 const chartViews = new Map();
 const chartNames = {
@@ -11,6 +11,8 @@ const chartNames = {
 
 async function renderChart(element) {
   const name = element.dataset.spec;
+  chartViews.get(name)?.view.finalize();
+  chartViews.delete(name);
   element.setAttribute('aria-busy','true');
   element.innerHTML = '<p class="chart-loading">Loading visualisation…</p>';
   try {
@@ -18,13 +20,14 @@ async function renderChart(element) {
     if (!response.ok) throw new Error(`Specification request failed (${response.status})`);
     const spec = await response.json();
     const isVega = spec.$schema.includes('/vega/');
+    const layout = chartLayout(spec,element.clientWidth);
     if (isVega) spec.width = element.clientWidth;
     element.replaceChildren();
     const result = await vegaEmbed(element, spec, {
       actions:false,renderer:'svg',tooltip:{theme:'custom'},defaultStyle:false,
       mode:isVega?'vega':'vega-lite'
     });
-    chartViews.set(name,{view:result.view,element,isVega,width:element.clientWidth});
+    chartViews.set(name,{view:result.view,element,isVega,width:element.clientWidth,spec,layout});
     element.dataset.rendered='true';
   } catch(error) {
     console.error(`Could not render ${name}:`,error);
@@ -66,7 +69,15 @@ function initialiseResize() {
         const width=Math.floor(entry.element.clientWidth);
         if(width>0&&Math.abs(width-entry.width)>2){
           entry.width=width;
-          entry.view.width(width).resize().runAsync().catch(error=>console.error('Chart resize:',error));
+          const layout=chartLayout(entry.spec,width);
+          if(layout.type==='facet'&&layout.columns!==entry.layout.columns){
+            renderChart(entry.element);
+          }else{
+            if(layout.type==='facet')entry.view.signal('child_width',layout.plotWidth);
+            else entry.view.width(layout.plotWidth);
+            entry.layout=layout;
+            entry.view.resize().runAsync().catch(error=>console.error('Chart resize:',error));
+          }
         }
       }
     },160);
