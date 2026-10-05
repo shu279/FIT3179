@@ -8,13 +8,13 @@
   <title>Staying at the Top of AFL — 2012–2025</title>
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=9c678729047a">
+  <link rel="stylesheet" href="css/style.css?v=62f7ecfcf06c">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
   <script defer src="js/chart-layout.js?v=ffa0cdc99558"></script>
-  <script defer src="js/map-controls.js?v=08f97f86e60a"></script>
-  <script defer src="js/main.js?v=d328df95fc11"></script>
+  <script defer src="js/map-controls.js?v=83d18b2ef654"></script>
+  <script defer src="js/main.js?v=0613786c2d29"></script>
 </head>
 <body>
   <a class="skip-link" href="#story">Skip to the visualisations</a>
@@ -88,10 +88,15 @@
         <figure class="figure-wide map-study">
           <h3>Finals participation varies by state and season.</h3>
           <p class="chart-deck">In 2025, both Queensland clubs reached finals. Change the year to see which states had a larger share of their clubs qualify. The same five colour classes apply every year.</p>
-          <div class="chart-actions"><button type="button" id="play-map" aria-pressed="false">Play years</button><button type="button" id="reset-map">Reset maps</button></div>
           <p id="map-season-summary" class="micro" aria-live="polite">Season 2025 · the controls below apply to all three maps.</p>
           <div class="map-with-legend">
-            <div class="chart" data-spec="state_choropleth" aria-label="Interactive choropleth with season selection, physical and cultural layers, and five fixed finals-rate classes."></div>
+            <div class="map-panel">
+              <div class="chart" data-spec="state_choropleth" aria-label="Interactive choropleth with season selection, physical and cultural layers, and five fixed finals-rate classes."></div>
+              <div class="map-controls-row">
+                <div id="map-season-control" class="vega-bindings"></div>
+                <div class="chart-actions"><button type="button" id="play-map" aria-pressed="false">Play</button><button type="button" id="reset-map">Reset</button></div>
+              </div>
+            </div>
             <aside class="map-legend" aria-label="Finals rate: five fixed percentage classes">
               <p class="micro">Share of clubs reaching finals (%)</p>
               <div class="map-rate-legend"><span style="--swatch:#ffffcc">0–&lt;20</span><span style="--swatch:#a1dab4">20–&lt;40</span><span style="--swatch:#41b6c4">40–&lt;60</span><span style="--swatch:#2c7fb8">60–&lt;80</span><span style="--swatch:#253494">80–100</span></div>
@@ -114,7 +119,7 @@
         </figure>
         <figure class="figure-wide map-study">
           <h3>Grand Final opponents came from different cities in most years.</h3>
-          <p class="chart-deck">Use the same year slider or Play years to follow the home cities of each season’s two Grand Final clubs.</p>
+          <p class="chart-deck">Use the same year slider or Play to follow the home cities of each season’s two Grand Final clubs.</p>
           <p id="map-final-summary" class="micro" aria-live="polite">2025: Brisbane Lions (Brisbane) defeated Geelong (Geelong).</p>
           <div class="chart" data-spec="grand_final_flows" aria-label="Time-selectable connection map between Grand Final opponents’ home cities, with premier and runner-up markers."></div>
           <figcaption>Thirteen of the fourteen Grand Finals paired clubs from different home cities. In 2021, both clubs were based in Melbourne, so their markers share a location and no line is drawn.</figcaption>

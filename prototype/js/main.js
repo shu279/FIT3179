@@ -23,6 +23,7 @@ async function renderChart(element, {resetMapPeriod=false}={}) {
     element.replaceChildren();
     const result = await vegaEmbed(element, spec, {
       actions:false,renderer:'svg',tooltip:{theme:'custom'},defaultStyle:false,
+      ...(name==='state_choropleth'?{bind:'#map-season-control'}:{}),
       mode:isVega?'vega':'vega-lite'
     });
     chartViews.set(name,{view:result.view,element,isVega,width:element.clientWidth,spec,layout});

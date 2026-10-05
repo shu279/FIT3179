@@ -24,7 +24,7 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
   let playing=false,timer=null,closed=false;
   const stop=()=>{
     playing=false;clearTimeout(timer);timer=null;
-    play.textContent='Play years';play.setAttribute('aria-pressed','false');
+    play.textContent='Play';play.setAttribute('aria-pressed','false');
   };
   function updatePeriod(){
     const period=symbols.signal('usePeriod');
@@ -38,7 +38,7 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
   function updateSeason(){
     const year=controller.signal('selectedSeason');
     const final=finals.find(row=>row.season===year);
-    status.textContent=`Season ${year} · the year and map controls apply to all three maps. Play years advances from 2012 to 2025.`;
+    status.textContent=`Season ${year} · the year and map controls apply to all three maps. Play advances from 2012 to 2025.`;
     flowStatus.textContent=final?`${year}: ${final.winner} (${final.winner_city}) defeated ${final.runner_up} (${final.runner_city}).`+
       (final.winner_city===final.runner_city?' Both clubs were based in the same city, so there is no connecting line.':' The line connects club home cities; it does not represent travel.'):
       `${year} Grand Final: hover over the markers for the clubs and results.`;
@@ -92,7 +92,7 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
   }
   play.addEventListener('click',async()=>{
     if(playing){stop();return;}
-    playing=true;play.textContent='Pause years';play.setAttribute('aria-pressed','true');
+    playing=true;play.textContent='Pause';play.setAttribute('aria-pressed','true');
     await symbols.signal('usePeriod',false).runAsync();
     if(controller.signal('selectedSeason')>=2025)await controller.signal('selectedSeason',2012).runAsync();
     timer=setTimeout(tick,1100);
