@@ -47,8 +47,6 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .map-rate-legend{display:grid;grid-template-columns:1fr;font-size:15px;color:var(--ink);text-align:left}
 .map-rate-legend>span{position:relative;min-height:34px;padding:5px 0 5px 38px;white-space:nowrap;line-height:24px}
 .map-rate-legend>span::before{content:"";position:absolute;top:0;bottom:0;left:0;width:24px;background:var(--swatch);border-inline:1px solid #bcc4b8}
-.map-legend>.map-key{margin-top:18px}
 .map-key{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:12px 0}
-.map-no-clubs{display:inline-block;width:14px;height:14px;background:#dedfd5;border:1px solid #748679}
 .map-study .chart-actions button:disabled{opacity:.5;cursor:default}
 @media(max-width:700px){.map-with-legend{grid-template-columns:1fr;gap:12px}.map-legend{max-width:240px;margin-top:0}}

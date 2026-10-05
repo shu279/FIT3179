@@ -33,7 +33,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const borders={url:'data/natural_earth_states.topojson',format:{type:'topojson',feature:'states'}};
  const commonParams=(bound=false)=>[
   {name:'selectedSeason',value:2025,...(bound?{bind:{input:'range',min:2012,max:2025,step:1,name:'Season (all maps): '}}:{})},
-  {name:'mapZoom',value:1,...(bound?{bind:{input:'range',min:1,max:6,step:0.25,name:'Zoom (all maps): '}}:{})},
+  {name:'mapZoom',value:1},
   {name:'mapCentre',value:[0,-28]},
   {name:'showPhysical',value:true},
   {name:'showCultural',value:true}
@@ -68,7 +68,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const mapTitle=text=>({text,anchor:'start',fontSize:15,color:ink,fontWeight:'normal',limit:{expr:'width'}});
  const save=(name,spec)=>write('specs/'+name+'.json',{...base,usermeta:{layout:'map'},...spec});
  save('state_choropleth',{
-  description:'Week 10 long-table lookup and year/zoom bindings, with Week 8 threshold classes. Natural Earth physical and cultural layers are visible by default over a rectangular ocean background.',
+  description:'Week 10 long-table lookup and year selection, with Week 8 threshold classes. The map stays at a fixed national view with Natural Earth physical and cultural layers over a rectangular ocean background.',
   height:440,title:mapTitle({expr:"'State finals rate · ' + selectedSeason"}),params:commonParams(true),projection,
   layer:[...physicalLayers(),
    {name:'state_rates',data:table('state_seasons'),transform:[{filter:'datum.season === selectedSeason'},

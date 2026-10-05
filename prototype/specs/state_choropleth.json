@@ -50,7 +50,7 @@
   "usermeta": {
     "layout": "map"
   },
-  "description": "Week 10 long-table lookup and year/zoom bindings, with Week 8 threshold classes. Natural Earth physical and cultural layers are visible by default over a rectangular ocean background.",
+  "description": "Week 10 long-table lookup and year selection, with Week 8 threshold classes. The map stays at a fixed national view with Natural Earth physical and cultural layers over a rectangular ocean background.",
   "title": {
     "text": {
       "expr": "'State finals rate · ' + selectedSeason"
@@ -77,14 +77,7 @@
     },
     {
       "name": "mapZoom",
-      "value": 1,
-      "bind": {
-        "input": "range",
-        "min": 1,
-        "max": 6,
-        "step": 0.25,
-        "name": "Zoom (all maps): "
-      }
+      "value": 1
     },
     {
       "name": "mapCentre",

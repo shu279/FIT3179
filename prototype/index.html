@@ -8,7 +8,7 @@
   <title>Staying at the Top of AFL — 2012–2025</title>
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=083dbb245287">
+  <link rel="stylesheet" href="css/style.css?v=b38398223282">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -91,11 +91,10 @@
           <div class="chart-actions"><button type="button" id="play-map" aria-pressed="false">Play years</button><button type="button" id="reset-map">Reset maps</button></div>
           <p id="map-season-summary" class="micro" aria-live="polite">Season 2025 · the controls below apply to all three maps.</p>
           <div class="map-with-legend">
-            <div class="chart" data-spec="state_choropleth" aria-label="Interactive choropleth with season and zoom controls, physical and cultural layers, and five fixed finals-rate classes."></div>
+            <div class="chart" data-spec="state_choropleth" aria-label="Interactive choropleth with season selection, physical and cultural layers, and five fixed finals-rate classes."></div>
             <aside class="map-legend" aria-label="Finals rate: five fixed percentage classes">
               <p class="micro">Share of clubs reaching finals (%)</p>
               <div class="map-rate-legend"><span style="--swatch:#ffffcc">0–&lt;20</span><span style="--swatch:#a1dab4">20–&lt;40</span><span style="--swatch:#41b6c4">40–&lt;60</span><span style="--swatch:#2c7fb8">60–&lt;80</span><span style="--swatch:#253494">80–100</span></div>
-              <p class="map-key micro"><span class="map-no-clubs" aria-hidden="true"></span> No AFL club based here. This is different from 0% reaching finals.</p>
             </aside>
           </div>
           <figcaption>Rate = clubs reaching finals ÷ clubs based in the state. The lightest colour includes 0%; grey means no clubs. A value on a class boundary belongs to the higher class, so 20% enters 20–&lt;40%. The physical layer shows land, ocean and a coordinate grid; the cultural layer shows state borders and names. Both are displayed throughout.</figcaption>
