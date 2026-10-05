@@ -13,7 +13,7 @@
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
   <script defer src="js/chart-layout.js?v=ffa0cdc99558"></script>
-  <script defer src="js/map-controls.js?v=ec64b93f7237"></script>
+  <script defer src="js/map-controls.js?v=08f97f86e60a"></script>
   <script defer src="js/main.js?v=d328df95fc11"></script>
 </head>
 <body>
@@ -100,9 +100,8 @@
           <figcaption>Rate = clubs reaching finals ÷ clubs based in the state. The lightest colour includes 0%; grey means no clubs. A value on a class boundary belongs to the higher class, so 20% enters 20–&lt;40%. The physical layer shows land, ocean and a coordinate grid; the cultural layer shows state borders and names. Both are displayed throughout.</figcaption>
         </figure>
         <figure class="figure-wide map-study">
-          <h3>The number of finalists from each city changed over time.</h3>
+          <h3 id="map-period-summary" aria-live="polite">City finalists in 2025</h3>
           <p class="chart-deck">Larger circles mean more finalists per season. Colour shows the share of the city’s clubs reaching finals. The orange diamond identifies that year’s premier.</p>
-          <p id="map-period-summary" class="micro" aria-live="polite">City map: 2025. Drag below the map to compare a period.</p>
           <div class="map-with-legend">
             <div class="chart" data-spec="premiership_symbols" aria-label="Proportional-symbol map of finalists by home city, linked to a time brush. Circle area shows finalists per season and colour shows finals rate."></div>
             <aside class="map-legend" aria-label="Finals rate: five fixed percentage classes">

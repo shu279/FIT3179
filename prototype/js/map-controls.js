@@ -31,9 +31,9 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
     const range=symbols.signal('mapTimeBrush').season || [2012,2025];
     const first=Math.max(2012,Math.ceil(range[0]));
     const last=Math.min(2025,Math.floor(range[1]));
-    periodStatus.textContent=!period?`City map: ${controller.signal('selectedSeason')}. Drag below the map to compare a period.`:
-      first>last?'The brush falls between seasons. Widen it to include a completed season.':
-      `City map: ${first}–${last}. Circle area shows the average number of finalists per season; colour shows the share of club-seasons reaching finals.`;
+    periodStatus.textContent=!period?`City finalists in ${controller.signal('selectedSeason')}`:
+      first>last?'City finalists — no seasons selected':
+      first===last?`City finalists in ${first}`:`City finalists, ${first}–${last}`;
   }
   function updateSeason(){
     const year=controller.signal('selectedSeason');

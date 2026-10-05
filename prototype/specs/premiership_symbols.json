@@ -128,18 +128,6 @@
           "expr": "[width / 2, city_map_height / 2]"
         }
       },
-      "title": {
-        "text": {
-          "expr": "usePeriod ? 'Finalists · period' : 'Finalists · ' + selectedSeason"
-        },
-        "anchor": "start",
-        "fontSize": 15,
-        "color": "#21372b",
-        "fontWeight": "normal",
-        "limit": {
-          "expr": "width"
-        }
-      },
       "layer": [
         {
           "name": "water_backdrop",
