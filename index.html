@@ -13,7 +13,7 @@
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
   <script defer src="js/chart-layout.js?v=ffa0cdc99558"></script>
-  <script defer src="js/map-controls.js?v=f57cf32d0f81"></script>
+  <script defer src="js/map-controls.js?v=2264441757b1"></script>
   <script defer src="js/main.js?v=2e2b543d6f0e"></script>
 </head>
 <body>
@@ -86,9 +86,8 @@
       <section class="chapter geography" aria-labelledby="chapter-two">
         <div class="section-intro pure-g"><div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-two">Success varies across states and cities.</h2></div><div class="pure-u-1 pure-u-md-2-5 intro-copy"><p>Victoria has ten clubs. Most other states in the competition have two. Raw totals tell only part of the story.</p><p class="micro">Compare the share of clubs reaching finals in each season to account for the different numbers of clubs.</p></div></div>
         <figure class="figure-wide map-study">
-          <h3>Finals participation varies by state and season.</h3>
-          <p class="chart-deck">In 2025, both Queensland clubs reached finals. Change the year to see which states had a larger share of their clubs qualify. The same five colour classes apply every year.</p>
-          <p id="map-season-summary" class="micro" aria-live="polite">Season 2025 · the controls below apply to all three maps.</p>
+          <h3 id="map-season-summary" aria-live="polite">Season 2025</h3>
+          <p class="chart-deck">The year applies to all three maps. Play advances from 2012 to 2025. The same five colour classes apply every year.</p>
           <div class="map-with-legend">
             <div class="map-panel">
               <div class="chart" data-spec="state_choropleth" aria-label="Interactive choropleth with season selection, physical and cultural layers, and five fixed finals-rate classes."></div>

@@ -69,7 +69,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const save=(name,spec)=>write('js/'+name+'.json',{...base,usermeta:{layout:'map'},...spec});
  save('state_choropleth',{
   description:'Week 10 long-table lookup and year selection, with Week 8 threshold classes. The map stays at a fixed national view with Natural Earth physical and cultural layers over a rectangular ocean background.',
-  height:440,title:mapTitle({expr:"'State finals rate · ' + selectedSeason"}),params:commonParams(true),projection,
+  height:440,params:commonParams(true),projection,
   layer:[...physicalLayers(),
    {name:'state_rates',data:table('state_seasons'),transform:[{filter:'datum.season === selectedSeason'},
     {calculate:"datum.clubs > 0 ? format(datum.finals_rate, '.1f') + '%' : 'Not applicable'",as:'rate_label'},
