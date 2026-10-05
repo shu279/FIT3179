@@ -8,7 +8,7 @@
   <title>Staying at the Top of AFL — 2012–2025</title>
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=e16955643506">
+  <link rel="stylesheet" href="css/style.css?v=083dbb245287">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -90,25 +90,29 @@
           <p class="chart-deck">In 2025, both Queensland clubs reached finals. Change the year to see which states had a larger share of their clubs qualify. The same five colour classes apply every year.</p>
           <div class="chart-actions"><button type="button" id="play-map" aria-pressed="false">Play years</button><button type="button" id="reset-map">Reset maps</button></div>
           <p id="map-season-summary" class="micro" aria-live="polite">Season 2025 · the controls below apply to all three maps.</p>
-          <div class="chart" data-spec="state_choropleth" aria-label="Interactive choropleth: season, zoom, centre and physical/cultural layer controls, with five fixed finals-rate classes."></div>
-          <div class="map-legend" aria-label="Finals rate: five fixed percentage classes">
-            <p class="micro">Share of clubs reaching finals (%)</p>
-            <div class="map-rate-legend"><span style="--swatch:#ffffcc">0–&lt;20</span><span style="--swatch:#a1dab4">20–&lt;40</span><span style="--swatch:#41b6c4">40–&lt;60</span><span style="--swatch:#2c7fb8">60–&lt;80</span><span style="--swatch:#253494">80–100</span></div>
+          <div class="map-with-legend">
+            <div class="chart" data-spec="state_choropleth" aria-label="Interactive choropleth with season and zoom controls, physical and cultural layers, and five fixed finals-rate classes."></div>
+            <aside class="map-legend" aria-label="Finals rate: five fixed percentage classes">
+              <p class="micro">Share of clubs reaching finals (%)</p>
+              <div class="map-rate-legend"><span style="--swatch:#ffffcc">0–&lt;20</span><span style="--swatch:#a1dab4">20–&lt;40</span><span style="--swatch:#41b6c4">40–&lt;60</span><span style="--swatch:#2c7fb8">60–&lt;80</span><span style="--swatch:#253494">80–100</span></div>
+              <p class="map-key micro"><span class="map-no-clubs" aria-hidden="true"></span> No AFL club based here. This is different from 0% reaching finals.</p>
+            </aside>
           </div>
-          <p class="map-key micro"><span class="map-no-clubs" aria-hidden="true"></span> No AFL club based here. This is different from 0% reaching finals.</p>
-          <figcaption>Rate = clubs reaching finals ÷ clubs based in the state. The lightest colour includes 0%; grey means no clubs. A value on a class boundary belongs to the higher class, so 20% enters 20–&lt;40%. The physical layer shows land, ocean and a coordinate grid; the cultural layer shows state borders and names. Zoom and choose a centre to inspect a region.</figcaption>
+          <figcaption>Rate = clubs reaching finals ÷ clubs based in the state. The lightest colour includes 0%; grey means no clubs. A value on a class boundary belongs to the higher class, so 20% enters 20–&lt;40%. The physical layer shows land, ocean and a coordinate grid; the cultural layer shows state borders and names. Both are displayed throughout.</figcaption>
         </figure>
         <figure class="figure-wide map-study">
           <h3>The number of finalists from each city changed over time.</h3>
           <p class="chart-deck">Larger circles mean more finalists per season. Colour shows the share of the city’s clubs reaching finals. The orange diamond identifies that year’s premier.</p>
           <p id="map-period-summary" class="micro" aria-live="polite">City map: 2025. Drag below the map to compare a period.</p>
-          <div class="chart" data-spec="premiership_symbols" aria-label="Proportional-symbol map of finalists by home city, linked to a time brush. Circle area shows finalists per season and colour shows finals rate."></div>
-          <div class="map-legend" aria-label="Finals rate: five fixed percentage classes">
-            <p class="micro">Share of clubs reaching finals (%)</p>
-            <div class="map-rate-legend"><span style="--swatch:#ffffcc">0–&lt;20</span><span style="--swatch:#a1dab4">20–&lt;40</span><span style="--swatch:#41b6c4">40–&lt;60</span><span style="--swatch:#2c7fb8">60–&lt;80</span><span style="--swatch:#253494">80–100</span></div>
+          <div class="map-with-legend">
+            <div class="chart" data-spec="premiership_symbols" aria-label="Proportional-symbol map of finalists by home city, linked to a time brush. Circle area shows finalists per season and colour shows finals rate."></div>
+            <aside class="map-legend" aria-label="Finals rate: five fixed percentage classes">
+              <p class="micro">Share of clubs reaching finals (%)</p>
+              <div class="map-rate-legend"><span style="--swatch:#ffffcc">0–&lt;20</span><span style="--swatch:#a1dab4">20–&lt;40</span><span style="--swatch:#41b6c4">40–&lt;60</span><span style="--swatch:#2c7fb8">60–&lt;80</span><span style="--swatch:#253494">80–100</span></div>
+            </aside>
           </div>
           <p class="map-key micro"><i class="legend-diamond" aria-hidden="true"></i> Premier in the selected season · Small empty ring: no finalists.</p>
-          <figcaption>Drag a range on the timeline to compare those seasons on the city map. Change the year or turn off “Compare the brushed period” to return to a single season. Period comparisons use finals appearances ÷ club-seasons for colour, and finals appearances ÷ seasons for area; scales stay fixed. City locations are fixed club bases: the circles change size and the premier marker changes location as seasons change. Zoom to Melbourne &amp; Geelong to separate nearby cities. On narrow screens, zoom to show city names or hover or tap a circle for details. Perth includes Fremantle.</figcaption>
+          <figcaption>Drag a range on the timeline to compare those seasons on the city map. Change the year or turn off “Compare the brushed period” to return to a single season. Period comparisons use finals appearances ÷ club-seasons for colour, and finals appearances ÷ seasons for area; scales stay fixed. City locations are fixed club bases: the circles change size and the premier marker changes location as seasons change. Hover or tap a circle for its city and record. Nearby cities such as Melbourne and Geelong can overlap at the national scale. Perth includes Fremantle.</figcaption>
         </figure>
         <figure class="figure-wide map-study">
           <h3>Grand Final opponents came from different cities in most years.</h3>

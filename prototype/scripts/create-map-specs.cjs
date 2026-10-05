@@ -34,13 +34,18 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const commonParams=(bound=false)=>[
   {name:'selectedSeason',value:2025,...(bound?{bind:{input:'range',min:2012,max:2025,step:1,name:'Season (all maps): '}}:{})},
   {name:'mapZoom',value:1,...(bound?{bind:{input:'range',min:1,max:6,step:0.25,name:'Zoom (all maps): '}}:{})},
-  {name:'mapCentre',value:[0,-28],...(bound?{bind:{input:'select',options:[[0,-28],[13,-33],[-12,-26],[11,-38]],labels:['Australia','Eastern states','Western Australia','Melbourne & Geelong'],name:'Map centre: '}}:{})},
-  {name:'showPhysical',value:true,...(bound?{bind:{input:'checkbox',name:'Land, ocean & grid (physical layer): '}}:{})},
-  {name:'showCultural',value:true,...(bound?{bind:{input:'checkbox',name:'State borders & names (cultural layer): '}}:{})}
+  {name:'mapCentre',value:[0,-28]},
+  {name:'showPhysical',value:true},
+  {name:'showCultural',value:true}
  ];
  const projection={type:'conicEqualArea',rotate:[-134,0,0],parallels:[-18,-36],center:{expr:'mapCentre'},
   scale:{expr:'mapZoom * min(width / 0.84, height / 0.72)'},translate:{expr:'[width / 2, height / 2]'}};
- const physicalLayers=()=>[
+ const physicalLayers=(height='height')=>[
+  // Fill the rectangular viewport; the clipped ocean geometry alone has a
+  // curved boundary under the equal-area projection.
+  {name:'water_backdrop',data:{values:[{}]},transform:[{filter:'showPhysical'}],
+   mark:{type:'rect',clip:true,fill:'#e4eff0',stroke:null,aria:false},
+   encoding:{x:{value:0},x2:{value:{expr:'width'}},y:{value:0},y2:{value:{expr:height}}}},
   {name:'physical_ocean',data:physical('ocean'),transform:[{filter:'showPhysical'}],mark:{type:'geoshape',clip:true,fill:'#e4eff0',stroke:null}},
   {name:'physical_land',data:physical('land'),transform:[{filter:'showPhysical'}],mark:{type:'geoshape',clip:true,fill:'#e5e6da',stroke:'#adb7a5',strokeWidth:0.6}},
   {name:'reference_grid',data:physical('graticules'),transform:[{filter:'showPhysical'}],mark:{type:'geoshape',clip:true,filled:false,stroke:'#bccbca',strokeWidth:0.6,strokeDash:[3,3]}}
@@ -63,7 +68,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const mapTitle=text=>({text,anchor:'start',fontSize:15,color:ink,fontWeight:'normal',limit:{expr:'width'}});
  const save=(name,spec)=>write('specs/'+name+'.json',{...base,usermeta:{layout:'map'},...spec});
  save('state_choropleth',{
-  description:'Week 10 long-table lookup and year/zoom/centre bindings, with Week 8 threshold classes. Natural Earth physical and cultural layers can be toggled separately.',
+  description:'Week 10 long-table lookup and year/zoom bindings, with Week 8 threshold classes. Natural Earth physical and cultural layers are visible by default over a rectangular ocean background.',
   height:440,title:mapTitle({expr:"'State finals rate · ' + selectedSeason"}),params:commonParams(true),projection,
   layer:[...physicalLayers(),
    {name:'state_rates',data:table('state_seasons'),transform:[{filter:'datum.season === selectedSeason'},
@@ -99,7 +104,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
   params:[...commonParams(true),{name:'usePeriod',value:false,bind:{input:'checkbox',name:'Compare the brushed period: '}}],spacing:28,
   vconcat:[
    {name:'city_map',width:900,height:440,projection:{...projection,scale:{expr:'mapZoom * min(width / 0.84, city_map_height / 0.72)'},translate:{expr:'[width / 2, city_map_height / 2]'}},title:mapTitle({expr:"usePeriod ? 'Finalists · period' : 'Finalists · ' + selectedSeason"}),
-    layer:[...physicalLayers(),borderLayer(),
+    layer:[...physicalLayers('city_map_height'),borderLayer(),
      {name:'city_symbols',data:table('city_seasons'),transform:cityTransform,
       mark:{type:'circle',clip:true,stroke:ink,strokeWidth:1,opacity:0.85},encoding:{...loc,color:rateColor,
        size:{field:'finals_per_season',type:'quantitative',scale:{domain:[0,9],range:[0,2400]},legend:{title:'Finalists',values:[1,3,6,9],orient:'bottom',direction:'horizontal',columns:2}},tooltip:cityTip}},

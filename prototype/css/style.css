@@ -40,11 +40,15 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .map-study .vega-bindings{display:flex;flex-wrap:wrap;gap:4px 28px;padding:14px 0}
 .map-study .vega-bind{margin:4px 0}
 .map-study .vega-bind input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
-.map-legend{max-width:560px;margin:18px 0 10px}
-.map-legend>p{margin:0 0 8px;color:var(--ink)}
-.map-rate-legend{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));font-size:15px;color:var(--ink);text-align:center}
-.map-rate-legend>span{position:relative;padding-top:20px;white-space:nowrap}
-.map-rate-legend>span::before{content:"";position:absolute;top:0;left:0;right:0;height:13px;background:var(--swatch);border-block:1px solid #bcc4b8}
+.map-with-legend{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:28px;align-items:start}
+.map-with-legend>.chart{min-width:0}
+.map-legend{margin:36px 0 0}
+.map-legend>p{margin:0 0 12px;color:var(--ink)}
+.map-rate-legend{display:grid;grid-template-columns:1fr;font-size:15px;color:var(--ink);text-align:left}
+.map-rate-legend>span{position:relative;min-height:34px;padding:5px 0 5px 38px;white-space:nowrap;line-height:24px}
+.map-rate-legend>span::before{content:"";position:absolute;top:0;bottom:0;left:0;width:24px;background:var(--swatch);border-inline:1px solid #bcc4b8}
+.map-legend>.map-key{margin-top:18px}
 .map-key{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:12px 0}
 .map-no-clubs{display:inline-block;width:14px;height:14px;background:#dedfd5;border:1px solid #748679}
 .map-study .chart-actions button:disabled{opacity:.5;cursor:default}
+@media(max-width:700px){.map-with-legend{grid-template-columns:1fr;gap:12px}.map-legend{max-width:240px;margin-top:0}}

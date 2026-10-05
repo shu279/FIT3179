@@ -50,7 +50,7 @@
   "usermeta": {
     "layout": "map"
   },
-  "description": "Week 10 long-table lookup and year/zoom/centre bindings, with Week 8 threshold classes. Natural Earth physical and cultural layers can be toggled separately.",
+  "description": "Week 10 long-table lookup and year/zoom bindings, with Week 8 threshold classes. Natural Earth physical and cultural layers are visible by default over a rectangular ocean background.",
   "title": {
     "text": {
       "expr": "'State finals rate · ' + selectedSeason"
@@ -91,51 +91,15 @@
       "value": [
         0,
         -28
-      ],
-      "bind": {
-        "input": "select",
-        "options": [
-          [
-            0,
-            -28
-          ],
-          [
-            13,
-            -33
-          ],
-          [
-            -12,
-            -26
-          ],
-          [
-            11,
-            -38
-          ]
-        ],
-        "labels": [
-          "Australia",
-          "Eastern states",
-          "Western Australia",
-          "Melbourne & Geelong"
-        ],
-        "name": "Map centre: "
-      }
+      ]
     },
     {
       "name": "showPhysical",
-      "value": true,
-      "bind": {
-        "input": "checkbox",
-        "name": "Land, ocean & grid (physical layer): "
-      }
+      "value": true
     },
     {
       "name": "showCultural",
-      "value": true,
-      "bind": {
-        "input": "checkbox",
-        "name": "State borders & names (cultural layer): "
-      }
+      "value": true
     }
   ],
   "projection": {
@@ -160,6 +124,44 @@
     }
   },
   "layer": [
+    {
+      "name": "water_backdrop",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "transform": [
+        {
+          "filter": "showPhysical"
+        }
+      ],
+      "mark": {
+        "type": "rect",
+        "clip": true,
+        "fill": "#e4eff0",
+        "stroke": null,
+        "aria": false
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "x2": {
+          "value": {
+            "expr": "width"
+          }
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": {
+            "expr": "height"
+          }
+        }
+      }
+    },
     {
       "name": "physical_ocean",
       "data": {
