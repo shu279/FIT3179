@@ -32,7 +32,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const physical=name=>({url:'data/natural_earth_physical.topojson',format:{type:'topojson',feature:name}});
  const borders={url:'data/natural_earth_states.topojson',format:{type:'topojson',feature:'states'}};
  const commonParams=(bound=false)=>[
-  {name:'selectedSeason',value:2025,...(bound?{bind:{input:'range',min:2012,max:2025,step:1,name:'Season (all maps): '}}:{})},
+  {name:'selectedSeason',value:2025,...(bound?{bind:{input:'range',min:2012,max:2025,step:1,name:'Season: '}}:{})},
   {name:'mapZoom',value:1},
   {name:'mapCentre',value:[0,-28]},
   {name:'showPhysical',value:true},
@@ -119,7 +119,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
     params:[{name:'mapTimeBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.14,stroke:green}}}],
     mark:{type:'line',point:true,color:green,strokeWidth:2.5},
     encoding:{x:{field:'season',type:'quantitative',scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:[2012,2015,2018,2021,2025],grid:false}},
-     y:{field:'finals',type:'quantitative',scale:{domain:[0,9]},axis:{title:'Melbourne finalists',values:[0,3,6,9]}},
+     y:{field:'finals',type:'quantitative',scale:{domain:[0,9]},axis:{title:null,values:[0,3,6,9]}},
      tooltip:[{field:'season',type:'quantitative',format:'d',title:'Season'},{field:'finals',type:'quantitative',title:'Melbourne clubs reaching finals'},{field:'finalists',type:'nominal',title:'Clubs'}]}}
   ]
  });
