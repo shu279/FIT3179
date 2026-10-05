@@ -1,14 +1,6 @@
 /* Plain JavaScript: embed JSON specs, link the club selector and size compound views. */
 'use strict';
 const chartViews = new Map();
-const chartNames = {
-  ladder_heatmap:'Ladder heatmap',finals_frequency:'Finals appearances',
-  finals_streaks:'Finals streaks',ladder_bump:'Ladder journeys',state_choropleth:'State choropleth',
-  premiership_symbols:'Premiership symbols',grand_final_flows:'Grand Final connections',
-  premiership_treemap:'Premiership share',success_radar:'Success profiles',season_boxplot:'Season spread',era_change:'Changing eras',
-  rank_profiles:'Ladder groups',finals_return:'Returning to finals',rank_changes:'Year-to-year ladder changes',
-  club_small_multiples:'Six club win-rate profiles'
-};
 
 async function renderChart(element) {
   const name = element.dataset.spec;
@@ -45,7 +37,7 @@ async function renderChart(element) {
     console.error(`Could not render ${name}:`,error);
     const message=document.createElement('p');
     message.className='chart-error';
-    message.textContent='This chart could not load. Please reload the page. The source data and chart files are available below.';
+    message.textContent='This chart could not load. Please reload the page. The source data is available below.';
     element.replaceChildren(message);
     element.dataset.rendered='error';
   } finally { element.setAttribute('aria-busy','false'); }
@@ -100,10 +92,6 @@ function initialiseResize() {
 
 async function initialise() {
   const figures=[...document.querySelectorAll('[data-spec]')];
-  const links=document.querySelector('#spec-links');
-  figures.forEach(el=>{
-    const a=document.createElement('a');a.href=`specs/${el.dataset.spec}.json`;a.textContent=chartNames[el.dataset.spec];a.className='spec-link';links.append(a);
-  });
   // Render the opening charts first, then the rest in bounded groups.
   for(let i=0;i<figures.length;i+=3)await Promise.all(figures.slice(i,i+3).map(renderChart));
   await initialiseClubControl();
