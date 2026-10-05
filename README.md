@@ -24,10 +24,9 @@ data/         Chart data, TopoJSON and source manifests
 images/       Page images
 vendor/       Pure.css and Vega libraries
 scripts/      Data preparation and validation
-docs/         Implementation notes
 ```
 
-The folder layout follows Week 8 Studio, section 3.3. See the [implementation guide](docs/implementation.md) for the studio connections, data definitions and preparation steps.
+The folder layout follows Week 8 Studio, section 3.3.
 
 ## Publishing and checks
 
