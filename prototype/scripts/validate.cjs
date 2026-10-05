@@ -36,7 +36,7 @@ async function main(){
  const flows=read('data/finals_connections.json');assert.equal(flows.reduce((s,d)=>s+d.properties.count,0),13);
  const topo=read('data/australia_states.topojson');assert.equal(topo.objects.states.geometries.length,8);
  const specs=fs.readdirSync(path.join(root,'specs')).filter(f=>f.endsWith('.json'));
- assert.equal(specs.length,16);
+ assert.equal(specs.length,15);
  const stateSeasons=read('data/state_seasons.json');
  assert.equal(stateSeasons.length,112);
  for(const d of stateSeasons){

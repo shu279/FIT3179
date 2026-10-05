@@ -91,7 +91,6 @@ const finalsReturn={
 };
 fs.writeFileSync(path.join(root,'specs/finals_return.json'),JSON.stringify(finalsReturn,null,2)+'\n');
 
-save('hero_finals',{description:'Geelong finals participation in each completed season from 2012 to 2025.',height:100,data:data('team_seasons'),transform:[{filter:"datum.team === 'Geelong'"},{calculate:"datum.finalist === 1 ? 'Yes' : 'No'",as:'played_finals'}],encoding:{x:field('season','ordinal',{axis:{title:null,labelAngle:0,labelExpr:"datum.value == 2012 || datum.value == 2025 || (width >= 280 && (datum.value == 2015 || datum.value == 2020)) ? datum.label : ''",domain:false,ticks:false}})},layer:[{mark:{type:'bar',cornerRadiusTopLeft:1,cornerRadiusTopRight:1},encoding:{y:{value:5},y2:{value:60},color:{condition:{test:'datum.finalist === 1',value:green},value:'#d6dace'},tooltip:[tip('season','Season'),{field:'played_finals',type:'nominal',title:'Played finals'}]}}]});
 
 save('ladder_heatmap',{description:'Regular-season ladder position, sorted by seasons reaching finals. Highlight a club using the bound dropdown.',height:530,data:data('team_seasons'),
  // Week 9: a JSON parameter creates the dropdown; opacity highlights the selected club.
@@ -276,4 +275,4 @@ const treemap={
  {type:'text',from:{data:'leaves'},encode:{enter:{fill:{value:'#fffdf4'},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:500},baseline:{value:'bottom'}},update:{x:{signal:'datum.x0 + 12'},y:{signal:'datum.y1 - 13'},text:{field:'team'},limit:{signal:'datum.x1 - datum.x0 - 22'}}}}
  ]};
 fs.writeFileSync(path.join(root,'specs/premiership_treemap.json'),JSON.stringify(treemap,null,2)+'\n');
-console.log('Created 15 main chart specs and the hero mini-chart.');
+console.log('Created 15 chart specs.');

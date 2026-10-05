@@ -2,7 +2,7 @@
 'use strict';
 const chartViews = new Map();
 const chartNames = {
-  hero_finals:'Geelong finals record',ladder_heatmap:'Ladder heatmap',finals_frequency:'Finals appearances',
+  ladder_heatmap:'Ladder heatmap',finals_frequency:'Finals appearances',
   finals_streaks:'Finals streaks',ladder_bump:'Ladder journeys',state_choropleth:'State choropleth',
   premiership_symbols:'Premiership symbols',grand_final_flows:'Grand Final connections',
   premiership_treemap:'Premiership share',success_radar:'Success profiles',season_boxplot:'Season spread',era_change:'Changing eras',
@@ -101,7 +101,7 @@ function initialiseResize() {
 async function initialise() {
   const figures=[...document.querySelectorAll('[data-spec]')];
   const links=document.querySelector('#spec-links');
-  figures.filter(el=>el.dataset.spec!=='hero_finals').forEach(el=>{
+  figures.forEach(el=>{
     const a=document.createElement('a');a.href=`specs/${el.dataset.spec}.json`;a.textContent=chartNames[el.dataset.spec];a.className='spec-link';links.append(a);
   });
   // Render the opening charts first, then the rest in bounded groups.
