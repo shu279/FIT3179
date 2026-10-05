@@ -5,10 +5,17 @@
 - [Prototype and setup instructions](prototype/README.md)
 - [Page](prototype/index.html)
 - [Data source manifest](prototype/data/manifest.json)
+- [Live AFL visualisation](https://shu279.github.io/FIT3179/)
 
 From the repository root, run `python3 -m http.server 8000` and open `http://localhost:8000/prototype/`. No build step is required.
 
 The repository includes source attribution and an AI-assistance acknowledgement. The source research notes, project specification, lecture slides and assessment PDFs are kept locally.
+
+## GitHub Pages
+
+In this repository's **Settings → Pages**, use **Deploy from a branch**, select **main** and **/(root)**, then save. This follows the Week 4 tutorial's branch-based publishing method. The root `index.html` opens `prototype/`, where the page and its relative data, chart and asset paths stay together. `.nojekyll` serves the files without Jekyll processing.
+
+Push changes to `main` to update the published page. Check the **pages build and deployment** run in **Actions**, then visit the live link above. The direct page is <https://shu279.github.io/FIT3179/prototype/>.
 
 ## History
 

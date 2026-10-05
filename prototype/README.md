@@ -88,7 +88,7 @@ This checks records, ranks, finals totals, every state-year join, selected-perio
 
 ## Publish and finish the assignment
 
-The contents of this folder can be served directly by GitHub Pages. Keep the `data/`, `specs/`, `vendor/`, `css/` and `js/` paths alongside `index.html`.
+The live page is <https://shu279.github.io/FIT3179/>; the root entry opens this `prototype/` folder. GitHub Pages serves **main → /(root)** using **Deploy from a branch**, as in the Week 4 tutorial. Keep the `data/`, `specs/`, `vendor/`, `css/` and `js/` paths alongside this folder's `index.html`. Push changes to `main` and check the Pages deployment in the repository's Actions tab.
 
 This is a prototype. Add your author details, review the AI acknowledgement against the unit's requirements, complete the hand-drawn A4 sketch and tutor feedback, refresh the data, and check the final page at desktop and mobile sizes before submission.
 
