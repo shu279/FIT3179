@@ -12,7 +12,7 @@ const base={ '$schema':'https://vega.github.io/schema/vega-lite/v5.json',width:'
 const data=url=>({url:'data/'+url+'.json'});
 const field=(field,type='quantitative',extra={})=>({field,type,...extra});
 const tip=(field,title,format)=>({field,title,...(format?{format}:{}),type:['team','city','band'].includes(field)?'nominal':'quantitative'});
-const save=(name,spec)=>fs.writeFileSync(path.join(root,'specs',name+'.json'),JSON.stringify({...base,...spec},null,2)+'\n');
+const save=(name,spec)=>fs.writeFileSync(path.join(root,'js',name+'.json'),JSON.stringify({...base,...spec},null,2)+'\n');
 const focus=[{name:'focusTeam',value:'All clubs'}];
 const focused={condition:{test:"focusTeam === 'All clubs' || datum.team === focusTeam",value:1},value:0.22};
 const years=[2012,2015,2018,2021,2025];
@@ -89,7 +89,7 @@ const finalsReturn={
   {type:'text',from:{data:'nodes'},encode:{update:{x:{signal:'datum.stage ? right : left'},y:{signal:'(datum.finalist ? top : missedStart) - 13'},align:{signal:"datum.stage ? 'right' : 'left'"},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:ink},text:{field:'label'}}}}
  ]
 };
-fs.writeFileSync(path.join(root,'specs/finals_return.json'),JSON.stringify(finalsReturn,null,2)+'\n');
+fs.writeFileSync(path.join(root,'js/finals_return.json'),JSON.stringify(finalsReturn,null,2)+'\n');
 
 
 save('ladder_heatmap',{description:'Regular-season ladder position, sorted by seasons reaching finals. Orange cells identify the season champion; numbers retain regular-season ranks. Highlight a club using the bound dropdown.',height:530,data:data('team_seasons'),
@@ -117,7 +117,7 @@ save('finals_frequency',{description:'Number of seasons in which each club playe
 const journeyTeams=['Geelong','Hawthorn','Richmond','Brisbane Lions'];
 const journeyColors=[green,'#ad8b42','#777f76',orange];
 const multiConfig={...config,title:{fontSize:15,fontWeight:600,anchor:'start',color:ink,offset:14},header:{labelFontSize:15,labelColor:ink,labelFontWeight:600,titleFontSize:15}};
-const saveMultiple=(name,spec)=>fs.writeFileSync(path.join(root,'specs',name+'.json'),JSON.stringify({
+const saveMultiple=(name,spec)=>fs.writeFileSync(path.join(root,'js',name+'.json'),JSON.stringify({
  '$schema':base.$schema,padding:5,autosize:{type:'pad',resize:true},config:multiConfig,...spec
 },null,2)+'\n');
 const journeyColor={field:'team',type:'nominal',scale:{domain:journeyTeams,range:journeyColors},legend:{title:null,columns:{expr:'width < 385 ? 1 : 2'},symbolType:'stroke',symbolStrokeWidth:3,labelLimit:180}};
@@ -243,7 +243,7 @@ const successRadar={
   }}}
  ]
 };
-fs.writeFileSync(path.join(root,'specs/success_radar.json'),JSON.stringify(successRadar,null,2)+'\n');
+fs.writeFileSync(path.join(root,'js/success_radar.json'),JSON.stringify(successRadar,null,2)+'\n');
 
 const tree=[{team:'AFL',parent:null,premierships:0},...summary.filter(d=>d.premierships).map(d=>({team:d.team,parent:'AFL',premierships:d.premierships}))];
 fs.writeFileSync(path.join(root,'data/premiership_tree.json'),JSON.stringify(tree,null,2)+'\n');
@@ -255,5 +255,5 @@ const treemap={
  {type:'text',from:{data:'leaves'},encode:{enter:{fill:{value:'#fffdf4'},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:32},fontWeight:{value:700},baseline:{value:'top'}},update:{x:{signal:'datum.x0 + 12'},y:{signal:'datum.y0 + 12'},text:{field:'premierships'}}}},
  {type:'text',from:{data:'leaves'},encode:{enter:{fill:{value:'#fffdf4'},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:500},baseline:{value:'bottom'}},update:{x:{signal:'datum.x0 + 12'},y:{signal:'datum.y1 - 13'},text:{field:'team'},limit:{signal:'datum.x1 - datum.x0 - 22'}}}}
  ]};
-fs.writeFileSync(path.join(root,'specs/premiership_treemap.json'),JSON.stringify(treemap,null,2)+'\n');
+fs.writeFileSync(path.join(root,'js/premiership_treemap.json'),JSON.stringify(treemap,null,2)+'\n');
 console.log('Created 15 chart specs.');

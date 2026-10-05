@@ -1,17 +1,22 @@
-# Staying at the Top of AFL — prototype
+# Staying at the Top of AFL — implementation guide
 
 A single scrolling visual story about consistency across the 18-club AFL era, 2012–2025. Includes 15 visualisations (three map idioms), using real data retrieved on 14 September 2026.
 
-## Open the prototype
+## View the visualisation
 
-Open this folder in VS Code and use **Live Server** on `index.html`, as in the lecture workflow. Alternatively, from the repository root, run:
+Open the repository root in VS Code and use **Live Server** on `index.html`, as in the lecture workflow. Alternatively, from the repository root, run:
 
 ```sh
-cd prototype
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
 Then visit <http://127.0.0.1:8000/>. Serve the folder over HTTP: double-clicking the HTML file can block the JSON requests.
+
+## Project structure
+
+The layout follows **Week 8 Studio, section 3.3** (PDF page 19, printed page 18): data files belong in `data/`, and JavaScript plus chart JSON files belong in `js/`. **Week 4 Tutorial Part B**, pages 20–22, explains branch-based GitHub Pages publishing and the root `index.html` entry point. Custom styles, images, bundled libraries and preparation scripts have their own folders.
+
+All file paths in this guide are relative to the repository root. Chart JSON data URLs are resolved relative to the page, for example `data/team_seasons.json`. There is no build step for publishing. Lecture materials, assessment documents and personal study notes stay local and are excluded from Git.
 
 ## Lecture-aligned stack
 
@@ -73,7 +78,7 @@ Each map's year input is a Vega-Lite `params.bind` control. Zoom, centre and bac
 | `js/map-controls.js` | Shared map inputs, playback, reset and accessible status text |
 | `scripts/create-map-specs.cjs` | Generate the three map specs and state/city/year tables |
 | `scripts/prepare-map-layers.cjs` | Download and process Natural Earth shapefiles with Mapshaper |
-| `specs/` | One readable Vega/Vega-Lite JSON file per chart |
+| `js/*.json` | One readable Vega/Vega-Lite specification per chart |
 | `data/manifest.json` | Source URLs, coverage and home-city groupings |
 | `data/corrections.json` | Documented source discrepancy and verification URLs |
 | `data/map_sources.json` | Map sources, processing arguments, hashes and colour classes |
@@ -95,7 +100,7 @@ The 2026 snapshot is retained separately and excluded from the story. The snapsh
 
 ## Checks and preparation
 
-With Node.js installed, from this folder:
+With Node.js installed, from the repository root:
 
 ```sh
 node scripts/validate.cjs
@@ -103,7 +108,7 @@ node scripts/validate.cjs
 
 This checks records, ranks, finals totals, every state-year join, selected-period aggregates, shared facet scales and legend highlighting. All 15 charts compile and render at desktop and narrow widths using the bundled libraries. Additional map checks cover all 14 years, exact colour-class boundaries, zero versus missing regions, layer visibility, zoom/centre changes, city brush calculations and actual shared-control/Play/Pause/Reset code with a simulated document and timer. Map SVGs are checked at 1000 and 320 pixels and inspected as rendered images. Node cannot attach the brush’s window pointer events, so only that headless warning is ignored; other warnings fail the check. These checks do not exercise browser pointer gestures or screenshot the entire webpage.
 
-`scripts/create-specs.cjs` rebuilds the chart JSON, derives the yearly state/city tables, Grand Final participants/connections and consecutive-season comparisons from the included club-season records. The added stacked bars show time in each ladder group; the flow diagram shows changes in finals participation; the histogram shows year-to-year ladder movement. There are 234 comparisons: 18 clubs × 13 adjacent-season pairs. `scripts/prepare-data.cjs` requires a folder of cached original AFL Tables HTML and Wikidata entity JSON; those temporary downloads are not bundled. The cleaned data is included, so these preparation scripts are unnecessary for viewing or hosting the prototype. Changing the study period also requires updating the scripts' explicit year ranges and the page's text.
+`scripts/create-specs.cjs` rebuilds the chart JSON, derives the yearly state/city tables, Grand Final participants/connections and consecutive-season comparisons from the included club-season records. The added stacked bars show time in each ladder group; the flow diagram shows changes in finals participation; the histogram shows year-to-year ladder movement. There are 234 comparisons: 18 clubs × 13 adjacent-season pairs. `scripts/prepare-data.cjs` requires a folder of cached original AFL Tables HTML and Wikidata entity JSON; those temporary downloads are not bundled. The cleaned data is included, so these preparation scripts are unnecessary for viewing or hosting the visualisation. Changing the study period also requires updating the scripts' explicit year ranges and the page's text.
 
 ### Reproduce the Natural Earth preparation
 
@@ -118,10 +123,10 @@ node scripts/validate.cjs
 
 The script downloads four official Natural Earth ZIP files and imports each shapefile together with its sidecars. It filters Australian states using ISO codes, clips to `[110, -45, 156, -10]`, cleans polygon geometry, applies weighted Visvalingam simplification with `keep-shapes` (20% of land/ocean points, 12% of state points), cleans again and exports quantised TopoJSON. Land, ocean and graticules are separate objects in `natural_earth_physical.topojson`; the eight state/territory features are in `natural_earth_states.topojson`. The two processed files total about **42 KB**. In the recorded argument lists, `$CACHE` and `$DATA` stand for the supplied cache folder and this project's `data/` folder.
 
-## Publish and finish the assignment
+## GitHub Pages
 
-The live page is <https://shu279.github.io/FIT3179/>; the root entry opens this `prototype/` folder. GitHub Pages serves **main → /(root)** using **Deploy from a branch**, as in the Week 4 tutorial. Keep the `data/`, `specs/`, `vendor/`, `css/` and `js/` paths alongside this folder's `index.html`. Push changes to `main` and check the Pages deployment in the repository's Actions tab.
+The live page is <https://shu279.github.io/FIT3179/>. GitHub Pages serves **main → /(root)** using **Deploy from a branch**, as in the Week 4 tutorial. The root `index.html` is the visualisation itself. `.nojekyll` keeps the site as plain static files. Keep `data/`, `js/`, `vendor/`, `css/` and `images/` alongside `index.html`. Push changes to `main` and check the **pages build and deployment** run in the repository's Actions tab. `404.html` sends outdated page bookmarks to the site home, preserving chapter anchors.
 
-This is a prototype. Add your author details, review the AI acknowledgement against the unit's requirements, complete the hand-drawn A4 sketch and tutor feedback, refresh the data, and check the final page at desktop and mobile sizes before submission.
+AI assistance was used during development. Source attribution and data-processing records are retained in the page and data manifests.
 
 Library projects: [Pure.css](https://purecss.io/), [Vega](https://github.com/vega/vega), [Vega-Lite](https://github.com/vega/vega-lite), [Vega-Embed](https://github.com/vega/vega-embed). Their upstream licences apply to the bundled files.

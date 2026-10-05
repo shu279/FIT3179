@@ -19,7 +19,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  const chartViews=new Map();
  for(const width of [1000,320]){
   for(const name of ['state_choropleth','premiership_symbols','grand_final_flows']){
-   const spec=read('specs/'+name+'.json');layout(spec,width);if(!spec.vconcat)spec.width=width;
+   const spec=read('js/'+name+'.json');layout(spec,width);if(!spec.vconcat)spec.width=width;
    const view=new vega.View(vega.parse(vl.compile(spec).spec),{renderer:'none',loader,logger});await view.runAsync();
    const svg=await view.toSVG();
    fs.writeFileSync(`/private/tmp/ass2-chart-renders/${name}-${width}.svg`,svg);
@@ -132,7 +132,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  const symbols=chartViews.get('premiership_symbols').view;
  await symbols.change('mapTimeBrush_store',vega.changeset().insert([{unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[2017,2020]]}])).runAsync();await settle();
  assert.equal(symbols.signal('usePeriod'),true);assert.match(elements.get('#map-period-summary').textContent,/2017–2020/);
- const restoredSpec=read('specs/premiership_symbols.json');layout(restoredSpec,1000);restoreCityMapState(restoredSpec,captureCityMapState(symbols));
+ const restoredSpec=read('js/premiership_symbols.json');layout(restoredSpec,1000);restoreCityMapState(restoredSpec,captureCityMapState(symbols));
  const restored=new vega.View(vega.parse(vl.compile(restoredSpec).spec),{renderer:'none',loader,logger});await restored.runAsync();
  assert.deepEqual(restored.signal('mapTimeBrush').season,[2017,2020]);assert.equal(restored.signal('usePeriod'),true);restored.finalize();
  restoreCityMapState(restoredSpec,captureCityMapState(symbols),true);

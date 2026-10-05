@@ -66,7 +66,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  // Limit titles to their panel: an overflowing title makes fit autosizing shrink
  // the projection again on every signal update at narrow screen widths.
  const mapTitle=text=>({text,anchor:'start',fontSize:15,color:ink,fontWeight:'normal',limit:{expr:'width'}});
- const save=(name,spec)=>write('specs/'+name+'.json',{...base,usermeta:{layout:'map'},...spec});
+ const save=(name,spec)=>write('js/'+name+'.json',{...base,usermeta:{layout:'map'},...spec});
  save('state_choropleth',{
   description:'Week 10 long-table lookup and year selection, with Week 8 threshold classes. The map stays at a fixed national view with Natural Earth physical and cultural layers over a rectangular ocean background.',
   height:440,title:mapTitle({expr:"'State finals rate · ' + selectedSeason"}),params:commonParams(true),projection,
@@ -98,7 +98,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
   {field:'last',type:'quantitative',format:'d',title:'Last season'},{field:'finals',type:'quantitative',title:'Finals appearances'},
   {field:'club_seasons',type:'quantitative',title:'Club-seasons'},{field:'finals_per_season',type:'quantitative',format:'.2f',title:'Finalists per season'},
   {field:'finals_rate',type:'quantitative',format:'.1f',title:'Finals rate (%)'}];
- write('specs/premiership_symbols.json',{
+ write('js/premiership_symbols.json',{
   '$schema':base.$schema,description:'A proportional-symbol map linked to an interval brush. Area shows finalists per season, colour uses the same five finals-rate classes as the state map. A diamond identifies the selected season’s premier.',
   usermeta:{layout:'map-timeline'},padding:5,autosize:{type:'pad',resize:true},config:multiConfig,
   params:[...commonParams(true),{name:'usePeriod',value:false,bind:{input:'checkbox',name:'Compare the brushed period: '}}],spacing:28,

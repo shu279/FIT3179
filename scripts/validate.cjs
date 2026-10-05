@@ -35,7 +35,7 @@ async function main(){
  assert.ok(cities.every(d=>d.longitude>110&&d.longitude<155&&d.latitude<0));
  const flows=read('data/finals_connections.json');assert.equal(flows.reduce((s,d)=>s+d.properties.count,0),13);
  const topo=read('data/australia_states.topojson');assert.equal(topo.objects.states.geometries.length,8);
- const specs=fs.readdirSync(path.join(root,'specs')).filter(f=>f.endsWith('.json'));
+ const specs=fs.readdirSync(path.join(root,'js')).filter(f=>f.endsWith('.json'));
  assert.equal(specs.length,15);
  const stateSeasons=read('data/state_seasons.json');
  assert.equal(stateSeasons.length,112);
@@ -68,7 +68,7 @@ async function main(){
  const report=[];
  for(const name of specs){
    console.log('Render',name);
-   const s=read('specs/'+name);const isLite=s.$schema.includes('vega-lite');
+   const s=read('js/'+name);const isLite=s.$schema.includes('vega-lite');
    const warnings=[];const logger={level(){return this;},warn(...a){warnings.push(a.join(' '));},info(){},debug(){},error(...a){throw Error(a.join(' '));}};
    for(const width of [1000,340]){
      const spec=structuredClone(s);const layout=chartLayout(spec,width);if(layout.type==='single')spec.width=width;

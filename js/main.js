@@ -13,7 +13,7 @@ async function renderChart(element, {resetMapPeriod=false}={}) {
   element.setAttribute('aria-busy','true');
   element.innerHTML = '<p class="chart-loading">Loading visualisation…</p>';
   try {
-    const response = await fetch(`specs/${name}.json`, {cache:'no-cache'});
+    const response = await fetch(`js/${name}.json`, {cache:'no-cache'});
     if (!response.ok) throw new Error(`Specification request failed (${response.status})`);
     const spec = await response.json();
     if(cityState)restoreCityMapState(spec,cityState,resetMapPeriod);

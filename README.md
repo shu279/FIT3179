@@ -1,22 +1,41 @@
-# FIT3179 — AFL team consistency
+# AFL team consistency
 
-**Staying at the Top of AFL** is a static data visualisation of the 18 AFL clubs across the 2012–2025 seasons, built with HTML, Pure.css, JavaScript and separate Vega/Vega-Lite JSON files.
+Staying at the Top of AFL is a data visualisation of the 18 AFL clubs across the 2012–2025 seasons, built with HTML, Pure.css, JavaScript and Vega-Lite.
 
-- [Prototype and setup instructions](prototype/README.md)
-- [Page](prototype/index.html)
-- [Data source manifest](prototype/data/manifest.json)
-- [Live AFL visualisation](https://shu279.github.io/FIT3179/)
+- [Visualisation](https://shu279.github.io/FIT3179/)
 
-From the repository root, run `python3 -m http.server 8000` and open `http://localhost:8000/prototype/`. No build step is required.
+## Run locally
 
-The repository includes source attribution and an AI-assistance acknowledgement. The source research notes, project specification, lecture slides and assessment PDFs are kept locally.
+Open the repository root in VS Code and use **Live Server** on `index.html`, or run:
 
-## GitHub Pages
+```sh
+python3 -m http.server 8000 --bind 127.0.0.1
+```
 
-In this repository's **Settings → Pages**, use **Deploy from a branch**, select **main** and **/(root)**, then save. This follows the Week 4 tutorial's branch-based publishing method. The root `index.html` opens `prototype/`, where the page and its relative data, chart and asset paths stay together. `.nojekyll` serves the files without Jekyll processing.
+Visit <http://127.0.0.1:8000/>. No build step is required.
 
-Push changes to `main` to update the published page. Check the **pages build and deployment** run in **Actions**, then visit the live link above. The direct page is <https://shu279.github.io/FIT3179/prototype/>.
+## Files
 
-## History
+```text
+index.html    Published visualisation
+css/          Page styles
+js/           JavaScript and Vega/Vega-Lite chart JSON
+data/         Chart data, TopoJSON and source manifests
+images/       Page images
+vendor/       Pure.css and Vega libraries
+scripts/      Data preparation and validation
+docs/         Implementation notes
+```
 
-The initial 15 commits were reconstructed on 28 September 2026 from saved work and Codex session records. The recorded work sessions took place on 14 and 28 September. For this retrospective history, the first eleven commits were assigned dates across 14–17 September, and the next four retain 28 September; exact times are approximate. These assigned dates organise the work into stages and are not a contemporaneous commit log. Subsequent development commits use their actual work dates.
+The folder layout follows Week 8 Studio, section 3.3. See the [implementation guide](docs/implementation.md) for the studio connections, data definitions and preparation steps.
+
+## Publishing and checks
+
+GitHub Pages serves **main → /(root)** using **Deploy from a branch**, following Week 4 Tutorial Part B. `index.html` opens the visualisation directly; `.nojekyll` keeps it as static files. Push to `main` and check the Pages deployment in **Actions**.
+
+To regenerate the chart JSON and validate all 15 charts from the repository root:
+
+```sh
+node scripts/create-specs.cjs
+node scripts/validate.cjs
+```
