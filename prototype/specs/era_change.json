@@ -81,10 +81,7 @@
             "nice": false
           },
           "axis": {
-            "title": [
-              "Change in win rate",
-              "(percentage points)"
-            ],
+            "title": "Change in win rate (percentage points)",
             "values": [
               -40,
               -20,

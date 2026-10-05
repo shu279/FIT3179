@@ -85,10 +85,7 @@
   "vconcat": [
     {
       "name": "journey_detail",
-      "title": [
-        "Ladder positions",
-        "in the selected period"
-      ],
+      "title": "Ladder positions in the selected period",
       "width": 900,
       "height": 260,
       "encoding": {
@@ -216,10 +213,7 @@
     },
     {
       "name": "journey_overview",
-      "title": [
-        "Drag to select",
-        "a season range"
-      ],
+      "title": "Drag to select a season range",
       "width": 900,
       "height": 90,
       "params": [
@@ -323,10 +317,7 @@
     },
     {
       "name": "journey_summary",
-      "title": [
-        "Games won",
-        "in the selected seasons"
-      ],
+      "title": "Games won in the selected seasons",
       "width": 900,
       "height": 145,
       "transform": [
@@ -413,10 +404,7 @@
             ]
           },
           "axis": {
-            "title": [
-              "Games won",
-              "(%)"
-            ],
+            "title": "Games won (%)",
             "values": [
               0,
               25,

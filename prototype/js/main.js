@@ -17,7 +17,7 @@ async function renderChart(element) {
   element.setAttribute('aria-busy','true');
   element.innerHTML = '<p class="chart-loading">Loading visualisation…</p>';
   try {
-    const response = await fetch(`specs/${name}.json`);
+    const response = await fetch(`specs/${name}.json`, {cache:'no-cache'});
     if (!response.ok) throw new Error(`Specification request failed (${response.status})`);
     const spec = await response.json();
     const isVega = spec.$schema.includes('/vega/');

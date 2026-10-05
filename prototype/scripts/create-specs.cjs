@@ -115,19 +115,19 @@ saveMultiple('ladder_bump',{
  data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:journeyTeams}}],spacing:32,
  resolve:{scale:{x:'independent',y:'independent',color:'shared'}},
  vconcat:[
-  {name:'journey_detail',title:['Ladder positions','in the selected period'],width:900,height:260,
+  {name:'journey_detail',title:'Ladder positions in the selected period',width:900,height:260,
    encoding:{x:field('season','quantitative',{scale:{domain:{param:'seasonBrush'},nice:false,zero:false},axis:{title:null,format:'d',tickMinStep:1,tickCount:6,grid:false}}),y:rankAxis,color:journeyColor,opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('season','Season','d'),tip('rank','Ladder position')]},
    layer:[
     {params:[{name:'journeyClub',select:{type:'point',fields:['team']},bind:'legend'}],mark:{type:'line',clip:true,strokeWidth:2.8}},
     {mark:{type:'point',clip:true,filled:true,size:42}}
    ]},
-  {name:'journey_overview',title:['Drag to select','a season range'],width:900,height:90,
+  {name:'journey_overview',title:'Drag to select a season range',width:900,height:90,
    params:[{name:'seasonBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.12,stroke:green}}}],
    mark:{type:'line',strokeWidth:1.8},
    encoding:{x:field('season','quantitative',{scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:years,grid:false}}),y:{...rankAxis,axis:{title:null,values:[1,18]}},color:journeyColor,opacity:journeyOpacity}},
-  {name:'journey_summary',title:['Games won','in the selected seasons'],width:900,height:145,
+  {name:'journey_summary',title:'Games won in the selected seasons',width:900,height:145,
    transform:[{filter:{param:'seasonBrush'}},{aggregate:[{op:'sum',field:'wins',as:'wins'},{op:'sum',field:'played',as:'games'},{op:'count',as:'seasons'},{op:'min',field:'season',as:'first'},{op:'max',field:'season',as:'last'}],groupby:['team']},{calculate:'datum.wins / datum.games * 100',as:'period_win_rate'},{window:[{op:'rank',as:'period_rank'}],sort:[{field:'period_win_rate',order:'descending'}]}],
-   encoding:{y:field('team','nominal',{scale:{domain:journeyTeams},axis:{title:null,ticks:false,labelLimit:150}}),x:field('period_win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:['Games won','(%)'],values:[0,25,50,75,100]}}),color:journeyColor,opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('seasons','Seasons'),tip('wins','Wins'),tip('games','Games played'),tip('period_win_rate','Win rate (%)','.1f')]},
+   encoding:{y:field('team','nominal',{scale:{domain:journeyTeams},axis:{title:null,ticks:false,labelLimit:150}}),x:field('period_win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:'Games won (%)',values:[0,25,50,75,100]}}),color:journeyColor,opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('seasons','Seasons'),tip('wins','Wins'),tip('games','Games played'),tip('period_win_rate','Win rate (%)','.1f')]},
    layer:[{mark:{type:'bar',size:19}},{transform:[{filter:'datum.period_rank === 1'}],mark:{type:'text',align:'right',dx:-7,fontSize:15,fontWeight:600,color:'#ffffff'},encoding:{text:{value:'Best'},color:{value:'#ffffff'}}}]}
  ]
 });
@@ -202,7 +202,7 @@ save('era_change',{
  height:475,data:data('team_summary'),layer:[
   {mark:{type:'bar',size:17},encoding:{
    y:field('team','nominal',{sort:{field:'change',order:'descending'},axis:{title:null,ticks:false}}),
-   x:field('change','quantitative',{scale:{domain:[-45,45],nice:false},axis:{title:['Change in win rate','(percentage points)'],values:[-40,-20,0,20,40],format:'+d'}}),
+   x:field('change','quantitative',{scale:{domain:[-45,45],nice:false},axis:{title:'Change in win rate (percentage points)',values:[-40,-20,0,20,40],format:'+d'}}),
    color:{condition:{test:'datum.change >= 0',value:green},value:orange},
    tooltip:[tip('team','Club'),tip('early_rate','2012–2018 win rate (%)','.1f'),tip('recent_rate','2019–2025 win rate (%)','.1f'),tip('change','Change (percentage points)','+.1f')]
   }},
