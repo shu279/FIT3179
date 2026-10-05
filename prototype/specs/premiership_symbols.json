@@ -1,13 +1,14 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": "container",
-  "height": 360,
-  "autosize": {
-    "type": "fit",
-    "contains": "padding",
-    "resize": true
+  "description": "A proportional-symbol map linked to an interval brush. Area shows finalists per season, colour uses the same five finals-rate classes as the state map. A diamond identifies the selected season’s premier.",
+  "usermeta": {
+    "layout": "map-timeline"
   },
   "padding": 5,
+  "autosize": {
+    "type": "pad",
+    "resize": true
+  },
   "config": {
     "background": "transparent",
     "font": "Helvetica Neue, Arial, sans-serif",
@@ -45,202 +46,790 @@
         "#838c76",
         "#637963"
       ]
+    },
+    "title": {
+      "fontSize": 15,
+      "fontWeight": 600,
+      "anchor": "start",
+      "color": "#21372b",
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 15,
+      "labelColor": "#21372b",
+      "labelFontWeight": 600,
+      "titleFontSize": 15
     }
   },
-  "description": "Premiership totals aggregated by club home city. Circle area, not radius, represents title count. Melbourne and Geelong are separate cities.",
-  "projection": {
-    "type": "conicEqualArea",
-    "rotate": [
-      -134,
-      0,
-      0
-    ],
-    "center": [
-      0,
-      -28
-    ],
-    "parallels": [
-      -18,
-      -36
-    ]
-  },
-  "layer": [
+  "params": [
     {
-      "data": {
-        "url": "data/australia_states.topojson",
-        "format": {
-          "type": "topojson",
-          "feature": "states"
-        }
-      },
-      "mark": {
-        "type": "geoshape",
-        "fill": "#e3e6d9",
-        "stroke": "#f7f6ef",
-        "strokeWidth": 1.2
+      "name": "selectedSeason",
+      "value": 2025,
+      "bind": {
+        "input": "range",
+        "min": 2012,
+        "max": 2025,
+        "step": 1,
+        "name": "Season (all maps): "
       }
     },
     {
-      "data": {
-        "url": "data/cities.json"
-      },
-      "transform": [
-        {
-          "filter": "datum.premierships > 0"
-        }
-      ],
-      "mark": {
-        "type": "circle",
-        "color": "#c96636",
-        "opacity": 0.65,
-        "stroke": "#c96636",
-        "strokeWidth": 1
-      },
-      "encoding": {
-        "longitude": {
-          "field": "longitude",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "latitude",
-          "type": "quantitative"
-        },
-        "size": {
-          "field": "premierships",
-          "type": "quantitative",
-          "scale": {
-            "domain": [
-              0,
-              9
-            ],
-            "range": [
-              0,
-              1700
-            ]
-          },
-          "legend": {
-            "title": "Premierships",
-            "values": [
-              1,
-              3,
-              9
-            ],
-            "orient": "bottom"
-          }
-        },
-        "tooltip": [
-          {
-            "field": "city",
-            "title": "Home city",
-            "type": "nominal"
-          },
-          {
-            "field": "clubs",
-            "title": "Clubs",
-            "type": "quantitative"
-          },
-          {
-            "field": "premierships",
-            "title": "Premierships",
-            "type": "quantitative"
-          }
-        ]
+      "name": "mapZoom",
+      "value": 1,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 6,
+        "step": 0.25,
+        "name": "Zoom (all maps): "
       }
     },
     {
-      "data": {
-        "url": "data/cities.json"
-      },
-      "transform": [
-        {
-          "filter": "datum.grand_finals > 0 && datum.city !== 'Geelong' && datum.city !== 'Melbourne'"
-        }
+      "name": "mapCentre",
+      "value": [
+        0,
+        -28
       ],
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "dx": 7,
-        "dy": -8,
-        "fontSize": 15,
-        "color": "#21372b"
+      "bind": {
+        "input": "select",
+        "options": [
+          [
+            0,
+            -28
+          ],
+          [
+            13,
+            -33
+          ],
+          [
+            -12,
+            -26
+          ],
+          [
+            11,
+            -38
+          ]
+        ],
+        "labels": [
+          "Australia",
+          "Eastern states",
+          "Western Australia",
+          "Melbourne & Geelong"
+        ],
+        "name": "Map centre: "
+      }
+    },
+    {
+      "name": "showPhysical",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "Land, ocean & grid (physical layer): "
+      }
+    },
+    {
+      "name": "showCultural",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "State borders & names (cultural layer): "
+      }
+    },
+    {
+      "name": "usePeriod",
+      "value": false,
+      "bind": {
+        "input": "checkbox",
+        "name": "Compare the brushed period: "
+      }
+    }
+  ],
+  "spacing": 28,
+  "vconcat": [
+    {
+      "name": "city_map",
+      "width": 900,
+      "height": 440,
+      "projection": {
+        "type": "conicEqualArea",
+        "rotate": [
+          -134,
+          0,
+          0
+        ],
+        "parallels": [
+          -18,
+          -36
+        ],
+        "center": {
+          "expr": "mapCentre"
+        },
+        "scale": {
+          "expr": "mapZoom * min(width / 0.84, city_map_height / 0.72)"
+        },
+        "translate": {
+          "expr": "[width / 2, city_map_height / 2]"
+        }
       },
-      "encoding": {
-        "longitude": {
-          "field": "longitude",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "latitude",
-          "type": "quantitative"
-        },
+      "title": {
         "text": {
-          "field": "city",
-          "type": "nominal"
+          "expr": "usePeriod ? 'Finalists · period' : 'Finalists · ' + selectedSeason"
+        },
+        "anchor": "start",
+        "fontSize": 15,
+        "color": "#21372b",
+        "fontWeight": "normal",
+        "limit": {
+          "expr": "width"
         }
-      }
+      },
+      "layer": [
+        {
+          "name": "physical_ocean",
+          "data": {
+            "url": "data/natural_earth_physical.topojson",
+            "format": {
+              "type": "topojson",
+              "feature": "ocean"
+            }
+          },
+          "transform": [
+            {
+              "filter": "showPhysical"
+            }
+          ],
+          "mark": {
+            "type": "geoshape",
+            "clip": true,
+            "fill": "#e4eff0",
+            "stroke": null
+          }
+        },
+        {
+          "name": "physical_land",
+          "data": {
+            "url": "data/natural_earth_physical.topojson",
+            "format": {
+              "type": "topojson",
+              "feature": "land"
+            }
+          },
+          "transform": [
+            {
+              "filter": "showPhysical"
+            }
+          ],
+          "mark": {
+            "type": "geoshape",
+            "clip": true,
+            "fill": "#e5e6da",
+            "stroke": "#adb7a5",
+            "strokeWidth": 0.6
+          }
+        },
+        {
+          "name": "reference_grid",
+          "data": {
+            "url": "data/natural_earth_physical.topojson",
+            "format": {
+              "type": "topojson",
+              "feature": "graticules"
+            }
+          },
+          "transform": [
+            {
+              "filter": "showPhysical"
+            }
+          ],
+          "mark": {
+            "type": "geoshape",
+            "clip": true,
+            "filled": false,
+            "stroke": "#bccbca",
+            "strokeWidth": 0.6,
+            "strokeDash": [
+              3,
+              3
+            ]
+          }
+        },
+        {
+          "name": "cultural_borders",
+          "data": {
+            "url": "data/natural_earth_states.topojson",
+            "format": {
+              "type": "topojson",
+              "feature": "states"
+            }
+          },
+          "transform": [
+            {
+              "filter": "showCultural"
+            }
+          ],
+          "mark": {
+            "type": "geoshape",
+            "clip": true,
+            "filled": false,
+            "stroke": "#748679",
+            "strokeWidth": 0.8
+          }
+        },
+        {
+          "name": "city_symbols",
+          "data": {
+            "url": "data/city_seasons.json"
+          },
+          "transform": [
+            {
+              "filter": {
+                "or": [
+                  {
+                    "and": [
+                      "usePeriod",
+                      {
+                        "param": "mapTimeBrush"
+                      }
+                    ]
+                  },
+                  "!usePeriod && datum.season === selectedSeason"
+                ]
+              }
+            },
+            {
+              "aggregate": [
+                {
+                  "op": "sum",
+                  "field": "finals",
+                  "as": "finals"
+                },
+                {
+                  "op": "sum",
+                  "field": "clubs",
+                  "as": "club_seasons"
+                },
+                {
+                  "op": "count",
+                  "as": "season_count"
+                },
+                {
+                  "op": "min",
+                  "field": "season",
+                  "as": "first"
+                },
+                {
+                  "op": "max",
+                  "field": "season",
+                  "as": "last"
+                }
+              ],
+              "groupby": [
+                "city",
+                "longitude",
+                "latitude"
+              ]
+            },
+            {
+              "calculate": "datum.finals / datum.club_seasons * 100",
+              "as": "finals_rate"
+            },
+            {
+              "calculate": "datum.finals / datum.season_count",
+              "as": "finals_per_season"
+            }
+          ],
+          "mark": {
+            "type": "circle",
+            "clip": true,
+            "stroke": "#21372b",
+            "strokeWidth": 1,
+            "opacity": 0.85
+          },
+          "encoding": {
+            "longitude": {
+              "field": "longitude",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "latitude",
+              "type": "quantitative"
+            },
+            "color": {
+              "field": "finals_rate",
+              "type": "quantitative",
+              "scale": {
+                "type": "threshold",
+                "domain": [
+                  20,
+                  40,
+                  60,
+                  80
+                ],
+                "range": [
+                  "#ffffcc",
+                  "#a1dab4",
+                  "#41b6c4",
+                  "#2c7fb8",
+                  "#253494"
+                ]
+              },
+              "legend": null
+            },
+            "size": {
+              "field": "finals_per_season",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  9
+                ],
+                "range": [
+                  0,
+                  2400
+                ]
+              },
+              "legend": {
+                "title": "Finalists",
+                "values": [
+                  1,
+                  3,
+                  6,
+                  9
+                ],
+                "orient": "bottom",
+                "direction": "horizontal",
+                "columns": 2
+              }
+            },
+            "tooltip": [
+              {
+                "field": "city",
+                "type": "nominal",
+                "title": "Home city"
+              },
+              {
+                "field": "first",
+                "type": "quantitative",
+                "format": "d",
+                "title": "First season"
+              },
+              {
+                "field": "last",
+                "type": "quantitative",
+                "format": "d",
+                "title": "Last season"
+              },
+              {
+                "field": "finals",
+                "type": "quantitative",
+                "title": "Finals appearances"
+              },
+              {
+                "field": "club_seasons",
+                "type": "quantitative",
+                "title": "Club-seasons"
+              },
+              {
+                "field": "finals_per_season",
+                "type": "quantitative",
+                "format": ".2f",
+                "title": "Finalists per season"
+              },
+              {
+                "field": "finals_rate",
+                "type": "quantitative",
+                "format": ".1f",
+                "title": "Finals rate (%)"
+              }
+            ]
+          }
+        },
+        {
+          "name": "zero_city_symbols",
+          "data": {
+            "url": "data/city_seasons.json"
+          },
+          "transform": [
+            {
+              "filter": {
+                "or": [
+                  {
+                    "and": [
+                      "usePeriod",
+                      {
+                        "param": "mapTimeBrush"
+                      }
+                    ]
+                  },
+                  "!usePeriod && datum.season === selectedSeason"
+                ]
+              }
+            },
+            {
+              "aggregate": [
+                {
+                  "op": "sum",
+                  "field": "finals",
+                  "as": "finals"
+                },
+                {
+                  "op": "sum",
+                  "field": "clubs",
+                  "as": "club_seasons"
+                },
+                {
+                  "op": "count",
+                  "as": "season_count"
+                },
+                {
+                  "op": "min",
+                  "field": "season",
+                  "as": "first"
+                },
+                {
+                  "op": "max",
+                  "field": "season",
+                  "as": "last"
+                }
+              ],
+              "groupby": [
+                "city",
+                "longitude",
+                "latitude"
+              ]
+            },
+            {
+              "calculate": "datum.finals / datum.club_seasons * 100",
+              "as": "finals_rate"
+            },
+            {
+              "calculate": "datum.finals / datum.season_count",
+              "as": "finals_per_season"
+            },
+            {
+              "filter": "datum.finals === 0"
+            }
+          ],
+          "mark": {
+            "type": "point",
+            "clip": true,
+            "shape": "circle",
+            "size": 35,
+            "filled": false,
+            "stroke": "#21372b",
+            "strokeWidth": 1.2
+          },
+          "encoding": {
+            "longitude": {
+              "field": "longitude",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "latitude",
+              "type": "quantitative"
+            },
+            "tooltip": [
+              {
+                "field": "city",
+                "type": "nominal",
+                "title": "Home city"
+              },
+              {
+                "field": "first",
+                "type": "quantitative",
+                "format": "d",
+                "title": "First season"
+              },
+              {
+                "field": "last",
+                "type": "quantitative",
+                "format": "d",
+                "title": "Last season"
+              },
+              {
+                "field": "finals",
+                "type": "quantitative",
+                "title": "Finals appearances"
+              },
+              {
+                "field": "club_seasons",
+                "type": "quantitative",
+                "title": "Club-seasons"
+              },
+              {
+                "field": "finals_per_season",
+                "type": "quantitative",
+                "format": ".2f",
+                "title": "Finalists per season"
+              },
+              {
+                "field": "finals_rate",
+                "type": "quantitative",
+                "format": ".1f",
+                "title": "Finals rate (%)"
+              }
+            ]
+          }
+        },
+        {
+          "name": "premier_location",
+          "data": {
+            "url": "data/city_seasons.json"
+          },
+          "transform": [
+            {
+              "filter": "!usePeriod && datum.season === selectedSeason && datum.premierships > 0"
+            }
+          ],
+          "mark": {
+            "type": "point",
+            "clip": true,
+            "shape": "diamond",
+            "filled": true,
+            "size": 180,
+            "color": "#c96636",
+            "stroke": "#ffffff",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "longitude": {
+              "field": "longitude",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "latitude",
+              "type": "quantitative"
+            },
+            "tooltip": [
+              {
+                "field": "season",
+                "type": "quantitative",
+                "format": "d",
+                "title": "Season"
+              },
+              {
+                "field": "premier",
+                "type": "nominal",
+                "title": "Premier"
+              },
+              {
+                "field": "city",
+                "type": "nominal",
+                "title": "Home city"
+              }
+            ]
+          }
+        },
+        {
+          "name": "cultural_city_labels",
+          "data": {
+            "url": "data/cities.json"
+          },
+          "transform": [
+            {
+              "filter": "(width >= 500 || mapZoom >= 2) && showCultural && datum.city !== 'Geelong' && datum.city !== 'Gold Coast'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "clip": true,
+            "align": "left",
+            "dx": 12,
+            "dy": -12,
+            "fontSize": 15,
+            "color": "#21372b"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "longitude",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "latitude",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "city",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "name": "cultural_geelong_label",
+          "data": {
+            "url": "data/cities.json"
+          },
+          "transform": [
+            {
+              "filter": "(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Geelong'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "clip": true,
+            "align": "right",
+            "dx": -12,
+            "dy": 22,
+            "fontSize": 15,
+            "color": "#21372b"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "longitude",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "latitude",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "city",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "name": "cultural_gold_coast_label",
+          "data": {
+            "url": "data/cities.json"
+          },
+          "transform": [
+            {
+              "filter": "(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Gold Coast'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "clip": true,
+            "align": "left",
+            "dx": 12,
+            "dy": 19,
+            "fontSize": 15,
+            "color": "#21372b"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "longitude",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "latitude",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "city",
+              "type": "nominal"
+            }
+          }
+        }
+      ]
     },
     {
+      "name": "map_overview",
+      "title": {
+        "text": "Drag to select years",
+        "anchor": "start",
+        "fontSize": 15,
+        "color": "#21372b",
+        "fontWeight": "normal",
+        "limit": {
+          "expr": "width"
+        }
+      },
+      "width": 900,
+      "height": 100,
       "data": {
-        "url": "data/cities.json"
+        "url": "data/city_seasons.json"
       },
       "transform": [
         {
           "filter": "datum.city === 'Melbourne'"
         }
       ],
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "dx": 15,
-        "dy": -6,
-        "fontSize": 15,
-        "color": "#21372b"
-      },
-      "encoding": {
-        "longitude": {
-          "field": "longitude",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "latitude",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "city",
-          "type": "nominal"
-        }
-      }
-    },
-    {
-      "data": {
-        "url": "data/cities.json"
-      },
-      "transform": [
+      "params": [
         {
-          "filter": "datum.city === 'Geelong'"
+          "name": "mapTimeBrush",
+          "select": {
+            "type": "interval",
+            "encodings": [
+              "x"
+            ],
+            "mark": {
+              "fill": "#31553b",
+              "fillOpacity": 0.14,
+              "stroke": "#31553b"
+            }
+          }
         }
       ],
       "mark": {
-        "type": "text",
-        "align": "right",
-        "dx": -7,
-        "dy": 20,
-        "fontSize": 15,
-        "color": "#21372b"
+        "type": "line",
+        "point": true,
+        "color": "#31553b",
+        "strokeWidth": 2.5
       },
       "encoding": {
-        "longitude": {
-          "field": "longitude",
-          "type": "quantitative"
+        "x": {
+          "field": "season",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              2012,
+              2025
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": {
+            "title": null,
+            "format": "d",
+            "values": [
+              2012,
+              2015,
+              2018,
+              2021,
+              2025
+            ],
+            "grid": false
+          }
         },
-        "latitude": {
-          "field": "latitude",
-          "type": "quantitative"
+        "y": {
+          "field": "finals",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              9
+            ]
+          },
+          "axis": {
+            "title": "Melbourne finalists",
+            "values": [
+              0,
+              3,
+              6,
+              9
+            ]
+          }
         },
-        "text": {
-          "field": "city",
-          "type": "nominal"
-        }
+        "tooltip": [
+          {
+            "field": "season",
+            "type": "quantitative",
+            "format": "d",
+            "title": "Season"
+          },
+          {
+            "field": "finals",
+            "type": "quantitative",
+            "title": "Melbourne clubs reaching finals"
+          },
+          {
+            "field": "finalists",
+            "type": "nominal",
+            "title": "Clubs"
+          }
+        ]
       }
     }
   ]

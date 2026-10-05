@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
-  "height": 400,
+  "height": 440,
   "autosize": {
     "type": "fit",
     "contains": "padding",
@@ -47,14 +47,21 @@
       ]
     }
   },
-  "description": "State finals participation by season, using a fixed 0–100% scale. Year, zoom and centre controls follow the Week 10 studio.",
+  "usermeta": {
+    "layout": "map"
+  },
+  "description": "Week 10 long-table lookup and year/zoom/centre bindings, with Week 8 threshold classes. Natural Earth physical and cultural layers can be toggled separately.",
   "title": {
     "text": {
-      "expr": "'Season ' + selectedSeason"
+      "expr": "'State finals rate · ' + selectedSeason"
     },
     "anchor": "start",
     "fontSize": 15,
-    "color": "#21372b"
+    "color": "#21372b",
+    "fontWeight": "normal",
+    "limit": {
+      "expr": "width"
+    }
   },
   "params": [
     {
@@ -65,7 +72,7 @@
         "min": 2012,
         "max": 2025,
         "step": 1,
-        "name": "Season: "
+        "name": "Season (all maps): "
       }
     },
     {
@@ -74,9 +81,9 @@
       "bind": {
         "input": "range",
         "min": 1,
-        "max": 3,
+        "max": 6,
         "step": 0.25,
-        "name": "Zoom: "
+        "name": "Zoom (all maps): "
       }
     },
     {
@@ -99,14 +106,35 @@
           [
             -12,
             -26
+          ],
+          [
+            11,
+            -38
           ]
         ],
         "labels": [
           "Australia",
           "Eastern states",
-          "Western Australia"
+          "Western Australia",
+          "Melbourne & Geelong"
         ],
-        "name": "Centre: "
+        "name": "Map centre: "
+      }
+    },
+    {
+      "name": "showPhysical",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "Land, ocean & grid (physical layer): "
+      }
+    },
+    {
+      "name": "showCultural",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "State borders & names (cultural layer): "
       }
     }
   ],
@@ -117,15 +145,15 @@
       0,
       0
     ],
-    "center": {
-      "expr": "mapCentre"
-    },
     "parallels": [
       -18,
       -36
     ],
+    "center": {
+      "expr": "mapCentre"
+    },
     "scale": {
-      "expr": "mapZoom * min(width / 0.78, height / 0.66)"
+      "expr": "mapZoom * min(width / 0.84, height / 0.72)"
     },
     "translate": {
       "expr": "[width / 2, height / 2]"
@@ -133,6 +161,76 @@
   },
   "layer": [
     {
+      "name": "physical_ocean",
+      "data": {
+        "url": "data/natural_earth_physical.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "ocean"
+        }
+      },
+      "transform": [
+        {
+          "filter": "showPhysical"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "clip": true,
+        "fill": "#e4eff0",
+        "stroke": null
+      }
+    },
+    {
+      "name": "physical_land",
+      "data": {
+        "url": "data/natural_earth_physical.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "land"
+        }
+      },
+      "transform": [
+        {
+          "filter": "showPhysical"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "clip": true,
+        "fill": "#e5e6da",
+        "stroke": "#adb7a5",
+        "strokeWidth": 0.6
+      }
+    },
+    {
+      "name": "reference_grid",
+      "data": {
+        "url": "data/natural_earth_physical.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "graticules"
+        }
+      },
+      "transform": [
+        {
+          "filter": "showPhysical"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "clip": true,
+        "filled": false,
+        "stroke": "#bccbca",
+        "strokeWidth": 0.6,
+        "strokeDash": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "name": "state_rates",
       "data": {
         "url": "data/state_seasons.json"
       },
@@ -148,7 +246,7 @@
           "lookup": "state_code",
           "from": {
             "data": {
-              "url": "data/australia_states.topojson",
+              "url": "data/natural_earth_states.topojson",
               "format": {
                 "type": "topojson",
                 "feature": "states"
@@ -162,8 +260,7 @@
       "mark": {
         "type": "geoshape",
         "clip": true,
-        "stroke": "#f7f6ef",
-        "strokeWidth": 1.5,
+        "stroke": null,
         "invalid": null
       },
       "encoding": {
@@ -172,26 +269,28 @@
           "type": "geojson"
         },
         "color": {
-          "condition": {
-            "test": "datum.clubs === 0",
-            "value": "#dedfd5"
-          },
           "field": "finals_rate",
           "type": "quantitative",
           "scale": {
+            "type": "threshold",
             "domain": [
-              0,
-              100
+              20,
+              40,
+              60,
+              80
             ],
             "range": [
-              "#edf0de",
-              "#acbf94",
-              "#31553b"
+              "#ffffcc",
+              "#a1dab4",
+              "#41b6c4",
+              "#2c7fb8",
+              "#253494"
             ]
           },
-          "legend": {
-            "title": "Clubs reaching finals (%)",
-            "gradientLength": 190
+          "legend": null,
+          "condition": {
+            "test": "datum.clubs === 0",
+            "value": "#dedfd5"
           }
         },
         "tooltip": [
@@ -202,24 +301,24 @@
           },
           {
             "field": "season",
-            "title": "Season",
+            "type": "quantitative",
             "format": "d",
-            "type": "quantitative"
+            "title": "Season"
           },
           {
             "field": "clubs",
-            "title": "Clubs",
-            "type": "quantitative"
+            "type": "quantitative",
+            "title": "Clubs based here"
           },
           {
             "field": "finals",
-            "title": "Clubs reaching finals",
-            "type": "quantitative"
+            "type": "quantitative",
+            "title": "Clubs reaching finals"
           },
           {
             "field": "rate_label",
-            "title": "Finals rate",
-            "type": "nominal"
+            "type": "nominal",
+            "title": "Finals rate"
           },
           {
             "field": "coverage",
@@ -230,12 +329,35 @@
       }
     },
     {
+      "name": "cultural_borders",
+      "data": {
+        "url": "data/natural_earth_states.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "transform": [
+        {
+          "filter": "showCultural"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "clip": true,
+        "filled": false,
+        "stroke": "#748679",
+        "strokeWidth": 0.8
+      }
+    },
+    {
+      "name": "cultural_state_labels",
       "data": {
         "url": "data/state_seasons.json"
       },
       "transform": [
         {
-          "filter": "datum.season === selectedSeason"
+          "filter": "showCultural && datum.season === selectedSeason"
         },
         {
           "lookup": "state",
@@ -243,43 +365,43 @@
             "data": {
               "values": [
                 {
-                  "label": "WA",
+                  "state": "WA",
                   "lon": 122,
                   "lat": -26
                 },
                 {
-                  "label": "NT",
+                  "state": "NT",
                   "lon": 133,
                   "lat": -21
                 },
                 {
-                  "label": "SA",
+                  "state": "SA",
                   "lon": 135,
                   "lat": -30
                 },
                 {
-                  "label": "QLD",
+                  "state": "QLD",
                   "lon": 145,
                   "lat": -22
                 },
                 {
-                  "label": "NSW",
+                  "state": "NSW",
                   "lon": 147,
                   "lat": -32
                 },
                 {
-                  "label": "VIC",
+                  "state": "VIC",
                   "lon": 143,
                   "lat": -36.7
                 },
                 {
-                  "label": "TAS",
+                  "state": "TAS",
                   "lon": 146.5,
                   "lat": -42
                 }
               ]
             },
-            "key": "label",
+            "key": "state",
             "fields": [
               "lon",
               "lat"
@@ -294,7 +416,7 @@
         "type": "text",
         "clip": true,
         "fontSize": 15,
-        "fontWeight": 700
+        "fontWeight": 600
       },
       "encoding": {
         "longitude": {
@@ -311,7 +433,7 @@
         },
         "color": {
           "condition": {
-            "test": "datum.clubs > 0 && datum.finals_rate >= 65",
+            "test": "datum.clubs > 0 && datum.finals_rate >= 60",
             "value": "#ffffff"
           },
           "value": "#21372b"

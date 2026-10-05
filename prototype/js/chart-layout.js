@@ -9,13 +9,17 @@ function chartLayout(spec, availableWidth) {
     return {type:'facet', columns, plotWidth};
   }
   if (spec.vconcat) {
-    const plotWidth = Math.max(120, available - 175);
+    const plotWidth = Math.max(120, available - (spec.usermeta?.layout === 'map-timeline' ? 75 : 175));
     spec.vconcat.forEach(view => {
       view.width = plotWidth;
     });
-    return {type:'concat', plotWidth};
+    const mapHeight = spec.usermeta?.layout === 'map-timeline' ? Math.max(220,Math.min(440,Math.round(available*0.55))) : null;
+    if(mapHeight) spec.vconcat[0].height = mapHeight;
+    return {type:'concat', plotWidth, mapHeight};
   }
-  return {type:'single', plotWidth:available};
+  const mapHeight = spec.usermeta?.layout === 'map' ? Math.max(240,Math.min(400,Math.round(available*0.6))) : null;
+  if(mapHeight) spec.height = mapHeight;
+  return {type:'single', plotWidth:available, mapHeight};
 }
 
 // The same sizing logic is used by the local validation script.

@@ -89,10 +89,14 @@ for(const club of summaries){
    else if(start!==null){const end=ds[i-1].season;streaks.push({team:club.team,id:club.id,start:start-0.35,end:end+0.35,first:start,last:end,length:end-start+1});start=null;}
  }
 }
-const manifest={title:'The Long Game',competition:'AFL men',complete_seasons:[2012,2025],retrieved:'2026-09-14',club_seasons:complete.length,clubs:18,seasons:14,premierships:14,distinct_premiers:summaries.filter(d=>d.premierships>0).length,leading_club:summaries[0],same_city_grand_finals:grandFinals.filter(d=>d.winner_city===d.runner_city).length,sources:{afl_tables:sourceList,abs:'https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-4-july-2026-june-2031/access-and-downloads/digital-boundary-files',wikidata:cityData.map(d=>({city:d.city,url:d.source_url}))}};
+const manifest={title:'Staying at the Top of AFL',competition:'AFL men',complete_seasons:[2012,2025],retrieved:'2026-09-14',club_seasons:complete.length,clubs:18,seasons:14,premierships:14,distinct_premiers:summaries.filter(d=>d.premierships>0).length,leading_club:summaries[0],same_city_grand_finals:grandFinals.filter(d=>d.winner_city===d.runner_city).length,sources:{afl_tables:sourceList,abs:'https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-4-july-2026-june-2031/access-and-downloads/digital-boundary-files',wikidata:cityData.map(d=>({city:d.city,url:d.source_url}))}};
 manifest.home_city_groupings=cityData.map(d=>({city:d.city,clubs:clubs.filter(c=>c[4]===d.city).map(c=>c[1])}));
 manifest.location_method='Author-assigned home-city groups represent club bases, not stadiums or match venues. Fremantle is grouped with Perth; Geelong is separate from Melbourne.';
 manifest.corrections='corrections.json';
+manifest.sources.natural_earth='https://www.naturalearthdata.com/downloads/';
+manifest.sources.colorbrewer='https://colorbrewer2.org/#type=sequential&scheme=YlGnBu&n=5';
+manifest.map_preparation='map_sources.json';
+manifest.legacy_boundary_file='australia_states.topojson is the earlier ABS boundary file, retained for provenance; the current maps use natural_earth_states.topojson and natural_earth_physical.topojson.';
 write('team_seasons',complete);write('team_summary',summaries);write('states',states);write('cities',cityData);write('grand_finals',grandFinals);write('finals_connections',flows);write('streaks',streaks);write('manifest',manifest);
 write('season_2026_snapshot',rows.filter(d=>d.season===2026));write('corrections',rankCorrections);
 console.log(JSON.stringify({club_seasons:complete.length,leading:summaries.slice(0,3),premiers:summaries.filter(d=>d.premierships).map(d=>[d.team,d.premierships]),cityData},null,2));

@@ -1,0 +1,187 @@
+{
+  "provider": "Natural Earth",
+  "licence": "Public domain",
+  "licence_url": "https://www.naturalearthdata.com/about/terms-of-use/",
+  "retrieved": "2026-10-05",
+  "mapshaper_version": "0.7.75",
+  "bbox": [
+    110,
+    -45,
+    156,
+    -10
+  ],
+  "method": "Import all shapefile sidecars; filter Australian states; clip to mainland Australia and Tasmania; clean; weighted Visvalingam simplification with keep-shapes; retain only join fields; export quantized TopoJSON.",
+  "layers": [
+    {
+      "name": "land",
+      "source": "50m_physical/ne_50m_land",
+      "category": "physical",
+      "retained": "20%",
+      "url": "https://naturalearth.s3.amazonaws.com/50m_physical/ne_50m_land.zip",
+      "download_bytes": 457183,
+      "sha256": "0b8e670cf80dce9cbebe2a193bc44ba5602758c22e1fa603980553646d7ff162"
+    },
+    {
+      "name": "ocean",
+      "source": "50m_physical/ne_50m_ocean",
+      "category": "physical",
+      "retained": "20%",
+      "url": "https://naturalearth.s3.amazonaws.com/50m_physical/ne_50m_ocean.zip",
+      "download_bytes": 461745,
+      "sha256": "abf268ba229f5eaab5012d7bfba340b424a4d25ed1efa085815c4a17ee0fd77d"
+    },
+    {
+      "name": "graticules",
+      "source": "110m_physical/ne_110m_graticules_10",
+      "category": "reference grid",
+      "retained": "100%",
+      "url": "https://naturalearth.s3.amazonaws.com/110m_physical/ne_110m_graticules_10.zip",
+      "download_bytes": 106977,
+      "sha256": "6a3f90c774f508c5cae45e88f18dac77a78e4f8290b3aaf1191aa9c54f9878db"
+    },
+    {
+      "name": "states",
+      "source": "10m_cultural/ne_10m_admin_1_states_provinces",
+      "category": "cultural",
+      "retained": "12%",
+      "url": "https://naturalearth.s3.amazonaws.com/10m_cultural/ne_10m_admin_1_states_provinces.zip",
+      "download_bytes": 14909524,
+      "sha256": "efc59726337323058f9446210adc96673179cd344e053666ee3d28cb58ba2b05"
+    }
+  ],
+  "commands": [
+    [
+      "-i",
+      "$CACHE/ne_50m_land/ne_50m_land.shp",
+      "-filter-fields",
+      "-clip",
+      "bbox=110,-45,156,-10",
+      "-clean",
+      "-simplify",
+      "weighted",
+      "20%",
+      "keep-shapes",
+      "-clean",
+      "-rename-layers",
+      "land",
+      "-o",
+      "$CACHE/land.geojson",
+      "format=geojson",
+      "force"
+    ],
+    [
+      "-i",
+      "$CACHE/ne_50m_ocean/ne_50m_ocean.shp",
+      "-filter-fields",
+      "-clip",
+      "bbox=110,-45,156,-10",
+      "-clean",
+      "-simplify",
+      "weighted",
+      "20%",
+      "keep-shapes",
+      "-clean",
+      "-rename-layers",
+      "ocean",
+      "-o",
+      "$CACHE/ocean.geojson",
+      "format=geojson",
+      "force"
+    ],
+    [
+      "-i",
+      "$CACHE/ne_110m_graticules_10/ne_110m_graticules_10.shp",
+      "-filter-fields",
+      "-clip",
+      "bbox=110,-45,156,-10",
+      "-rename-layers",
+      "graticules",
+      "-o",
+      "$CACHE/graticules.geojson",
+      "format=geojson",
+      "force"
+    ],
+    [
+      "-i",
+      "$CACHE/ne_10m_admin_1_states_provinces/ne_10m_admin_1_states_provinces.shp",
+      "-filter",
+      "adm0_a3 === \"AUS\" && [\"AU-NSW\",\"AU-VIC\",\"AU-QLD\",\"AU-SA\",\"AU-WA\",\"AU-TAS\",\"AU-NT\",\"AU-ACT\"].indexOf(iso_3166_2) >= 0",
+      "-each",
+      "state=iso_3166_2.replace(\"AU-\",\"\"), state_name=name, state_code=({NSW:\"1\",VIC:\"2\",QLD:\"3\",SA:\"4\",WA:\"5\",TAS:\"6\",NT:\"7\",ACT:\"8\"})[state]",
+      "-filter-fields",
+      "state,state_name,state_code",
+      "-clip",
+      "bbox=110,-45,156,-10",
+      "-clean",
+      "-simplify",
+      "weighted",
+      "12%",
+      "keep-shapes",
+      "-clean",
+      "-rename-layers",
+      "states",
+      "-o",
+      "$CACHE/states.geojson",
+      "format=geojson",
+      "force"
+    ],
+    [
+      "-i",
+      "$CACHE/land.geojson",
+      "$CACHE/ocean.geojson",
+      "$CACHE/graticules.geojson",
+      "combine-files",
+      "-o",
+      "$DATA/natural_earth_physical.topojson",
+      "format=topojson",
+      "quantization=100000",
+      "force"
+    ],
+    [
+      "-i",
+      "$CACHE/states.geojson",
+      "-o",
+      "$DATA/natural_earth_states.topojson",
+      "format=topojson",
+      "quantization=100000",
+      "force"
+    ]
+  ],
+  "outputs": [
+    {
+      "file": "natural_earth_physical.topojson",
+      "bytes": 21161
+    },
+    {
+      "file": "natural_earth_states.topojson",
+      "bytes": 20948
+    }
+  ],
+  "colour": {
+    "provider": "ColorBrewer 2.0",
+    "scheme": "YlGnBu",
+    "classes": 5,
+    "thresholds": [
+      20,
+      40,
+      60,
+      80
+    ],
+    "colours": [
+      "#ffffcc",
+      "#a1dab4",
+      "#41b6c4",
+      "#2c7fb8",
+      "#253494"
+    ],
+    "intervals": [
+      "0–<20%",
+      "20–<40%",
+      "40–<60%",
+      "60–<80%",
+      "80–100%"
+    ],
+    "url": "https://colorbrewer2.org/#type=sequential&scheme=YlGnBu&n=5",
+    "specification_source": "https://github.com/axismaps/colorbrewer/blob/master/colorbrewer_schemes.js"
+  }
+}

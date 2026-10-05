@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
-  "height": 360,
+  "height": 400,
   "autosize": {
     "type": "fit",
     "contains": "padding",
@@ -47,7 +47,97 @@
       ]
     }
   },
-  "description": "Connections between the home cities of Grand Final opponents. Line width represents the number of matchups, not physical journeys. Same-city final excluded.",
+  "usermeta": {
+    "layout": "map"
+  },
+  "description": "A season-by-season connection map of the home cities of Grand Final opponents. The common year and map controls update it alongside the other maps. Lines represent matchups, not travel.",
+  "title": {
+    "text": {
+      "expr": "'Grand Final · ' + selectedSeason"
+    },
+    "anchor": "start",
+    "fontSize": 15,
+    "color": "#21372b",
+    "fontWeight": "normal",
+    "limit": {
+      "expr": "width"
+    }
+  },
+  "params": [
+    {
+      "name": "selectedSeason",
+      "value": 2025,
+      "bind": {
+        "input": "range",
+        "min": 2012,
+        "max": 2025,
+        "step": 1,
+        "name": "Season (all maps): "
+      }
+    },
+    {
+      "name": "mapZoom",
+      "value": 1,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 6,
+        "step": 0.25,
+        "name": "Zoom (all maps): "
+      }
+    },
+    {
+      "name": "mapCentre",
+      "value": [
+        0,
+        -28
+      ],
+      "bind": {
+        "input": "select",
+        "options": [
+          [
+            0,
+            -28
+          ],
+          [
+            13,
+            -33
+          ],
+          [
+            -12,
+            -26
+          ],
+          [
+            11,
+            -38
+          ]
+        ],
+        "labels": [
+          "Australia",
+          "Eastern states",
+          "Western Australia",
+          "Melbourne & Geelong"
+        ],
+        "name": "Map centre: "
+      }
+    },
+    {
+      "name": "showPhysical",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "Land, ocean & grid (physical layer): "
+      }
+    },
+    {
+      "name": "showCultural",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "State borders & names (cultural layer): "
+      }
+    }
+  ],
   "projection": {
     "type": "conicEqualArea",
     "rotate": [
@@ -55,138 +145,261 @@
       0,
       0
     ],
-    "center": [
-      0,
-      -28
-    ],
     "parallels": [
       -18,
       -36
-    ]
+    ],
+    "center": {
+      "expr": "mapCentre"
+    },
+    "scale": {
+      "expr": "mapZoom * min(width / 0.84, height / 0.72)"
+    },
+    "translate": {
+      "expr": "[width / 2, height / 2]"
+    }
   },
   "layer": [
     {
+      "name": "physical_ocean",
       "data": {
-        "url": "data/australia_states.topojson",
+        "url": "data/natural_earth_physical.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "ocean"
+        }
+      },
+      "transform": [
+        {
+          "filter": "showPhysical"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "clip": true,
+        "fill": "#e4eff0",
+        "stroke": null
+      }
+    },
+    {
+      "name": "physical_land",
+      "data": {
+        "url": "data/natural_earth_physical.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "land"
+        }
+      },
+      "transform": [
+        {
+          "filter": "showPhysical"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "clip": true,
+        "fill": "#e5e6da",
+        "stroke": "#adb7a5",
+        "strokeWidth": 0.6
+      }
+    },
+    {
+      "name": "reference_grid",
+      "data": {
+        "url": "data/natural_earth_physical.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "graticules"
+        }
+      },
+      "transform": [
+        {
+          "filter": "showPhysical"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "clip": true,
+        "filled": false,
+        "stroke": "#bccbca",
+        "strokeWidth": 0.6,
+        "strokeDash": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "name": "cultural_borders",
+      "data": {
+        "url": "data/natural_earth_states.topojson",
         "format": {
           "type": "topojson",
           "feature": "states"
         }
       },
+      "transform": [
+        {
+          "filter": "showCultural"
+        }
+      ],
       "mark": {
         "type": "geoshape",
-        "fill": "#e3e6d9",
-        "stroke": "#f7f6ef",
-        "strokeWidth": 1.2
+        "clip": true,
+        "filled": false,
+        "stroke": "#748679",
+        "strokeWidth": 0.8
       }
     },
     {
+      "name": "annual_matchup",
       "data": {
-        "url": "data/finals_connections.json"
+        "url": "data/grand_final_seasons.json"
       },
+      "transform": [
+        {
+          "filter": "datum.properties.season === selectedSeason"
+        }
+      ],
       "mark": {
         "type": "geoshape",
+        "clip": true,
         "filled": false,
         "stroke": "#31553b",
-        "opacity": 0.65
+        "strokeWidth": 3,
+        "opacity": 0.8
       },
       "encoding": {
-        "strokeWidth": {
-          "field": "properties.count",
-          "type": "quantitative",
+        "tooltip": [
+          {
+            "field": "properties.season",
+            "type": "quantitative",
+            "format": "d",
+            "title": "Season"
+          },
+          {
+            "field": "properties.winner",
+            "type": "nominal",
+            "title": "Premier"
+          },
+          {
+            "field": "properties.runner_up",
+            "type": "nominal",
+            "title": "Runner-up"
+          }
+        ]
+      }
+    },
+    {
+      "name": "finalist_locations",
+      "data": {
+        "url": "data/grand_final_participants.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.season === selectedSeason"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "clip": true,
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "shape": {
+          "field": "result",
+          "type": "nominal",
           "scale": {
             "domain": [
-              1,
-              5
+              "Runner-up",
+              "Premier"
             ],
             "range": [
-              1.5,
-              9
+              "circle",
+              "diamond"
             ]
           },
           "legend": {
-            "title": "Grand Final meetings",
-            "values": [
-              1,
-              3,
-              5
+            "title": null
+          }
+        },
+        "size": {
+          "condition": {
+            "test": "datum.result === 'Runner-up'",
+            "value": 300
+          },
+          "value": 150
+        },
+        "fill": {
+          "field": "result",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Runner-up",
+              "Premier"
             ],
-            "orient": "bottom"
+            "range": [
+              "#f3f2e9",
+              "#c96636"
+            ]
+          },
+          "legend": {
+            "title": null
           }
+        },
+        "stroke": {
+          "condition": {
+            "test": "datum.result === 'Premier'",
+            "value": "#c96636"
+          },
+          "value": "#21372b"
         },
         "tooltip": [
           {
-            "field": "properties.pair",
+            "field": "team",
             "type": "nominal",
-            "title": "Club home cities"
+            "title": "Club"
           },
           {
-            "field": "properties.count",
-            "type": "quantitative",
-            "title": "Meetings"
-          },
-          {
-            "field": "properties.years",
+            "field": "result",
             "type": "nominal",
-            "title": "Seasons"
-          }
-        ]
-      }
-    },
-    {
-      "data": {
-        "url": "data/cities.json"
-      },
-      "transform": [
-        {
-          "filter": "datum.grand_finals > 0"
-        }
-      ],
-      "mark": {
-        "type": "circle",
-        "color": "#31553b",
-        "opacity": 1,
-        "size": 45,
-        "stroke": "#f3f2e9",
-        "strokeWidth": 1.5
-      },
-      "encoding": {
-        "longitude": {
-          "field": "longitude",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "latitude",
-          "type": "quantitative"
-        },
-        "tooltip": [
+            "title": "Result"
+          },
           {
             "field": "city",
-            "title": "Home city",
-            "type": "nominal"
-          },
-          {
-            "field": "grand_finals",
-            "title": "Grand Final appearances",
-            "type": "quantitative"
+            "type": "nominal",
+            "title": "Home city"
           }
         ]
       }
     },
     {
+      "name": "cultural_city_labels",
       "data": {
-        "url": "data/cities.json"
+        "url": "data/city_seasons.json"
       },
       "transform": [
         {
-          "filter": "datum.grand_finals > 0 && datum.city !== 'Geelong' && datum.city !== 'Melbourne'"
+          "filter": "datum.season === selectedSeason && datum.grand_finals > 0"
+        },
+        {
+          "filter": "(width >= 500 || mapZoom >= 2) && showCultural && datum.city !== 'Geelong' && datum.city !== 'Gold Coast'"
         }
       ],
       "mark": {
         "type": "text",
+        "clip": true,
         "align": "left",
-        "dx": 7,
-        "dy": -8,
+        "dx": 12,
+        "dy": -12,
         "fontSize": 15,
         "color": "#21372b"
       },
@@ -206,51 +419,61 @@
       }
     },
     {
+      "name": "cultural_geelong_label",
       "data": {
-        "url": "data/cities.json"
+        "url": "data/city_seasons.json"
       },
       "transform": [
         {
-          "filter": "datum.city === 'Melbourne'"
+          "filter": "datum.season === selectedSeason && datum.grand_finals > 0"
+        },
+        {
+          "filter": "(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Geelong'"
         }
       ],
       "mark": {
         "type": "text",
-        "align": "left",
-        "dx": 15,
-        "dy": -6,
-        "fontSize": 15,
-        "color": "#21372b"
-      },
-      "encoding": {
-        "longitude": {
-          "field": "longitude",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "latitude",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "city",
-          "type": "nominal"
-        }
-      }
-    },
-    {
-      "data": {
-        "url": "data/cities.json"
-      },
-      "transform": [
-        {
-          "filter": "datum.city === 'Geelong'"
-        }
-      ],
-      "mark": {
-        "type": "text",
+        "clip": true,
         "align": "right",
-        "dx": -7,
-        "dy": 20,
+        "dx": -12,
+        "dy": 22,
+        "fontSize": 15,
+        "color": "#21372b"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "city",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "name": "cultural_gold_coast_label",
+      "data": {
+        "url": "data/city_seasons.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.season === selectedSeason && datum.grand_finals > 0"
+        },
+        {
+          "filter": "(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Gold Coast'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "clip": true,
+        "align": "left",
+        "dx": 12,
+        "dy": 19,
         "fontSize": 15,
         "color": "#21372b"
       },

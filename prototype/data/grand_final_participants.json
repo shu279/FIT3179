@@ -1,0 +1,226 @@
+[
+  {
+    "season": 2012,
+    "team": "Hawthorn",
+    "city": "Melbourne",
+    "result": "Runner-up",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2012,
+    "team": "Sydney",
+    "city": "Sydney",
+    "result": "Premier",
+    "longitude": 151.21,
+    "latitude": -33.867777777777775
+  },
+  {
+    "season": 2013,
+    "team": "Fremantle",
+    "city": "Perth",
+    "result": "Runner-up",
+    "longitude": 115.85972222222222,
+    "latitude": -31.955833333333334
+  },
+  {
+    "season": 2013,
+    "team": "Hawthorn",
+    "city": "Melbourne",
+    "result": "Premier",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2014,
+    "team": "Sydney",
+    "city": "Sydney",
+    "result": "Runner-up",
+    "longitude": 151.21,
+    "latitude": -33.867777777777775
+  },
+  {
+    "season": 2014,
+    "team": "Hawthorn",
+    "city": "Melbourne",
+    "result": "Premier",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2015,
+    "team": "West Coast",
+    "city": "Perth",
+    "result": "Runner-up",
+    "longitude": 115.85972222222222,
+    "latitude": -31.955833333333334
+  },
+  {
+    "season": 2015,
+    "team": "Hawthorn",
+    "city": "Melbourne",
+    "result": "Premier",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2016,
+    "team": "Sydney",
+    "city": "Sydney",
+    "result": "Runner-up",
+    "longitude": 151.21,
+    "latitude": -33.867777777777775
+  },
+  {
+    "season": 2016,
+    "team": "Western Bulldogs",
+    "city": "Melbourne",
+    "result": "Premier",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2017,
+    "team": "Adelaide",
+    "city": "Adelaide",
+    "result": "Runner-up",
+    "longitude": 138.6,
+    "latitude": -34.9275
+  },
+  {
+    "season": 2017,
+    "team": "Richmond",
+    "city": "Melbourne",
+    "result": "Premier",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2018,
+    "team": "Collingwood",
+    "city": "Melbourne",
+    "result": "Runner-up",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2018,
+    "team": "West Coast",
+    "city": "Perth",
+    "result": "Premier",
+    "longitude": 115.85972222222222,
+    "latitude": -31.955833333333334
+  },
+  {
+    "season": 2019,
+    "team": "GWS Giants",
+    "city": "Sydney",
+    "result": "Runner-up",
+    "longitude": 151.21,
+    "latitude": -33.867777777777775
+  },
+  {
+    "season": 2019,
+    "team": "Richmond",
+    "city": "Melbourne",
+    "result": "Premier",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2020,
+    "team": "Geelong",
+    "city": "Geelong",
+    "result": "Runner-up",
+    "longitude": 144.35,
+    "latitude": -38.15
+  },
+  {
+    "season": 2020,
+    "team": "Richmond",
+    "city": "Melbourne",
+    "result": "Premier",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2021,
+    "team": "Western Bulldogs",
+    "city": "Melbourne",
+    "result": "Runner-up",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2021,
+    "team": "Melbourne",
+    "city": "Melbourne",
+    "result": "Premier",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2022,
+    "team": "Sydney",
+    "city": "Sydney",
+    "result": "Runner-up",
+    "longitude": 151.21,
+    "latitude": -33.867777777777775
+  },
+  {
+    "season": 2022,
+    "team": "Geelong",
+    "city": "Geelong",
+    "result": "Premier",
+    "longitude": 144.35,
+    "latitude": -38.15
+  },
+  {
+    "season": 2023,
+    "team": "Brisbane Lions",
+    "city": "Brisbane",
+    "result": "Runner-up",
+    "longitude": 153.02777777778,
+    "latitude": -27.467777777778
+  },
+  {
+    "season": 2023,
+    "team": "Collingwood",
+    "city": "Melbourne",
+    "result": "Premier",
+    "longitude": 144.96305555555554,
+    "latitude": -37.814166666666665
+  },
+  {
+    "season": 2024,
+    "team": "Sydney",
+    "city": "Sydney",
+    "result": "Runner-up",
+    "longitude": 151.21,
+    "latitude": -33.867777777777775
+  },
+  {
+    "season": 2024,
+    "team": "Brisbane Lions",
+    "city": "Brisbane",
+    "result": "Premier",
+    "longitude": 153.02777777778,
+    "latitude": -27.467777777778
+  },
+  {
+    "season": 2025,
+    "team": "Geelong",
+    "city": "Geelong",
+    "result": "Runner-up",
+    "longitude": 144.35,
+    "latitude": -38.15
+  },
+  {
+    "season": 2025,
+    "team": "Brisbane Lions",
+    "city": "Brisbane",
+    "result": "Premier",
+    "longitude": 153.02777777778,
+    "latitude": -27.467777777778
+  }
+]

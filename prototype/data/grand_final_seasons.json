@@ -1,0 +1,301 @@
+[
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2012,
+      "winner": "Sydney",
+      "runner_up": "Hawthorn",
+      "winner_city": "Sydney",
+      "runner_city": "Melbourne"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          151.21,
+          -33.867777777777775
+        ],
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2013,
+      "winner": "Hawthorn",
+      "runner_up": "Fremantle",
+      "winner_city": "Melbourne",
+      "runner_city": "Perth"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ],
+        [
+          115.85972222222222,
+          -31.955833333333334
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2014,
+      "winner": "Hawthorn",
+      "runner_up": "Sydney",
+      "winner_city": "Melbourne",
+      "runner_city": "Sydney"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ],
+        [
+          151.21,
+          -33.867777777777775
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2015,
+      "winner": "Hawthorn",
+      "runner_up": "West Coast",
+      "winner_city": "Melbourne",
+      "runner_city": "Perth"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ],
+        [
+          115.85972222222222,
+          -31.955833333333334
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2016,
+      "winner": "Western Bulldogs",
+      "runner_up": "Sydney",
+      "winner_city": "Melbourne",
+      "runner_city": "Sydney"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ],
+        [
+          151.21,
+          -33.867777777777775
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2017,
+      "winner": "Richmond",
+      "runner_up": "Adelaide",
+      "winner_city": "Melbourne",
+      "runner_city": "Adelaide"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ],
+        [
+          138.6,
+          -34.9275
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2018,
+      "winner": "West Coast",
+      "runner_up": "Collingwood",
+      "winner_city": "Perth",
+      "runner_city": "Melbourne"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          115.85972222222222,
+          -31.955833333333334
+        ],
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2019,
+      "winner": "Richmond",
+      "runner_up": "GWS Giants",
+      "winner_city": "Melbourne",
+      "runner_city": "Sydney"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ],
+        [
+          151.21,
+          -33.867777777777775
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2020,
+      "winner": "Richmond",
+      "runner_up": "Geelong",
+      "winner_city": "Melbourne",
+      "runner_city": "Geelong"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ],
+        [
+          144.35,
+          -38.15
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2022,
+      "winner": "Geelong",
+      "runner_up": "Sydney",
+      "winner_city": "Geelong",
+      "runner_city": "Sydney"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.35,
+          -38.15
+        ],
+        [
+          151.21,
+          -33.867777777777775
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2023,
+      "winner": "Collingwood",
+      "runner_up": "Brisbane Lions",
+      "winner_city": "Melbourne",
+      "runner_city": "Brisbane"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          144.96305555555554,
+          -37.814166666666665
+        ],
+        [
+          153.02777777778,
+          -27.467777777778
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2024,
+      "winner": "Brisbane Lions",
+      "runner_up": "Sydney",
+      "winner_city": "Brisbane",
+      "runner_city": "Sydney"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          153.02777777778,
+          -27.467777777778
+        ],
+        [
+          151.21,
+          -33.867777777777775
+        ]
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "season": 2025,
+      "winner": "Brisbane Lions",
+      "runner_up": "Geelong",
+      "winner_city": "Brisbane",
+      "runner_city": "Geelong"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          153.02777777778,
+          -27.467777777778
+        ],
+        [
+          144.35,
+          -38.15
+        ]
+      ]
+    }
+  }
+]

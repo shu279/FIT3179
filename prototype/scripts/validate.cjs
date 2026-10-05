@@ -77,7 +77,8 @@ async function main(){
      await view.runAsync();
      const svg=await view.toSVG();
      assert.ok(svg.startsWith('<svg'));
-     // Browser QA checks actual text bounds; Node uses approximate font metrics.assert.ok(!/\bNaN\b|\bInfinity\b/.test(svg),`${name} invalid geometry`);
+     // Node uses approximate font metrics; also reject invalid geometry.
+     assert.ok(!/\bNaN\b|\bInfinity\b/.test(svg),`${name} invalid geometry`);
      for(const match of svg.matchAll(/font-size="([\d.]+)(?:px)?"/g))assert.ok(+match[1]>=15,`${name}: text below 15px`);
      if(name==='finals_return.json'){
        assert.equal(view.data('links').length,4);
@@ -118,7 +119,7 @@ async function main(){
            assert.ok(d.geo?.geometry,'Every year-state must have its geometry');
            assert.equal(d.finals_rate,stateSeasons.find(r=>r.season===year&&r.state_code===d.state_code).finals_rate);
          }
-         assert.deepEqual(view.scale('color').domain(),[0,100]);
+         assert.deepEqual(view.scale('color').domain(),[20,40,60,80]);
        }
        await view.signal('mapZoom',3).signal('mapCentre',[13,-33]).runAsync();
        assert.ok(!/\bNaN\b|\bInfinity\b/.test(await view.toSVG()));
@@ -180,6 +181,7 @@ async function main(){
    assert.deepEqual([...new Set(unexpected)],[],`${name}: unexpected render warnings`);
    report.push(name);
  }
+ await require('./validate-maps.cjs')({vega,vl,loader,root,read,rows,stateSeasons,cities,items});
  const total=fs.readdirSync(path.join(root,'data')).reduce((s,f)=>s+fs.statSync(path.join(root,'data',f)).size,0);
  assert.ok(total<1000000,`Prepared data over budget: ${total}`);
  console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',streak_filter:'passed',legend_highlighting:'passed',brush_aggregates:'passed',year_map_joins:'passed',small_multiples:'passed',data_bytes:total,charts:report},null,2));
