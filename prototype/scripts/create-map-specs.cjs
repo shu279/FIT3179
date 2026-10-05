@@ -107,7 +107,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
     layer:[...physicalLayers('city_map_height'),borderLayer(),
      {name:'city_symbols',data:table('city_seasons'),transform:cityTransform,
       mark:{type:'circle',clip:true,stroke:ink,strokeWidth:1,opacity:0.85},encoding:{...loc,color:rateColor,
-       size:{field:'finals_per_season',type:'quantitative',scale:{domain:[0,9],range:[0,2400]},legend:{title:'Finalists',values:[1,3,6,9],orient:'bottom',direction:'horizontal',columns:2}},tooltip:cityTip}},
+       size:{field:'finals_per_season',type:'quantitative',scale:{domain:[0,9],range:[0,2400]},legend:null},tooltip:cityTip}},
      {name:'zero_city_symbols',data:table('city_seasons'),transform:[...cityTransform,{filter:'datum.finals === 0'}],
       mark:{type:'point',clip:true,shape:'circle',size:35,filled:false,stroke:ink,strokeWidth:1.2},encoding:{...loc,tooltip:cityTip}},
      {name:'premier_location',data:table('city_seasons'),transform:[{filter:'!usePeriod && datum.season === selectedSeason && datum.premierships > 0'}],
