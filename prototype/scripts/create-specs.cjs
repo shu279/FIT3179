@@ -28,7 +28,7 @@ const transitionLinks=[];
 const sourceOffsets={1:0,0:0},targetOffsets={1:0,0:0};
 for(const from of [1,0])for(const to of [1,0]){
  const count=transitions.filter(d=>d.from_finals===from&&d.to_finals===to).length;
- transitionLinks.push({from,to,count,source_offset:sourceOffsets[from],target_offset:targetOffsets[to],label:from?(to?'Reached finals again':'Missed finals next year'):(to?'Returned to finals':'Missed finals both years'),color:from?(to?green:orange):(to?sage:'#d6dace')});
+ transitionLinks.push({from,to,count,source_offset:sourceOffsets[from],target_offset:targetOffsets[to],label:from?(to?'Reached finals again':'Missed finals next year'):(to?'Returned to finals':'Missed finals both years'),color:from?(to?orange:green):(to?sage:'#d6dace')});
  sourceOffsets[from]+=count;targetOffsets[to]+=count;
 }
 fs.writeFileSync(path.join(root,'data/finals_transition_totals.json'),JSON.stringify(transitionLinks,null,2)+'\n');
@@ -84,7 +84,7 @@ const finalsReturn={
    fill:{field:'color'},fillOpacity:{value:0.82},stroke:{value:'#f3f2e9'},strokeWidth:{value:1},
    tooltip:{signal:"{'Outcome':datum.label,'Club-season transitions':datum.count,'Share of starting group':format(datum.count / (datum.from ? "+sourceOffsets[1]+" : "+sourceOffsets[0]+"),'.1%')}"}
   },hover:{fillOpacity:{value:1}}}},
-  {type:'rect',from:{data:'nodes'},encode:{update:{x:{signal:'datum.stage ? right-barWidth : left'},width:{signal:'barWidth'},y:{signal:'datum.finalist ? top : missedStart'},height:{signal:'datum.count * unit'},fill:{signal:"datum.finalist ? '#31553b' : '#a8bd9c'"}}}},
+  {type:'rect',from:{data:'nodes'},encode:{update:{x:{signal:'datum.stage ? right-barWidth : left'},width:{signal:'barWidth'},y:{signal:'datum.finalist ? top : missedStart'},height:{signal:'datum.count * unit'},fill:{signal:"datum.finalist ? '#c96636' : '#a8bd9c'"}}}},
   {type:'text',from:{data:'headers'},encode:{update:{x:{signal:'datum.stage ? right : left'},y:{value:15},align:{signal:"datum.stage ? 'right' : 'left'"},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:600},fill:{value:ink},text:{field:'label'}}}},
   {type:'text',from:{data:'nodes'},encode:{update:{x:{signal:'datum.stage ? right : left'},y:{signal:'(datum.finalist ? top : missedStart) - 13'},align:{signal:"datum.stage ? 'right' : 'left'"},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:ink},text:{field:'label'}}}}
  ]

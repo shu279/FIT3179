@@ -158,7 +158,7 @@
             "signal": "datum.count * unit"
           },
           "fill": {
-            "signal": "datum.finalist ? '#31553b' : '#a8bd9c'"
+            "signal": "datum.finalist ? '#c96636' : '#a8bd9c'"
           }
         }
       }
