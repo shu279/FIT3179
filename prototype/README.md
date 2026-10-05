@@ -1,4 +1,4 @@
-# The Long Game — AFL prototype
+# AFL: Who Stays at the Top? — prototype
 
 A single scrolling visual story about consistency across the 18-club AFL era, 2012–2025. Includes 15 main visualisations (three map idioms) and one small introductory chart, using real data retrieved on 14 September 2026.
 
