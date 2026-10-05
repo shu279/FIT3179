@@ -1,4 +1,4 @@
-# Teams at the Top of AFL — prototype
+# Staying at the Top of AFL — prototype
 
 A single scrolling visual story about consistency across the 18-club AFL era, 2012–2025. Includes 15 visualisations (three map idioms), using real data retrieved on 14 September 2026.
 

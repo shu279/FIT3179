@@ -1,6 +1,6 @@
 # FIT3179 — AFL team consistency
 
-**Teams at the Top of AFL** is a static data visualisation of the 18 AFL clubs across the 2012–2025 seasons, built with HTML, Pure.css, JavaScript and separate Vega/Vega-Lite JSON files.
+**Staying at the Top of AFL** is a static data visualisation of the 18 AFL clubs across the 2012–2025 seasons, built with HTML, Pure.css, JavaScript and separate Vega/Vega-Lite JSON files.
 
 - [Prototype and setup instructions](prototype/README.md)
 - [Page](prototype/index.html)
