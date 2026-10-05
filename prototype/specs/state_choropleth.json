@@ -427,6 +427,10 @@
           "type": "nominal"
         },
         "color": {
+          "condition": {
+            "test": "datum.clubs > 0 && datum.finals_rate < 20",
+            "value": "#000000"
+          },
           "value": "#ffffff"
         }
       }

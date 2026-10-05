@@ -83,7 +83,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
    {name:'cultural_state_labels',data:table('state_seasons'),transform:[{filter:'showCultural && datum.season === selectedSeason'},
     {lookup:'state',from:{data:{values:stateLabels},key:'state',fields:['lon','lat']}},{filter:'isValid(datum.lon)'}],
     mark:{type:'text',clip:true,fontSize:15,fontWeight:600},encoding:{longitude:{field:'lon',type:'quantitative'},latitude:{field:'lat',type:'quantitative'},text:{field:'state',type:'nominal'},
-     color:{value:'#ffffff'}}}
+     color:{condition:{test:`datum.clubs > 0 && datum.finals_rate < ${palette.thresholds[0]}`,value:'#000000'},value:'#ffffff'}}}
   ]
  });
  // Week 10: the interval brush filters the map's data before aggregation.
