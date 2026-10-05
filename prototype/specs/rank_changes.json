@@ -114,11 +114,11 @@
       "condition": [
         {
           "test": "datum.change > 0",
-          "value": "#31553b"
+          "value": "#c96636"
         },
         {
           "test": "datum.change < 0",
-          "value": "#c96636"
+          "value": "#31553b"
         }
       ],
       "value": "#a8bd9c"

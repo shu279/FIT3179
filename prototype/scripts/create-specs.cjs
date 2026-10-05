@@ -54,7 +54,7 @@ save('rank_changes',{
  encoding:{
   x:field('change','ordinal',{sort:'ascending',scale:{domain:Array.from({length:31},(_,i)=>i-15)},axis:{title:'Change in ladder places',labelAngle:0,labelExpr:"datum.value % 5 === 0 ? (datum.value > 0 ? '+' + datum.value : datum.value) : ''"}}),
   y:{aggregate:'count',type:'quantitative',axis:{title:'Club-season changes',tickMinStep:1}},
-  color:{condition:[{test:'datum.change > 0',value:green},{test:'datum.change < 0',value:orange}],value:sage},
+  color:{condition:[{test:'datum.change > 0',value:orange},{test:'datum.change < 0',value:green}],value:sage},
   tooltip:[tip('change','Places gained / lost','+d'),{aggregate:'count',type:'quantitative',title:'Club-season changes'}]
  }
 });
@@ -184,7 +184,7 @@ save('era_change',{
   {mark:{type:'bar',size:17},encoding:{
    y:field('team','nominal',{sort:{field:'change',order:'descending'},axis:{title:null,ticks:false}}),
    x:field('change','quantitative',{scale:{domain:[-45,45],nice:false},axis:{title:'Change in win rate (percentage points)',values:[-40,-20,0,20,40],format:'+d'}}),
-   color:{condition:{test:'datum.change >= 0',value:green},value:orange},
+   color:{condition:{test:'datum.change >= 0',value:orange},value:green},
    tooltip:[tip('team','Club'),tip('early_rate','2012–2018 win rate (%)','.1f'),tip('recent_rate','2019–2025 win rate (%)','.1f'),tip('change','Change (percentage points)','+.1f')]
   }},
   {data:{values:[{}]},mark:{type:'rule',color:ink,strokeWidth:1.2},encoding:{x:{datum:0}}}
