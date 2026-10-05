@@ -51,18 +51,6 @@
     "layout": "map"
   },
   "description": "A season-by-season connection map of the home cities of Grand Final opponents. The common year and map controls update it alongside the other maps. Lines represent matchups, not travel.",
-  "title": {
-    "text": {
-      "expr": "'Grand Final · ' + selectedSeason"
-    },
-    "anchor": "start",
-    "fontSize": 15,
-    "color": "#21372b",
-    "fontWeight": "normal",
-    "limit": {
-      "expr": "width"
-    }
-  },
   "params": [
     {
       "name": "selectedSeason",
@@ -322,9 +310,7 @@
               "diamond"
             ]
           },
-          "legend": {
-            "title": null
-          }
+          "legend": null
         },
         "size": {
           "condition": {
@@ -346,9 +332,7 @@
               "#c96636"
             ]
           },
-          "legend": {
-            "title": null
-          }
+          "legend": null
         },
         "stroke": {
           "condition": {

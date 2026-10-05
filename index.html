@@ -8,13 +8,13 @@
   <title>Staying at the Top of AFL — 2012–2025</title>
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=49eee171f003">
+  <link rel="stylesheet" href="css/style.css?v=e4ca7a1b94ca">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
   <script defer src="js/chart-layout.js?v=ffa0cdc99558"></script>
-  <script defer src="js/map-controls.js?v=83d18b2ef654"></script>
-  <script defer src="js/main.js?v=e9d6573a6756"></script>
+  <script defer src="js/map-controls.js?v=f57cf32d0f81"></script>
+  <script defer src="js/main.js?v=2e2b543d6f0e"></script>
 </head>
 <body>
   <a class="skip-link" href="#story">Skip to the visualisations</a>
@@ -128,10 +128,13 @@
           <figcaption>Drag a range on the timeline to compare those seasons on the city map. Change the year or turn off “Compare the brushed period” to return to a single season. Period comparisons use finals appearances ÷ club-seasons for colour, and finals appearances ÷ seasons for area; scales stay fixed. The champion marker and annotation appear when one season is selected and disappear for multiple seasons. City locations are fixed club bases: the circles change size and the champion marker changes location as seasons change. Hover or tap a circle for its city and record. Nearby cities such as Melbourne and Geelong can overlap at the national scale. Perth includes Fremantle.</figcaption>
         </figure>
         <figure class="figure-wide map-study">
-          <h3>Grand Final opponents came from different cities in most years.</h3>
-          <p class="chart-deck">Use the same year slider or Play to follow the home cities of each season’s two Grand Final clubs.</p>
-          <p id="map-final-summary" class="micro" aria-live="polite">2025: Brisbane Lions (Brisbane) defeated Geelong (Geelong).</p>
+          <h3 id="map-final-summary" aria-live="polite">2025: Brisbane Lions (Brisbane) defeated Geelong (Geelong).</h3>
+          <p id="map-final-context" class="chart-deck">The line connects club home cities; it does not represent travel.</p>
           <div class="chart" data-spec="grand_final_flows" aria-label="Time-selectable connection map between Grand Final opponents’ home cities, with premier and runner-up markers."></div>
+          <div class="map-controls-row map-final-controls">
+            <div class="chart-legend" role="group" aria-label="Grand Final results"><span><i class="legend-circle hollow" aria-hidden="true"></i> Runner-up</span><span><i class="legend-diamond" aria-hidden="true"></i> Premier</span></div>
+            <div id="map-final-season-control" class="vega-bindings"></div>
+          </div>
           <figcaption>Thirteen of the fourteen Grand Finals paired clubs from different home cities. In 2021, both clubs were based in Melbourne, so their markers share a location and no line is drawn.</figcaption>
         </figure>
       </section>

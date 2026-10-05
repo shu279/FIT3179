@@ -45,6 +45,8 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .map-controls-row{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:12px 0}
 .map-controls-row .vega-bindings{margin:0;padding:0;gap:0}
 .map-controls-row .chart-actions{margin:0;gap:8px;flex-wrap:nowrap}
+.map-final-controls{gap:12px 28px}
+.map-final-controls .chart-legend{margin:0}
 .map-legend{margin:36px 0 0}
 .map-legend>p{margin:0 0 12px;color:var(--ink)}
 .map-rate-legend{display:grid;grid-template-columns:1fr;font-size:15px;color:var(--ink);text-align:left}

@@ -117,7 +117,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
   }
  }
  const elements=new Map();
- for(const id of ['#map-season-summary','#map-period-summary','#map-final-summary','#play-map','#reset-map'])elements.set(id,{
+ for(const id of ['#map-season-summary','#map-period-summary','#map-final-summary','#map-final-context','#play-map','#reset-map'])elements.set(id,{
   textContent:'',attributes:{},listeners:{},setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,fn){this.listeners[name]=fn;}
  });
  let pending=null;
@@ -133,13 +133,15 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  // Controls beside the lower maps also update the other maps and their inputs.
  await chartViews.get('grand_final_flows').view.signal('selectedSeason',2021).signal('mapCentre',[13,-33]).runAsync();await settle();
  for(const {view} of chartViews.values()){assert.equal(view.signal('selectedSeason'),2021);assert.deepEqual(view.signal('mapCentre'),[13,-33]);}
+ assert.match(elements.get('#map-final-context').textContent,/same city/);
  await elements.get('#reset-map').listeners.click();await settle();
  for(const {view} of chartViews.values()){assert.equal(view.signal('selectedSeason'),2025);assert.equal(view.signal('showPhysical'),true);}
  const play=elements.get('#play-map');await play.listeners.click();await settle();
  assert.equal(controller.signal('selectedSeason'),2012);assert.equal(play.attributes['aria-pressed'],'true');
  await pending();await settle();assert.equal(controller.signal('selectedSeason'),2013);
  await play.listeners.click();assert.equal(play.attributes['aria-pressed'],'false');assert.equal(pending,null);
- assert.match(elements.get('#map-final-summary').textContent,/Hawthorn/);
+ assert.equal(elements.get('#map-final-summary').textContent,'2013: Hawthorn (Melbourne) defeated Fremantle (Perth).');
+ assert.match(elements.get('#map-final-context').textContent,/does not represent travel/);
  const symbols=chartViews.get('premiership_symbols').view;
  await symbols.change('mapTimeBrush_store',vega.changeset().insert([{unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[2017,2020]]}])).runAsync();await settle();
  assert.equal(symbols.signal('usePeriod'),true);assert.match(elements.get('#map-period-summary').textContent,/2017–2020/);

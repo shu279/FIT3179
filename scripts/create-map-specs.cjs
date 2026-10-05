@@ -140,16 +140,16 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  });
  save('grand_final_flows',{
   description:'A season-by-season connection map of the home cities of Grand Final opponents. The common year and map controls update it alongside the other maps. Lines represent matchups, not travel.',
-  height:400,title:mapTitle({expr:"'Grand Final · ' + selectedSeason"}),params:commonParams(true),projection,
+  height:400,params:commonParams(true),projection,
   layer:[...physicalLayers(),borderLayer(),
    {name:'annual_matchup',data:table('grand_final_seasons'),transform:[{filter:'datum.properties.season === selectedSeason'}],
     mark:{type:'geoshape',clip:true,filled:false,stroke:green,strokeWidth:3,opacity:0.8},
     encoding:{tooltip:[{field:'properties.season',type:'quantitative',format:'d',title:'Season'},{field:'properties.winner',type:'nominal',title:'Premier'},{field:'properties.runner_up',type:'nominal',title:'Runner-up'}]}},
    {name:'finalist_locations',data:table('grand_final_participants'),transform:[{filter:'datum.season === selectedSeason'}],
     mark:{type:'point',clip:true,strokeWidth:2},encoding:{...loc,
-     shape:{field:'result',type:'nominal',scale:{domain:['Runner-up','Premier'],range:['circle','diamond']},legend:{title:null}},
+     shape:{field:'result',type:'nominal',scale:{domain:['Runner-up','Premier'],range:['circle','diamond']},legend:null},
      size:{condition:{test:"datum.result === 'Runner-up'",value:300},value:150},
-     fill:{field:'result',type:'nominal',scale:{domain:['Runner-up','Premier'],range:['#f3f2e9',orange]},legend:{title:null}},stroke:{condition:{test:"datum.result === 'Premier'",value:orange},value:ink},
+     fill:{field:'result',type:'nominal',scale:{domain:['Runner-up','Premier'],range:['#f3f2e9',orange]},legend:null},stroke:{condition:{test:"datum.result === 'Premier'",value:orange},value:ink},
      tooltip:[{field:'team',type:'nominal',title:'Club'},{field:'result',type:'nominal',title:'Result'},{field:'city',type:'nominal',title:'Home city'}]}},
    ...cityLabels(true)]
  });
