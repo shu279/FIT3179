@@ -427,11 +427,7 @@
           "type": "nominal"
         },
         "color": {
-          "condition": {
-            "test": "datum.clubs > 0 && datum.finals_rate >= 60",
-            "value": "#ffffff"
-          },
-          "value": "#21372b"
+          "value": "#ffffff"
         }
       }
     }
