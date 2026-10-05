@@ -13,7 +13,7 @@
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
   <script defer src="js/chart-layout.js"></script>
-  <script defer src="js/main.js?v=5214d7b922ea"></script>
+  <script defer src="js/main.js?v=e3f44a2ef4c3"></script>
 </head>
 <body>
   <a class="skip-link" href="#story">Skip to the visualisations</a>
@@ -122,23 +122,18 @@
 
       <section class="methodology" aria-labelledby="method-title"><div class="pure-g"><div class="pure-u-1 pure-u-md-1-3"><h3 id="method-title">The data behind the story.</h3><p class="micro">AFL men · 2012–2025<br>Retrieved 14 September 2026<br>Prototype created with AI assistance.</p></div><div class="pure-u-1 pure-u-md-2-3 method-copy"><p>All 18 clubs are compared across the same fourteen completed seasons. Actual games played are used, including the shortened 2020 season. Finals participation is taken from recorded finals appearances, so Essendon’s 2013 exclusion is preserved.</p><p>The 2026 snapshot was taken during that season and is excluded from completed-season totals. Refresh the data after the 2026 Grand Final before final submission.</p></div></div>
         <section class="sources" aria-labelledby="sources-title">
-          <h4 id="sources-title">Sources, data and definitions</h4>
+          <h4 id="sources-title">Sources and definitions</h4>
           <ul>
-            <li><a href="https://afltables.com/afl/teams/geelong/season.html">AFL Tables</a>: club-season records, ladder ranks and finals outcomes. All 18 source URLs are listed in the <a href="data/manifest.json">data manifest</a>.</li>
+            <li><a href="https://afltables.com/afl/teams/geelong/season.html">AFL Tables</a>: club-season records, ladder ranks and finals outcomes.</li>
             <li><a href="https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-4-july-2026-june-2031/access-and-downloads/digital-boundary-files">Australian Bureau of Statistics</a>: ASGS Edition 4 state boundaries, simplified with Mapshaper and cropped to mainland Australia and Tasmania. Based on ABS data; CC BY 4.0, subject to source exceptions.</li>
-            <li><a href="https://www.wikidata.org/">Wikidata contributors</a>: city coordinates; CC0. Home-city groupings are documented in the manifest. Cities are representative locations, not stadium positions.</li>
-            <li>Port Adelaide’s 2024 ladder rank is corrected from 3 to 2 after checking the full-season ladder and official reports. The original value and verification links are preserved in the <a href="data/corrections.json">correction log</a>.</li>
-            <li><a href="data/team_seasons.json">Club-season data</a></li>
-            <li><a href="data/team_summary.json">Club summaries</a></li>
-            <li><a href="data/season_transitions.json">Consecutive-season comparisons</a></li>
-            <li><a href="data/australia_states.topojson">Map boundaries</a></li>
-            <li><a href="data/season_2026_snapshot.json">Separate 2026 snapshot</a></li>
+            <li><a href="https://www.wikidata.org/">Wikidata contributors</a>: city coordinates; CC0. Cities are representative locations, not stadium positions.</li>
           </ul>
+          <p class="micro">Port Adelaide’s 2024 ladder rank is corrected from 3 to 2 using the <a href="https://afltables.com/afl/seas/2024.html#lad">2024 AFL Tables ladder</a>.</p>
           <p class="micro">Win rate is different from AFL ladder “percentage”, which compares points scored with points conceded. State finals rates use finalist club-seasons / all club-seasons. National map locations group clubs by their base city, including Fremantle within Perth.</p>
         </section>
       </section>
     </main>
   </div>
-  <noscript><p class="noscript-note">Enable JavaScript to view the charts. The <a href="data/team_seasons.json">underlying data</a> is available separately.</p></noscript>
+  <noscript><p class="noscript-note">Enable JavaScript to view the charts. Original data sources are listed above.</p></noscript>
 </body>
 </html>

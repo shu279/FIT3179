@@ -37,7 +37,7 @@ async function renderChart(element) {
     console.error(`Could not render ${name}:`,error);
     const message=document.createElement('p');
     message.className='chart-error';
-    message.textContent='This chart could not load. Please reload the page. The source data is available below.';
+    message.textContent='This chart could not load. Please reload the page. Original data sources are listed below.';
     element.replaceChildren(message);
     element.dataset.rendered='error';
   } finally { element.setAttribute('aria-busy','false'); }
