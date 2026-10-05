@@ -47,7 +47,7 @@
       ]
     }
   },
-  "description": "Regular-season ladder position, sorted by seasons reaching finals. Highlight a club using the bound dropdown.",
+  "description": "Regular-season ladder position, sorted by seasons reaching finals. Orange cells identify the season champion; numbers retain regular-season ranks. Highlight a club using the bound dropdown.",
   "data": {
     "url": "data/team_seasons.json"
   },
@@ -140,6 +140,10 @@
       },
       "encoding": {
         "color": {
+          "condition": {
+            "test": "datum.premier === 1",
+            "value": "#c96636"
+          },
           "field": "band",
           "type": "nominal",
           "scale": {
@@ -193,7 +197,7 @@
           {
             "field": "won_premiership",
             "type": "nominal",
-            "title": "Premier"
+            "title": "Season champion"
           }
         ]
       }
@@ -214,10 +218,16 @@
           "value": ""
         },
         "color": {
-          "condition": {
-            "test": "datum.rank <= 4",
-            "value": "#ffffff"
-          },
+          "condition": [
+            {
+              "test": "datum.premier === 1",
+              "value": "#111111"
+            },
+            {
+              "test": "datum.rank <= 4",
+              "value": "#ffffff"
+            }
+          ],
           "value": "#21372b"
         },
         "opacity": {
@@ -226,35 +236,6 @@
             "value": 1
           },
           "value": 0.22
-        }
-      }
-    },
-    {
-      "transform": [
-        {
-          "filter": "datum.premier === 1"
-        }
-      ],
-      "mark": {
-        "type": "point",
-        "shape": "diamond",
-        "filled": true,
-        "size": 19,
-        "color": "#c96636"
-      },
-      "encoding": {
-        "opacity": {
-          "condition": {
-            "test": "focusTeam === 'All clubs' || datum.team === focusTeam",
-            "value": 1
-          },
-          "value": 0.22
-        },
-        "xOffset": {
-          "value": 0
-        },
-        "yOffset": {
-          "value": -10
         }
       }
     }
