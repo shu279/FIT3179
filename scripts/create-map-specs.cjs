@@ -134,7 +134,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
     params:[{name:'mapTimeBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.14,stroke:green}}}],
     mark:{type:'line',point:true,color:green,strokeWidth:2.5},
     encoding:{x:{field:'season',type:'quantitative',scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:[2012,2015,2018,2021,2025],grid:false}},
-     y:{field:'finals',type:'quantitative',scale:{domain:[0,9]},axis:{title:null,values:[0,3,6,9]}},
+     y:{field:'finals',type:'quantitative',scale:{domain:[0,5],nice:false},axis:{title:null,values:[0,1,2,3,4,5]}},
      tooltip:[{field:'season',type:'quantitative',format:'d',title:'Season'},{field:'finals',type:'quantitative',title:'Melbourne clubs reaching finals'},{field:'finalists',type:'nominal',title:'Clubs'}]}}
   ]
  });

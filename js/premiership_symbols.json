@@ -938,16 +938,19 @@
           "scale": {
             "domain": [
               0,
-              9
-            ]
+              5
+            ],
+            "nice": false
           },
           "axis": {
             "title": null,
             "values": [
               0,
+              1,
+              2,
               3,
-              6,
-              9
+              4,
+              5
             ]
           }
         },
