@@ -98,8 +98,20 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
   {field:'last',type:'quantitative',format:'d',title:'Last season'},{field:'finals',type:'quantitative',title:'Finals appearances'},
   {field:'club_seasons',type:'quantitative',title:'Club-seasons'},{field:'finals_per_season',type:'quantitative',format:'.2f',title:'Finalists per season'},
   {field:'finals_rate',type:'quantitative',format:'.1f',title:'Finals rate (%)'}];
+ // Filter this layer by the same time selection as the circles. A single year
+ // has one champion; hide the annotation when comparing several seasons.
+ const championTransform=[{filter:periodFilter},
+  {joinaggregate:[{op:'distinct',field:'season',as:'visible_seasons'}]},
+  {filter:'datum.visible_seasons === 1 && datum.premierships > 0'}];
+ const championText={type:'text',clip:true,fontSize:15,fontWeight:600,lineHeight:18,
+  align:{expr:"datum.city === 'Perth' ? 'left' : 'right'"},
+  dx:{expr:"datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"},
+  dy:{expr:"datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"}};
+ const championAnnotation={data:table('city_seasons'),transform:[...championTransform,
+  {calculate:"[format(datum.season, 'd') + ' champions', datum.premier]",as:'champion_label'}],
+  encoding:{...loc,text:{field:'champion_label',type:'nominal'}}};
  write('js/premiership_symbols.json',{
-  '$schema':base.$schema,description:'A proportional-symbol map linked to an interval brush. Area shows finalists per season, colour uses the same five finals-rate classes as the state map. A diamond identifies the selected season’s premier.',
+  '$schema':base.$schema,description:'A proportional-symbol map linked to an interval brush. Area shows finalists per season, colour uses the same five finals-rate classes as the state map. For a single selected season, a diamond and annotation identify its champion. Both disappear when comparing multiple seasons.',
   usermeta:{layout:'map-timeline'},padding:5,autosize:{type:'pad',resize:true},config:multiConfig,
   params:[...commonParams(true),{name:'usePeriod',value:false,bind:{input:'checkbox',name:'Compare the brushed period: '}}],spacing:28,
   vconcat:[
@@ -110,10 +122,13 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
        size:{field:'finals_per_season',type:'quantitative',scale:{domain:[0,9],range:[0,2400]},legend:null},tooltip:cityTip}},
      {name:'zero_city_symbols',data:table('city_seasons'),transform:[...cityTransform,{filter:'datum.finals === 0'}],
       mark:{type:'point',clip:true,shape:'circle',size:35,filled:false,stroke:ink,strokeWidth:1.2},encoding:{...loc,tooltip:cityTip}},
-     {name:'premier_location',data:table('city_seasons'),transform:[{filter:'!usePeriod && datum.season === selectedSeason && datum.premierships > 0'}],
+     {name:'premier_location',data:table('city_seasons'),transform:championTransform,
       mark:{type:'point',clip:true,shape:'diamond',filled:true,size:180,color:orange,stroke:'#ffffff',strokeWidth:1},
       encoding:{...loc,tooltip:[{field:'season',type:'quantitative',format:'d',title:'Season'},{field:'premier',type:'nominal',title:'Premier'},{field:'city',type:'nominal',title:'Home city'}]}},
-     ...cityLabels()]},
+     ...cityLabels(),
+     {...championAnnotation,name:'champion_annotation_halo',mark:{...championText,fill:'#f3f2e9',stroke:'#f3f2e9',strokeWidth:4,aria:false}},
+     {...championAnnotation,name:'champion_annotation',mark:{...championText,color:orange}}
+    ]},
    {name:'map_overview',title:mapTitle('Drag to select years'),width:900,height:100,data:table('city_seasons'),
     transform:[{filter:"datum.city === 'Melbourne'"}],
     params:[{name:'mapTimeBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.14,stroke:green}}}],

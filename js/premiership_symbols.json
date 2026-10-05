@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "A proportional-symbol map linked to an interval brush. Area shows finalists per season, colour uses the same five finals-rate classes as the state map. A diamond identifies the selected season’s premier.",
+  "description": "A proportional-symbol map linked to an interval brush. Area shows finalists per season, colour uses the same five finals-rate classes as the state map. For a single selected season, a diamond and annotation identify its champion. Both disappear when comparing multiple seasons.",
   "usermeta": {
     "layout": "map-timeline"
   },
@@ -550,7 +550,31 @@
           },
           "transform": [
             {
-              "filter": "!usePeriod && datum.season === selectedSeason && datum.premierships > 0"
+              "filter": {
+                "or": [
+                  {
+                    "and": [
+                      "usePeriod",
+                      {
+                        "param": "mapTimeBrush"
+                      }
+                    ]
+                  },
+                  "!usePeriod && datum.season === selectedSeason"
+                ]
+              }
+            },
+            {
+              "joinaggregate": [
+                {
+                  "op": "distinct",
+                  "field": "season",
+                  "as": "visible_seasons"
+                }
+              ]
+            },
+            {
+              "filter": "datum.visible_seasons === 1 && datum.premierships > 0"
             }
           ],
           "mark": {
@@ -692,6 +716,149 @@
               "field": "city",
               "type": "nominal"
             }
+          }
+        },
+        {
+          "data": {
+            "url": "data/city_seasons.json"
+          },
+          "transform": [
+            {
+              "filter": {
+                "or": [
+                  {
+                    "and": [
+                      "usePeriod",
+                      {
+                        "param": "mapTimeBrush"
+                      }
+                    ]
+                  },
+                  "!usePeriod && datum.season === selectedSeason"
+                ]
+              }
+            },
+            {
+              "joinaggregate": [
+                {
+                  "op": "distinct",
+                  "field": "season",
+                  "as": "visible_seasons"
+                }
+              ]
+            },
+            {
+              "filter": "datum.visible_seasons === 1 && datum.premierships > 0"
+            },
+            {
+              "calculate": "[format(datum.season, 'd') + ' champions', datum.premier]",
+              "as": "champion_label"
+            }
+          ],
+          "encoding": {
+            "longitude": {
+              "field": "longitude",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "latitude",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "champion_label",
+              "type": "nominal"
+            }
+          },
+          "name": "champion_annotation_halo",
+          "mark": {
+            "type": "text",
+            "clip": true,
+            "fontSize": 15,
+            "fontWeight": 600,
+            "lineHeight": 18,
+            "align": {
+              "expr": "datum.city === 'Perth' ? 'left' : 'right'"
+            },
+            "dx": {
+              "expr": "datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"
+            },
+            "dy": {
+              "expr": "datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"
+            },
+            "fill": "#f3f2e9",
+            "stroke": "#f3f2e9",
+            "strokeWidth": 4,
+            "aria": false
+          }
+        },
+        {
+          "data": {
+            "url": "data/city_seasons.json"
+          },
+          "transform": [
+            {
+              "filter": {
+                "or": [
+                  {
+                    "and": [
+                      "usePeriod",
+                      {
+                        "param": "mapTimeBrush"
+                      }
+                    ]
+                  },
+                  "!usePeriod && datum.season === selectedSeason"
+                ]
+              }
+            },
+            {
+              "joinaggregate": [
+                {
+                  "op": "distinct",
+                  "field": "season",
+                  "as": "visible_seasons"
+                }
+              ]
+            },
+            {
+              "filter": "datum.visible_seasons === 1 && datum.premierships > 0"
+            },
+            {
+              "calculate": "[format(datum.season, 'd') + ' champions', datum.premier]",
+              "as": "champion_label"
+            }
+          ],
+          "encoding": {
+            "longitude": {
+              "field": "longitude",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "latitude",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "champion_label",
+              "type": "nominal"
+            }
+          },
+          "name": "champion_annotation",
+          "mark": {
+            "type": "text",
+            "clip": true,
+            "fontSize": 15,
+            "fontWeight": 600,
+            "lineHeight": 18,
+            "align": {
+              "expr": "datum.city === 'Perth' ? 'left' : 'right'"
+            },
+            "dx": {
+              "expr": "datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"
+            },
+            "dy": {
+              "expr": "datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"
+            },
+            "color": "#c96636"
           }
         }
       ]
