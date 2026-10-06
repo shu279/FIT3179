@@ -185,7 +185,7 @@
         {
           "name": "physical_ocean",
           "data": {
-            "url": "data/natural_earth_physical.topojson",
+            "url": "data/natural_earth_physical.topojson?v=cd42ca2f99cb",
             "format": {
               "type": "topojson",
               "feature": "ocean"
@@ -206,7 +206,7 @@
         {
           "name": "physical_land",
           "data": {
-            "url": "data/natural_earth_physical.topojson",
+            "url": "data/natural_earth_states.topojson?v=12fe2808b2a9",
             "format": {
               "type": "topojson",
               "feature": "land"
@@ -221,14 +221,13 @@
             "type": "geoshape",
             "clip": true,
             "fill": "#e5e6da",
-            "stroke": "#adb7a5",
-            "strokeWidth": 0.6
+            "stroke": null
           }
         },
         {
           "name": "reference_grid",
           "data": {
-            "url": "data/natural_earth_physical.topojson",
+            "url": "data/natural_earth_physical.topojson?v=cd42ca2f99cb",
             "format": {
               "type": "topojson",
               "feature": "graticules"
@@ -254,7 +253,7 @@
         {
           "name": "cultural_borders",
           "data": {
-            "url": "data/natural_earth_states.topojson",
+            "url": "data/natural_earth_states.topojson?v=12fe2808b2a9",
             "format": {
               "type": "topojson",
               "feature": "states"

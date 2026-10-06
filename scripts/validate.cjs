@@ -12,7 +12,7 @@ const root=path.resolve(__dirname,'..');
 const chartLayout=require('../js/chart-layout.js');
 const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
 const sum=(a,f)=>a.reduce((n,x)=>n+x[f],0);
-const loader={...vega.loader(),load:async uri=>fs.readFileSync(path.join(root,uri),'utf8')};
+const loader={...vega.loader(),load:async uri=>fs.readFileSync(path.join(root,uri.split('?')[0]),'utf8')};
 
 async function main(){
  const rows=read('data/team_seasons.json'),clubs=read('data/team_summary.json'),states=read('data/states.json');

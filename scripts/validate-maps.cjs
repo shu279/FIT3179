@@ -8,7 +8,16 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  const palette=read('data/map_sources.json').colour;
  const topology=read('data/natural_earth_states.topojson');
  assert.deepEqual(topology.objects.states.geometries.map(d=>d.properties.state_code).sort(),['1','2','3','4','5','6','7','8']);
- assert.deepEqual(Object.keys(read('data/natural_earth_physical.topojson').objects).sort(),['graticules','land','ocean']);
+ assert.deepEqual(Object.keys(read('data/natural_earth_physical.topojson').objects).sort(),['graticules','ocean']);
+ // Exterior state arcs must be exactly the land outline, including islands.
+ // Shared arcs ensure identical coordinates even after quantization and zooming.
+ const stateArcUse=new Map();
+ for(const state of topology.objects.states.geometries)for(const arc of state.arcs.flat(Infinity)){
+  const id=arc<0?~arc:arc;stateArcUse.set(id,(stateArcUse.get(id)||0)+1);
+ }
+ const coast=[...stateArcUse].filter(([,count])=>count===1).map(([id])=>id).sort((a,b)=>a-b);
+ const landArcs=topology.objects.land.geometries.flatMap(land=>land.arcs.flat(Infinity)).map(arc=>arc<0?~arc:arc).sort((a,b)=>a-b);
+ assert.deepEqual(landArcs,coast,'Land fill and coastal state borders must use identical arcs');
  const cityRows=read('data/city_seasons.json');
  assert.equal(cityRows.length,98);
  for(const d of cityRows){

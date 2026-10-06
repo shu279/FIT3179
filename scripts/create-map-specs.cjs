@@ -1,6 +1,6 @@
 // Adapted from FIT3179 Week 8 maps and Week 10 2_interactive / 3_properties.
 module.exports=function({base,config,multiConfig,ink,green,orange}){
- const fs=require('node:fs'),path=require('node:path');
+ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
  const root=path.resolve(__dirname,'..');
  const rows=require('../data/team_seasons.json'),states=require('../data/states.json'),cities=require('../data/cities.json');
  const finals=require('../data/grand_finals.json');
@@ -29,8 +29,14 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  write('data/state_seasons.json',stateSeasons);write('data/city_seasons.json',citySeasons);
  write('data/grand_final_seasons.json',connections);write('data/grand_final_participants.json',participants);
  const table=name=>({url:'data/'+name+'.json'});
- const physical=name=>({url:'data/natural_earth_physical.topojson',format:{type:'topojson',feature:name}});
- const borders={url:'data/natural_earth_states.topojson',format:{type:'topojson',feature:'states'}};
+ const geometryUrl=name=>{
+  const file='data/'+name+'.topojson';
+  return file+'?v='+crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex').slice(0,12);
+ };
+ const stateGeometry=geometryUrl('natural_earth_states'),physicalGeometry=geometryUrl('natural_earth_physical');
+ // Land and state borders share one topology, keeping their coast identical at every zoom.
+ const physical=name=>({url:name==='land'?stateGeometry:physicalGeometry,format:{type:'topojson',feature:name}});
+ const borders={url:stateGeometry,format:{type:'topojson',feature:'states'}};
  const commonParams=(bound=false)=>[
   {name:'selectedSeason',value:2025,...(bound?{bind:{input:'range',min:2012,max:2025,step:1,name:'Season: '}}:{})},
   {name:'mapZoom',value:1},
@@ -47,7 +53,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
    mark:{type:'rect',clip:true,fill:'#e4eff0',stroke:null,aria:false},
    encoding:{x:{value:0},x2:{value:{expr:'width'}},y:{value:0},y2:{value:{expr:height}}}},
   {name:'physical_ocean',data:physical('ocean'),transform:[{filter:'showPhysical'}],mark:{type:'geoshape',clip:true,fill:'#e4eff0',stroke:null}},
-  {name:'physical_land',data:physical('land'),transform:[{filter:'showPhysical'}],mark:{type:'geoshape',clip:true,fill:'#e5e6da',stroke:'#adb7a5',strokeWidth:0.6}},
+  {name:'physical_land',data:physical('land'),transform:[{filter:'showPhysical'}],mark:{type:'geoshape',clip:true,fill:'#e5e6da',stroke:null}},
   {name:'reference_grid',data:physical('graticules'),transform:[{filter:'showPhysical'}],mark:{type:'geoshape',clip:true,filled:false,stroke:'#bccbca',strokeWidth:0.6,strokeDash:[3,3]}}
  ];
  const borderLayer=()=>({name:'cultural_borders',data:borders,transform:[{filter:'showCultural'}],mark:{type:'geoshape',clip:true,filled:false,stroke:'#748679',strokeWidth:0.8}});

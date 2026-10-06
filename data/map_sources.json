@@ -3,6 +3,7 @@
   "licence": "Public domain",
   "licence_url": "https://www.naturalearthdata.com/about/terms-of-use/",
   "retrieved": "2026-10-05",
+  "processed": "2026-10-06",
   "mapshaper_version": "0.7.75",
   "bbox": [
     110,
@@ -10,17 +11,14 @@
     156,
     -10
   ],
-  "method": "Import all shapefile sidecars; filter Australian states; clip to mainland Australia and Tasmania; clean; weighted Visvalingam simplification with keep-shapes; retain only join fields; export quantized TopoJSON.",
+  "method": "Import all shapefile sidecars; filter Australian states; clip to mainland Australia and Tasmania; clean; weighted Visvalingam simplification with keep-shapes; retain only join fields. Dissolve the prepared states into a land object without gap filling, and export land and states together so they share the same quantized coastline arcs.",
+  "land_derivation": {
+    "source": "states",
+    "operation": "Dissolve state polygons after simplification; remove internal boundaries; preserve exterior coast and islands.",
+    "output": "natural_earth_states.topojson",
+    "object": "land"
+  },
   "layers": [
-    {
-      "name": "land",
-      "source": "50m_physical/ne_50m_land",
-      "category": "physical",
-      "retained": "20%",
-      "url": "https://naturalearth.s3.amazonaws.com/50m_physical/ne_50m_land.zip",
-      "download_bytes": 457183,
-      "sha256": "0b8e670cf80dce9cbebe2a193bc44ba5602758c22e1fa603980553646d7ff162"
-    },
     {
       "name": "ocean",
       "source": "50m_physical/ne_50m_ocean",
@@ -43,32 +41,13 @@
       "name": "states",
       "source": "10m_cultural/ne_10m_admin_1_states_provinces",
       "category": "cultural",
-      "retained": "12%",
+      "retained": "50%",
       "url": "https://naturalearth.s3.amazonaws.com/10m_cultural/ne_10m_admin_1_states_provinces.zip",
       "download_bytes": 14909524,
       "sha256": "efc59726337323058f9446210adc96673179cd344e053666ee3d28cb58ba2b05"
     }
   ],
   "commands": [
-    [
-      "-i",
-      "$CACHE/ne_50m_land/ne_50m_land.shp",
-      "-filter-fields",
-      "-clip",
-      "bbox=110,-45,156,-10",
-      "-clean",
-      "-simplify",
-      "weighted",
-      "20%",
-      "keep-shapes",
-      "-clean",
-      "-rename-layers",
-      "land",
-      "-o",
-      "$CACHE/land.geojson",
-      "format=geojson",
-      "force"
-    ],
     [
       "-i",
       "$CACHE/ne_50m_ocean/ne_50m_ocean.shp",
@@ -115,7 +94,7 @@
       "-clean",
       "-simplify",
       "weighted",
-      "12%",
+      "50%",
       "keep-shapes",
       "-clean",
       "-rename-layers",
@@ -127,7 +106,6 @@
     ],
     [
       "-i",
-      "$CACHE/land.geojson",
       "$CACHE/ocean.geojson",
       "$CACHE/graticules.geojson",
       "combine-files",
@@ -140,8 +118,14 @@
     [
       "-i",
       "$CACHE/states.geojson",
+      "-dissolve",
+      "target=states",
+      "no-replace",
+      "name=land",
+      "gap-width=0",
       "-o",
       "$DATA/natural_earth_states.topojson",
+      "target=states,land",
       "format=topojson",
       "quantization=100000",
       "force"
@@ -150,11 +134,11 @@
   "outputs": [
     {
       "file": "natural_earth_physical.topojson",
-      "bytes": 21161
+      "bytes": 11554
     },
     {
       "file": "natural_earth_states.topojson",
-      "bytes": 20948
+      "bytes": 73112
     }
   ],
   "colour": {

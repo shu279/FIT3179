@@ -7,15 +7,15 @@ const {execFileSync}=require('node:child_process');
 const packagePath=process.argv[2] || path.dirname(require.resolve('mapshaper/package.json'));
 const cache=path.resolve(process.argv[3] || '/tmp/afl-natural-earth');
 const dest=path.resolve(__dirname,'../data');
+const previousManifest=fs.existsSync(path.join(dest,'map_sources.json'))?JSON.parse(fs.readFileSync(path.join(dest,'map_sources.json'))):null;
 const cli=path.join(packagePath,'bin/mapshaper');
 const version=JSON.parse(fs.readFileSync(path.join(packagePath,'package.json'))).version;
 const bbox='110,-45,156,-10';
 fs.mkdirSync(cache,{recursive:true});
 const layers=[
- {name:'land',source:'50m_physical/ne_50m_land',category:'physical',retained:'20%'},
  {name:'ocean',source:'50m_physical/ne_50m_ocean',category:'physical',retained:'20%'},
  {name:'graticules',source:'110m_physical/ne_110m_graticules_10',category:'reference grid',retained:'100%'},
- {name:'states',source:'10m_cultural/ne_10m_admin_1_states_provinces',category:'cultural',retained:'12%'}
+ {name:'states',source:'10m_cultural/ne_10m_admin_1_states_provinces',category:'cultural',retained:'50%'}
 ];
 const commands=[];
 function run(args){
@@ -44,15 +44,20 @@ for(const layer of layers){
  args.push('-rename-layers',layer.name,'-o',path.join(cache,layer.name+'.geojson'),'format=geojson','force');
  run(args);
 }
-run(['-i',...['land','ocean','graticules'].map(n=>path.join(cache,n+'.geojson')),'combine-files',
+run(['-i',...['ocean','graticules'].map(n=>path.join(cache,n+'.geojson')),'combine-files',
  '-o',path.join(dest,'natural_earth_physical.topojson'),'format=topojson','quantization=100000','force']);
-run(['-i',path.join(cache,'states.geojson'),'-o',path.join(dest,'natural_earth_states.topojson'),'format=topojson','quantization=100000','force']);
+// Dissolve the prepared states into land without changing their shared coast.
+// Export both objects together so fill and outlines reuse exactly the same arcs.
+run(['-i',path.join(cache,'states.geojson'),'-dissolve','target=states','no-replace','name=land','gap-width=0',
+ '-o',path.join(dest,'natural_earth_states.topojson'),'target=states,land','format=topojson','quantization=100000','force']);
 const states=JSON.parse(fs.readFileSync(path.join(dest,'natural_earth_states.topojson')));
 if(states.objects.states.geometries.length!==8)throw Error('Expected eight Australian state/territory features');
 const manifest={
  provider:'Natural Earth',licence:'Public domain',licence_url:'https://www.naturalearthdata.com/about/terms-of-use/',
- retrieved:new Date().toISOString().slice(0,10),mapshaper_version:version,bbox:bbox.split(',').map(Number),
- method:'Import all shapefile sidecars; filter Australian states; clip to mainland Australia and Tasmania; clean; weighted Visvalingam simplification with keep-shapes; retain only join fields; export quantized TopoJSON.',
+ retrieved:layers.every(layer=>previousManifest?.layers.some(old=>old.sha256===layer.sha256))?previousManifest.retrieved:new Date().toISOString().slice(0,10),
+ processed:new Date().toISOString().slice(0,10),mapshaper_version:version,bbox:bbox.split(',').map(Number),
+ method:'Import all shapefile sidecars; filter Australian states; clip to mainland Australia and Tasmania; clean; weighted Visvalingam simplification with keep-shapes; retain only join fields. Dissolve the prepared states into a land object without gap filling, and export land and states together so they share the same quantized coastline arcs.',
+ land_derivation:{source:'states',operation:'Dissolve state polygons after simplification; remove internal boundaries; preserve exterior coast and islands.',output:'natural_earth_states.topojson',object:'land'},
  layers,commands,
  outputs:['natural_earth_physical.topojson','natural_earth_states.topojson'].map(file=>({file,bytes:fs.statSync(path.join(dest,file)).size})),
  colour:{provider:'ColorBrewer 2.0',scheme:'YlGnBu',classes:5,thresholds:[20,40,60,80],
