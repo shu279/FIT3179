@@ -80,6 +80,28 @@ async function main(){
      // Node uses approximate font metrics; also reject invalid geometry.
      assert.ok(!/\bNaN\b|\bInfinity\b/.test(svg),`${name} invalid geometry`);
      for(const match of svg.matchAll(/font-size="([\d.]+)(?:px)?"/g))assert.ok(+match[1]>=15,`${name}: text below 15px`);
+     if(name==='premiership_bubbles.json'){
+       const checkBubbles=()=>{
+         const leaves=view.data('leaves');
+         assert.equal(leaves.length,9);assert.equal(sum(leaves,'premierships'),14);
+         assert.equal(items(view,item=>item.mark?.name==='title_bubbles').length,9);
+         const areaPerTitle=leaves[0].r**2/leaves[0].premierships;
+         for(const d of leaves){
+           assert.ok(Math.abs(d.r**2/d.premierships-areaPerTitle)<1e-8,'Circle area must be proportional to titles');
+           assert.equal(d.premierships,clubs.find(club=>club.team===d.team).premierships);
+           assert.equal(d.title_years,rows.filter(row=>row.team===d.team&&row.premier).map(row=>row.season).join(', '));
+           assert.ok(d.x-d.r>=0&&d.x+d.r<=view.width());
+           assert.ok(d.y-d.r>=0&&d.y+d.r<=view.height());
+         }
+         for(let i=0;i<leaves.length;i++)for(let j=i+1;j<leaves.length;j++){
+           const a=leaves[i],b=leaves[j];
+           assert.ok(Math.hypot(a.x-b.x,a.y-b.y)>=a.r+b.r-1e-8,'Packed bubbles must not overlap');
+         }
+       };
+       checkBubbles();
+       await view.width(276).runAsync();checkBubbles();assert.equal(view.height(),276);
+       await view.width(width).runAsync();
+     }
      if(name==='finals_return.json'){
        assert.equal(view.data('links').length,4);
        assert.equal(view.data('nodes').length,4);

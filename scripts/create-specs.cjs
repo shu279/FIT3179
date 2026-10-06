@@ -2,6 +2,7 @@
 // These files can be opened independently in the Vega Editor with local data URLs replaced.
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const root = path.resolve(__dirname,'..');
 const summary = require('../data/team_summary.json');
 const seasons = require('../data/team_seasons.json');
@@ -245,15 +246,29 @@ const successRadar={
 };
 fs.writeFileSync(path.join(root,'js/success_radar.json'),JSON.stringify(successRadar,null,2)+'\n');
 
-const tree=[{team:'AFL',parent:null,premierships:0},...summary.filter(d=>d.premierships).map(d=>({team:d.team,parent:'AFL',premierships:d.premierships}))];
-fs.writeFileSync(path.join(root,'data/premiership_tree.json'),JSON.stringify(tree,null,2)+'\n');
-const treemap={
- '$schema':'https://vega.github.io/schema/vega/v5.json',description:'Every rectangle represents a premiership-winning club; its area is proportional to titles in 2012–2025.',width:600,height:330,padding:0,autosize:{type:'none',resize:true},background:'transparent',
- data:[{name:'tree',url:'data/premiership_tree.json',transform:[{type:'stratify',key:'team',parentKey:'parent'},{type:'treemap',field:'premierships',sort:{field:'value',order:'descending'},method:'squarify',ratio:1.4,size:[{signal:'width'},{signal:'height'}],paddingInner:5}]},{name:'leaves',source:'tree',transform:[{type:'filter',expr:'!datum.children'}]}],
- scales:[{name:'fill',type:'ordinal',domain:['Hawthorn','Richmond','Brisbane Lions','Geelong','Sydney','Collingwood','Western Bulldogs','West Coast','Melbourne'],range:['#a07740',green,'#a14e36','#496c4d','#65845d','#72876b','#839278','#506b51','#6b7e5c']}],
- marks:[{type:'rect',from:{data:'leaves'},encode:{enter:{stroke:{value:'#f3f2e9'},strokeWidth:{value:1}},update:{x:{field:'x0'},y:{field:'y0'},x2:{field:'x1'},y2:{field:'y1'},fill:{scale:'fill',field:'team'},tooltip:{signal:"{'Club':datum.team,'Premierships':datum.premierships,'Share of titles':format(datum.premierships/14,'.0%')}"}}}},
- {type:'text',from:{data:'leaves'},encode:{enter:{fill:{value:'#fffdf4'},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:32},fontWeight:{value:700},baseline:{value:'top'}},update:{x:{signal:'datum.x0 + 12'},y:{signal:'datum.y0 + 12'},text:{field:'premierships'}}}},
- {type:'text',from:{data:'leaves'},encode:{enter:{fill:{value:'#fffdf4'},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:500},baseline:{value:'bottom'}},update:{x:{signal:'datum.x0 + 12'},y:{signal:'datum.y1 - 13'},text:{field:'team'},limit:{signal:'datum.x1 - datum.x0 - 22'}}}}
+const tree=[{team:'AFL',parent:null,premierships:0},...summary.filter(d=>d.premierships).map(d=>({team:d.team,parent:'AFL',premierships:d.premierships,short_name:d.id,
+ title_years:seasons.filter(row=>row.team===d.team&&row.premier).map(row=>row.season).join(', ')}))];
+const treeJSON=JSON.stringify(tree,null,2)+'\n';
+fs.writeFileSync(path.join(root,'data/premiership_tree.json'),treeJSON);
+const treeVersion=crypto.createHash('sha256').update(treeJSON).digest('hex').slice(0,12);
+const bubbleTip="{'Club':datum.team,'Premierships':datum.premierships,'Winning years':datum.title_years,'Share of titles':format(datum.premierships/14,'.1%')}";
+const bubbleText={signal:"datum.premierships === 3 ? '#111111' : '#fffdf4'"};
+const bubbles={
+ '$schema':'https://vega.github.io/schema/vega/v5.json',description:'Packed bubbles showing nine premiership-winning clubs in 2012–2025. Circle area is proportional to titles. Hawthorn and Richmond are highlighted in orange.',width:600,padding:0,autosize:{type:'none',resize:true},background:'transparent',
+ signals:[{name:'height',update:'min(width, 640)'}],
+ data:[{name:'tree',url:'data/premiership_tree.json?v='+treeVersion,transform:[{type:'stratify',key:'team',parentKey:'parent'},
+  {type:'pack',field:'premierships',sort:{field:['value','data.team'],order:['descending','ascending']},size:[{signal:'width'},{signal:'height'}],padding:6}]},
+  {name:'leaves',source:'tree',transform:[{type:'filter',expr:'!datum.children'}]}],
+ marks:[
+  {name:'title_bubbles',type:'symbol',from:{data:'leaves'},encode:{enter:{shape:{value:'circle'},cursor:{value:'pointer'}},
+   update:{x:{field:'x'},y:{field:'y'},size:{signal:'4 * datum.r * datum.r'},fill:[{test:'datum.premierships === 3',value:orange},{value:green}],
+    stroke:{value:ink},strokeWidth:{value:0},tooltip:{signal:bubbleTip},aria:{value:true},description:{signal:"datum.team + ': ' + datum.premierships + ' premierships, won in ' + datum.title_years"}},
+   hover:{strokeWidth:{value:2}}}},
+  {type:'text',interactive:false,from:{data:'leaves'},encode:{enter:{font:{value:'Helvetica Neue, Arial, sans-serif'},fontWeight:{value:700},align:{value:'center'},baseline:{value:'middle'}},
+   update:{x:{field:'x'},y:{field:'y'},dy:{signal:'datum.r < 50 ? -10 : -18'},fontSize:{signal:'max(22, min(52, datum.r * 0.55))'},fill:bubbleText,text:{field:'premierships'}}}},
+  {type:'text',interactive:false,from:{data:'leaves'},encode:{enter:{font:{value:'Helvetica Neue, Arial, sans-serif'},fontWeight:{value:500},align:{value:'center'},baseline:{value:'middle'},lineHeight:{value:20}},
+   update:{x:{field:'x'},y:{field:'y'},dy:{signal:'datum.r < 50 ? 14 : 18'},fontSize:{signal:'width < 500 ? 15 : 18'},fill:bubbleText,
+    text:{signal:"datum.r < 50 ? datum.short_name : (datum.team === 'Brisbane Lions' || datum.team === 'Western Bulldogs') ? split(datum.team, ' ') : datum.team"}}}}
  ]};
-fs.writeFileSync(path.join(root,'js/premiership_treemap.json'),JSON.stringify(treemap,null,2)+'\n');
+fs.writeFileSync(path.join(root,'js/premiership_bubbles.json'),JSON.stringify(bubbles,null,2)+'\n');
 console.log('Created 15 chart specs.');

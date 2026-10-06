@@ -1,0 +1,211 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Packed bubbles showing nine premiership-winning clubs in 2012–2025. Circle area is proportional to titles. Hawthorn and Richmond are highlighted in orange.",
+  "width": 600,
+  "padding": 0,
+  "autosize": {
+    "type": "none",
+    "resize": true
+  },
+  "background": "transparent",
+  "signals": [
+    {
+      "name": "height",
+      "update": "min(width, 640)"
+    }
+  ],
+  "data": [
+    {
+      "name": "tree",
+      "url": "data/premiership_tree.json?v=c29f4aff4cd3",
+      "transform": [
+        {
+          "type": "stratify",
+          "key": "team",
+          "parentKey": "parent"
+        },
+        {
+          "type": "pack",
+          "field": "premierships",
+          "sort": {
+            "field": [
+              "value",
+              "data.team"
+            ],
+            "order": [
+              "descending",
+              "ascending"
+            ]
+          },
+          "size": [
+            {
+              "signal": "width"
+            },
+            {
+              "signal": "height"
+            }
+          ],
+          "padding": 6
+        }
+      ]
+    },
+    {
+      "name": "leaves",
+      "source": "tree",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "!datum.children"
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "name": "title_bubbles",
+      "type": "symbol",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "enter": {
+          "shape": {
+            "value": "circle"
+          },
+          "cursor": {
+            "value": "pointer"
+          }
+        },
+        "update": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "size": {
+            "signal": "4 * datum.r * datum.r"
+          },
+          "fill": [
+            {
+              "test": "datum.premierships === 3",
+              "value": "#c96636"
+            },
+            {
+              "value": "#31553b"
+            }
+          ],
+          "stroke": {
+            "value": "#21372b"
+          },
+          "strokeWidth": {
+            "value": 0
+          },
+          "tooltip": {
+            "signal": "{'Club':datum.team,'Premierships':datum.premierships,'Winning years':datum.title_years,'Share of titles':format(datum.premierships/14,'.1%')}"
+          },
+          "aria": {
+            "value": true
+          },
+          "description": {
+            "signal": "datum.team + ': ' + datum.premierships + ' premierships, won in ' + datum.title_years"
+          }
+        },
+        "hover": {
+          "strokeWidth": {
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "enter": {
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontWeight": {
+            "value": 700
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          }
+        },
+        "update": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "dy": {
+            "signal": "datum.r < 50 ? -10 : -18"
+          },
+          "fontSize": {
+            "signal": "max(22, min(52, datum.r * 0.55))"
+          },
+          "fill": {
+            "signal": "datum.premierships === 3 ? '#111111' : '#fffdf4'"
+          },
+          "text": {
+            "field": "premierships"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "enter": {
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontWeight": {
+            "value": 500
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "lineHeight": {
+            "value": 20
+          }
+        },
+        "update": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "dy": {
+            "signal": "datum.r < 50 ? 14 : 18"
+          },
+          "fontSize": {
+            "signal": "width < 500 ? 15 : 18"
+          },
+          "fill": {
+            "signal": "datum.premierships === 3 ? '#111111' : '#fffdf4'"
+          },
+          "text": {
+            "signal": "datum.r < 50 ? datum.short_name : (datum.team === 'Brisbane Lions' || datum.team === 'Western Bulldogs') ? split(datum.team, ' ') : datum.team"
+          }
+        }
+      }
+    }
+  ]
+}

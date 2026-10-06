@@ -7,46 +7,64 @@
   {
     "team": "Geelong",
     "parent": "AFL",
-    "premierships": 1
+    "premierships": 1,
+    "short_name": "GEE",
+    "title_years": "2022"
   },
   {
     "team": "Sydney",
     "parent": "AFL",
-    "premierships": 1
+    "premierships": 1,
+    "short_name": "SYD",
+    "title_years": "2012"
   },
   {
     "team": "Hawthorn",
     "parent": "AFL",
-    "premierships": 3
+    "premierships": 3,
+    "short_name": "HAW",
+    "title_years": "2013, 2014, 2015"
   },
   {
     "team": "Collingwood",
     "parent": "AFL",
-    "premierships": 1
+    "premierships": 1,
+    "short_name": "COL",
+    "title_years": "2023"
   },
   {
     "team": "Richmond",
     "parent": "AFL",
-    "premierships": 3
+    "premierships": 3,
+    "short_name": "RIC",
+    "title_years": "2017, 2019, 2020"
   },
   {
     "team": "Western Bulldogs",
     "parent": "AFL",
-    "premierships": 1
+    "premierships": 1,
+    "short_name": "WBD",
+    "title_years": "2016"
   },
   {
     "team": "Brisbane Lions",
     "parent": "AFL",
-    "premierships": 2
+    "premierships": 2,
+    "short_name": "BRL",
+    "title_years": "2024, 2025"
   },
   {
     "team": "West Coast",
     "parent": "AFL",
-    "premierships": 1
+    "premierships": 1,
+    "short_name": "WCE",
+    "title_years": "2018"
   },
   {
     "team": "Melbourne",
     "parent": "AFL",
-    "premierships": 1
+    "premierships": 1,
+    "short_name": "MEL",
+    "title_years": "2021"
   }
 ]
