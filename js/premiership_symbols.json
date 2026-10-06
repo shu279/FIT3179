@@ -75,7 +75,15 @@
     },
     {
       "name": "mapZoom",
-      "value": 1
+      "value": 1,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 8,
+        "step": 0.25,
+        "name": "Zoom: ",
+        "element": "#city-zoom-control"
+      }
     },
     {
       "name": "mapCentre",
@@ -91,6 +99,13 @@
     {
       "name": "showCultural",
       "value": true
+    },
+    {
+      "name": "mapPan",
+      "value": [
+        0,
+        0
+      ]
     },
     {
       "name": "usePeriod",
@@ -125,7 +140,7 @@
           "expr": "mapZoom * min(width / 0.84, city_map_height / 0.72)"
         },
         "translate": {
-          "expr": "[width / 2, city_map_height / 2]"
+          "expr": "[width * (0.5 + mapPan[0]), city_map_height * (0.5 + mapPan[1])]"
         }
       },
       "layer": [
@@ -777,13 +792,13 @@
             "fontWeight": 600,
             "lineHeight": 18,
             "align": {
-              "expr": "datum.city === 'Perth' ? 'left' : 'right'"
+              "expr": "mapZoom > 1 ? 'center' : datum.city === 'Perth' ? 'left' : 'right'"
             },
             "dx": {
-              "expr": "datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"
+              "expr": "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"
             },
             "dy": {
-              "expr": "datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"
+              "expr": "mapZoom > 1 ? -54 : datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"
             },
             "fill": "#f3f2e9",
             "stroke": "#f3f2e9",
@@ -850,13 +865,13 @@
             "fontWeight": 600,
             "lineHeight": 18,
             "align": {
-              "expr": "datum.city === 'Perth' ? 'left' : 'right'"
+              "expr": "mapZoom > 1 ? 'center' : datum.city === 'Perth' ? 'left' : 'right'"
             },
             "dx": {
-              "expr": "datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"
+              "expr": "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"
             },
             "dy": {
-              "expr": "datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"
+              "expr": "mapZoom > 1 ? -54 : datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"
             },
             "color": "#c96636"
           }

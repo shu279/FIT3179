@@ -9,13 +9,14 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=f3d89cac66d3">
+  <link rel="stylesheet" href="css/style.css?v=d671e5df1e44">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
   <script defer src="js/chart-layout.js?v=ffa0cdc99558"></script>
-  <script defer src="js/map-controls.js?v=f67d1263c5fd"></script>
-  <script defer src="js/main.js?v=2e2b543d6f0e"></script>
+  <script defer src="js/map-controls.js?v=a72dc1a58c57"></script>
+  <script defer src="js/city-map-navigation.js?v=03f4ed95991a"></script>
+  <script defer src="js/main.js?v=fec85b6937c8"></script>
 </head>
 <body>
   <a class="skip-link" href="#story">Skip to the visualisations</a>
@@ -107,6 +108,11 @@
         <figure class="figure-wide map-study">
           <h3 id="map-period-summary" aria-live="polite">City finalists in 2025</h3>
           <p class="chart-deck">Larger circles mean more finalists per season. Colour shows the share of the city’s clubs reaching finals. The orange diamond and annotation identify the selected year’s champion.</p>
+          <div class="map-controls-row city-map-controls">
+            <div id="city-zoom-control" class="vega-bindings"></div>
+            <div class="chart-actions"><button type="button" id="reset-city-map" disabled>Reset view</button></div>
+            <p class="micro">Zoom in, then drag the map to move.</p>
+          </div>
           <div class="map-with-legend">
             <div class="chart" data-spec="premiership_symbols" aria-label="Proportional-symbol map of finalists by home city, linked to a time brush. Circle area shows finalists per season and colour shows finals rate."></div>
             <aside class="map-legend" aria-label="Map legends: finals rate and finalists per season">
@@ -125,7 +131,7 @@
             </aside>
           </div>
           <p class="map-key micro"><i class="legend-diamond" aria-hidden="true"></i> Season champion · Small empty ring: no finalists.</p>
-          <figcaption>Drag a range on the timeline to compare those seasons on the city map. Change the year or turn off “Compare the brushed period” to return to a single season. Period comparisons use finals appearances ÷ club-seasons for colour, and finals appearances ÷ seasons for area; scales stay fixed. The champion marker and annotation appear when one season is selected and disappear for multiple seasons. City locations are fixed club bases: the circles change size and the champion marker changes location as seasons change. Hover or tap a circle for its city and record. Nearby cities such as Melbourne and Geelong can overlap at the national scale. Perth includes Fremantle.</figcaption>
+          <figcaption>Drag a range on the timeline to compare those seasons on the city map. Change the year or turn off “Compare the brushed period” to return to a single season. Period comparisons use finals appearances ÷ club-seasons for colour, and finals appearances ÷ seasons for area; scales stay fixed. The champion marker and annotation appear when one season is selected and disappear for multiple seasons. City locations are fixed club bases: the circles change size and the champion marker changes location as seasons change. Hover or tap a circle for its city and record. Zoom in and drag to separate nearby cities such as Melbourne and Geelong. Circle sizes stay fixed when zooming so they still match the legend. Perth includes Fremantle.</figcaption>
         </figure>
         <figure class="figure-wide map-study">
           <h3 id="map-final-summary" aria-live="polite">2025: Brisbane Lions (Brisbane) defeated Geelong (Geelong).</h3>

@@ -125,34 +125,87 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
   setTimeout:fn=>{pending=fn;return 1;},clearTimeout:()=>{pending=null;},
   document:{querySelector:id=>elements.get(id),addEventListener(){}},window:{addEventListener(){}}};
  const initialise=vm.runInNewContext(fs.readFileSync(path.join(root,'js/map-controls.js'),'utf8')+'\n;initialiseMapControls',context);
- await initialise(chartViews);
+ const controls=await initialise(chartViews);
  const settle=()=>Promise.all([...chartViews.values()].map(entry=>entry.view.runAsync()));
+ const symbols=chartViews.get('premiership_symbols').view;
+ // Exercise the actual navigation handlers with screen coordinates at 1:1 scale.
+ class NavigationElement extends EventTarget {
+  constructor(){super();this.dataset={};this.capture=null;}
+  setAttribute(){}
+  setPointerCapture(id){this.capture=id;}
+  hasPointerCapture(id){return this.capture===id;}
+  releasePointerCapture(){this.capture=null;}
+  getScreenCTM(){return {inverse(){return {};}};}
+ }
+ const map=new NavigationElement(),resetView=new NavigationElement();
+ map.ownerSVGElement={createSVGPoint:()=>({x:0,y:0,matrixTransform(){return {x:this.x,y:this.y};}})};
+ const navigationInit=vm.runInNewContext(fs.readFileSync(path.join(root,'js/city-map-navigation.js'),'utf8')+'\n;initialiseCityMapNavigation',{
+  console,AbortController,document:{querySelector:()=>resetView}
+ });
+ const navigation=navigationInit(symbols,{querySelector:()=>map});
+ const symbolPositions=()=>items(symbols,i=>i.mark?.name==='city_symbols_marks').map(i=>({city:i.datum.city,x:i.x,y:i.y,size:i.size}));
+ const original=symbolPositions();
+ const separation=positions=>{
+  const a=positions.find(d=>d.city==='Melbourne'),b=positions.find(d=>d.city==='Geelong');
+  return Math.hypot(a.x-b.x,a.y-b.y);
+ };
+ await symbols.signal('mapZoom',4).runAsync();await settle();
+ assert.ok(Math.abs(separation(symbolPositions())/separation(original)-4)<1e-8);
+ assert.deepEqual(symbolPositions().map(d=>d.size),original.map(d=>d.size),'Zoom must preserve the circle-size legend');
+ for(const name of ['state_choropleth','grand_final_flows'])assert.equal(chartViews.get(name).view.signal('mapZoom'),1);
+ const pointer=(type,x,y)=>map.dispatchEvent(Object.assign(new Event(type,{cancelable:true}),{button:0,pointerId:1,isPrimary:true,clientX:x,clientY:y}));
+ const beforeDrag=symbolPositions();
+ pointer('pointerdown',100,100);pointer('pointermove',140,120);await settle();pointer('pointerup',140,120);
+ for(const item of symbolPositions()){
+  const before=beforeDrag.find(d=>d.city===item.city);
+  assert.ok(Math.abs(item.x-before.x-40)<1e-8);assert.ok(Math.abs(item.y-before.y-20)<1e-8);
+ }
+ assert.equal(map.capture,null);
+ const beforeCancel=Array.from(symbols.signal('mapPan'));
+ pointer('pointerdown',100,100);pointer('pointercancel',100,100);pointer('pointermove',180,180);await settle();
+ assert.deepEqual(Array.from(symbols.signal('mapPan')),beforeCancel);
+ const panBeforeKey=Array.from(symbols.signal('mapPan'));
+ map.dispatchEvent(Object.assign(new Event('keydown',{cancelable:true}),{key:'ArrowLeft'}));await settle();
+ assert.ok(Math.abs(symbols.signal('mapPan')[0]-(panBeforeKey[0]-0.08))<1e-8);
+ resetView.dispatchEvent(new Event('click'));await settle();
+ assert.equal(symbols.signal('mapZoom'),1);assert.deepEqual(Array.from(symbols.signal('mapPan')),[0,0]);
+ assert.equal(symbols.signal('selectedSeason'),2025);
+ await symbols.signal('mapZoom',4).runAsync();await settle();
  const controller=chartViews.get('state_choropleth').view;
  await controller.signal('selectedSeason',2018).signal('showPhysical',false).runAsync();await settle();
  for(const {view} of chartViews.values()){assert.equal(view.signal('selectedSeason'),2018);assert.equal(view.signal('showPhysical'),false);}
+ assert.equal(symbols.signal('mapZoom'),4,'Changing season must preserve city zoom');
  // Controls beside the lower maps also update the other maps and their inputs.
  await chartViews.get('grand_final_flows').view.signal('selectedSeason',2021).signal('mapCentre',[13,-33]).runAsync();await settle();
  for(const {view} of chartViews.values()){assert.equal(view.signal('selectedSeason'),2021);assert.deepEqual(view.signal('mapCentre'),[13,-33]);}
  assert.match(elements.get('#map-final-context').textContent,/same city/);
  await elements.get('#reset-map').listeners.click();await settle();
  for(const {view} of chartViews.values()){assert.equal(view.signal('selectedSeason'),2025);assert.equal(view.signal('showPhysical'),true);}
+ assert.equal(symbols.signal('mapZoom'),1);assert.deepEqual(Array.from(symbols.signal('mapPan')),[0,0]);
  const play=elements.get('#play-map');await play.listeners.click();await settle();
  assert.equal(controller.signal('selectedSeason'),2012);assert.equal(play.attributes['aria-pressed'],'true');
  await pending();await settle();assert.equal(controller.signal('selectedSeason'),2013);
  await play.listeners.click();assert.equal(play.attributes['aria-pressed'],'false');assert.equal(pending,null);
  assert.equal(elements.get('#map-final-summary').textContent,'2013: Hawthorn (Melbourne) defeated Fremantle (Perth).');
  assert.match(elements.get('#map-final-context').textContent,/does not represent travel/);
- const symbols=chartViews.get('premiership_symbols').view;
+ await symbols.signal('mapZoom',4).runAsync();await settle();
+ await symbols.signal('mapPan',[0.2,-0.15]).runAsync();
  await symbols.change('mapTimeBrush_store',vega.changeset().insert([{unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[2017,2020]]}])).runAsync();await settle();
  assert.equal(symbols.signal('usePeriod'),true);assert.match(elements.get('#map-period-summary').textContent,/2017–2020/);
  const restoredSpec=read('js/premiership_symbols.json');layout(restoredSpec,1000);restoreCityMapState(restoredSpec,captureCityMapState(symbols));
  const restored=new vega.View(vega.parse(vl.compile(restoredSpec).spec),{renderer:'none',loader,logger});await restored.runAsync();
- assert.deepEqual(restored.signal('mapTimeBrush').season,[2017,2020]);assert.equal(restored.signal('usePeriod'),true);restored.finalize();
+ assert.deepEqual(restored.signal('mapTimeBrush').season,[2017,2020]);assert.equal(restored.signal('usePeriod'),true);
+ assert.equal(restored.signal('mapZoom'),4);assert.deepEqual(Array.from(restored.signal('mapPan')),[0.2,-0.15]);
+ controls.replaceCityView(restored);await restored.runAsync();await Promise.resolve();
+ assert.equal(restored.signal('mapZoom'),4,'Re-embedding must not overwrite local zoom with another map');
+ assert.deepEqual(Array.from(restored.signal('mapPan')),[0.2,-0.15]);
+ controls.replaceCityView(symbols);await settle();restored.finalize();
  restoreCityMapState(restoredSpec,captureCityMapState(symbols),true);
  assert.equal(restoredSpec.vconcat[1].params[0].value,undefined);assert.equal(restoredSpec.params.find(p=>p.name==='usePeriod').value,false);
  await controller.signal('selectedSeason',2024).runAsync();await settle();
  assert.equal(symbols.signal('usePeriod'),false);assert.match(elements.get('#map-period-summary').textContent,/2024/);
  await elements.get('#reset-map').listeners.click();await settle();
+ navigation.destroy();
  for(const {view} of chartViews.values())view.finalize();
  assert.deepEqual(errors,[],'No Vega runtime errors');
  console.log('Map checks passed: 14 seasons, fixed class boundaries, no-club regions, layers, zoom, time-brush aggregates, shared controls, play/pause and reset.');

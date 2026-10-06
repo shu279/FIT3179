@@ -8,6 +8,7 @@ async function renderChart(element, {resetMapPeriod=false}={}) {
   const previous=chartViews.get(name);
   const cityState=name==='premiership_symbols' && previous ? captureCityMapState(previous.view) : null;
   if(cityState)mapControls?.pause();
+  previous?.navigation?.destroy();
   chartViews.get(name)?.view.finalize();
   chartViews.delete(name);
   element.setAttribute('aria-busy','true');
@@ -21,13 +22,15 @@ async function renderChart(element, {resetMapPeriod=false}={}) {
     const layout = chartLayout(spec,element.clientWidth);
     if (isVega) spec.width = element.clientWidth;
     element.replaceChildren();
+    if(name==='premiership_symbols')document.querySelector('#city-zoom-control').replaceChildren();
     const result = await vegaEmbed(element, spec, {
       actions:false,renderer:'svg',tooltip:{theme:'custom'},defaultStyle:false,
       ...(name==='state_choropleth'?{bind:'#map-season-control'}:{}),
       ...(name==='grand_final_flows'?{bind:'#map-final-season-control'}:{}),
       mode:isVega?'vega':'vega-lite'
     });
-    chartViews.set(name,{view:result.view,element,isVega,width:element.clientWidth,spec,layout});
+    const navigation=name==='premiership_symbols'?initialiseCityMapNavigation(result.view,element):null;
+    chartViews.set(name,{view:result.view,element,isVega,width:element.clientWidth,spec,layout,navigation});
     if(name==='premiership_symbols')mapControls?.replaceCityView(result.view);
     if(name==='ladder_bump'){
       const updatePeriod=(_signal,selection)=>{

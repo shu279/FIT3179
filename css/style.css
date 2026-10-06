@@ -47,6 +47,12 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .map-controls-row .chart-actions{margin:0;gap:8px;flex-wrap:nowrap}
 .map-final-controls{gap:12px 28px}
 .map-final-controls .chart-legend{margin:0}
+.city-map-controls>.micro{margin:0}
+[data-spec="premiership_symbols"] .city_map_group{touch-action:pan-y}
+[data-spec="premiership_symbols"] .water_backdrop_marks{pointer-events:all}
+[data-spec="premiership_symbols"] .city_map_group[data-zoomed="true"]{cursor:grab;touch-action:none}
+[data-spec="premiership_symbols"] .city_map_group[data-dragging="true"]{cursor:grabbing}
+[data-spec="premiership_symbols"] .city_map_group:focus-visible{outline:2px solid var(--orange)}
 .map-legend{margin:36px 0 0}
 .map-legend>p{margin:0 0 12px;color:var(--ink)}
 .map-rate-legend{display:grid;grid-template-columns:1fr;font-size:15px;color:var(--ink);text-align:left}

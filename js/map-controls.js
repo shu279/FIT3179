@@ -3,6 +3,7 @@
  * supplies an opt-in play/pause button. Brushing itself is defined in JSON. */
 async function initialiseMapControls(chartViews, resetCityBrush) {
   const names=['state_choropleth','premiership_symbols','grand_final_flows'];
+  const sharedSignals=['selectedSeason','mapCentre','showPhysical','showCultural'];
   const controller=chartViews.get(names[0])?.view;
   let symbols=chartViews.get(names[1])?.view;
   const status=document.querySelector('#map-season-summary');
@@ -51,7 +52,7 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
   // scrolling. Share changes in both directions, skipping equal values to avoid
   // feedback loops (including array-valued projection centres).
   function attachSharedInputs(source,view){
-    for(const signal of ['selectedSeason','mapZoom','mapCentre','showPhysical','showCultural']){
+    for(const signal of sharedSignals){
       view.addSignalListener(signal,(_name,value)=>{
         for(const name of names){
           if(name===source)continue;
@@ -104,6 +105,7 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
     stop();
     await controller.signal('selectedSeason',2025).signal('mapZoom',1).signal('mapCentre',[0,-28])
       .signal('showPhysical',true).signal('showCultural',true).runAsync();
+    await symbols.signal('mapZoom',1).signal('mapPan',[0,0]).runAsync();
     // Re-embed the city chart so the brush rectangle and its data both reset.
     if(resetCityBrush)await resetCityBrush();
     else await symbols.change('mapTimeBrush_store',vega.changeset().remove(()=>true)).signal('usePeriod',false).runAsync();
@@ -115,7 +117,7 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
   return {pause:stop,replaceCityView(view){
     symbols=view;attachSharedInputs('premiership_symbols',view);attachBrush();
     // A reader may change another map while this one is being re-embedded.
-    for(const name of ['selectedSeason','mapZoom','mapCentre','showPhysical','showCultural'])view.signal(name,controller.signal(name));
+    for(const name of sharedSignals)view.signal(name,controller.signal(name));
     Promise.resolve().then(()=>view.runAsync()).then(updateSeason).catch(console.error);
   }};
 }
@@ -123,7 +125,7 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
 // Re-embedding on resize avoids Vega-Lite 5.20's empty-interval resize error.
 // Restore through public JSON parameter values, preserving the selected period.
 function captureCityMapState(view){
-  return Object.fromEntries(['selectedSeason','mapZoom','mapCentre','showPhysical','showCultural','usePeriod','mapTimeBrush']
+  return Object.fromEntries(['selectedSeason','mapZoom','mapCentre','mapPan','showPhysical','showCultural','usePeriod','mapTimeBrush']
     .map(name=>[name,view.signal(name)]));
 }
 function restoreCityMapState(spec,state,resetPeriod=false){

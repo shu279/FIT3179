@@ -104,18 +104,20 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
   {joinaggregate:[{op:'distinct',field:'season',as:'visible_seasons'}]},
   {filter:'datum.visible_seasons === 1 && datum.premierships > 0'}];
  const championText={type:'text',clip:true,fontSize:15,fontWeight:600,lineHeight:18,
-  align:{expr:"datum.city === 'Perth' ? 'left' : 'right'"},
-  dx:{expr:"datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"},
-  dy:{expr:"datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"}};
+  align:{expr:"mapZoom > 1 ? 'center' : datum.city === 'Perth' ? 'left' : 'right'"},
+  dx:{expr:"mapZoom > 1 ? 0 : datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"},
+  dy:{expr:"mapZoom > 1 ? -54 : datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"}};
  const championAnnotation={data:table('city_seasons'),transform:[...championTransform,
   {calculate:"[format(datum.season, 'd') + ' champions', datum.premier]",as:'champion_label'}],
   encoding:{...loc,text:{field:'champion_label',type:'nominal'}}};
  write('js/premiership_symbols.json',{
   '$schema':base.$schema,description:'A proportional-symbol map linked to an interval brush. Area shows finalists per season, colour uses the same five finals-rate classes as the state map. For a single selected season, a diamond and annotation identify its champion. Both disappear when comparing multiple seasons.',
   usermeta:{layout:'map-timeline'},padding:5,autosize:{type:'pad',resize:true},config:multiConfig,
-  params:[...commonParams(true),{name:'usePeriod',value:false,bind:{input:'checkbox',name:'Compare the brushed period: '}}],spacing:28,
+  params:[...commonParams(true).map(param=>param.name==='mapZoom'?{...param,bind:{input:'range',min:1,max:8,step:0.25,name:'Zoom: ',element:'#city-zoom-control'}}:param),
+   {name:'mapPan',value:[0,0]},
+   {name:'usePeriod',value:false,bind:{input:'checkbox',name:'Compare the brushed period: '}}],spacing:28,
   vconcat:[
-   {name:'city_map',width:900,height:440,projection:{...projection,scale:{expr:'mapZoom * min(width / 0.84, city_map_height / 0.72)'},translate:{expr:'[width / 2, city_map_height / 2]'}},
+   {name:'city_map',width:900,height:440,projection:{...projection,scale:{expr:'mapZoom * min(width / 0.84, city_map_height / 0.72)'},translate:{expr:'[width * (0.5 + mapPan[0]), city_map_height * (0.5 + mapPan[1])]'}},
     layer:[...physicalLayers('city_map_height'),borderLayer(),
      {name:'city_symbols',data:table('city_seasons'),transform:cityTransform,
       mark:{type:'circle',clip:true,stroke:ink,strokeWidth:1,opacity:0.85},encoding:{...loc,color:rateColor,
