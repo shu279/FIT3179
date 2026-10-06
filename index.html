@@ -9,7 +9,7 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=d671e5df1e44">
+  <link rel="stylesheet" href="css/style.css?v=cc20bd80a689">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -109,9 +109,8 @@
           <h3 id="map-period-summary" aria-live="polite">City finalists in 2025</h3>
           <p class="chart-deck">Larger circles mean more finalists per season. Colour shows the share of the city’s clubs reaching finals. The orange diamond and annotation identify the selected year’s champion.</p>
           <div class="map-controls-row city-map-controls">
+            <div class="chart-actions"><button type="button" id="reset-city-map" disabled>Reset</button></div>
             <div id="city-zoom-control" class="vega-bindings"></div>
-            <div class="chart-actions"><button type="button" id="reset-city-map" disabled>Reset view</button></div>
-            <p class="micro">Zoom in, then drag the map to move.</p>
           </div>
           <div class="map-with-legend">
             <div class="chart" data-spec="premiership_symbols" aria-label="Proportional-symbol map of finalists by home city, linked to a time brush. Circle area shows finalists per season and colour shows finals rate."></div>
