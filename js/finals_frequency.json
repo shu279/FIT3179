@@ -47,7 +47,7 @@
       ]
     }
   },
-  "description": "Number of seasons in which each club played finals, out of 14.",
+  "description": "Finals seasons out of fourteen. Geelong and Sydney are labelled directly; a note in the unused lower-right area identifies Geelong’s two missed seasons.",
   "data": {
     "url": "data/team_summary.json"
   },
@@ -81,6 +81,14 @@
         "St Kilda",
         "Gold Coast"
       ],
+      "scale": {
+        "range": [
+          0,
+          {
+            "expr": "width < 300 ? height - 90 : height"
+          }
+        ]
+      },
       "axis": {
         "title": null,
         "ticks": false
@@ -92,12 +100,18 @@
       "scale": {
         "domain": [
           0,
-          14
+          18
         ]
       },
       "axis": {
-        "title": "Seasons reaching finals",
-        "tickCount": 8
+        "title": "Finals seasons",
+        "values": [
+          0,
+          4,
+          8,
+          12,
+          14
+        ]
       }
     },
     "opacity": {
@@ -148,6 +162,12 @@
       }
     },
     {
+      "transform": [
+        {
+          "calculate": "datum.finals >= 11 ? datum.finals + '/14' : '' + datum.finals",
+          "as": "finals_label"
+        }
+      ],
       "mark": {
         "type": "text",
         "align": "left",
@@ -157,8 +177,49 @@
       },
       "encoding": {
         "text": {
-          "field": "finals",
-          "type": "quantitative"
+          "field": "finals_label",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "name": "finals_note",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "fontSize": 15,
+        "lineHeight": 19,
+        "lineBreak": "\n",
+        "color": "#21372b"
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width - 2"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "width < 300 ? height - 65 : height * .72"
+          }
+        },
+        "text": {
+          "value": "Geelong missed\nonly 2015\nand 2023."
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
         }
       }
     }

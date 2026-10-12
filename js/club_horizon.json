@@ -7,7 +7,7 @@
     "contains": "padding",
     "resize": true
   },
-  "height": 682,
+  "height": 944,
   "padding": {
     "top": 12,
     "left": 4,
@@ -564,6 +564,42 @@
           }
         },
         {
+          "name": "club_story_note_0",
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 72
+              },
+              "baseline": {
+                "value": "top"
+              },
+              "text": {
+                "signal": "width >= 560 ? \"Most finals appearances: 12 of 14 seasons.\" : \"Most finals appearances:\\n12 of 14 seasons.\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 18
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
           "name": "season_targets",
           "type": "rect",
           "from": {
@@ -608,7 +644,7 @@
             "value": 0
           },
           "y": {
-            "value": 136
+            "value": 176
           },
           "width": {
             "signal": "width"
@@ -879,6 +915,42 @@
           }
         },
         {
+          "name": "club_story_note_1",
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 72
+              },
+              "baseline": {
+                "value": "top"
+              },
+              "text": {
+                "signal": "width >= 560 ? \"Second-most finals appearances: 11 of 14 seasons.\" : \"Second-most finals appearances:\\n11 of 14 seasons.\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 18
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
           "name": "season_targets",
           "type": "rect",
           "from": {
@@ -923,7 +995,7 @@
             "value": 0
           },
           "y": {
-            "value": 244
+            "value": 324
           },
           "width": {
             "signal": "width"
@@ -1194,6 +1266,42 @@
           }
         },
         {
+          "name": "club_story_note_2",
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 72
+              },
+              "baseline": {
+                "value": "top"
+              },
+              "text": {
+                "signal": "width >= 560 ? \"Three consecutive titles: 2013, 2014 and 2015.\" : \"Three consecutive titles:\\n2013, 2014 and 2015.\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 18
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
           "name": "season_targets",
           "type": "rect",
           "from": {
@@ -1238,7 +1346,7 @@
             "value": 0
           },
           "y": {
-            "value": 352
+            "value": 472
           },
           "width": {
             "signal": "width"
@@ -1509,6 +1617,42 @@
           }
         },
         {
+          "name": "club_story_note_3",
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 72
+              },
+              "baseline": {
+                "value": "top"
+              },
+              "text": {
+                "signal": "width >= 560 ? \"Three titles: 2017, 2019 and 2020.\" : \"Three titles:\\n2017, 2019 and 2020.\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 18
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
           "name": "season_targets",
           "type": "rect",
           "from": {
@@ -1553,7 +1697,7 @@
             "value": 0
           },
           "y": {
-            "value": 460
+            "value": 620
           },
           "width": {
             "signal": "width"
@@ -1824,6 +1968,42 @@
           }
         },
         {
+          "name": "club_story_note_4",
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 72
+              },
+              "baseline": {
+                "value": "top"
+              },
+              "text": {
+                "signal": "width >= 560 ? \"Largest rise among title winners: +41.8 percentage points.\" : \"Largest rise among title winners:\\n+41.8 percentage points.\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 18
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
           "name": "season_targets",
           "type": "rect",
           "from": {
@@ -1868,7 +2048,7 @@
             "value": 0
           },
           "y": {
-            "value": 568
+            "value": 768
           },
           "width": {
             "signal": "width"
@@ -2134,6 +2314,42 @@
               },
               "strokeOpacity": {
                 "value": 0.65
+              }
+            }
+          }
+        },
+        {
+          "name": "club_story_note_5",
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 72
+              },
+              "baseline": {
+                "value": "top"
+              },
+              "text": {
+                "signal": "width >= 560 ? \"Largest fall among title winners: −30.1 percentage points.\" : \"Largest fall among title winners:\\n−30.1 percentage points.\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 18
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
               }
             }
           }

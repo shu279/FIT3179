@@ -90,7 +90,7 @@
         ]
       },
       "axis": {
-        "title": "Regular-season games won (%)",
+        "title": "Games won (%)",
         "tickCount": 6
       }
     }

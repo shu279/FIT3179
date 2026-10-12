@@ -44,6 +44,10 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
     x:{signal:'datum.x1-datum.x0 < 64 ? (datum.x0+datum.x1)/2 : datum.x0 + ('+shortTile+' ? 44 : 10)'},align:{signal:"datum.x1-datum.x0 < 64 ? 'center' : 'left'"},y:{signal:shortTile+" ? (datum.y0+datum.y1)/2 : datum.y1 - 10 - (datum.label_lines-1)*18"},
     baseline:{signal:shortTile+" ? 'middle' : 'bottom'"},text:{field:'display_label'},
     lineBreak:{value:'\n'},lineHeight:{value:18},font:{value:font},fontSize:{value:15},fill:{signal:"datum.team === 'Geelong' ? '"+ink+"' : '#ffffff'"}
+   }}},
+   {name:'geelong_top_four_note',type:'text',interactive:false,from:{data:'leaves'},encode:{update:{
+    x:{signal:'datum.x0 + 10'},y:{signal:'datum.y0 + 46'},text:{signal:"datum.team === 'Geelong' ? 'of 14\\nseasons' : ''"},
+    lineBreak:{value:'\n'},lineHeight:{value:18},font:{value:font},fontSize:{value:15},fill:{value:ink}
    }}}
   ]
  });
@@ -72,9 +76,17 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
   {name:'band_50_75',expr:'clamp(datum.rate-50,0,25)',color:green},
   {name:'band_75_100',expr:'clamp(datum.rate-75,0,25)',color:orange}
  ];
+ const rowNotes=[
+  ['Most finals appearances:','12 of 14 seasons.'],
+  ['Second-most finals appearances:','11 of 14 seasons.'],
+  ['Three consecutive titles:','2013, 2014 and 2015.'],
+  ['Three titles:','2017, 2019 and 2020.'],
+  ['Largest rise among title winners:','+41.8 percentage points.'],
+  ['Largest fall among title winners:','−30.1 percentage points.']
+ ];
  const horizonTip="{'Club':datum.team,'Season':datum.season,'Games won':format(datum.wins/datum.played,'.1%'),'Record':datum.wins + ' wins / ' + datum.played + ' games','Ladder position':datum.rank}";
  write('js/club_horizon.json',{
-  ...base,height:682,padding:{top:12,left:4,right:4,bottom:38},
+  ...base,height:944,padding:{top:12,left:4,right:4,bottom:38},
   description:'Six horizon strips show absolute annual win rates from 0 to 100%, folded into four consecutive 25-percentage-point bands. Higher bands overlay lower bands in pale green, sage, dark green and orange. A full band has a flat upper edge, inset from the row boundary. All six strips count as one chart. Interpolated fold crossings are for drawing only; hover reports real season records.',
   signals:[{name:'detailSeason',value:2025,on:[{events:'@season_targets:pointermove, @season_targets:click',update:'datum.season'}]}],
   data:[
@@ -90,7 +102,7 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
   axes:[{scale:'year',orient:'bottom',values:{signal:'width >= 700 ? sequence(2012,2026) : [2012,2018,2025]'},format:'d',domain:false,tickColor:'#cdd2c2',labelPadding:9,labelFont:font,labelFontSize:15,labelColor:ink,
    encode:{labels:{update:{align:{signal:"datum.value === 2012 ? 'left' : datum.value === 2025 ? 'right' : 'center'"}}}}}],
   marks:teams.map((team,i)=>({
-   name:'horizon_row_'+i,type:'group',encode:{update:{x:{value:0},y:{value:i*108+28},width:{signal:'width'},height:{value:64}}},
+   name:'horizon_row_'+i,type:'group',encode:{update:{x:{value:0},y:{value:i*148+28},width:{signal:'width'},height:{value:64}}},
    scales:[{name:'band',type:'linear',domain:[0,25],range:[58,6],zero:true,nice:false}],
    marks:[
     {type:'text',interactive:false,encode:{update:{x:{value:0},y:{value:-8},text:{value:team},font:{value:font},fontSize:{value:15},fontWeight:{value:600},fill:{value:ink}}}},
@@ -102,6 +114,10 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
      x:{scale:'year',field:'season'},y:{scale:'band',field:f.name},y2:{value:58},fill:{value:f.color},interpolate:{value:'linear'}
     }}})),
     {type:'rule',interactive:false,encode:{update:{x:{scale:'year',signal:'detailSeason'},y:{value:6},y2:{value:58},stroke:{value:ink},strokeDash:{value:[3,3]},strokeOpacity:{value:0.65}}}},
+    {name:'club_story_note_'+i,type:'text',interactive:false,encode:{update:{
+     x:{value:0},y:{value:72},baseline:{value:'top'},text:{signal:'width >= 560 ? '+JSON.stringify(rowNotes[i].join(' '))+' : '+JSON.stringify(rowNotes[i].join('\n'))},
+     lineBreak:{value:'\n'},lineHeight:{value:18},font:{value:font},fontSize:{value:15},fill:{value:ink}
+    }}},
     {name:'season_targets',type:'rect',from:{data:'records_'+i},encode:{update:{
      x:{scale:'year',signal:'max(2012,datum.season-0.5)'},x2:{scale:'year',signal:'min(2025,datum.season+0.5)'},y:{value:0},height:{value:64},fill:{value:'transparent'},tooltip:{signal:horizonTip},
      description:{signal:"datum.team + ', ' + datum.season + ': ' + format(datum.wins/datum.played,'.1%') + ' games won'"}

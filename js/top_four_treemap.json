@@ -184,6 +184,42 @@
           }
         }
       }
+    },
+    {
+      "name": "geelong_top_four_note",
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 10"
+          },
+          "y": {
+            "signal": "datum.y0 + 46"
+          },
+          "text": {
+            "signal": "datum.team === 'Geelong' ? 'of 14\\nseasons' : ''"
+          },
+          "lineBreak": {
+            "value": "\n"
+          },
+          "lineHeight": {
+            "value": 18
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fill": {
+            "value": "#21372b"
+          }
+        }
+      }
     }
   ]
 }

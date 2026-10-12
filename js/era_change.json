@@ -81,7 +81,7 @@
             "nice": false
           },
           "axis": {
-            "title": "Change in win rate (percentage points)",
+            "title": "Change (pp)",
             "values": [
               -40,
               -20,
@@ -140,6 +140,232 @@
       "encoding": {
         "x": {
           "datum": 0
+        }
+      }
+    },
+    {
+      "name": "rise_note",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 15,
+        "lineHeight": 19,
+        "lineBreak": "\n",
+        "color": "#21372b"
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "3"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Brisbane Lions') + 18"
+          }
+        },
+        "text": {
+          "value": "Brisbane\n+41.8\npoints"
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "rise_leader",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width * .25"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Brisbane Lions') + 13"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',0) - 5"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Brisbane Lions') + bandwidth('y')/2"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "fall_note",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 15,
+        "lineHeight": 19,
+        "lineBreak": "\n",
+        "color": "#21372b"
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width * .52"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','West Coast') - 65"
+          }
+        },
+        "text": {
+          "value": {
+            "expr": "width < 200 ? 'West\\nCoast\\n−30.1 pts' : 'West Coast\\n−30.1 points'"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "fall_leader",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width * .72"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','West Coast') + 8"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',0) + 5"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','West Coast') + bandwidth('y')/2"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "rise_arrow",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "point",
+        "shape": "triangle-right",
+        "filled": true,
+        "color": "#21372b",
+        "size": 35
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',0)-5"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Brisbane Lions') + bandwidth('y')/2"
+          }
+        }
+      }
+    },
+    {
+      "name": "fall_arrow",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "point",
+        "shape": "triangle-left",
+        "filled": true,
+        "color": "#21372b",
+        "size": 35
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',0)+5"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','West Coast') + bandwidth('y')/2"
+          }
         }
       }
     }

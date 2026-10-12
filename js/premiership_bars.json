@@ -66,6 +66,14 @@
         "West Coast",
         "Western Bulldogs"
       ],
+      "scale": {
+        "range": [
+          0,
+          {
+            "expr": "width < 350 ? height - 110 : height"
+          }
+        ]
+      },
       "axis": {
         "title": null,
         "ticks": false,
@@ -148,6 +156,70 @@
         "text": {
           "field": "premierships",
           "type": "quantitative"
+        }
+      }
+    },
+    {
+      "name": "winning_years",
+      "transform": [
+        {
+          "filter": "datum.premierships >= 2 && width >= 400"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 15,
+        "color": "#ffffff"
+      },
+      "encoding": {
+        "x": {
+          "value": 10
+        },
+        "text": {
+          "field": "title_years",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "name": "titles_note",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "fontSize": 15,
+        "lineHeight": 19,
+        "lineBreak": "\n",
+        "color": "#21372b"
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width - 6"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "width < 350 ? height - 85 : height * .7"
+          }
+        },
+        "text": {
+          "value": "Hawthorn and\nRichmond won\n6 of 14 titles."
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
         }
       }
     }

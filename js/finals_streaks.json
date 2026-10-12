@@ -187,9 +187,45 @@
       }
     ]
   },
-  "mark": {
-    "type": "bar",
-    "size": 13,
-    "cornerRadius": 2
-  }
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "size": 18,
+        "cornerRadius": 2
+      }
+    },
+    {
+      "name": "longest_run_labels",
+      "transform": [
+        {
+          "filter": "datum.length === 7"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "align": "center",
+        "baseline": "middle",
+        "color": "#ffffff"
+      },
+      "encoding": {
+        "x2": null,
+        "x": {
+          "value": {
+            "expr": "(scale('x', datum.start) + scale('x', datum.end)) / 2"
+          }
+        },
+        "text": {
+          "value": {
+            "expr": "width >= 260 ? '7 seasons' : '7'"
+          }
+        },
+        "color": {
+          "value": "#ffffff"
+        }
+      }
+    }
+  ]
 }

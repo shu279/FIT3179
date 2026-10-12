@@ -51,11 +51,232 @@
   "data": {
     "url": "data/season_transitions.json"
   },
-  "mark": {
-    "type": "bar",
-    "stroke": "#f3f2e9",
-    "strokeWidth": 1
-  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "stroke": "#f3f2e9",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "name": "rank_change_note",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 15,
+        "lineHeight": 19,
+        "lineBreak": "\n",
+        "color": "#21372b"
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "8"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "8"
+          }
+        },
+        "text": {
+          "value": "55% of changes\nwere within ±3 places.\n129 of 234 comparisons"
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "rank_change_leader",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "min(190, width * .7)"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "69"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',0) + bandwidth('x')/2"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y',26)"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "rank_change_bracket",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',-3)"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y',26)"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',3) + bandwidth('x')"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y',26)"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "rank_change_bracket_left",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',-3)"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y',26)"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',-3)"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y',25)"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "rank_change_bracket_right",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',3) + bandwidth('x')"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y',26)"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',3) + bandwidth('x')"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y',25)"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    }
+  ],
   "encoding": {
     "x": {
       "field": "change",
@@ -105,9 +326,23 @@
     "y": {
       "aggregate": "count",
       "type": "quantitative",
+      "scale": {
+        "domain": [
+          0,
+          36
+        ]
+      },
       "axis": {
         "title": "Club-season changes",
-        "tickMinStep": 1
+        "values": [
+          0,
+          5,
+          10,
+          15,
+          20,
+          25,
+          30
+        ]
       }
     },
     "color": {
