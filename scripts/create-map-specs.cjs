@@ -132,7 +132,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
   {calculate:"[format(datum.season, 'd') + ' champions', datum.premier]",as:'champion_label'}],
   encoding:{...loc,text:{field:'champion_label',type:'nominal'}}};
  write('js/premiership_symbols.json',{
-  '$schema':base.$schema,description:'A proportional-symbol map with Single season and Compare period modes. The period brush selects inclusive whole years; fractional endpoints resolve to their nearest seasons. Area shows finalists per season and colour shows finals rate. A diamond and annotation identify the champion when exactly one season is selected.',
+  '$schema':base.$schema,description:'A proportional-symbol map with Single season and Compare period modes. The period brush selects inclusive whole years; fractional endpoints resolve to their nearest seasons. Green circle area shows finalists per season. A diamond and annotation identify the champion when exactly one season is selected.',
   usermeta:{layout:'map-timeline'},padding:5,autosize:{type:'pad',resize:true},config:multiConfig,
   params:[...commonParams(true).map(param=>param.name==='mapZoom'?{...param,bind:{input:'range',min:1,max:8,step:0.25,name:'Zoom: ',element:'#city-zoom-control'}}:
    param.name==='selectedSeason'?{...param,bind:{...param.bind,element:'#city-season-control'}}:param),
@@ -144,7 +144,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
    {name:'city_map',width:900,height:440,projection:{...projection,scale:{expr:'mapZoom * min(width / 0.84, city_map_height / 0.72)'},translate:{expr:'[width * (0.5 + mapPan[0]), city_map_height * (0.5 + mapPan[1])]'}},
     layer:[...physicalLayers('city_map_height'),borderLayer(),
      {name:'city_symbols',data:table('city_seasons'),transform:cityTransform,
-      mark:{type:'circle',clip:true,stroke:ink,strokeWidth:1,opacity:0.85},encoding:{...loc,color:rateColor,
+      mark:{type:'circle',clip:true,color:green,stroke:ink,strokeWidth:1,opacity:0.85},encoding:{...loc,
        size:{field:'finals_per_season',type:'quantitative',scale:{domain:[0,9],range:[0,2400]},legend:null},tooltip:cityTip}},
      {name:'zero_city_symbols',data:table('city_seasons'),transform:[...cityTransform,{filter:'datum.finals === 0'}],
       mark:{type:'point',clip:true,shape:'circle',size:35,filled:false,stroke:ink,strokeWidth:1.2},encoding:{...loc,tooltip:cityTip}},

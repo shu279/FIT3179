@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "A proportional-symbol map with Single season and Compare period modes. The period brush selects inclusive whole years; fractional endpoints resolve to their nearest seasons. Area shows finalists per season and colour shows finals rate. A diamond and annotation identify the champion when exactly one season is selected.",
+  "description": "A proportional-symbol map with Single season and Compare period modes. The period brush selects inclusive whole years; fractional endpoints resolve to their nearest seasons. Green circle area shows finalists per season. A diamond and annotation identify the champion when exactly one season is selected.",
   "usermeta": {
     "layout": "map-timeline"
   },
@@ -331,6 +331,7 @@
           "mark": {
             "type": "circle",
             "clip": true,
+            "color": "#31553b",
             "stroke": "#21372b",
             "strokeWidth": 1,
             "opacity": 0.85
@@ -343,27 +344,6 @@
             "latitude": {
               "field": "latitude",
               "type": "quantitative"
-            },
-            "color": {
-              "field": "finals_rate",
-              "type": "quantitative",
-              "scale": {
-                "type": "threshold",
-                "domain": [
-                  30,
-                  40,
-                  50,
-                  100
-                ],
-                "range": [
-                  "#c1c6b7",
-                  "#a8bd9c",
-                  "#819978",
-                  "#587651",
-                  "#31553b"
-                ]
-              },
-              "legend": null
             },
             "size": {
               "field": "finals_per_season",

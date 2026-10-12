@@ -86,7 +86,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
      const table=circles().filter(i=>i.datum.finals>0 || i.size===35);
      assert.equal(table.length,7);
      assert.equal(table.reduce((n,i)=>n+i.datum.finals,0),8);
-     for(const item of table.filter(i=>i.datum.finals>0))assert.equal(item.fill,palette.colours[colourIndex(item.datum.finals_rate)]);
+     for(const item of table.filter(i=>i.datum.finals>0))assert.equal(item.fill,'#31553b');
      assert.ok(Math.max(...table.map(i=>i.y))-Math.min(...table.map(i=>i.y))>40,'Projected cities must not collapse onto one point');
      checkChampion(year);
     }
@@ -107,7 +107,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
       assert.equal(item.datum.finals,finalists);
       assert.equal(item.datum.finals_per_season,finalists/(range[1]-range[0]+1));
       assert.equal(item.datum.finals_rate,finalists/expected.length*100);
-      if(finalists>0)assert.equal(item.fill,palette.colours[colourIndex(item.datum.finals_rate)]);
+      if(finalists>0)assert.equal(item.fill,'#31553b');
      }
     }
     await brush(null);

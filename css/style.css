@@ -87,7 +87,7 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .map-size-legend ul{display:grid;grid-template-columns:1fr;gap:2px;list-style:none;margin:0;padding:0}
 .map-size-legend li{display:flex;align-items:center;gap:6px}
 .map-size-legend svg{display:block;flex:none;width:38px;height:38px}
-.map-size-legend circle{fill:#000;fill-opacity:.85;stroke:var(--ink);stroke-width:1.5;opacity:.85}
+.map-size-legend circle{fill:var(--green);stroke:var(--ink);stroke-width:1;opacity:.85}
 .map-symbol-key{position:absolute;top:12px;z-index:1;flex-direction:column;align-items:flex-start;gap:4px;margin:0;pointer-events:none}
 .map-symbol-key>span{white-space:nowrap}
 .city-map-symbol-key{right:60px}
@@ -103,8 +103,8 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .city-map-legend,.state-map-legend{position:absolute;top:12px;left:36px;z-index:1;max-width:none;margin:0;pointer-events:none}
 .city-map-legend{display:grid;grid-template-columns:max-content;gap:12px}
 .city-map-legend .micro,.state-map-legend .micro{margin:0 0 4px;line-height:21px}
-.city-map-legend .map-rate-legend>span,.state-map-legend .map-rate-legend>span{min-height:22px;padding:0 0 0 28px;line-height:22px}
-.city-map-legend .map-rate-legend>span::before,.state-map-legend .map-rate-legend>span::before{width:18px}
+.state-map-legend .map-rate-legend>span{min-height:22px;padding:0 0 0 28px;line-height:22px}
+.state-map-legend .map-rate-legend>span::before{width:18px}
 .city-map-legend .map-size-legend{margin:0}
 .city-map-legend .map-size-legend ul{gap:0}
 .city-map-legend .map-size-legend li{gap:4px}
@@ -112,12 +112,8 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 /* Narrow maps reserve ocean space so the keys never hide the map data. */
 @container(max-width:600px){
  .city-map-legend,.state-map-legend{left:12px}
- .city-map-frame{padding-top:310px;background:linear-gradient(#e4eff0 0 316px,transparent 316px)}
+ .city-map-frame{padding-top:156px;background:linear-gradient(#e4eff0 0 162px,transparent 162px)}
  .city-map-symbol-key{right:12px}
-}
-@container(max-width:360px){
- .city-map-symbol-key{top:310px;left:12px;right:auto}
- .city-map-frame{padding-top:376px;background:linear-gradient(#e4eff0 0 382px,transparent 382px)}
 }
 @container(max-width:700px){
  .state-map-legend{left:12px}

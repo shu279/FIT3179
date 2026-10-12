@@ -28,7 +28,7 @@ These eight distinct idioms fall outside the rubric’s listed basic charts:
 | Treemap | [top_four_treemap.json](js/top_four_treemap.json) | Each club’s share of the 56 top-four ladder places, encoded by rectangle area. |
 | Sankey diagram | [finals_return.json](js/finals_return.json) | Counts and conditional percentages of clubs retaining, gaining or losing finals participation. |
 | Choropleth map | [state_choropleth.json](js/state_choropleth.json) | State finals percentages with actual finalist / club counts. |
-| Proportional-symbol map | [premiership_symbols.json](js/premiership_symbols.json) | Finals participation by home city, across one season or a period. |
+| Proportional-symbol map | [premiership_symbols.json](js/premiership_symbols.json) | Finalists per season by home city, encoded only by the area of uniformly green circles. |
 | Connection map | [grand_final_flows.json](js/grand_final_flows.json) | The home cities of Grand Final opponents, including same-city matchups. |
 | Interval timeline (Gantt-style) | [finals_streaks.json](js/finals_streaks.json) | The start, end and duration of consecutive finals runs, with multiple intervals per club. |
 | Box-and-whisker plot | [season_boxplot.json](js/season_boxplot.json) | Each club’s median, middle half and range of annual win rates. |

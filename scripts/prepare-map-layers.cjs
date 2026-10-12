@@ -63,7 +63,7 @@ const manifest={
  colour:{provider:'Custom site palette',scheme:'Muted greens',classes:5,thresholds:[30,40,50,100],
   colours:['#c1c6b7','#a8bd9c','#819978','#587651','#31553b'],
   intervals:['0–<30%','30–<40%','40–<50%','50–<100%','100%'],
-  classification:'Fixed, unequal intervals separate all five observed state rates (0, 30, 40, 50, 100) across 2012–2025. The same thresholds apply to every year and city-period comparison; 100% is a separate class. No-club regions are excluded and shown in grey.',
+  classification:'Fixed, unequal intervals separate all five observed state rates (0, 30, 40, 50, 100) across 2012–2025. The same thresholds apply to every year of the state map; 100% is a separate class. No-club regions are excluded and shown in grey.',
   light_labels_from:50}
 };
 fs.writeFileSync(path.join(dest,'map_sources.json'),JSON.stringify(manifest,null,2)+'\n');
