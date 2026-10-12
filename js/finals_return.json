@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "description": "Finals participation in one season and the next, pooling 2012–2013 through 2024–2025. Every link counts club-season transitions.",
+  "description": "Finals participation in one season and the next, pooling 2012–2013 through 2024–2025. Every flow is labelled with its transition count and percentage of the starting group.",
   "width": 700,
   "height": 420,
   "padding": 0,
@@ -37,6 +37,14 @@
     {
       "name": "missedStart",
       "update": "top + 104 * unit + gap"
+    },
+    {
+      "name": "labelT",
+      "update": "width < 360 ? 0.15 : 0.25"
+    },
+    {
+      "name": "labelX",
+      "update": "pow(1-labelT,3)*(left+barWidth) + 3*pow(1-labelT,2)*labelT*width*.45 + 3*(1-labelT)*pow(labelT,2)*width*.55 + pow(labelT,3)*(right-barWidth)"
     }
   ],
   "data": [
@@ -44,6 +52,31 @@
       "name": "links",
       "url": "data/finals_transition_totals.json",
       "transform": [
+        {
+          "type": "joinaggregate",
+          "groupby": [
+            "from"
+          ],
+          "ops": [
+            "sum"
+          ],
+          "fields": [
+            "count"
+          ],
+          "as": [
+            "source_total"
+          ]
+        },
+        {
+          "type": "formula",
+          "expr": "datum.count / datum.source_total",
+          "as": "share"
+        },
+        {
+          "type": "formula",
+          "expr": "datum.count + ' (' + format(datum.share, datum.count * 100 % datum.source_total ? '.1%' : '.0%') + ')'",
+          "as": "value_label"
+        },
         {
           "type": "formula",
           "expr": "(datum.from ? top : missedStart) + datum.source_offset * unit",
@@ -58,6 +91,11 @@
           "type": "formula",
           "expr": "datum.count * unit",
           "as": "thickness"
+        },
+        {
+          "type": "formula",
+          "expr": "datum.sy + (datum.ty-datum.sy) * (3*labelT*labelT - 2*labelT*labelT*labelT) + datum.thickness/2",
+          "as": "label_y"
         }
       ]
     },
@@ -128,7 +166,7 @@
             "value": 1
           },
           "tooltip": {
-            "signal": "{'Outcome':datum.label,'Club-season transitions':datum.count,'Share of starting group':format(datum.count / (datum.from ? 104 : 130),'.1%')}"
+            "signal": "{'Outcome':datum.label,'Club-season transitions':datum.count,'Starting-group transitions':datum.source_total,'Share of starting group':format(datum.share,'.1%')}"
           }
         },
         "hover": {
@@ -159,6 +197,45 @@
           },
           "fill": {
             "signal": "datum.finalist ? '#c96636' : '#a8bd9c'"
+          }
+        }
+      }
+    },
+    {
+      "name": "flow_values",
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "links"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "labelX"
+          },
+          "y": {
+            "field": "label_y"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fontWeight": {
+            "value": 600
+          },
+          "fill": {
+            "signal": "datum.from && !datum.to ? '#ffffff' : '#21372b'"
+          },
+          "text": {
+            "field": "value_label"
           }
         }
       }

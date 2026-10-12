@@ -106,6 +106,13 @@ async function main(){
        assert.equal(view.data('links').length,4);
        assert.equal(view.data('nodes').length,4);
        assert.equal(sum(view.data('links'),'count'),234);
+       const labels=items(view,item=>item.mark?.name==='flow_values');
+       assert.deepEqual(labels.map(item=>item.text),['65 (62.5%)','39 (37.5%)','39 (30%)','91 (70%)']);
+       for(const label of labels){
+         const startingGroup=transitions.filter(d=>d.from_finals===label.datum.from);
+         assert.equal(label.datum.source_total,startingGroup.length);
+         assert.equal(label.datum.share,startingGroup.filter(d=>d.to_finals===label.datum.to).length/startingGroup.length);
+       }
      }
      if(name==='success_radar.json'){
        const profiles=view.data('profiles');
