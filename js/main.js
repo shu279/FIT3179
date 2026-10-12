@@ -2,11 +2,27 @@
 'use strict';
 const chartViews = new Map();
 let mapControls;
+let cityRenderQueue=Promise.resolve();
 
-async function renderChart(element, {resetMapPeriod=false}={}) {
+function renderChart(element,options={}) {
+  // Mode changes, year edits and responsive resizing can arrive together.
+  // Serialize city embeds so the last request preserves the latest state.
+  if(element.dataset.spec==='premiership_symbols'){
+    cityRenderQueue=cityRenderQueue.then(()=>embedChart(element,options));
+    return cityRenderQueue;
+  }
+  return embedChart(element,options);
+}
+
+async function embedChart(element, {resetMapPeriod=false,cityMode,cityPeriod,preserveJourney=false}={}) {
   const name = element.dataset.spec;
   const previous=chartViews.get(name);
   const cityState=name==='premiership_symbols' && previous ? captureCityMapState(previous.view) : null;
+  const journeyState=preserveJourney && name==='ladder_bump' && previous ? {
+    brush:previous.view.signal('seasonBrush'),clubs:previous.view.signal('journeyClub')
+  } : null;
+  if(cityState && cityMode!==undefined)cityState.usePeriod=cityMode;
+  if(cityState && cityPeriod)cityState.mapTimeBrush={season:cityPeriod};
   if(cityState)mapControls?.pause();
   previous?.navigation?.destroy();
   chartViews.get(name)?.view.finalize();
@@ -17,12 +33,20 @@ async function renderChart(element, {resetMapPeriod=false}={}) {
     const response = await fetch(`js/${name}.json`, {cache:'no-cache'});
     if (!response.ok) throw new Error(`Specification request failed (${response.status})`);
     const spec = await response.json();
+    if(journeyState){
+      if(journeyState.brush.season)spec.vconcat[1].params[0].value={season:journeyState.brush.season};
+      if(journeyState.clubs.team?.length)spec.vconcat[0].layer[0].params[0].value=journeyState.clubs.team.map(team=>({team}));
+    }
     if(cityState)restoreCityMapState(spec,cityState,resetMapPeriod);
+    if(name==='premiership_symbols')configureCityMapMode(spec);
     const isVega = spec.$schema.includes('/vega/');
     const layout = chartLayout(spec,element.clientWidth);
     if (isVega) spec.width = element.clientWidth;
     element.replaceChildren();
-    if(name==='premiership_symbols')document.querySelector('#city-zoom-control').replaceChildren();
+    if(name==='premiership_symbols'){
+      document.querySelector('#city-zoom-control').replaceChildren();
+      document.querySelector('#city-season-control').replaceChildren();
+    }
     const result = await vegaEmbed(element, spec, {
       actions:false,renderer:'svg',tooltip:{theme:'custom'},defaultStyle:false,
       ...(name==='state_choropleth'?{bind:'#map-season-control'}:{}),
@@ -85,8 +109,9 @@ function initialiseResize() {
         if(width>0&&Math.abs(width-entry.width)>2){
           entry.width=width;
           const layout=chartLayout(entry.spec,width);
-          if((layout.type==='facet'&&layout.columns!==entry.layout.columns)||entry.spec.usermeta?.layout==='map-timeline'){
-            renderChart(entry.element);
+          // Rebuild interval views: Vega-Lite 5.20 cannot resize an empty brush.
+          if((layout.type==='facet'&&layout.columns!==entry.layout.columns)||layout.type==='concat'){
+            renderChart(entry.element,{preserveJourney:true});
           }else{
             if(layout.type==='facet')entry.view.signal('child_width',layout.plotWidth);
             else entry.view.width(layout.plotWidth);
@@ -114,9 +139,9 @@ async function initialise() {
     const entry=chartViews.get('ladder_bump');
     if(entry)renderChart(entry.element);
   });
-  mapControls=await initialiseMapControls(chartViews,()=>{
+  mapControls=await initialiseMapControls(chartViews,options=>{
     const element=document.querySelector('[data-spec="premiership_symbols"]');
-    return element?.getAttribute('aria-busy')==='true' ? Promise.resolve() : renderChart(element,{resetMapPeriod:true});
+    return renderChart(element,options);
   });
   initialiseResize();
   document.documentElement.dataset.chartsReady=String(chartViews.size);

@@ -96,9 +96,9 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
      color:{condition:{test:`datum.finals_rate < ${palette.thresholds.at(-1)}`,value:'#000000'},value:'#ffffff'}}}
   ]
  });
- // Week 10: the interval brush filters the map's data before aggregation.
- // The period checkbox lets readers switch back to the shared single-year view.
- const periodFilter={or:[{and:['usePeriod',{param:'mapTimeBrush'}]},'!usePeriod && datum.season === selectedSeason']};
+ // Resolve continuous brush edges to inclusive, whole seasons. Even a narrow
+ // drag between year ticks includes at least one year instead of an empty map.
+ const periodFilter='usePeriod ? datum.season >= periodStart && datum.season <= periodEnd : datum.season === selectedSeason';
  const cityTransform=[{filter:periodFilter},
   {aggregate:[{op:'sum',field:'finals',as:'finals'},{op:'sum',field:'clubs',as:'club_seasons'},{op:'count',as:'season_count'},
    {op:'min',field:'season',as:'first'},{op:'max',field:'season',as:'last'}],groupby:['city','longitude','latitude']},
@@ -121,11 +121,14 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
   {calculate:"[format(datum.season, 'd') + ' champions', datum.premier]",as:'champion_label'}],
   encoding:{...loc,text:{field:'champion_label',type:'nominal'}}};
  write('js/premiership_symbols.json',{
-  '$schema':base.$schema,description:'A proportional-symbol map linked to an interval brush. Area shows finalists per season, colour uses the same five finals-rate classes as the state map. For a single selected season, a diamond and annotation identify its champion. Both disappear when comparing multiple seasons.',
+  '$schema':base.$schema,description:'A proportional-symbol map with Single season and Compare period modes. The period brush selects inclusive whole years; fractional endpoints resolve to their nearest seasons. Area shows finalists per season and colour shows finals rate. A diamond and annotation identify the champion when exactly one season is selected.',
   usermeta:{layout:'map-timeline'},padding:5,autosize:{type:'pad',resize:true},config:multiConfig,
-  params:[...commonParams(true).map(param=>param.name==='mapZoom'?{...param,bind:{input:'range',min:1,max:8,step:0.25,name:'Zoom: ',element:'#city-zoom-control'}}:param),
+  params:[...commonParams(true).map(param=>param.name==='mapZoom'?{...param,bind:{input:'range',min:1,max:8,step:0.25,name:'Zoom: ',element:'#city-zoom-control'}}:
+   param.name==='selectedSeason'?{...param,bind:{...param.bind,element:'#city-season-control'}}:param),
    {name:'mapPan',value:[0,0]},
-   {name:'usePeriod',value:false,bind:{input:'checkbox',name:'Compare the brushed period: '}}],spacing:28,
+   {name:'usePeriod',value:false},
+   {name:'periodStart',expr:'mapTimeBrush.season ? clamp(round(min(mapTimeBrush.season[0], mapTimeBrush.season[1])), 2012, 2025) : 2012'},
+   {name:'periodEnd',expr:'mapTimeBrush.season ? clamp(round(max(mapTimeBrush.season[0], mapTimeBrush.season[1])), 2012, 2025) : 2025'}],spacing:28,
   vconcat:[
    {name:'city_map',width:900,height:440,projection:{...projection,scale:{expr:'mapZoom * min(width / 0.84, city_map_height / 0.72)'},translate:{expr:'[width * (0.5 + mapPan[0]), city_map_height * (0.5 + mapPan[1])]'}},
     layer:[...physicalLayers('city_map_height'),borderLayer(),
@@ -141,7 +144,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
      {...championAnnotation,name:'champion_annotation_halo',mark:{...championText,fill:'#f3f2e9',stroke:'#f3f2e9',strokeWidth:4,aria:false}},
      {...championAnnotation,name:'champion_annotation',mark:{...championText,color:orange}}
     ]},
-   {name:'map_overview',title:mapTitle('Drag to select years'),width:900,height:100,data:table('city_seasons'),
+   {name:'map_overview',title:mapTitle('Melbourne finalists per season'),width:900,height:100,data:table('city_seasons'),
     transform:[{filter:"datum.city === 'Melbourne'"}],
     params:[{name:'mapTimeBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.14,stroke:green}}}],
     mark:{type:'line',point:true,color:green,strokeWidth:2.5},

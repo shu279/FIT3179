@@ -2,7 +2,7 @@
 module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities,items}){
  const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),vm=require('node:vm');
  const layout=require('../js/chart-layout.js');
- const {captureCityMapState,restoreCityMapState}=require('../js/map-controls.js');
+ const {captureCityMapState,restoreCityMapState,configureCityMapMode}=require('../js/map-controls.js');
  const errors=[];
  const logger={level(){return this;},warn(){},info(){},debug(){},error(...args){errors.push(args.map(String).join(' '));}};
  const palette=read('data/map_sources.json').colour;
@@ -91,8 +91,12 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
      checkChampion(year);
     }
     const brush=range=>view.change('mapTimeBrush_store',vega.changeset().remove(()=>true).insert(range?[{unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[range]}]:[])).runAsync();
-    for(const range of [[2012,2015],[2020,2020],[2019,2025]]){
-     await view.signal('usePeriod',true).runAsync();await brush(range);
+    const ranges=[[2012,2015],[2020,2020],[2019,2025],[2011.8,2012.2],[2024.8,2025.2]];
+    for(let year=2012;year<2025;year++)ranges.push([year+0.2,year+0.4],[year+0.6,year+0.8],[year+0.2,year+0.8]);
+    for(const rawRange of ranges){
+     const range=rawRange.map(year=>Math.max(2012,Math.min(2025,Math.round(year))));
+     await view.signal('usePeriod',true).runAsync();await brush(rawRange);
+     assert.equal(view.signal('periodStart'),range[0]);assert.equal(view.signal('periodEnd'),range[1]);
      if(range[0]===range[1])checkChampion(range[0]);
      else{assert.equal(annotations().length,0);assert.equal(championMarkers().length,0);}
      const table=circles().filter(i=>i.datum.finals>0 || i.size===35);
@@ -106,7 +110,9 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
       if(finalists>0)assert.equal(item.fill,palette.colours[colourIndex(item.datum.finals_rate)]);
      }
     }
-    await brush([2014.2,2014.8]);assert.equal(circles().length,0);assert.equal(annotations().length,0);assert.equal(championMarkers().length,0);
+    await brush(null);
+    assert.equal(view.signal('periodStart'),2012);assert.equal(view.signal('periodEnd'),2025);
+    assert.equal(circles().filter(i=>i.datum.finals>0 || i.size===35).length,7,'Clearing the brush includes all seasons');
     await brush(null);await view.signal('usePeriod',false).runAsync();checkChampion(2025);
    }
    if(name==='grand_final_flows'){
@@ -149,8 +155,9 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
   }
  }
  const elements=new Map();
- for(const id of ['#map-season-summary','#map-period-summary','#map-final-summary','#map-final-context','#play-map','#reset-map'])elements.set(id,{
-  textContent:'',attributes:{},listeners:{},setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,fn){this.listeners[name]=fn;}
+ for(const id of ['#map-season-summary','#map-period-summary','#map-final-summary','#map-final-context','#play-map','#reset-map',
+  '#city-mode-single','#city-mode-period','#city-single-controls','#city-period-controls','#city-period-from','#city-period-to'])elements.set(id,{
+  textContent:'',attributes:{},listeners:{},setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,fn){this.listeners[name]=fn;},checkValidity(){return true;}
  });
  let pending=null;
  const context={console,vega,fetch:async()=>({ok:true,json:async()=>read('data/grand_finals.json')}),
@@ -158,6 +165,8 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
   document:{querySelector:id=>elements.get(id),addEventListener(){}},window:{addEventListener(){}}};
  const initialise=vm.runInNewContext(fs.readFileSync(path.join(root,'js/map-controls.js'),'utf8')+'\n;initialiseMapControls',context);
  const controls=await initialise(chartViews);
+ assert.equal(elements.get('#city-mode-single').checked,true);
+ assert.equal(elements.get('#city-period-controls').hidden,true);
  const settle=()=>Promise.all([...chartViews.values()].map(entry=>entry.view.runAsync()));
  const symbols=chartViews.get('premiership_symbols').view;
  // Exercise the actual navigation handlers with screen coordinates at 1:1 scale.
@@ -223,6 +232,9 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  assert.match(elements.get('#map-final-context').textContent,/does not represent travel/);
  await symbols.signal('mapZoom',4).runAsync();await settle();
  await symbols.signal('mapPan',[0.2,-0.15]).runAsync();
+ await elements.get('#city-mode-period').listeners.change();await settle();
+ assert.equal(elements.get('#city-single-controls').hidden,true);
+ assert.equal(elements.get('#city-period-controls').hidden,false);
  await symbols.change('mapTimeBrush_store',vega.changeset().insert([{unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[2017,2020]]}])).runAsync();await settle();
  assert.equal(symbols.signal('usePeriod'),true);assert.match(elements.get('#map-period-summary').textContent,/2017–2020/);
  const restoredSpec=read('js/premiership_symbols.json');layout(restoredSpec,1000);restoreCityMapState(restoredSpec,captureCityMapState(symbols));
@@ -236,10 +248,32 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  restoreCityMapState(restoredSpec,captureCityMapState(symbols),true);
  assert.equal(restoredSpec.vconcat[1].params[0].value,undefined);assert.equal(restoredSpec.params.find(p=>p.name==='usePeriod').value,false);
  await controller.signal('selectedSeason',2024).runAsync();await settle();
+ assert.equal(symbols.signal('usePeriod'),true);assert.match(elements.get('#map-period-summary').textContent,/2017–2020/);
+ await play.listeners.click();await settle();
+ assert.equal(symbols.signal('usePeriod'),true,'Play must not override the explicit Compare period mode');
+ await play.listeners.click();await settle();
+ await elements.get('#city-mode-single').listeners.change();await settle();
  assert.equal(symbols.signal('usePeriod'),false);assert.match(elements.get('#map-period-summary').textContent,/2024/);
+ const singleSpec=read('js/premiership_symbols.json');
+ restoreCityMapState(singleSpec,captureCityMapState(symbols));configureCityMapMode(singleSpec);layout(singleSpec,320);
+ assert.equal(singleSpec.vconcat.length,1,'Single season has no timeline');
+ const singleView=new vega.View(vega.parse(vl.compile(singleSpec).spec),{renderer:'none',loader,logger});await singleView.runAsync();
+ assert.deepEqual(singleView.signal('mapTimeBrush').season,[2017,2020]);
+ assert.equal(items(singleView,i=>i.mark?.name==='city_symbols_marks').length,7);
+ const comparisonSpec=read('js/premiership_symbols.json');
+ const previousState=captureCityMapState(singleView);previousState.usePeriod=true;
+ restoreCityMapState(comparisonSpec,previousState);configureCityMapMode(comparisonSpec);layout(comparisonSpec,320);
+ assert.equal(comparisonSpec.vconcat.length,2,'Compare period includes the timeline');
+ const comparisonView=new vega.View(vega.parse(vl.compile(comparisonSpec).spec),{renderer:'none',loader,logger});await comparisonView.runAsync();
+ assert.deepEqual(comparisonView.signal('mapTimeBrush').season,[2017,2020]);
+ assert.equal(comparisonView.signal('periodStart'),2017);assert.equal(comparisonView.signal('periodEnd'),2020);
+ singleView.finalize();comparisonView.finalize();
+ await elements.get('#city-mode-period').listeners.change();await settle();
+ elements.get('#city-period-from').value='2022';await elements.get('#city-period-from').listeners.change();await settle();
+ assert.equal(symbols.signal('periodStart'),2022);assert.equal(symbols.signal('periodEnd'),2022,'Crossed endpoints select a single season');
  await elements.get('#reset-map').listeners.click();await settle();
  navigation.destroy();
  for(const {view} of chartViews.values())view.finalize();
  assert.deepEqual(errors,[],'No Vega runtime errors');
- console.log('Map checks passed: 14 seasons, fixed class boundaries, no-club regions, layers, zoom, time-brush aggregates, shared controls, play/pause and reset.');
+ console.log('Map checks passed: 14 seasons, fixed class boundaries, no-club regions, layers, zoom, whole-year brushes, independent period mode, mode restoration, shared controls, play/pause and reset.');
 };

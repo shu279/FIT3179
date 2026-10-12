@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "A proportional-symbol map linked to an interval brush. Area shows finalists per season, colour uses the same five finals-rate classes as the state map. For a single selected season, a diamond and annotation identify its champion. Both disappear when comparing multiple seasons.",
+  "description": "A proportional-symbol map with Single season and Compare period modes. The period brush selects inclusive whole years; fractional endpoints resolve to their nearest seasons. Area shows finalists per season and colour shows finals rate. A diamond and annotation identify the champion when exactly one season is selected.",
   "usermeta": {
     "layout": "map-timeline"
   },
@@ -70,7 +70,8 @@
         "min": 2012,
         "max": 2025,
         "step": 1,
-        "name": "Season: "
+        "name": "Season: ",
+        "element": "#city-season-control"
       }
     },
     {
@@ -109,11 +110,15 @@
     },
     {
       "name": "usePeriod",
-      "value": false,
-      "bind": {
-        "input": "checkbox",
-        "name": "Compare the brushed period: "
-      }
+      "value": false
+    },
+    {
+      "name": "periodStart",
+      "expr": "mapTimeBrush.season ? clamp(round(min(mapTimeBrush.season[0], mapTimeBrush.season[1])), 2012, 2025) : 2012"
+    },
+    {
+      "name": "periodEnd",
+      "expr": "mapTimeBrush.season ? clamp(round(max(mapTimeBrush.season[0], mapTimeBrush.season[1])), 2012, 2025) : 2025"
     }
   ],
   "spacing": 28,
@@ -279,19 +284,7 @@
           },
           "transform": [
             {
-              "filter": {
-                "or": [
-                  {
-                    "and": [
-                      "usePeriod",
-                      {
-                        "param": "mapTimeBrush"
-                      }
-                    ]
-                  },
-                  "!usePeriod && datum.season === selectedSeason"
-                ]
-              }
+              "filter": "usePeriod ? datum.season >= periodStart && datum.season <= periodEnd : datum.season === selectedSeason"
             },
             {
               "aggregate": [
@@ -437,19 +430,7 @@
           },
           "transform": [
             {
-              "filter": {
-                "or": [
-                  {
-                    "and": [
-                      "usePeriod",
-                      {
-                        "param": "mapTimeBrush"
-                      }
-                    ]
-                  },
-                  "!usePeriod && datum.season === selectedSeason"
-                ]
-              }
+              "filter": "usePeriod ? datum.season >= periodStart && datum.season <= periodEnd : datum.season === selectedSeason"
             },
             {
               "aggregate": [
@@ -564,19 +545,7 @@
           },
           "transform": [
             {
-              "filter": {
-                "or": [
-                  {
-                    "and": [
-                      "usePeriod",
-                      {
-                        "param": "mapTimeBrush"
-                      }
-                    ]
-                  },
-                  "!usePeriod && datum.season === selectedSeason"
-                ]
-              }
+              "filter": "usePeriod ? datum.season >= periodStart && datum.season <= periodEnd : datum.season === selectedSeason"
             },
             {
               "joinaggregate": [
@@ -738,19 +707,7 @@
           },
           "transform": [
             {
-              "filter": {
-                "or": [
-                  {
-                    "and": [
-                      "usePeriod",
-                      {
-                        "param": "mapTimeBrush"
-                      }
-                    ]
-                  },
-                  "!usePeriod && datum.season === selectedSeason"
-                ]
-              }
+              "filter": "usePeriod ? datum.season >= periodStart && datum.season <= periodEnd : datum.season === selectedSeason"
             },
             {
               "joinaggregate": [
@@ -811,19 +768,7 @@
           },
           "transform": [
             {
-              "filter": {
-                "or": [
-                  {
-                    "and": [
-                      "usePeriod",
-                      {
-                        "param": "mapTimeBrush"
-                      }
-                    ]
-                  },
-                  "!usePeriod && datum.season === selectedSeason"
-                ]
-              }
+              "filter": "usePeriod ? datum.season >= periodStart && datum.season <= periodEnd : datum.season === selectedSeason"
             },
             {
               "joinaggregate": [
@@ -880,7 +825,7 @@
     {
       "name": "map_overview",
       "title": {
-        "text": "Drag to select years",
+        "text": "Melbourne finalists per season",
         "anchor": "start",
         "fontSize": 15,
         "color": "#21372b",

@@ -1,7 +1,7 @@
 /* Vega-Lite creates the Studio-style inputs from params.bind in the JSON.
  * Plain JavaScript shares their signals between the three embedded maps and
  * supplies an opt-in play/pause button. Brushing itself is defined in JSON. */
-async function initialiseMapControls(chartViews, resetCityBrush) {
+async function initialiseMapControls(chartViews, renderCity) {
   const names=['state_choropleth','premiership_symbols','grand_final_flows'];
   const sharedSignals=['selectedSeason','mapCentre','showPhysical','showCultural'];
   const controller=chartViews.get(names[0])?.view;
@@ -12,6 +12,12 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
   const flowContext=document.querySelector('#map-final-context');
   const play=document.querySelector('#play-map');
   const reset=document.querySelector('#reset-map');
+  const singleMode=document.querySelector('#city-mode-single');
+  const periodMode=document.querySelector('#city-mode-period');
+  const singleControls=document.querySelector('#city-single-controls');
+  const periodControls=document.querySelector('#city-period-controls');
+  const periodFrom=document.querySelector('#city-period-from');
+  const periodTo=document.querySelector('#city-period-to');
   if(!controller || !symbols || names.some(name=>!chartViews.has(name))){
     play.disabled=true;reset.disabled=true;
     status.textContent='The maps could not load. Reload the page to try again.';
@@ -30,11 +36,12 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
   };
   function updatePeriod(){
     const period=symbols.signal('usePeriod');
-    const range=symbols.signal('mapTimeBrush').season || [2012,2025];
-    const first=Math.max(2012,Math.ceil(range[0]));
-    const last=Math.min(2025,Math.floor(range[1]));
+    const first=symbols.signal('periodStart');
+    const last=symbols.signal('periodEnd');
+    singleMode.checked=!period;periodMode.checked=period;
+    singleControls.hidden=period;periodControls.hidden=!period;
+    periodFrom.value=first;periodTo.value=last;
     periodStatus.textContent=!period?`City finalists in ${controller.signal('selectedSeason')}`:
-      first>last?'City finalists — no seasons selected':
       first===last?`City finalists in ${first}`:`City finalists, ${first}–${last}`;
   }
   function updateSeason(){
@@ -64,27 +71,43 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
           }
         }
         if(signal==='selectedSeason'){
-          if(symbols.signal('usePeriod')){
-            symbols.signal('usePeriod',false);
-            Promise.resolve().then(()=>symbols.runAsync()).catch(console.error);
-          }
           updateSeason();
         }
       });
     }
   }
   function attachBrush(){
-    symbols.addSignalListener('mapTimeBrush',(_name,selection)=>{
-      stop();
-      // The full map and its long table are filtered by this selection in JSON.
-      // Queue after this signal's dataflow finishes; running it from its own
-      // listener can re-enter Vega before its pending-run promise is assigned.
-      Promise.resolve().then(()=>symbols.signal('usePeriod',Boolean(selection.season)).runAsync()).then(updatePeriod).catch(console.error);
+    symbols.addSignalListener('mapTimeBrush',()=>{
+      if(symbols.signal('usePeriod'))stop();
+      // Read the rounded endpoints after the selection's dataflow settles.
+      Promise.resolve().then(updatePeriod).catch(console.error);
     });
     symbols.addSignalListener('usePeriod',updatePeriod);
   }
+  async function changeMode(period){
+    stop();
+    if(renderCity)await renderCity({cityMode:period});
+    else await symbols.signal('usePeriod',period).runAsync();
+    updatePeriod();
+  }
+  singleMode.addEventListener('change',()=>changeMode(false).catch(console.error));
+  periodMode.addEventListener('change',()=>changeMode(true).catch(console.error));
+  async function changePeriod(changed){
+    stop();
+    // Native number inputs also make the brush accessible from the keyboard.
+    if(!changed.checkValidity() || changed.value===''){updatePeriod();return;}
+    let first=Number(periodFrom.value),last=Number(periodTo.value);
+    if(first>last){if(changed===periodFrom)last=first;else first=last;}
+    if(renderCity)await renderCity({cityMode:true,cityPeriod:[first,last]});
+    else await symbols.change('mapTimeBrush_store',vega.changeset().remove(()=>true).insert([
+      {unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[first,last]]}
+    ])).runAsync();
+    updatePeriod();
+  }
+  for(const input of [periodFrom,periodTo])input.addEventListener('change',()=>changePeriod(input).catch(console.error));
   names.forEach(name=>attachSharedInputs(name,chartViews.get(name).view));
   attachBrush();
+  singleMode.disabled=false;periodMode.disabled=false;
   async function tick(){
     if(!playing || closed)return;
     const current=controller.signal('selectedSeason');
@@ -97,7 +120,6 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
   play.addEventListener('click',async()=>{
     if(playing){stop();return;}
     playing=true;play.textContent='Pause';play.setAttribute('aria-pressed','true');
-    await symbols.signal('usePeriod',false).runAsync();
     if(controller.signal('selectedSeason')>=2025)await controller.signal('selectedSeason',2012).runAsync();
     timer=setTimeout(tick,1100);
   });
@@ -107,7 +129,7 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
       .signal('showPhysical',true).signal('showCultural',true).runAsync();
     await symbols.signal('mapZoom',1).signal('mapPan',[0,0]).runAsync();
     // Re-embed the city chart so the brush rectangle and its data both reset.
-    if(resetCityBrush)await resetCityBrush();
+    if(renderCity)await renderCity({resetMapPeriod:true});
     else await symbols.change('mapTimeBrush_store',vega.changeset().remove(()=>true)).signal('usePeriod',false).runAsync();
     updateSeason();
   });
@@ -135,4 +157,15 @@ function restoreCityMapState(spec,state,resetPeriod=false){
   if(!resetPeriod && state.mapTimeBrush.season)brush.value={season:state.mapTimeBrush.season};
   else delete brush.value;
 }
-if(typeof module!=='undefined')module.exports={captureCityMapState,restoreCityMapState};
+
+// Keep the linked timeline only in Compare period mode. A plain parameter
+// preserves its selection while Single season shows just the map and slider.
+function configureCityMapMode(spec){
+  if(spec.params.find(param=>param.name==='usePeriod').value)return;
+  const brush=spec.vconcat[1].params.find(param=>param.name==='mapTimeBrush');
+  spec.params.push({name:'mapTimeBrush',value:brush.value || {}});
+  // Vega-Lite calls the shared panel height childHeight for a one-panel concat.
+  spec.params.push({name:'city_map_height',expr:'childHeight'});
+  spec.vconcat=spec.vconcat.slice(0,1);
+}
+if(typeof module!=='undefined')module.exports={captureCityMapState,restoreCityMapState,configureCityMapMode};

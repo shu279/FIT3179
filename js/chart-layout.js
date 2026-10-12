@@ -9,7 +9,7 @@ function chartLayout(spec, availableWidth) {
     return {type:'facet', columns, plotWidth};
   }
   if (spec.vconcat) {
-    const plotWidth = Math.max(120, available - (spec.usermeta?.layout === 'map-timeline' ? 75 : 175));
+    const plotWidth = Math.max(120, available - (spec.usermeta?.layout === 'map-timeline' ? (spec.vconcat.length===1 ? 10 : 75) : 175));
     spec.vconcat.forEach(view => {
       view.width = plotWidth;
     });
