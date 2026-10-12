@@ -48,7 +48,7 @@
     }
   },
   "usermeta": {
-    "layout": "map"
+    "layout": "connection-map"
   },
   "description": "A season-by-season connection map of the home cities of Grand Final opponents. A loop and direct club labels show opponents sharing the same home city. Lines and loops represent matchups, not travel.",
   "params": [

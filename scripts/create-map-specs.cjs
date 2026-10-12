@@ -157,6 +157,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const sameCityText={type:'text',clip:true,align:'right',dx:{expr:'width < 500 ? 30 : -28'},dy:-94,fontSize:15,fontWeight:600,lineHeight:20};
  save('grand_final_flows',{
   description:'A season-by-season connection map of the home cities of Grand Final opponents. A loop and direct club labels show opponents sharing the same home city. Lines and loops represent matchups, not travel.',
+  usermeta:{layout:'connection-map'},
   height:400,params:commonParams(true),projection,
   layer:[...physicalLayers(),borderLayer(),
    {name:'annual_matchup',data:table('grand_final_seasons'),transform:[{filter:'datum.properties.season === selectedSeason'}],
