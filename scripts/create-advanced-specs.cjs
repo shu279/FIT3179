@@ -65,7 +65,7 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
  write('data/club_win_rate_horizon.json',curves);
  const horizonTip="{'Club':datum.team,'Season':datum.season,'Games won':format(datum.wins/datum.played,'.1%'),'Record':datum.wins + ' wins / ' + datum.played + ' games','Ladder position':datum.rank}";
  write('js/club_horizon.json',{
-  ...base,height:324,padding:{top:4,left:4,right:4,bottom:32},
+  ...base,height:384,padding:{top:4,left:4,right:4,bottom:32},
   description:'Six small-multiple area charts show annual win rates on the same 0–100% scale. Dark-green height is directly proportional to games won; the pale-green remainder completes 100%. Club names and percentages flank each compact strip. All six strips count as one chart. Hover reports real season records.',
   signals:[
    {name:'detailSeason',value:2025,on:[{events:'@season_targets:pointermove, @season_targets:click',update:'datum.season'}]},
@@ -87,7 +87,7 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
   axes:[{scale:'year',orient:'bottom',values:{signal:'plotWidth >= 700 ? sequence(2012,2026) : plotWidth >= 180 ? [2012,2018,2025] : [2012,2025]'},format:'d',domain:false,tickColor:'#cdd2c2',labelPadding:9,labelFont:font,labelFontSize:15,labelColor:ink,
    encode:{labels:{update:{align:{signal:"datum.value === 2012 ? 'left' : datum.value === 2025 ? 'right' : 'center'"}}}}}],
   marks:teams.map((team,i)=>({
-   name:'horizon_row_'+i,type:'group',encode:{update:{x:{value:0},y:{value:i*48+4},width:{signal:'width'},height:{value:44}}},
+   name:'horizon_row_'+i,type:'group',encode:{update:{x:{value:0},y:{value:i*56+24},width:{signal:'width'},height:{value:44}}},
    scales:[{name:'winRate',type:'linear',domain:[0,100],range:[38,6],zero:true,nice:false}],
    marks:[
     {name:'club_name_'+i,type:'text',interactive:false,encode:{update:{
