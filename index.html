@@ -92,7 +92,7 @@
           <p class="chart-deck">The year applies to all three maps. Play advances from 2012 to 2025. The same five colour classes apply every year.</p>
           <div class="map-with-legend">
             <div class="map-panel">
-              <div class="chart" data-spec="state_choropleth" aria-label="Interactive choropleth with season selection, physical and cultural layers, and five fixed finals-rate classes."></div>
+              <div class="chart" data-spec="state_choropleth" aria-label="State choropleth with season selection. Colour shows the percentage of clubs reaching finals; fraction labels show finalists out of all clubs in each state."></div>
               <div class="map-controls-row">
                 <div id="map-season-control" class="vega-bindings"></div>
                 <div class="chart-actions"><button type="button" id="play-map" aria-pressed="false">Play</button><button type="button" id="reset-map">Reset</button></div>
@@ -103,7 +103,7 @@
               <div class="map-rate-legend"><span style="--swatch:#ffffcc">0–&lt;20%</span><span style="--swatch:#a1dab4">20–&lt;40%</span><span style="--swatch:#41b6c4">40–&lt;60%</span><span style="--swatch:#2c7fb8">60–&lt;80%</span><span style="--swatch:#253494">80–100%</span></div>
             </aside>
           </div>
-          <figcaption>Rate = clubs reaching finals ÷ clubs based in the state. The lightest colour includes 0%; grey means no clubs. A value on a class boundary belongs to the higher class, so 20% enters 20–&lt;40%. The physical layer shows land, ocean and a coordinate grid; the cultural layer shows state borders and names. Both are displayed throughout.</figcaption>
+          <figcaption>Labels show finalists / all clubs in each state: 1/2 means one of two clubs reached finals. Colour shows the corresponding percentage. The lightest colour includes 0%; grey means no clubs. A value on a class boundary belongs to the higher class, so 20% enters 20–&lt;40%. The physical layer shows land, ocean and a coordinate grid; the cultural layer shows state borders and finalist counts. Both are displayed throughout.</figcaption>
         </figure>
         <figure class="figure-wide map-study">
           <h3 id="map-period-summary" aria-live="polite">City finalists in 2025</h3>

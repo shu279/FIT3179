@@ -74,7 +74,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const mapTitle=text=>({text,anchor:'start',fontSize:15,color:ink,fontWeight:'normal',limit:{expr:'width'}});
  const save=(name,spec)=>write('js/'+name+'.json',{...base,usermeta:{layout:'map'},...spec});
  save('state_choropleth',{
-  description:'Week 10 long-table lookup and year selection, with Week 8 threshold classes. The map stays at a fixed national view with Natural Earth physical and cultural layers over a rectangular ocean background.',
+  description:'State choropleth with fixed percentage classes and year selection. Labels show clubs reaching finals / all clubs in each state, so states with different numbers of clubs can be compared. States without clubs remain grey and have no fraction label.',
   height:440,params:commonParams(true),projection,
   layer:[...physicalLayers(),
    {name:'state_rates',data:table('state_seasons'),transform:[{filter:'datum.season === selectedSeason'},
@@ -86,9 +86,13 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
       {field:'clubs',type:'quantitative',title:'Clubs based here'},{field:'finals',type:'quantitative',title:'Clubs reaching finals'},
       {field:'rate_label',type:'nominal',title:'Finals rate'},{field:'coverage',type:'nominal',title:'Coverage'}]}},
    borderLayer(),
-   {name:'cultural_state_labels',data:table('state_seasons'),transform:[{filter:'showCultural && datum.season === selectedSeason'},
+   {name:'state_count_labels',data:table('state_seasons'),transform:[{filter:'showCultural && datum.season === selectedSeason && datum.clubs > 0'},
+    {calculate:"datum.finals + '/' + datum.clubs",as:'count_label'},
     {lookup:'state',from:{data:{values:stateLabels},key:'state',fields:['lon','lat']}},{filter:'isValid(datum.lon)'}],
-    mark:{type:'text',clip:true,fontSize:15,fontWeight:600},encoding:{longitude:{field:'lon',type:'quantitative'},latitude:{field:'lat',type:'quantitative'},text:{field:'state',type:'nominal'},
+    mark:{type:'text',clip:true,fontSize:15,fontWeight:600},encoding:{longitude:{field:'lon',type:'quantitative'},latitude:{field:'lat',type:'quantitative'},text:{field:'count_label',type:'nominal'},
+     tooltip:[{field:'state_name',type:'nominal',title:'State'},{field:'season',type:'quantitative',format:'d',title:'Season'},
+      {field:'finals',type:'quantitative',title:'Clubs reaching finals'},{field:'clubs',type:'quantitative',title:'All clubs in state'},
+      {field:'finals_rate',type:'quantitative',format:'.1f',title:'Finals rate (%)'}],
      color:{condition:{test:`datum.clubs > 0 && datum.finals_rate < ${palette.thresholds[0]}`,value:'#000000'},value:'#ffffff'}}}
   ]
  });

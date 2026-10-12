@@ -47,6 +47,15 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
      await view.signal('selectedSeason',year).runAsync();
      const shapes=items(view,i=>i.mark?.marktype==='shape'&&i.datum?.state_code);
      assert.equal(shapes.length,8);
+     const labels=items(view,i=>i.mark?.name==='state_count_labels_marks');
+     assert.equal(labels.length,5,'Show counts only for states with clubs, never 0/0');
+     for(const label of labels){
+      const expected=stateSeasons.find(d=>d.state_code===label.datum.state_code&&d.season===year);
+      assert.equal(label.text,`${expected.finals}/${expected.clubs}`);
+      assert.equal(label.fill,expected.finals_rate<20?'#000000':'#ffffff');
+     }
+     assert.equal(labels.reduce((total,label)=>total+label.datum.finals,0),8);
+     assert.equal(labels.reduce((total,label)=>total+label.datum.clubs,0),18);
      for(const item of shapes){
       const rate=item.datum.finals_rate;
       assert.equal(item.fill,rate===null?'#dedfd5':palette.colours[Math.min(4,Math.floor(rate/20))]);
