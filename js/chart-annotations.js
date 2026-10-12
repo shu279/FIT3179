@@ -29,10 +29,6 @@ function initialiseReadingAnnotations(element, name) {
     state_choropleth:[
       {text:d=>`${d.finals} finalist${d.finals===1?'':'s'} / ${d.clubs} clubs`,at:target('.state_count_labels_marks text',d=>d?.state==='WA',.5,1)}
     ],
-    premiership_symbols:[
-      {text:()=>find('.city_symbols_marks path',d=>d?.city==='Perth')?.__data__?.datum?.season_count>1?'Area = average finalists per season':'Area = finalists per season',at:target('.city_symbols_marks path',d=>d?.city==='Perth',.2,1)},
-      {text:'Darker green = higher finals share',at:target('.city_symbols_marks path',d=>d?.city==='Perth',.8,1)}
-    ],
     premiership_bars:[{text:'Bar length = titles',at:target('.title_bars_marks path',team('Hawthorn'),.95)}],
     season_boxplot:[
       {text:'Whiskers = lowest and highest',at:target('.layer_2_marks path',team('Geelong'),.5,0),also:target('.layer_3_marks path',team('Geelong'),.5,0)},
@@ -42,7 +38,7 @@ function initialiseReadingAnnotations(element, name) {
     era_change:[{text:'Length = change in percentage points',short:'Length = change (pp)',at:target('.layer_0_marks path',team('Brisbane Lions'),.8)}],
     rank_changes:[{text:'Bar height = yearly comparisons',at:target('.layer_0_marks path',d=>d?.change===-9,.5,0)}]
   };
-  const map=['state_choropleth','premiership_symbols'].includes(name);
+  const map=name==='state_choropleth';
   if(!guides[name])return {destroy(){}};
   const overlay=svgElement('svg',{'class':'chart-reading-annotations',role:'group','aria-label':'How to read this chart'});
   element.append(overlay);
@@ -73,8 +69,7 @@ function initialiseReadingAnnotations(element, name) {
     const top=map||histogramInset||name==='ladder_bump'?0:stacked?annotations.length*25+24:62;
     element.style.paddingTop=top+'px';
     const mapFooter=map&&width<650;
-    const mapTimeline=name==='premiership_symbols'&&element.querySelector('.map_overview_group');
-    element.style.paddingBottom=mapFooter&&!mapTimeline?(annotations.length*26+24)+'px':'0px';
+    element.style.paddingBottom=mapFooter?(annotations.length*26+24)+'px':'0px';
     overlay.replaceChildren();
     const defs=svgElement('defs'),marker=svgElement('marker',{id:markerId,viewBox:'0 0 8 8',refX:7,refY:4,markerWidth:6,markerHeight:6,orient:'auto',markerUnits:'userSpaceOnUse'});
     marker.append(svgElement('path',{d:'M0 0 L8 4 L0 8 Z',fill:ink}));defs.append(marker);overlay.append(defs);

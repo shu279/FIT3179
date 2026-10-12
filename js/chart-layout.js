@@ -9,7 +9,6 @@ function chartLayout(spec, availableWidth) {
     return {type:'facet', columns, plotWidth};
   }
   if (spec.vconcat) {
-    if(spec.usermeta?.layout==='map-timeline')spec.spacing=available<650?110:28;
     const journey = spec.usermeta?.layout === 'journey';
     const sideLegend = journey && available >= 600;
     const plotWidth = Math.max(120, available - (spec.usermeta?.layout === 'map-timeline' ? (spec.vconcat.length===1 ? 10 : 75) : sideLegend ? 300 : 175));
