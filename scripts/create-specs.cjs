@@ -54,7 +54,7 @@ save('rank_changes',{
   leader('rank_change_bracket_left',"scale('x',-3)","scale('y',26)","scale('x',-3)","scale('y',25)"),
   leader('rank_change_bracket_right',"scale('x',3) + bandwidth('x')","scale('y',26)","scale('x',3) + bandwidth('x')","scale('y',25)")],
  encoding:{
-  x:field('change','ordinal',{sort:'ascending',scale:{domain:Array.from({length:31},(_,i)=>i-15)},axis:{title:'Change in ladder places',labelAngle:0,labelExpr:"datum.value % 5 === 0 ? (datum.value > 0 ? '+' + datum.value : datum.value) : ''"}}),
+  x:field('change','ordinal',{sort:'ascending',scale:{domain:Array.from({length:31},(_,i)=>i-15)},axis:{title:'Yearly change in ladder places',labelAngle:0,labelExpr:"datum.value % 5 === 0 ? (datum.value > 0 ? '+' + datum.value : datum.value) : ''"}}),
   y:{aggregate:'count',type:'quantitative',scale:{domain:[0,36]},axis:{title:'Club-season changes',values:[0,5,10,15,20,25,30]}},
   color:{condition:[{test:'datum.change > 0',value:orange},{test:'datum.change < 0',value:green}],value:sage},
   tooltip:[tip('change','Places gained / lost','+d'),{aggregate:'count',type:'quantitative',title:'Club-season changes'}]

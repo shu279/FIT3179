@@ -355,7 +355,7 @@
         ]
       },
       "axis": {
-        "title": "Change in ladder places",
+        "title": "Yearly change in ladder places",
         "labelAngle": 0,
         "labelExpr": "datum.value % 5 === 0 ? (datum.value > 0 ? '+' + datum.value : datum.value) : ''"
       }
