@@ -87,7 +87,7 @@ function initialiseReadingAnnotations(element, name) {
     const lengths=annotations.map(a=>context.measureText(a.text).width);
     const stacked=lengths.reduce((a,b)=>a+b,0)+annotations.length*20>width;
     if(!stacked&&!map)annotations.sort((a,b)=>a.at.x-b.at.x);
-    const histogramInset=name==='rank_changes'&&width>=740;
+    const histogramInset=name==='rank_changes'&&width>=600;
     const top=map||histogramInset||name==='ladder_bump'?0:stacked?annotations.length*25+24:62;
     element.style.paddingTop=top+'px';
     const mapFooter=map&&width<650;
@@ -106,7 +106,7 @@ function initialiseReadingAnnotations(element, name) {
         const water=(element.querySelector('.water_backdrop_marks path')||element.querySelector('.vega-embed svg')).getBoundingClientRect(),o=element.getBoundingClientRect();
         x=12;y=water.bottom-o.top+(mapFooter?14:-annotations.length*26-8)+i*26;
       }
-      if(histogramInset){x=width*.2;y=130;}
+      if(histogramInset){x=Math.max(170,width*.2);y=130;}
       const t=label(a.text,x,y,map);
       if(!stacked&&!map)t.setAttribute('text-anchor','middle');
       return {a,t,x,y};

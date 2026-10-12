@@ -130,8 +130,6 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .state-map-study>.map-story-copy p:first-child{margin-top:0}
 .state-map-study>figcaption{grid-column:2}
 
-.horizon-figure>.micro{margin-top:0}
-.horizon-figure>.chart{margin-top:12px}
 .closing{display:block}
 .closing>div:first-child,.closing>div:last-child{width:100%;padding:0}
 .closing h2{margin-bottom:18px}
@@ -145,6 +143,16 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 }
 @media(max-width:700px){
  .sources ul{grid-template-columns:1fr;gap:16px}
- .horizon-figure>.chart-deck{margin-bottom:20px}
- .horizon-figure>.horizon-legend{margin:12px 0}
+}
+
+/* Alternate the narrative side while keeping each legend with its chart. */
+.chart-story{display:grid;gap:22px;align-items:center}
+.chart-story>.chart-story-copy{margin:0}
+.chart-story-visual{min-width:0}
+.chart-story-visual>.chart-legend{margin:0 0 14px}
+@media(min-width:1024px){
+ .chart-story{column-gap:32px;grid-template-columns:clamp(260px,25vw,300px) minmax(0,1fr);grid-template-areas:"copy visual"}
+ .chart-story--copy-right{grid-template-columns:minmax(0,1fr) clamp(260px,25vw,300px);grid-template-areas:"visual copy"}
+ .chart-story-copy{grid-area:copy}
+ .chart-story-visual{grid-area:visual}
 }
