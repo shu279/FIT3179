@@ -140,28 +140,30 @@ const multiConfig={...config,title:{fontSize:15,fontWeight:600,anchor:'start',co
 const saveMultiple=(name,spec)=>fs.writeFileSync(path.join(root,'js',name+'.json'),JSON.stringify({
  '$schema':base.$schema,padding:5,autosize:{type:'pad',resize:true},config:multiConfig,...spec
 },null,2)+'\n');
-const journeyColor={field:'team',type:'nominal',scale:{domain:journeyTeams,range:journeyColors},legend:{title:null,columns:{expr:'width < 385 ? 1 : 2'},symbolType:'stroke',symbolStrokeWidth:3,labelLimit:180}};
+const journeyColor={field:'team',type:'nominal',scale:{domain:journeyTeams,range:journeyColors},legend:{title:null,orient:'top',columns:{expr:'width < 385 ? 1 : 2'},symbolType:'stroke',symbolStrokeWidth:3,labelLimit:180}};
 const rankAxis={field:'rank',type:'quantitative',scale:{domain:[18.5,0.5],nice:false},axis:{title:'Ladder position',values:[1,4,8,12,18]}};
 const journeyOpacity={condition:{param:'journeyClub',value:1},value:0.15};
 saveMultiple('ladder_bump',{
  description:'Drag a season range in the overview to zoom the rank detail and compare pooled win rates for the same seasons. Legend selection highlights clubs across views.',
  data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:journeyTeams}}],spacing:32,
- resolve:{scale:{x:'independent',y:'independent',color:'shared'}},
+ params:[{name:'journeyClub',select:{type:'point',fields:['team']},bind:'legend',views:['journey_lines','journey_overview','journey_bars']},
+  {name:'seasonBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.12,stroke:green}},views:['journey_overview']}],
+ // Repeat the shared colour key beside every view, keeping selection linked.
+ resolve:{scale:{x:'independent',y:'independent',color:'shared'},legend:{color:'independent'}},
  vconcat:[
   {name:'journey_detail',title:'Ladder positions in the selected period',width:900,height:260,
    encoding:{x:field('season','quantitative',{scale:{domain:{param:'seasonBrush'},nice:false,zero:false},axis:{title:null,format:'d',tickMinStep:1,tickCount:6,grid:false}}),y:rankAxis,color:journeyColor,opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('season','Season','d'),tip('rank','Ladder position')]},
    layer:[
-    {params:[{name:'journeyClub',select:{type:'point',fields:['team']},bind:'legend'}],mark:{type:'line',clip:true,strokeWidth:2.8}},
+    {name:'journey_lines',mark:{type:'line',clip:true,strokeWidth:2.8}},
     {mark:{type:'point',clip:true,filled:true,size:42}}
    ]},
   {name:'journey_overview',title:'Drag to select a season range',width:900,height:90,
-   params:[{name:'seasonBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.12,stroke:green}}}],
    mark:{type:'line',strokeWidth:1.8},
    encoding:{x:field('season','quantitative',{scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:years,grid:false}}),y:{...rankAxis,axis:{title:null,values:[1,18]}},color:journeyColor,opacity:journeyOpacity}},
   {name:'journey_summary',title:'Games won in the selected seasons',width:900,height:145,
    transform:[{filter:{param:'seasonBrush'}},{aggregate:[{op:'sum',field:'wins',as:'wins'},{op:'sum',field:'played',as:'games'},{op:'count',as:'seasons'},{op:'min',field:'season',as:'first'},{op:'max',field:'season',as:'last'}],groupby:['team']},{calculate:'datum.wins / datum.games * 100',as:'period_win_rate'},{window:[{op:'rank',as:'period_rank'}],sort:[{field:'period_win_rate',order:'descending'}]}],
-   encoding:{y:field('team','nominal',{scale:{domain:journeyTeams},axis:{title:null,ticks:false,labelLimit:150}}),x:field('period_win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:'Games won (%)',values:[0,25,50,75,100]}}),color:journeyColor,opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('seasons','Seasons'),tip('wins','Wins'),tip('games','Games played'),tip('period_win_rate','Win rate (%)','.1f')]},
-   layer:[{mark:{type:'bar',size:19}},{transform:[{filter:'datum.period_rank === 1'}],mark:{type:'text',align:'right',dx:-7,fontSize:15,fontWeight:600,color:'#ffffff'},encoding:{text:{value:'Best'},color:{value:'#ffffff'}}}]}
+   encoding:{y:field('team','nominal',{scale:{domain:journeyTeams},axis:{title:null,ticks:false,labelLimit:150}}),x:field('period_win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:'Games won (%)',values:[0,25,50,75,100]}}),color:{...journeyColor,legend:{...journeyColor.legend,symbolType:'square',symbolSize:80}},opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('seasons','Seasons'),tip('wins','Wins'),tip('games','Games played'),tip('period_win_rate','Win rate (%)','.1f')]},
+   layer:[{name:'journey_bars',mark:{type:'bar',size:19}},{transform:[{filter:'datum.period_rank === 1'}],mark:{type:'text',align:'right',dx:-7,fontSize:15,fontWeight:600,color:'#ffffff'},encoding:{text:{value:'Best'},color:{value:'#ffffff'}}}]}
  ]
 });
 
@@ -176,14 +178,14 @@ save('season_boxplot',{description:'Distribution of regular-season win rates for
 // Week 9: a range binding filters the data while keeping the club and year axes fixed.
 save('finals_streaks',{
  description:'Consecutive runs of finals appearances. Use the slider to show runs of at least the selected number of seasons.',
- height:475,data:data('streaks'),
+ height:535,data:data('streaks'),
  params:[{name:'minimumRun',value:1,bind:{input:'range',min:1,max:7,step:1,name:'Minimum run (seasons): '}}],
  transform:[{filter:'datum.length >= minimumRun'}],
  encoding:{
   x:field('start','quantitative',{scale:{domain:[2011.5,2025.5],nice:false},axis:{title:null,format:'d',values:years,labelExpr:"width >= 300 || datum.value == 2012 || datum.value == 2018 || datum.value == 2025 ? datum.label : ''"}}),
   x2:field('end'),
   y:field('team','nominal',{sort:order,scale:{domain:order},axis:{title:null,ticks:false}}),
-  color:field('length','quantitative',{scale:{domain:[1,7],range:['#b5c6a7',green]},legend:null}),
+  color:field('length','quantitative',{scale:{domain:[1,7],range:['#b5c6a7',green]},legend:{title:['Consecutive finals','seasons'],titleFontWeight:600,orient:'top',direction:'horizontal',gradientLength:{expr:'min(240, width)'},gradientThickness:12,values:[1,3,5,7],offset:12}}),
   tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('length','Consecutive finals seasons')]
  },
  layer:[{mark:{type:'bar',size:18,cornerRadius:2}},{name:'longest_run_labels',transform:[{filter:'datum.length === 7'}],mark:{type:'text',fontSize:15,fontWeight:600,align:'center',baseline:'middle',color:'#ffffff'},encoding:{x2:null,x:{value:{expr:"(scale('x', datum.start) + scale('x', datum.end)) / 2"}},text:{value:{expr:"width >= 260 ? '7 seasons' : '7'"}},color:{value:'#ffffff'}}}]

@@ -34,8 +34,8 @@ async function embedChart(element, {resetMapPeriod=false,cityMode,cityPeriod,pre
     if (!response.ok) throw new Error(`Specification request failed (${response.status})`);
     const spec = await response.json();
     if(journeyState){
-      if(journeyState.brush.season)spec.vconcat[1].params[0].value={season:journeyState.brush.season};
-      if(journeyState.clubs.team?.length)spec.vconcat[0].layer[0].params[0].value=journeyState.clubs.team.map(team=>({team}));
+      if(journeyState.brush.season)spec.params.find(param=>param.name==='seasonBrush').value={season:journeyState.brush.season};
+      if(journeyState.clubs.team?.length)spec.params.find(param=>param.name==='journeyClub').value=journeyState.clubs.team.map(team=>({team}));
     }
     if(cityState)restoreCityMapState(spec,cityState,resetMapPeriod);
     if(name==='premiership_symbols')configureCityMapMode(spec);

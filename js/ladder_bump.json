@@ -75,11 +75,48 @@
     }
   ],
   "spacing": 32,
+  "params": [
+    {
+      "name": "journeyClub",
+      "select": {
+        "type": "point",
+        "fields": [
+          "team"
+        ]
+      },
+      "bind": "legend",
+      "views": [
+        "journey_lines",
+        "journey_overview",
+        "journey_bars"
+      ]
+    },
+    {
+      "name": "seasonBrush",
+      "select": {
+        "type": "interval",
+        "encodings": [
+          "x"
+        ],
+        "mark": {
+          "fill": "#31553b",
+          "fillOpacity": 0.12,
+          "stroke": "#31553b"
+        }
+      },
+      "views": [
+        "journey_overview"
+      ]
+    }
+  ],
   "resolve": {
     "scale": {
       "x": "independent",
       "y": "independent",
       "color": "shared"
+    },
+    "legend": {
+      "color": "independent"
     }
   },
   "vconcat": [
@@ -147,6 +184,7 @@
           },
           "legend": {
             "title": null,
+            "orient": "top",
             "columns": {
               "expr": "width < 385 ? 1 : 2"
             },
@@ -183,18 +221,7 @@
       },
       "layer": [
         {
-          "params": [
-            {
-              "name": "journeyClub",
-              "select": {
-                "type": "point",
-                "fields": [
-                  "team"
-                ]
-              },
-              "bind": "legend"
-            }
-          ],
+          "name": "journey_lines",
           "mark": {
             "type": "line",
             "clip": true,
@@ -216,22 +243,6 @@
       "title": "Drag to select a season range",
       "width": 900,
       "height": 90,
-      "params": [
-        {
-          "name": "seasonBrush",
-          "select": {
-            "type": "interval",
-            "encodings": [
-              "x"
-            ],
-            "mark": {
-              "fill": "#31553b",
-              "fillOpacity": 0.12,
-              "stroke": "#31553b"
-            }
-          }
-        }
-      ],
       "mark": {
         "type": "line",
         "strokeWidth": 1.8
@@ -298,6 +309,7 @@
           },
           "legend": {
             "title": null,
+            "orient": "top",
             "columns": {
               "expr": "width < 385 ? 1 : 2"
             },
@@ -433,12 +445,14 @@
           },
           "legend": {
             "title": null,
+            "orient": "top",
             "columns": {
               "expr": "width < 385 ? 1 : 2"
             },
-            "symbolType": "stroke",
+            "symbolType": "square",
             "symbolStrokeWidth": 3,
-            "labelLimit": 180
+            "labelLimit": 180,
+            "symbolSize": 80
           }
         },
         "opacity": {
@@ -491,6 +505,7 @@
       },
       "layer": [
         {
+          "name": "journey_bars",
           "mark": {
             "type": "bar",
             "size": 19
