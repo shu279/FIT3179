@@ -9,7 +9,7 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=9bc01c374dbb">
+  <link rel="stylesheet" href="css/style.css?v=8e1e6c78c79e">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -98,52 +98,58 @@
               </div>
             </div>
             <aside class="map-legend" aria-label="Finals rate: five fixed percentage classes">
-              <p class="micro">Clubs reaching finals</p>
+              <p class="micro"><strong>Clubs reaching finals</strong></p>
               <div class="map-rate-legend"><span style="--swatch:#c1c6b7">0–&lt;30%</span><span style="--swatch:#a8bd9c">30–&lt;40%</span><span style="--swatch:#819978">40–&lt;50%</span><span style="--swatch:#587651">50–&lt;100%</span><span style="--swatch:#31553b">100%</span></div>
             </aside>
           </div>
           <figcaption>Labels show finalists / all clubs in each state: 1/2 means one of two clubs reached finals. Darker greens show higher percentages; grey means no clubs. The unequal intervals separate the five observed state rates: 0%, 30%, 40%, 50% and 100%. Cutoffs stay fixed across all years, and a value on a boundary enters the higher class. The physical layer shows land, ocean and a coordinate grid; the cultural layer shows state borders and finalist counts.</figcaption>
         </figure>
-        <figure class="figure-wide map-study">
-          <h3 id="map-period-summary">Finals appearances by home city</h3>
-          <p class="chart-deck">The map compares finals participation across club home cities, for one season or a selected period. Circle area shows finalists per season, while darker green shows a higher share of local clubs reaching finals. An orange diamond marks the champion when one season is selected.</p>
-          <fieldset class="city-time-mode">
-            <legend>Time selection</legend>
-            <label><input type="radio" name="city-time-mode" id="city-mode-single" value="single" checked disabled> Single season</label>
-            <label><input type="radio" name="city-time-mode" id="city-mode-period" value="period" disabled> Compare period</label>
-          </fieldset>
-          <div id="city-single-controls" class="map-controls-row">
-            <div id="city-season-control" class="vega-bindings"></div>
-          </div>
-          <div id="city-period-controls" class="city-period-controls" hidden>
-            <div class="city-period-inputs">
-              <label>From <input id="city-period-from" type="number" min="2012" max="2025" step="1" value="2012"></label>
-              <label>To <input id="city-period-to" type="number" min="2012" max="2025" step="1" value="2025"></label>
+        <figure class="figure-wide map-study city-map-study">
+          <figcaption class="map-story-copy">
+            <h3 id="map-period-summary">Finals appearances by home city</h3>
+            <p class="chart-deck">Circle area shows finalists per season. Darker green shows a higher share of local clubs reaching finals, using the same five percentage bands as the state map.</p>
+            <p>Single season follows the year shared by the three maps. Compare period keeps its own whole-season range: colour shows finals appearances ÷ club-seasons, and circle area shows finals appearances ÷ seasons. Both scales stay fixed.</p>
+            <p>An orange diamond marks the champion when one season is selected. City locations stay fixed while circles change size. Perth includes Fremantle.</p>
+            <p>Hover or tap a circle for its record. Zoom and drag to separate nearby cities such as Melbourne and Geelong; circle sizes stay fixed so they still match the legend.</p>
+          </figcaption>
+          <div class="map-story-visual">
+            <fieldset class="city-time-mode">
+              <legend>Time selection</legend>
+              <label><input type="radio" name="city-time-mode" id="city-mode-single" value="single" checked disabled> Single season</label>
+              <label><input type="radio" name="city-time-mode" id="city-mode-period" value="period" disabled> Compare period</label>
+            </fieldset>
+            <div id="city-single-controls" class="map-controls-row">
+              <div id="city-season-control" class="vega-bindings"></div>
             </div>
-            <p class="micro">Select whole seasons with the timeline below or enter the first and last year. Both endpoints are included.</p>
-          </div>
-          <div class="map-controls-row city-map-controls">
-            <div class="chart-actions"><button type="button" id="reset-city-map" disabled>Reset</button></div>
-            <div id="city-zoom-control" class="vega-bindings"></div>
-          </div>
-          <div class="map-with-legend">
-            <div class="chart" data-spec="premiership_symbols" aria-label="Proportional-symbol map of finalists by home city, with Single season and Compare period modes. Circle area shows finalists per season and colour shows finals rate."></div>
-            <aside class="map-legend" aria-label="Map legends: finals rate and finalists per season">
-              <p class="micro">Clubs reaching finals</p>
-              <div class="map-rate-legend"><span style="--swatch:#c1c6b7">0–&lt;30%</span><span style="--swatch:#a8bd9c">30–&lt;40%</span><span style="--swatch:#819978">40–&lt;50%</span><span style="--swatch:#587651">50–&lt;100%</span><span style="--swatch:#31553b">100%</span></div>
-              <div class="map-size-legend" role="group" aria-label="Circle size: finalists per season">
-                <p class="micro">Finalists</p>
-                <!-- Three size examples retain the observed maximum of 4. Match Vega's area scale: radius = sqrt(2400 × count / 9) / 2. -->
-                <ul>
-                  <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="8.165"/></svg><span>1</span></li>
-                  <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="11.547"/></svg><span>2</span></li>
-                  <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="16.33"/></svg><span>4</span></li>
-                </ul>
+            <div id="city-period-controls" class="city-period-controls" hidden>
+              <div class="city-period-inputs">
+                <label>From <input id="city-period-from" type="number" min="2012" max="2025" step="1" value="2012"></label>
+                <label>To <input id="city-period-to" type="number" min="2012" max="2025" step="1" value="2025"></label>
               </div>
-            </aside>
+              <p class="micro">Select whole seasons with the timeline below or enter the first and last year. Both endpoints are included.</p>
+            </div>
+            <div class="map-controls-row city-map-controls">
+              <div class="chart-actions"><button type="button" id="reset-city-map" disabled>Reset</button></div>
+              <div id="city-zoom-control" class="vega-bindings"></div>
+            </div>
+            <div class="map-with-legend">
+              <div class="chart" data-spec="premiership_symbols" aria-label="Proportional-symbol map of finalists by home city, with Single season and Compare period modes. Circle area shows finalists per season and colour shows finals rate."></div>
+              <aside class="map-legend" aria-label="Map legends: finals rate and finalists per season">
+                <p class="micro"><strong>Clubs reaching finals</strong></p>
+                <div class="map-rate-legend"><span style="--swatch:#c1c6b7">0–&lt;30%</span><span style="--swatch:#a8bd9c">30–&lt;40%</span><span style="--swatch:#819978">40–&lt;50%</span><span style="--swatch:#587651">50–&lt;100%</span><span style="--swatch:#31553b">100%</span></div>
+                <div class="map-size-legend" role="group" aria-label="Circle size: finalists per season">
+                  <p class="micro"><strong>Finalists</strong></p>
+                  <!-- Three size examples retain the observed maximum of 4. Match Vega's area scale: radius = sqrt(2400 × count / 9) / 2. -->
+                  <ul>
+                    <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="8.165"/></svg><span>1</span></li>
+                    <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="11.547"/></svg><span>2</span></li>
+                    <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="16.33"/></svg><span>4</span></li>
+                  </ul>
+                </div>
+              </aside>
+            </div>
+            <p class="map-key micro"><i class="legend-diamond" aria-hidden="true"></i> Season champion · Small empty ring: no finalists.</p>
           </div>
-          <p class="map-key micro"><i class="legend-diamond" aria-hidden="true"></i> Season champion · Small empty ring: no finalists.</p>
-          <figcaption>Single season follows the year shared by the three maps. Compare period uses a separate, inclusive year range; timeline edges round to the nearest season, so a narrow selection between ticks still includes a year. Period comparisons use finals appearances ÷ club-seasons for colour, and finals appearances ÷ seasons for area; scales stay fixed. The five green percentage bands match the state map. The champion marker and annotation appear when one season is selected and disappear for multiple seasons. City locations are fixed club bases: the circles change size and the champion marker changes location as seasons change. Hover or tap a circle for its city and record. Zoom in and drag to separate nearby cities such as Melbourne and Geelong. Circle sizes stay fixed when zooming so they still match the legend. Perth includes Fremantle.</figcaption>
         </figure>
         <figure class="figure-wide map-study grand-final-study">
           <figcaption class="map-story-copy">
