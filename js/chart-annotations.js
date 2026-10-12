@@ -132,17 +132,6 @@ function initialiseReadingAnnotations(element, name) {
     });
     nodes.forEach(({t})=>overlay.append(t));
     if(name==='ladder_bump'){
-      const plot=element.querySelector('.journey_detail_group .background');
-      const rank=target('.journey_detail_layer_1_marks path',(d,el)=>{
-        const r=el.getBoundingClientRect(),p=plot.getBoundingClientRect();
-        return d?.team==='Hawthorn'&&r.left>=p.left-4&&r.right<=p.right+4;
-      })();
-      if(rank){
-        const y=plot.getBoundingClientRect().top-element.getBoundingClientRect().top-36;
-        const text=label('Higher position = better rank',4,y);
-        arrow({x:Math.min(rank.x,160),y:y+23},rank);
-        overlay.append(text);
-      }
       const bar=target('.journey_bars_marks path',team('Geelong'),.8,0)();
       if(bar){
         const text=label('Length = wins ÷ games',Math.max(4,bar.x-152),bar.y-36);

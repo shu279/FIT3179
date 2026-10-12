@@ -22,8 +22,9 @@ function chartLayout(spec, availableWidth) {
           legend.columns = sideLegend ? 1 : {expr:'width < 385 ? 1 : 2'};
         }
         if(view.name!=='journey_overview'){
-          if (legend) legend.offset=sideLegend?16:54;
-          view.title.offset=sideLegend||!legend?60:14;
+          if (legend) legend.offset=16;
+          // Only the win-rate panel needs space for its reading note.
+          view.title.offset=view.name==='journey_summary'?60:14;
         }
       }
     });
