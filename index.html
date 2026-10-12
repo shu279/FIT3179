@@ -9,7 +9,7 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=941394179044">
+  <link rel="stylesheet" href="css/style.css?v=9ffd2fe12b9e">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -88,8 +88,10 @@
       <section class="chapter geography" aria-labelledby="chapter-two">
         <div class="section-intro pure-g"><div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-two">Success varies across states and cities.</h2></div><div class="pure-u-1 pure-u-md-2-5 intro-copy reading-notes"><p>The club stories also have a geography. Victoria has ten clubs, while each other state represented in the competition has two, giving Victoria more opportunities to supply finalists. Comparing each state’s share of clubs reaching finals shows how widely success was spread relative to its club base.</p></div></div>
         <figure class="figure-wide map-study state-map-study">
-          <h3 id="map-season-summary" aria-live="polite">Clubs reaching finals by state</h3>
-          <div class="map-story-copy"><p>Victoria’s ten clubs give it more chances to supply finalists than any other state. Each of the other four represented states has two clubs.</p><p>A state with fewer finalists can still qualify a greater share of its clubs. Following each season shows where success was widespread within the local competition.</p></div>
+          <figcaption class="map-story-caption">
+            <h3 id="map-season-summary" aria-live="polite">Clubs reaching finals by state</h3>
+            <div class="map-story-copy"><p>Victoria’s ten clubs give it more chances to supply finalists than any other state. Each of the other four represented states has two clubs.</p><p>A state with fewer finalists can still qualify a greater share of its clubs. Following each season shows where success was widespread within the local competition.</p></div>
+          </figcaption>
           <div class="map-story-visual">
             <div class="state-map-frame">
               <div class="chart" data-spec="state_choropleth" aria-label="State choropleth with season selection. Colour shows the percentage of clubs reaching finals; fraction labels show finalists out of all clubs in each state."></div>
@@ -98,15 +100,15 @@
                 <div class="map-rate-legend"><span style="--swatch:#c1c6b7" title="0% to below 30%" role="img" aria-label="0% to below 30%">0–30%</span><span style="--swatch:#a8bd9c" title="30% to below 40%" role="img" aria-label="30% to below 40%">30–40%</span><span style="--swatch:#819978" title="40% to below 50%" role="img" aria-label="40% to below 50%">40–50%</span><span style="--swatch:#587651" title="50% to below 100%" role="img" aria-label="50% to below 100%">50–100%</span><span style="--swatch:#31553b" title="Exactly 100%" role="img" aria-label="Exactly 100%">100%</span></div>
               </aside>
             </div>
-            <div class="map-controls-row">
-              <div id="map-season-control" class="vega-bindings"></div>
-              <div class="chart-actions"><button type="button" id="play-map" aria-pressed="false">Play</button><button type="button" id="reset-map">Reset</button></div>
-            </div>
+          </div>
+          <div class="map-controls-row map-study-controls">
+            <div id="map-season-control" class="vega-bindings"></div>
+            <div class="chart-actions"><button type="button" id="play-map" aria-pressed="false">Play</button><button type="button" id="reset-map">Reset</button></div>
           </div>
 
         </figure>
         <figure class="figure-wide map-study city-map-study">
-          <figcaption class="city-map-caption">
+          <figcaption class="map-story-caption city-map-caption">
             <h3 id="map-period-summary">Finals appearances by home city</h3>
             <div class="map-story-copy">
               <p>Melbourne is home to nine clubs, while Geelong has one. Finals success can therefore concentrate in one city without being shared by all its clubs.</p><p>Across several seasons, the city view reveals whether a finals presence was sustained or depended on an occasional successful year.</p>
@@ -131,19 +133,19 @@
                 <span><i class="legend-circle hollow" aria-hidden="true"></i> No finalists</span>
               </div>
             </div>
-            <div class="city-map-tools">
-              <fieldset class="city-time-mode" aria-label="City map time mode">
-                <label><input type="radio" name="city-time-mode" id="city-mode-single" value="single" checked disabled> Single season</label>
-                <label><input type="radio" name="city-time-mode" id="city-mode-period" value="period" disabled> Compare period</label>
-              </fieldset>
-              <div id="city-single-controls" class="map-controls-row">
-                <div id="city-season-control" class="vega-bindings"></div>
-              </div>
-              <p id="city-period-controls" class="micro" aria-live="polite" hidden></p>
-              <div class="map-controls-row city-map-controls">
-                <div class="chart-actions"><button type="button" id="reset-city-map" disabled>Reset</button></div>
-                <div id="city-zoom-control" class="vega-bindings"></div>
-              </div>
+          </div>
+          <div class="city-map-tools map-study-controls">
+            <fieldset class="city-time-mode" aria-label="City map time mode">
+              <label><input type="radio" name="city-time-mode" id="city-mode-single" value="single" checked disabled> Single season</label>
+              <label><input type="radio" name="city-time-mode" id="city-mode-period" value="period" disabled> Compare period</label>
+            </fieldset>
+            <div id="city-single-controls" class="map-controls-row">
+              <div id="city-season-control" class="vega-bindings"></div>
+            </div>
+            <p id="city-period-controls" class="micro" aria-live="polite" hidden></p>
+            <div class="map-controls-row city-map-controls">
+              <div class="chart-actions"><button type="button" id="reset-city-map" disabled>Reset</button></div>
+              <div id="city-zoom-control" class="vega-bindings"></div>
             </div>
           </div>
         </figure>
