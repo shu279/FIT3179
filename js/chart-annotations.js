@@ -24,15 +24,6 @@ function initialiseReadingAnnotations(element, name) {
     const p={x:r.left-o.left+r.width*x,y:r.top-o.top+r.height*y,node};
     return inView(p)?p:null;
   };
-  const pointOnPath=(selector,fraction=.5)=>()=>{
-    const node=find(selector);
-    if(!node?.getTotalLength)return null;
-    const p=node.getPointAtLength(node.getTotalLength()*fraction);
-    const screen=new DOMPoint(p.x,p.y).matrixTransform(node.getScreenCTM());
-    const o=element.getBoundingClientRect();
-    const result={x:screen.x-o.left,y:screen.y-o.top,node};
-    return inView(result)?result:null;
-  };
   const guides={
     ladder_bump:[],
     state_choropleth:[
@@ -44,7 +35,6 @@ function initialiseReadingAnnotations(element, name) {
       {text:()=>find('.city_symbols_marks path',d=>d?.city==='Perth')?.__data__?.datum?.season_count>1?'Area = average finalists per season':'Area = finalists per season',at:target('.city_symbols_marks path',d=>d?.city==='Perth',.2,1)},
       {text:'Darker green = higher finals share',at:target('.city_symbols_marks path',d=>d?.city==='Perth',.8,1)}
     ],
-    grand_final_flows:[{text:()=>find('.same_city_loop_marks path')?'Loop = clubs sharing a home city':'Line = home-city matchup, not travel',at:()=>pointOnPath('.annual_matchup_marks path',.5)()||pointOnPath('.same_city_loop_marks path',.6)()}],
     premiership_bars:[{text:'Bar length = titles',at:target('.title_bars_marks path',team('Hawthorn'),.95)}],
     season_boxplot:[
       {text:'Whiskers = lowest and highest',at:target('.layer_2_marks path',team('Geelong'),.5,0),also:target('.layer_3_marks path',team('Geelong'),.5,0)},
@@ -54,7 +44,7 @@ function initialiseReadingAnnotations(element, name) {
     era_change:[{text:'Length = change in percentage points',short:'Length = change (pp)',at:target('.layer_0_marks path',team('Brisbane Lions'),.8)}],
     rank_changes:[{text:'Bar height = yearly comparisons',at:target('.layer_0_marks path',d=>d?.change===-9,.5,0)}]
   };
-  const map=['state_choropleth','premiership_symbols','grand_final_flows'].includes(name);
+  const map=['state_choropleth','premiership_symbols'].includes(name);
   if(!guides[name])return {destroy(){}};
   const overlay=svgElement('svg',{'class':'chart-reading-annotations',role:'group','aria-label':'How to read this chart'});
   element.append(overlay);
