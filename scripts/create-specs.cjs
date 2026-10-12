@@ -223,17 +223,17 @@ save('era_change',{
 
 // Paired bars compare clubs within each metric, without joining unrelated measures.
 const successMetrics=[
- {metric:'wins',label:'Games won (%)',side_label:'Games won (%)',small_label:'Games won\n(%)'},
- {metric:'finals',label:'Finals appearances (%)',side_label:'Finals\nappearances (%)',small_label:'Finals\nappearances\n(%)'},
- {metric:'top_four',label:'Top-four finishes (%)',side_label:'Top-four finishes\n(%)',small_label:'Top-four\nfinishes (%)'},
- {metric:'grand_finals',label:'Grand Final appearances (%)',side_label:'Grand Final\nappearances (%)',small_label:'Grand Final\nappearances\n(%)'},
- {metric:'premierships',label:'Premierships (%)',side_label:'Premierships (%)',small_label:'Premierships\n(%)'}
+ {metric:'wins',label:'Games won',side_label:'Games won',small_label:'Games won'},
+ {metric:'finals',label:'Finals appearances',side_label:'Finals\nappearances',small_label:'Finals\nappearances'},
+ {metric:'top_four',label:'Top-four finishes',side_label:'Top-four finishes',small_label:'Top-four\nfinishes'},
+ {metric:'grand_finals',label:'Grand Final appearances',side_label:'Grand Final\nappearances',small_label:'Grand Final\nappearances'},
+ {metric:'premierships',label:'Premierships',side_label:'Premierships',small_label:'Premierships'}
 ].map((d,order)=>({...d,order}));
 const comparisonY="datum.order * 64 + (datum.team === 'Geelong' ? (compact ? 4 : 5) : (compact ? 34 : 29))";
 const comparisonTip="{'Club':datum.team,'Measure':datum.label,'Percentage':format(datum.rate / 100,'.1%'),'Count':datum.numerator + ' / ' + datum.denominator,'Denominator':datum.metric === 'wins' ? 'Regular-season games played' : 'Completed seasons (2012–2025)'}";
 const successComparison={
  '$schema':'https://vega.github.io/schema/vega/v5.json',
- description:'Paired horizontal bars compare Geelong and Hawthorn on five separate measures in 2012–2025. All bars share a fixed 0–100% scale, with percentages and counts directly labelled. Top-four finishes means regular-season ladder ranks 1–4 out of 14 seasons. Games won uses games played; all other measures use seasons.',
+ description:'Paired horizontal bars compare Geelong and Hawthorn on five separate measures in 2012–2025. All bars share a fixed 0–100% scale, with counts directly labelled. Top-four finishes means regular-season ladder ranks 1–4 out of 14 seasons. Games won uses games played; all other measures use seasons.',
  width:700,height:360,padding:{top:4,left:4,right:4,bottom:36},autosize:{type:'none',contains:'padding',resize:true},background:'transparent',
  signals:[
   {name:'compact',update:'width < 600'},
@@ -254,7 +254,7 @@ const successComparison={
    {type:'lookup',from:'metrics',key:'metric',fields:['metric'],values:['label','order']},
    {type:'formula',expr:"datum.metric === 'wins' ? datum.played : datum.seasons",as:'denominator'},
    {type:'formula',expr:'datum.numerator / datum.denominator * 100',as:'rate'},
-   {type:'formula',expr:"format(datum.rate / 100, '.1%') + ' · ' + datum.numerator + '/' + datum.denominator",as:'value_label'}
+   {type:'formula',expr:"datum.numerator + '/' + datum.denominator",as:'value_label'}
   ]}
  ],
  scales:[

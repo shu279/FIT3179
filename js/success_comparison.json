@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "description": "Paired horizontal bars compare Geelong and Hawthorn on five separate measures in 2012–2025. All bars share a fixed 0–100% scale, with percentages and counts directly labelled. Top-four finishes means regular-season ladder ranks 1–4 out of 14 seasons. Games won uses games played; all other measures use seasons.",
+  "description": "Paired horizontal bars compare Geelong and Hawthorn on five separate measures in 2012–2025. All bars share a fixed 0–100% scale, with counts directly labelled. Top-four finishes means regular-season ladder ranks 1–4 out of 14 seasons. Games won uses games played; all other measures use seasons.",
   "width": 700,
   "height": 360,
   "padding": {
@@ -43,37 +43,37 @@
       "values": [
         {
           "metric": "wins",
-          "label": "Games won (%)",
-          "side_label": "Games won (%)",
-          "small_label": "Games won\n(%)",
+          "label": "Games won",
+          "side_label": "Games won",
+          "small_label": "Games won",
           "order": 0
         },
         {
           "metric": "finals",
-          "label": "Finals appearances (%)",
-          "side_label": "Finals\nappearances (%)",
-          "small_label": "Finals\nappearances\n(%)",
+          "label": "Finals appearances",
+          "side_label": "Finals\nappearances",
+          "small_label": "Finals\nappearances",
           "order": 1
         },
         {
           "metric": "top_four",
-          "label": "Top-four finishes (%)",
-          "side_label": "Top-four finishes\n(%)",
-          "small_label": "Top-four\nfinishes (%)",
+          "label": "Top-four finishes",
+          "side_label": "Top-four finishes",
+          "small_label": "Top-four\nfinishes",
           "order": 2
         },
         {
           "metric": "grand_finals",
-          "label": "Grand Final appearances (%)",
-          "side_label": "Grand Final\nappearances (%)",
-          "small_label": "Grand Final\nappearances\n(%)",
+          "label": "Grand Final appearances",
+          "side_label": "Grand Final\nappearances",
+          "small_label": "Grand Final\nappearances",
           "order": 3
         },
         {
           "metric": "premierships",
-          "label": "Premierships (%)",
-          "side_label": "Premierships (%)",
-          "small_label": "Premierships\n(%)",
+          "label": "Premierships",
+          "side_label": "Premierships",
+          "small_label": "Premierships",
           "order": 4
         }
       ],
@@ -174,7 +174,7 @@
         },
         {
           "type": "formula",
-          "expr": "format(datum.rate / 100, '.1%') + ' · ' + datum.numerator + '/' + datum.denominator",
+          "expr": "datum.numerator + '/' + datum.denominator",
           "as": "value_label"
         }
       ]

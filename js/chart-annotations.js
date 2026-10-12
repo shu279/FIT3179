@@ -62,7 +62,7 @@ function initialiseReadingAnnotations(element, name) {
     premiership_bars:[{text:'Bar length = titles',at:target('.title_bars_marks path',team('Hawthorn'),.95)}],
     success_comparison:[
       {text:'Length = percentage',at:target('.profile_bars path',d=>d?.team==='Geelong'&&d.metric==='wins',.95)},
-      {text:'Labels = % and counts',at:target('.profile_values text',d=>d?.team==='Geelong'&&d.metric==='wins')}
+      {text:'Labels = counts',at:target('.profile_values text',d=>d?.team==='Geelong'&&d.metric==='wins')}
     ],
     season_boxplot:[
       {text:'Whiskers = lowest and highest',at:target('.layer_2_marks path',team('Geelong'),.5,0),also:target('.layer_3_marks path',team('Geelong'),.5,0)},

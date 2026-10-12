@@ -118,7 +118,7 @@ async function main(){
        assert.equal(profiles.length,10,'Two clubs across five independent measures');
        assert.deepEqual([...new Set(profiles.map(d=>d.team))].sort(),['Geelong','Hawthorn']);
        assert.equal(view.data('metrics').length,5);
-       assert.equal(view.data('metrics').find(d=>d.metric==='top_four').label,'Top-four finishes (%)');
+       assert.equal(view.data('metrics').find(d=>d.metric==='top_four').label,'Top-four finishes');
        assert.deepEqual(view.scale('percentage').domain(),[0,100]);
        assert.equal(items(view,item=>item.mark?.name==='profile_bars').length,10);
        assert.equal(items(view,item=>['line','path'].includes(item.mark?.marktype)).length,0,'No lines connect different measures');
@@ -129,10 +129,10 @@ async function main(){
          assert.equal(d.numerator,counts[d.metric]);
          assert.equal(d.denominator,d.metric==='wins'?sum(clubRows,'played'):14);
          assert.equal(d.rate,d.numerator/d.denominator*100);
-         assert.equal(d.value_label,`${d.rate.toFixed(1)}% · ${d.numerator}/${d.denominator}`);
+         assert.equal(d.value_label,`${d.numerator}/${d.denominator}`);
        }
-       assert.equal(profiles.find(d=>d.team==='Geelong'&&d.metric==='top_four').value_label,'71.4% · 10/14');
-       assert.equal(profiles.find(d=>d.team==='Hawthorn'&&d.metric==='top_four').value_label,'42.9% · 6/14');
+       assert.equal(profiles.find(d=>d.team==='Geelong'&&d.metric==='top_four').value_label,'10/14');
+       assert.equal(profiles.find(d=>d.team==='Hawthorn'&&d.metric==='top_four').value_label,'6/14');
        const bars=items(view,item=>item.mark?.name==='profile_bars');
        for(const bar of bars)assert.ok(Math.abs(bar.width-(view.scale('percentage')(bar.datum.rate)-view.scale('percentage')(0)))<1e-8);
        await view.width(276).runAsync();
