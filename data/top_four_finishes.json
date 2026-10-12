@@ -1,0 +1,127 @@
+[
+  {
+    "id": "all",
+    "parent": null,
+    "count": 0
+  },
+  {
+    "id": "Geelong",
+    "parent": "all",
+    "team": "Geelong",
+    "abbreviation": "GEE",
+    "count": 10,
+    "years": "2013, 2014, 2016, 2017, 2019, 2020, 2021, 2022, 2024, 2025",
+    "label": "Geelong",
+    "longest_word": 7
+  },
+  {
+    "id": "Sydney",
+    "parent": "all",
+    "team": "Sydney",
+    "abbreviation": "SYD",
+    "count": 7,
+    "years": "2012, 2013, 2014, 2015, 2016, 2022, 2024",
+    "label": "Sydney",
+    "longest_word": 6
+  },
+  {
+    "id": "Collingwood",
+    "parent": "all",
+    "team": "Collingwood",
+    "abbreviation": "COL",
+    "count": 6,
+    "years": "2012, 2018, 2019, 2022, 2023, 2025",
+    "label": "Collingwood",
+    "longest_word": 11
+  },
+  {
+    "id": "Hawthorn",
+    "parent": "all",
+    "team": "Hawthorn",
+    "abbreviation": "HAW",
+    "count": 6,
+    "years": "2012, 2013, 2014, 2015, 2016, 2018",
+    "label": "Hawthorn",
+    "longest_word": 8
+  },
+  {
+    "id": "Brisbane Lions",
+    "parent": "all",
+    "team": "Brisbane Lions",
+    "abbreviation": "BRL",
+    "count": 5,
+    "years": "2019, 2020, 2021, 2023, 2025",
+    "label": "Brisbane\nLions",
+    "longest_word": 8
+  },
+  {
+    "id": "Port Adelaide",
+    "parent": "all",
+    "team": "Port Adelaide",
+    "abbreviation": "PTA",
+    "count": 4,
+    "years": "2020, 2021, 2023, 2024",
+    "label": "Port\nAdelaide",
+    "longest_word": 8
+  },
+  {
+    "id": "Richmond",
+    "parent": "all",
+    "team": "Richmond",
+    "abbreviation": "RIC",
+    "count": 4,
+    "years": "2017, 2018, 2019, 2020",
+    "label": "Richmond",
+    "longest_word": 8
+  },
+  {
+    "id": "Adelaide",
+    "parent": "all",
+    "team": "Adelaide",
+    "abbreviation": "ADE",
+    "count": 3,
+    "years": "2012, 2017, 2025",
+    "label": "Adelaide",
+    "longest_word": 8
+  },
+  {
+    "id": "Fremantle",
+    "parent": "all",
+    "team": "Fremantle",
+    "abbreviation": "FRE",
+    "count": 3,
+    "years": "2013, 2014, 2015",
+    "label": "Fremantle",
+    "longest_word": 9
+  },
+  {
+    "id": "GWS Giants",
+    "parent": "all",
+    "team": "GWS Giants",
+    "abbreviation": "GWS",
+    "count": 3,
+    "years": "2016, 2017, 2024",
+    "label": "GWS\nGiants",
+    "longest_word": 6
+  },
+  {
+    "id": "Melbourne",
+    "parent": "all",
+    "team": "Melbourne",
+    "abbreviation": "MEL",
+    "count": 3,
+    "years": "2021, 2022, 2023",
+    "label": "Melbourne",
+    "longest_word": 9
+  },
+  {
+    "id": "West Coast",
+    "parent": "all",
+    "team": "West Coast",
+    "abbreviation": "WCE",
+    "count": 2,
+    "years": "2015, 2018",
+    "label": "West\nCoast",
+    "longest_word": 5
+  }
+]

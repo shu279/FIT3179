@@ -1,0 +1,2178 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "transparent",
+  "width": 700,
+  "autosize": {
+    "type": "none",
+    "contains": "padding",
+    "resize": true
+  },
+  "height": 596,
+  "padding": {
+    "top": 6,
+    "left": 4,
+    "right": 4,
+    "bottom": 36
+  },
+  "description": "Six horizon strips compare annual win rates relative to 50%. Orange is above 50%, green below. The first 25 percentage points fill a light band; a second 25-point band folds over it in a darker shade. All six strips count as one chart. Interpolated fold crossings are for drawing only; hover reports real season records.",
+  "signals": [
+    {
+      "name": "detailSeason",
+      "value": 2025,
+      "on": [
+        {
+          "events": "@season_targets:pointermove, @season_targets:click",
+          "update": "datum.season"
+        }
+      ]
+    }
+  ],
+  "data": [
+    {
+      "name": "curves",
+      "url": "data/club_win_rate_horizon.json?v=d8986dbeb66f",
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "clamp(50-datum.rate,0,25)",
+          "as": "below_first"
+        },
+        {
+          "type": "formula",
+          "expr": "clamp(datum.rate-50,0,25)",
+          "as": "above_first"
+        },
+        {
+          "type": "formula",
+          "expr": "clamp(25-datum.rate,0,25)",
+          "as": "below_second"
+        },
+        {
+          "type": "formula",
+          "expr": "clamp(datum.rate-75,0,25)",
+          "as": "above_second"
+        }
+      ]
+    },
+    {
+      "name": "records",
+      "url": "data/team_seasons.json",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "indexof([\"Geelong\",\"Sydney\",\"Hawthorn\",\"Richmond\",\"Brisbane Lions\",\"West Coast\"],datum.team) >= 0"
+        }
+      ]
+    },
+    {
+      "name": "curve_0",
+      "source": "curves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"Geelong\""
+        }
+      ]
+    },
+    {
+      "name": "records_0",
+      "source": "records",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"Geelong\""
+        }
+      ]
+    },
+    {
+      "name": "detail_0",
+      "source": "records_0",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.season === detailSeason"
+        }
+      ]
+    },
+    {
+      "name": "curve_1",
+      "source": "curves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"Sydney\""
+        }
+      ]
+    },
+    {
+      "name": "records_1",
+      "source": "records",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"Sydney\""
+        }
+      ]
+    },
+    {
+      "name": "detail_1",
+      "source": "records_1",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.season === detailSeason"
+        }
+      ]
+    },
+    {
+      "name": "curve_2",
+      "source": "curves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"Hawthorn\""
+        }
+      ]
+    },
+    {
+      "name": "records_2",
+      "source": "records",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"Hawthorn\""
+        }
+      ]
+    },
+    {
+      "name": "detail_2",
+      "source": "records_2",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.season === detailSeason"
+        }
+      ]
+    },
+    {
+      "name": "curve_3",
+      "source": "curves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"Richmond\""
+        }
+      ]
+    },
+    {
+      "name": "records_3",
+      "source": "records",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"Richmond\""
+        }
+      ]
+    },
+    {
+      "name": "detail_3",
+      "source": "records_3",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.season === detailSeason"
+        }
+      ]
+    },
+    {
+      "name": "curve_4",
+      "source": "curves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"Brisbane Lions\""
+        }
+      ]
+    },
+    {
+      "name": "records_4",
+      "source": "records",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"Brisbane Lions\""
+        }
+      ]
+    },
+    {
+      "name": "detail_4",
+      "source": "records_4",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.season === detailSeason"
+        }
+      ]
+    },
+    {
+      "name": "curve_5",
+      "source": "curves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"West Coast\""
+        }
+      ]
+    },
+    {
+      "name": "records_5",
+      "source": "records",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === \"West Coast\""
+        }
+      ]
+    },
+    {
+      "name": "detail_5",
+      "source": "records_5",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.season === detailSeason"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "year",
+      "type": "linear",
+      "domain": [
+        2012,
+        2025
+      ],
+      "range": "width",
+      "zero": false,
+      "nice": false
+    }
+  ],
+  "axes": [
+    {
+      "scale": "year",
+      "orient": "bottom",
+      "values": {
+        "signal": "width >= 700 ? sequence(2012,2026) : [2012,2018,2025]"
+      },
+      "format": "d",
+      "domain": false,
+      "tickColor": "#cdd2c2",
+      "labelPadding": 9,
+      "labelFont": "Helvetica Neue, Arial, sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#21372b",
+      "encode": {
+        "labels": {
+          "update": {
+            "align": {
+              "signal": "datum.value === 2012 ? 'left' : datum.value === 2025 ? 'right' : 'center'"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "marks": [
+    {
+      "name": "horizon_row_0",
+      "type": "group",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 0
+          },
+          "y": {
+            "value": 20
+          },
+          "width": {
+            "signal": "width"
+          },
+          "height": {
+            "value": 52
+          }
+        }
+      },
+      "scales": [
+        {
+          "name": "band",
+          "type": "linear",
+          "domain": [
+            0,
+            25
+          ],
+          "range": [
+            52,
+            0
+          ],
+          "zero": true,
+          "nice": false
+        }
+      ],
+      "marks": [
+        {
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": -8
+              },
+              "text": {
+                "value": "Geelong"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fontWeight": {
+                "value": 600
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "name": "season_readout_0",
+          "type": "text",
+          "interactive": false,
+          "from": {
+            "data": "detail_0"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "signal": "width"
+              },
+              "y": {
+                "value": -8
+              },
+              "align": {
+                "value": "right"
+              },
+              "text": {
+                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 0
+              },
+              "width": {
+                "signal": "width"
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#eeeee3"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_first_0",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_0"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#a8bd9c"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_first_0",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_0"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#e6b494"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_second_0",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_0"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#31553b"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_second_0",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_0"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#c96636"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "type": "rule",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "detailSeason"
+              },
+              "y": {
+                "value": 0
+              },
+              "y2": {
+                "value": 52
+              },
+              "stroke": {
+                "value": "#21372b"
+              },
+              "strokeDash": {
+                "value": [
+                  3,
+                  3
+                ]
+              },
+              "strokeOpacity": {
+                "value": 0.65
+              }
+            }
+          }
+        },
+        {
+          "name": "season_targets",
+          "type": "rect",
+          "from": {
+            "data": "records_0"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "max(2012,datum.season-0.5)"
+              },
+              "x2": {
+                "scale": "year",
+                "signal": "min(2025,datum.season+0.5)"
+              },
+              "y": {
+                "value": 0
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "transparent"
+              },
+              "tooltip": {
+                "signal": "{'Club':datum.team,'Season':datum.season,'Games won':format(datum.wins/datum.played,'.1%'),'Record':datum.wins + ' wins / ' + datum.played + ' games','Ladder position':datum.rank}"
+              },
+              "description": {
+                "signal": "datum.team + ', ' + datum.season + ': ' + format(datum.wins/datum.played,'.1%') + ' games won'"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "horizon_row_1",
+      "type": "group",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 0
+          },
+          "y": {
+            "value": 116
+          },
+          "width": {
+            "signal": "width"
+          },
+          "height": {
+            "value": 52
+          }
+        }
+      },
+      "scales": [
+        {
+          "name": "band",
+          "type": "linear",
+          "domain": [
+            0,
+            25
+          ],
+          "range": [
+            52,
+            0
+          ],
+          "zero": true,
+          "nice": false
+        }
+      ],
+      "marks": [
+        {
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": -8
+              },
+              "text": {
+                "value": "Sydney"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fontWeight": {
+                "value": 600
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "name": "season_readout_1",
+          "type": "text",
+          "interactive": false,
+          "from": {
+            "data": "detail_1"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "signal": "width"
+              },
+              "y": {
+                "value": -8
+              },
+              "align": {
+                "value": "right"
+              },
+              "text": {
+                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 0
+              },
+              "width": {
+                "signal": "width"
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#eeeee3"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_first_1",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_1"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#a8bd9c"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_first_1",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_1"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#e6b494"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_second_1",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_1"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#31553b"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_second_1",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_1"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#c96636"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "type": "rule",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "detailSeason"
+              },
+              "y": {
+                "value": 0
+              },
+              "y2": {
+                "value": 52
+              },
+              "stroke": {
+                "value": "#21372b"
+              },
+              "strokeDash": {
+                "value": [
+                  3,
+                  3
+                ]
+              },
+              "strokeOpacity": {
+                "value": 0.65
+              }
+            }
+          }
+        },
+        {
+          "name": "season_targets",
+          "type": "rect",
+          "from": {
+            "data": "records_1"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "max(2012,datum.season-0.5)"
+              },
+              "x2": {
+                "scale": "year",
+                "signal": "min(2025,datum.season+0.5)"
+              },
+              "y": {
+                "value": 0
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "transparent"
+              },
+              "tooltip": {
+                "signal": "{'Club':datum.team,'Season':datum.season,'Games won':format(datum.wins/datum.played,'.1%'),'Record':datum.wins + ' wins / ' + datum.played + ' games','Ladder position':datum.rank}"
+              },
+              "description": {
+                "signal": "datum.team + ', ' + datum.season + ': ' + format(datum.wins/datum.played,'.1%') + ' games won'"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "horizon_row_2",
+      "type": "group",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 0
+          },
+          "y": {
+            "value": 212
+          },
+          "width": {
+            "signal": "width"
+          },
+          "height": {
+            "value": 52
+          }
+        }
+      },
+      "scales": [
+        {
+          "name": "band",
+          "type": "linear",
+          "domain": [
+            0,
+            25
+          ],
+          "range": [
+            52,
+            0
+          ],
+          "zero": true,
+          "nice": false
+        }
+      ],
+      "marks": [
+        {
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": -8
+              },
+              "text": {
+                "value": "Hawthorn"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fontWeight": {
+                "value": 600
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "name": "season_readout_2",
+          "type": "text",
+          "interactive": false,
+          "from": {
+            "data": "detail_2"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "signal": "width"
+              },
+              "y": {
+                "value": -8
+              },
+              "align": {
+                "value": "right"
+              },
+              "text": {
+                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 0
+              },
+              "width": {
+                "signal": "width"
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#eeeee3"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_first_2",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_2"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#a8bd9c"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_first_2",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_2"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#e6b494"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_second_2",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_2"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#31553b"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_second_2",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_2"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#c96636"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "type": "rule",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "detailSeason"
+              },
+              "y": {
+                "value": 0
+              },
+              "y2": {
+                "value": 52
+              },
+              "stroke": {
+                "value": "#21372b"
+              },
+              "strokeDash": {
+                "value": [
+                  3,
+                  3
+                ]
+              },
+              "strokeOpacity": {
+                "value": 0.65
+              }
+            }
+          }
+        },
+        {
+          "name": "season_targets",
+          "type": "rect",
+          "from": {
+            "data": "records_2"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "max(2012,datum.season-0.5)"
+              },
+              "x2": {
+                "scale": "year",
+                "signal": "min(2025,datum.season+0.5)"
+              },
+              "y": {
+                "value": 0
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "transparent"
+              },
+              "tooltip": {
+                "signal": "{'Club':datum.team,'Season':datum.season,'Games won':format(datum.wins/datum.played,'.1%'),'Record':datum.wins + ' wins / ' + datum.played + ' games','Ladder position':datum.rank}"
+              },
+              "description": {
+                "signal": "datum.team + ', ' + datum.season + ': ' + format(datum.wins/datum.played,'.1%') + ' games won'"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "horizon_row_3",
+      "type": "group",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 0
+          },
+          "y": {
+            "value": 308
+          },
+          "width": {
+            "signal": "width"
+          },
+          "height": {
+            "value": 52
+          }
+        }
+      },
+      "scales": [
+        {
+          "name": "band",
+          "type": "linear",
+          "domain": [
+            0,
+            25
+          ],
+          "range": [
+            52,
+            0
+          ],
+          "zero": true,
+          "nice": false
+        }
+      ],
+      "marks": [
+        {
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": -8
+              },
+              "text": {
+                "value": "Richmond"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fontWeight": {
+                "value": 600
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "name": "season_readout_3",
+          "type": "text",
+          "interactive": false,
+          "from": {
+            "data": "detail_3"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "signal": "width"
+              },
+              "y": {
+                "value": -8
+              },
+              "align": {
+                "value": "right"
+              },
+              "text": {
+                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 0
+              },
+              "width": {
+                "signal": "width"
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#eeeee3"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_first_3",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_3"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#a8bd9c"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_first_3",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_3"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#e6b494"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_second_3",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_3"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#31553b"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_second_3",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_3"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#c96636"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "type": "rule",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "detailSeason"
+              },
+              "y": {
+                "value": 0
+              },
+              "y2": {
+                "value": 52
+              },
+              "stroke": {
+                "value": "#21372b"
+              },
+              "strokeDash": {
+                "value": [
+                  3,
+                  3
+                ]
+              },
+              "strokeOpacity": {
+                "value": 0.65
+              }
+            }
+          }
+        },
+        {
+          "name": "season_targets",
+          "type": "rect",
+          "from": {
+            "data": "records_3"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "max(2012,datum.season-0.5)"
+              },
+              "x2": {
+                "scale": "year",
+                "signal": "min(2025,datum.season+0.5)"
+              },
+              "y": {
+                "value": 0
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "transparent"
+              },
+              "tooltip": {
+                "signal": "{'Club':datum.team,'Season':datum.season,'Games won':format(datum.wins/datum.played,'.1%'),'Record':datum.wins + ' wins / ' + datum.played + ' games','Ladder position':datum.rank}"
+              },
+              "description": {
+                "signal": "datum.team + ', ' + datum.season + ': ' + format(datum.wins/datum.played,'.1%') + ' games won'"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "horizon_row_4",
+      "type": "group",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 0
+          },
+          "y": {
+            "value": 404
+          },
+          "width": {
+            "signal": "width"
+          },
+          "height": {
+            "value": 52
+          }
+        }
+      },
+      "scales": [
+        {
+          "name": "band",
+          "type": "linear",
+          "domain": [
+            0,
+            25
+          ],
+          "range": [
+            52,
+            0
+          ],
+          "zero": true,
+          "nice": false
+        }
+      ],
+      "marks": [
+        {
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": -8
+              },
+              "text": {
+                "value": "Brisbane Lions"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fontWeight": {
+                "value": 600
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "name": "season_readout_4",
+          "type": "text",
+          "interactive": false,
+          "from": {
+            "data": "detail_4"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "signal": "width"
+              },
+              "y": {
+                "value": -8
+              },
+              "align": {
+                "value": "right"
+              },
+              "text": {
+                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 0
+              },
+              "width": {
+                "signal": "width"
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#eeeee3"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_first_4",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_4"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#a8bd9c"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_first_4",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_4"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#e6b494"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_second_4",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_4"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#31553b"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_second_4",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_4"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#c96636"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "type": "rule",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "detailSeason"
+              },
+              "y": {
+                "value": 0
+              },
+              "y2": {
+                "value": 52
+              },
+              "stroke": {
+                "value": "#21372b"
+              },
+              "strokeDash": {
+                "value": [
+                  3,
+                  3
+                ]
+              },
+              "strokeOpacity": {
+                "value": 0.65
+              }
+            }
+          }
+        },
+        {
+          "name": "season_targets",
+          "type": "rect",
+          "from": {
+            "data": "records_4"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "max(2012,datum.season-0.5)"
+              },
+              "x2": {
+                "scale": "year",
+                "signal": "min(2025,datum.season+0.5)"
+              },
+              "y": {
+                "value": 0
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "transparent"
+              },
+              "tooltip": {
+                "signal": "{'Club':datum.team,'Season':datum.season,'Games won':format(datum.wins/datum.played,'.1%'),'Record':datum.wins + ' wins / ' + datum.played + ' games','Ladder position':datum.rank}"
+              },
+              "description": {
+                "signal": "datum.team + ', ' + datum.season + ': ' + format(datum.wins/datum.played,'.1%') + ' games won'"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "horizon_row_5",
+      "type": "group",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 0
+          },
+          "y": {
+            "value": 500
+          },
+          "width": {
+            "signal": "width"
+          },
+          "height": {
+            "value": 52
+          }
+        }
+      },
+      "scales": [
+        {
+          "name": "band",
+          "type": "linear",
+          "domain": [
+            0,
+            25
+          ],
+          "range": [
+            52,
+            0
+          ],
+          "zero": true,
+          "nice": false
+        }
+      ],
+      "marks": [
+        {
+          "type": "text",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": -8
+              },
+              "text": {
+                "value": "West Coast"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fontWeight": {
+                "value": 600
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "name": "season_readout_5",
+          "type": "text",
+          "interactive": false,
+          "from": {
+            "data": "detail_5"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "signal": "width"
+              },
+              "y": {
+                "value": -8
+              },
+              "align": {
+                "value": "right"
+              },
+              "text": {
+                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+              },
+              "font": {
+                "value": "Helvetica Neue, Arial, sans-serif"
+              },
+              "fontSize": {
+                "value": 15
+              },
+              "fill": {
+                "value": "#21372b"
+              }
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "value": 0
+              },
+              "y": {
+                "value": 0
+              },
+              "width": {
+                "signal": "width"
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#eeeee3"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_first_5",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_5"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#a8bd9c"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_first_5",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_5"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_first"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#e6b494"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "below_second_5",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_5"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "below_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#31553b"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "above_second_5",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_5"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "above_second"
+              },
+              "y2": {
+                "value": 52
+              },
+              "fill": {
+                "value": "#c96636"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "type": "rule",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "detailSeason"
+              },
+              "y": {
+                "value": 0
+              },
+              "y2": {
+                "value": 52
+              },
+              "stroke": {
+                "value": "#21372b"
+              },
+              "strokeDash": {
+                "value": [
+                  3,
+                  3
+                ]
+              },
+              "strokeOpacity": {
+                "value": 0.65
+              }
+            }
+          }
+        },
+        {
+          "name": "season_targets",
+          "type": "rect",
+          "from": {
+            "data": "records_5"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "signal": "max(2012,datum.season-0.5)"
+              },
+              "x2": {
+                "scale": "year",
+                "signal": "min(2025,datum.season+0.5)"
+              },
+              "y": {
+                "value": 0
+              },
+              "height": {
+                "value": 52
+              },
+              "fill": {
+                "value": "transparent"
+              },
+              "tooltip": {
+                "signal": "{'Club':datum.team,'Season':datum.season,'Games won':format(datum.wins/datum.played,'.1%'),'Record':datum.wins + ' wins / ' + datum.played + ' games','Ladder position':datum.rank}"
+              },
+              "description": {
+                "signal": "datum.team + ', ' + datum.season + ': ' + format(datum.wins/datum.played,'.1%') + ' games won'"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

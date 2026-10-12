@@ -9,7 +9,7 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=81f9cc814a51">
+  <link rel="stylesheet" href="css/style.css?v=9bc01c374dbb">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -60,11 +60,10 @@
         <div class="pure-g two-up">
           <figure class="pure-u-1 pure-u-lg-1-2 chart-column">
 
-            <h3>Geelong spent ten seasons in the top four.</h3>
-            <p class="chart-deck">Each bar contains fourteen seasons. The darker segment shows how often a club finished near the top of the regular-season ladder.</p>
-            <div class="chart-legend"><span><i class="legend-square green"></i> Top four</span><span><i class="legend-square sage"></i> 5th–8th</span><span><i class="legend-square lower-ladder"></i> 9th–18th</span></div>
-            <div class="chart" data-spec="rank_profiles" aria-label="Stacked bars showing seasons in the top four, fifth to eighth and ninth to eighteenth for each club."></div>
-            <figcaption>These groups describe ladder positions, rather than actual finals participation. Essendon finished ninth in 2013 following its exclusion from finals.</figcaption>
+            <h3>Geelong claimed ten of the 56 top-four places.</h3>
+            <p class="chart-deck">Four clubs finish in the top four each season: 56 places over fourteen years. Geelong took ten of them, followed by Sydney with seven.</p>
+            <div class="chart" data-spec="top_four_treemap" aria-label="Treemap of 56 top-four ladder finishes across twelve clubs, with area proportional to the number of finishes. Geelong is highlighted in orange."></div>
+            <figcaption>Each rectangle’s area shows a club’s share of all top-four places; its number counts seasons. Orange highlights Geelong. Only clubs with at least one top-four finish are included. Hover or tap for the full club name and seasons; narrow tiles use club abbreviations.</figcaption>
           </figure>
           <figure class="pure-u-1 pure-u-lg-1-2 chart-column">
 
@@ -188,16 +187,21 @@
 
       <section class="chapter final-chapter" aria-labelledby="chapter-four">
         <div class="section-intro pure-g"><div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-four">Club win rates rise and fall over time.</h2></div><div class="pure-u-1 pure-u-md-2-5 intro-copy"><p>One average can hide a changing club. Compare the spread of season results, then split the fourteen years into two equal periods.</p><p class="micro">A steady record can mean sustained success—or sustained struggle. Read consistency alongside performance.</p></div></div>
-        <figure class="figure-wide small-multiples-figure">
-          <h3>All six clubs had rises and falls in win rate.</h3>
+        <figure class="figure-wide horizon-figure">
+          <h3>Brisbane’s rise contrasts with West Coast’s decline.</h3>
           <p class="chart-deck">These six title-winning clubs were chosen to compare frequent finals appearances, repeated titles and the largest changes in win rate among premiership winners.</p>
           <ul class="micro">
             <li><strong>Geelong and Sydney:</strong> the most finals appearances, with 12 and 11 of 14 seasons respectively.</li>
             <li><strong>Hawthorn and Richmond:</strong> the most premierships, with three each.</li>
             <li><strong>Brisbane Lions and West Coast:</strong> the largest rise (+41.8 percentage points) and fall (−30.1 points) in win rate among title-winning clubs, comparing 2012–2018 with 2019–2025.</li>
           </ul>
-          <div class="chart" data-spec="club_small_multiples" aria-label="Small multiples of annual win rates for Geelong, Sydney, Hawthorn, Richmond, Brisbane Lions and West Coast, all on the same scales."></div>
-          <figcaption>These are selected case studies; the heatmap and boxplots include all eighteen clubs. Every panel uses the same 2012–2025 time axis and 0–100% win-rate scale. The dashed line marks 50% of regular-season games won. Hover or tap a line for the season record.</figcaption>
+          <div class="chart-legend horizon-legend" aria-label="Win rate relative to fifty percent">
+            <span><i class="legend-square sage"></i><i class="legend-square green"></i> Below 50%</span>
+            <span><i class="legend-square" style="background:#e6b494"></i><i class="legend-square orange"></i> Above 50%</span>
+          </div>
+          <p class="micro">Each strip folds the distance from 50% into two 25-percentage-point bands. Light colour shows the first band; darker colour adds the second. For example, 60% is light orange, while 80% adds dark orange. A blank point means exactly 50%.</p>
+          <div class="chart" data-spec="club_horizon" aria-label="Horizon chart of six clubs’ annual win rates relative to fifty percent. Orange shows above fifty percent, green below, and a darker folded band shows a distance greater than twenty-five percentage points. Hover or tap a season to compare the exact win rates across all six clubs."></div>
+          <figcaption>These six strips share the same years and colour bands. Hover or tap a season to move the guide and compare the six exact win rates above the strips. Colours describe performance relative to 50%, not change since the previous season. The heatmap and boxplots include all eighteen clubs.</figcaption>
         </figure>
         <div class="pure-g two-up"><figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Each club’s win rate varied from season to season.</h3><p class="chart-deck">The box covers the middle half of each club’s seasons. Its centre line marks the median—the middle result.</p><div class="chart" data-spec="season_boxplot" aria-label="Boxplots showing the distribution of season win rates for each club."></div><figcaption>The thin line stretches from the lowest to highest season win rate. A narrow box means the middle half of seasons were closer together.</figcaption></figure><figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Brisbane had the largest increase in win rate.</h3><p class="chart-deck">The Lions’ win rate rose by 41.8 percentage points between the two seven-season periods.</p><div class="chart-legend"><span><i class="legend-square orange"></i> Improved</span><span><i class="legend-square green"></i> Declined</span></div><div class="chart" data-spec="era_change" aria-label="Diverging bars showing the change in each club’s win rate from 2012–2018 to 2019–2025; bars to the right show improvement."></div><figcaption>Bars to the right show an increase in win rate; bars to the left show a decrease. Change = 2019–2025 rate minus 2012–2018 rate, in percentage points. Hover or tap for both period rates, each calculated from total wins and games played.</figcaption></figure></div>
         <figure class="figure-wide journey-figure">

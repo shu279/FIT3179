@@ -34,20 +34,6 @@ for(const from of [1,0])for(const to of [1,0]){
 }
 fs.writeFileSync(path.join(root,'data/finals_transition_totals.json'),JSON.stringify(transitionLinks,null,2)+'\n');
 
-save('rank_profiles',{
- description:'Number of seasons each club spent in the top four, fifth to eighth, or ninth to eighteenth on the regular-season ladder.',height:550,
- data:data('team_seasons'),
- transform:[{calculate:"datum.rank <= 4 ? 0 : datum.rank <= 8 ? 1 : 2",as:'band_order'}],
- mark:{type:'bar',stroke:'#f3f2e9',strokeWidth:1.5,size:20},
- encoding:{
-  y:field('team','nominal',{sort:order,axis:{title:null,ticks:false}}),
-  x:{aggregate:'count',type:'quantitative',stack:'zero',scale:{domain:[0,14]},axis:{title:'Seasons',values:[0,2,4,6,8,10,12,14]}},
-  color:field('band','nominal',{scale:{domain:['Top four','5th–8th','9th–18th'],range:[green,sage,'#d6dace']},legend:null}),
-  order:field('band_order'),
-  tooltip:[tip('team','Club'),tip('band','Ladder group'),{aggregate:'count',type:'quantitative',title:'Seasons'}]
- }
-});
-
 save('rank_changes',{
  description:'Distribution of 234 year-to-year ladder changes across 18 clubs and 13 consecutive-season pairs. Positive values indicate improvement.',height:340,
  data:data('season_transitions'),
@@ -155,19 +141,8 @@ saveMultiple('ladder_bump',{
  ]
 });
 
-// Week 10: one shared template, split into club panels with fixed comparison scales.
-// Case studies: the two finals leaders, the two title leaders, and the largest
-// rise/fall in pooled win rate among title winners (2012–2018 versus 2019–2025).
-const panelTeams=['Geelong','Sydney','Hawthorn','Richmond','Brisbane Lions','West Coast'];
-saveMultiple('club_small_multiples',{
- description:'Six selected case studies: Geelong and Sydney had the most finals appearances; Hawthorn and Richmond won the most titles; Brisbane Lions and West Coast had the largest rise and fall in pooled win rate among premiership winners, comparing 2012–2018 with 2019–2025. All panels share 2012–2025, a 0–100% win-rate scale and a 50% reference line.',
- data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:panelTeams}}],
- facet:{field:'team',type:'nominal',sort:panelTeams,header:{title:null,labelOrient:'top',labelAnchor:'start',labelPadding:10}},columns:3,spacing:30,
- spec:{width:280,height:155,layer:[
-  {data:{values:[{}]},mark:{type:'rule',color:'#9aa58e',strokeDash:[4,4]},encoding:{y:{datum:50}}},
-  {mark:{type:'line',color:green,strokeWidth:2.5},encoding:{x:field('season','quantitative',{scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:[2012,2018,2025],grid:false}}),y:field('win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:null,values:[0,50,100],labelExpr:"datum.value + '%'"}}),tooltip:[tip('team','Club'),tip('season','Season','d'),tip('win_rate','Games won (%)','.1f'),tip('rank','Ladder position')]}}
- ]}
-});
+// Two distinct advanced idioms replace stacked bars and repeated line panels.
+require('./create-advanced-specs.cjs')({root,seasons,ink,green,orange,sage});
 
 // Week 8/10 map layers and coordinated time controls.
 require('./create-map-specs.cjs')({base,config,multiConfig,ink,green,orange});

@@ -165,13 +165,51 @@ async function main(){
        assert.ok(!/\bNaN\b|\bInfinity\b/.test(await view.toSVG()));
        await view.signal('mapZoom',1).signal('mapCentre',[0,-28]).runAsync();
      }
-     if(name==='club_small_multiples.json'){
-       const panels=items(view,item=>item.mark?.name==='cell'&&item.datum?.team);
-       assert.equal(panels.length,6,'One panel per selected club');
-       assert.deepEqual(view.scale('x').domain(),[2012,2025]);
-       assert.deepEqual(view.scale('y').domain(),[0,100]);
-       const lines=items(view,item=>item.mark?.marktype==='line'&&item.datum?.team);
-       assert.equal(lines.length,6*14,'Every club retains all fourteen seasons');
+     if(name==='top_four_treemap.json'){
+       const leaves=view.data('leaves');
+       assert.equal(leaves.length,12);assert.equal(sum(leaves,'count'),56);
+       const totalArea=view.width()*view.height();
+       for(const d of leaves){
+         const records=rows.filter(r=>r.team===d.team&&r.rank<=4);
+         assert.equal(d.count,records.length);
+         assert.equal(d.years,records.map(r=>r.season).join(', '));
+         assert.ok(Math.abs((d.x1-d.x0)*(d.y1-d.y0)/totalArea-d.count/56)<1e-8,'Tile area is proportional to top-four finishes');
+         assert.ok(d.x0>=0&&d.x1<=view.width()+1e-8&&d.y0>=0&&d.y1<=view.height()+1e-8);
+       }
+       assert.equal(leaves.find(d=>d.team==='Geelong').count,10);
+       const tiles=items(view,item=>item.mark?.name==='top_four_tiles');
+       assert.equal(tiles.length,12);
+       assert.equal(tiles.filter(t=>t.fill==='#c96636').length,1);
+     }
+     if(name==='club_horizon.json'){
+       const teams=['Geelong','Sydney','Hawthorn','Richmond','Brisbane Lions','West Coast'];
+       const curves=view.data('curves'),records=view.data('records');
+       assert.equal(records.length,84);assert.equal(curves.filter(d=>d.observed).length,84);
+       assert.deepEqual(view.scale('year').domain(),[2012,2025]);
+       for(const d of curves){
+         const observed=rows.find(r=>r.team===d.team&&r.season===d.season);
+         if(d.observed)assert.equal(d.rate,observed.wins/observed.played*100);
+         else{
+           assert.ok([25,50,75].includes(d.rate),'Drawing-only points are fold crossings');
+           const before=rows.find(r=>r.team===d.team&&r.season===Math.floor(d.season));
+           const after=rows.find(r=>r.team===d.team&&r.season===Math.ceil(d.season));
+           const interpolated=before.wins/before.played*100+(after.wins/after.played-before.wins/before.played)*100*(d.season-before.season);
+           assert.ok(Math.abs(interpolated-d.rate)<1e-8);
+         }
+         for(const field of ['above_first','above_second','below_first','below_second'])assert.ok(d[field]>=0&&d[field]<=25);
+         assert.ok(Math.abs(50+d.above_first+d.above_second-d.below_first-d.below_second-d.rate)<1e-8,'Folding preserves the exact win rate');
+         assert.ok(!(d.above_first&&d.below_first),'Positive and negative bands never overlap');
+       }
+       assert.equal(items(view,item=>item.mark?.name==='season_targets').length,84,'Only observed seasons are interactive');
+       for(const season of [2012,2018,2025]){
+         await view.signal('detailSeason',season).runAsync();
+         for(let i=0;i<teams.length;i++){
+           const detail=view.data('detail_'+i);assert.equal(detail.length,1);
+           assert.equal(detail[0].team,teams[i]);assert.equal(detail[0].season,season);
+           const label=items(view,item=>item.mark?.name==='season_readout_'+i)[0];
+           assert.equal(label.text,`${season} · ${(detail[0].wins/detail[0].played*100).toFixed(1)}%`);
+         }
+       }
      }
      if(['ladder_heatmap.json','finals_frequency.json'].includes(name)){
        await view.signal('focusTeam','Geelong').runAsync();assert.equal(view.signal('focusTeam'),'Geelong');
@@ -236,6 +274,6 @@ async function main(){
  await require('./validate-maps.cjs')({vega,vl,loader,root,read,rows,stateSeasons,cities,items});
  const total=fs.readdirSync(path.join(root,'data')).reduce((s,f)=>s+fs.statSync(path.join(root,'data',f)).size,0);
  assert.ok(total<1000000,`Prepared data over budget: ${total}`);
- console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',streak_filter:'passed',legend_highlighting:'passed',brush_aggregates:'passed',year_map_joins:'passed',small_multiples:'passed',data_bytes:total,charts:report},null,2));
+ console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',streak_filter:'passed',legend_highlighting:'passed',brush_aggregates:'passed',year_map_joins:'passed',horizon_folding:'passed',treemap_areas:'passed',data_bytes:total,charts:report},null,2));
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

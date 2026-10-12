@@ -1,0 +1,189 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "transparent",
+  "width": 700,
+  "autosize": {
+    "type": "none",
+    "contains": "padding",
+    "resize": true
+  },
+  "height": 475,
+  "padding": 4,
+  "description": "Treemap of the 56 top-four ladder places across 2012–2025. Rectangle area is proportional to each club’s count. Geelong, the largest contributor, is orange. Only the twelve clubs with a top-four finish are shown.",
+  "data": [
+    {
+      "name": "tree",
+      "url": "data/top_four_finishes.json?v=4d03b5e3b617",
+      "transform": [
+        {
+          "type": "stratify",
+          "key": "id",
+          "parentKey": "parent"
+        },
+        {
+          "type": "treemap",
+          "field": "count",
+          "sort": {
+            "field": "value",
+            "order": "descending"
+          },
+          "method": "squarify",
+          "ratio": 1.3,
+          "size": [
+            {
+              "signal": "width"
+            },
+            {
+              "signal": "height"
+            }
+          ],
+          "round": false,
+          "padding": 0
+        }
+      ]
+    },
+    {
+      "name": "leaves",
+      "source": "tree",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.depth === 1"
+        },
+        {
+          "type": "formula",
+          "as": "display_label",
+          "expr": "datum.x1-datum.x0 - (datum.y1-datum.y0 < 80 && datum.x1-datum.x0 >= 90 ? 54 : datum.x1-datum.x0 < 64 ? 8 : 20) >= length(datum.team)*8 ? datum.team : datum.y1-datum.y0 > 95 && datum.x1-datum.x0 - (datum.y1-datum.y0 < 80 && datum.x1-datum.x0 >= 90 ? 54 : datum.x1-datum.x0 < 64 ? 8 : 20) >= datum.longest_word*8 ? datum.label : datum.abbreviation"
+        },
+        {
+          "type": "formula",
+          "as": "label_lines",
+          "expr": "length(split(datum.display_label,'\\n'))"
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "name": "top_four_tiles",
+      "type": "rect",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "field": "x0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y": {
+            "field": "y0"
+          },
+          "y2": {
+            "field": "y1"
+          },
+          "fill": {
+            "signal": "datum.team === 'Geelong' ? '#c96636' : '#31553b'"
+          },
+          "stroke": {
+            "value": "#f3f2e9"
+          },
+          "strokeWidth": {
+            "value": 3
+          },
+          "tooltip": {
+            "signal": "{'Club':datum.team,'Top-four finishes':datum.count + ' of 14 seasons','Share of all 56 top-four places':format(datum.count / 56,'.1%'),'Seasons':datum.years}"
+          },
+          "description": {
+            "signal": "datum.team + ': ' + datum.count + ' top-four finishes, in ' + datum.years"
+          }
+        },
+        "hover": {
+          "fillOpacity": {
+            "value": 0.85
+          }
+        }
+      }
+    },
+    {
+      "name": "top_four_counts",
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 10"
+          },
+          "y": {
+            "signal": "datum.y1-datum.y0 < 80 && datum.x1-datum.x0 >= 90 ? (datum.y0+datum.y1)/2 : datum.y0+8"
+          },
+          "baseline": {
+            "signal": "datum.y1-datum.y0 < 80 && datum.x1-datum.x0 >= 90 ? 'middle' : 'top'"
+          },
+          "text": {
+            "field": "count"
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "signal": "datum.y1-datum.y0 < 80 && datum.x1-datum.x0 >= 90 ? 22 : 26"
+          },
+          "fontWeight": {
+            "value": 600
+          },
+          "fill": {
+            "signal": "datum.team === 'Geelong' ? '#21372b' : '#ffffff'"
+          }
+        }
+      }
+    },
+    {
+      "name": "top_four_clubs",
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x1-datum.x0 < 64 ? (datum.x0+datum.x1)/2 : datum.x0 + (datum.y1-datum.y0 < 80 && datum.x1-datum.x0 >= 90 ? 44 : 10)"
+          },
+          "align": {
+            "signal": "datum.x1-datum.x0 < 64 ? 'center' : 'left'"
+          },
+          "y": {
+            "signal": "datum.y1-datum.y0 < 80 && datum.x1-datum.x0 >= 90 ? (datum.y0+datum.y1)/2 : datum.y1 - 10 - (datum.label_lines-1)*18"
+          },
+          "baseline": {
+            "signal": "datum.y1-datum.y0 < 80 && datum.x1-datum.x0 >= 90 ? 'middle' : 'bottom'"
+          },
+          "text": {
+            "field": "display_label"
+          },
+          "lineBreak": {
+            "value": "\n"
+          },
+          "lineHeight": {
+            "value": 18
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fill": {
+            "signal": "datum.team === 'Geelong' ? '#21372b' : '#ffffff'"
+          }
+        }
+      }
+    }
+  ]
+}
