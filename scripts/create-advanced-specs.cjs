@@ -63,22 +63,14 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
   });
  }
  write('data/club_win_rate_horizon.json',curves);
- const rowNotes=[
-  '12/14 finals seasons',
-  '11/14 finals seasons',
-  '3 titles, 2013–2015',
-  '3 titles, 2017/19/20',
-  'Largest rise: +41.8 pp',
-  'Largest fall: −30.1 pp'
- ];
  const horizonTip="{'Club':datum.team,'Season':datum.season,'Games won':format(datum.wins/datum.played,'.1%'),'Record':datum.wins + ' wins / ' + datum.played + ' games','Ladder position':datum.rank}";
  write('js/club_horizon.json',{
-  ...base,height:468,padding:{top:4,left:4,right:4,bottom:32},
-  description:'Six small-multiple area charts show annual win rates on the same 0–100% scale. Dark-green height is directly proportional to games won; the pale-green remainder completes 100%. Club names and percentages flank each strip. Compact row notes identify the six case studies. All six strips count as one chart. Hover reports real season records.',
+  ...base,height:324,padding:{top:4,left:4,right:4,bottom:32},
+  description:'Six small-multiple area charts show annual win rates on the same 0–100% scale. Dark-green height is directly proportional to games won; the pale-green remainder completes 100%. Club names and percentages flank each compact strip. All six strips count as one chart. Hover reports real season records.',
   signals:[
    {name:'detailSeason',value:2025,on:[{events:'@season_targets:pointermove, @season_targets:click',update:'datum.season'}]},
    {name:'compact',update:'width < 650'},
-   {name:'plotLeft',update:'compact ? 104 : 184'},
+   {name:'plotLeft',update:'compact ? 104 : 128'},
    {name:'readoutWidth',value:58},
    {name:'plotWidth',update:'width - plotLeft - readoutWidth'}
   ],
@@ -95,11 +87,11 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
   axes:[{scale:'year',orient:'bottom',values:{signal:'plotWidth >= 700 ? sequence(2012,2026) : plotWidth >= 180 ? [2012,2018,2025] : [2012,2025]'},format:'d',domain:false,tickColor:'#cdd2c2',labelPadding:9,labelFont:font,labelFontSize:15,labelColor:ink,
    encode:{labels:{update:{align:{signal:"datum.value === 2012 ? 'left' : datum.value === 2025 ? 'right' : 'center'"}}}}}],
   marks:teams.map((team,i)=>({
-   name:'horizon_row_'+i,type:'group',encode:{update:{x:{value:0},y:{value:i*70+4},width:{signal:'width'},height:{value:44}}},
+   name:'horizon_row_'+i,type:'group',encode:{update:{x:{value:0},y:{value:i*48+4},width:{signal:'width'},height:{value:44}}},
    scales:[{name:'winRate',type:'linear',domain:[0,100],range:[38,6],zero:true,nice:false}],
    marks:[
     {name:'club_name_'+i,type:'text',interactive:false,encode:{update:{
-     x:{value:0},y:{signal:team==='Brisbane Lions'?'compact ? 14 : 13':'compact ? 22 : 13'},baseline:{value:'middle'},
+     x:{value:0},y:{signal:team==='Brisbane Lions'?'compact ? 14 : 22':'22'},baseline:{value:'middle'},
      text:{signal:'compact && '+JSON.stringify(team)+" === 'Brisbane Lions' ? 'Brisbane\\nLions' : "+JSON.stringify(team)},
      lineBreak:{value:'\n'},lineHeight:{value:17},font:{value:font},fontSize:{value:15},fontWeight:{value:600},fill:{value:ink}
     }}},
@@ -111,18 +103,6 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
      x:{scale:'year',field:'season'},y:{scale:'winRate',field:'rate'},y2:{value:38},fill:{value:green},interpolate:{value:'linear'}
     }}},
     {type:'rule',interactive:false,encode:{update:{x:{scale:'year',signal:'detailSeason'},y:{value:6},y2:{value:38},stroke:{value:ink},strokeDash:{value:[3,3]},strokeOpacity:{value:0.65}}}},
-    {name:'club_story_note_'+i,type:'text',interactive:false,encode:{update:{
-     x:{value:0},y:{signal:'compact ? 49 : 27'},baseline:{value:'top'},text:{value:rowNotes[i]},
-     lineBreak:{value:'\n'},lineHeight:{value:18},font:{value:font},fontSize:{value:15},fill:{value:ink}
-    }}},
-    {name:'club_story_leader_'+i,type:'rule',interactive:false,encode:{update:{
-     x:{signal:'compact ? 168 : plotLeft - 22'},y:{signal:'compact ? 55 : 35'},
-     x2:{signal:'compact ? plotLeft + plotWidth / 2 : plotLeft - 4'},y2:{signal:'compact ? 41 : 35'},stroke:{value:ink},strokeWidth:{value:1}
-    }}},
-    {name:'club_story_arrow_'+i,type:'symbol',interactive:false,encode:{update:{
-     x:{signal:'compact ? plotLeft + plotWidth / 2 : plotLeft - 4'},y:{signal:'compact ? 41 : 35'},
-     shape:{value:'triangle-up'},size:{value:35},angle:{signal:'compact ? atan2(-14, plotLeft + plotWidth / 2 - 168) * 180 / PI + 90 : 90'},fill:{value:ink}
-    }}},
     {name:'season_targets',type:'rect',from:{data:'records_'+i},encode:{update:{
      x:{scale:'year',signal:'max(2012,datum.season-0.5)'},x2:{scale:'year',signal:'min(2025,datum.season+0.5)'},y:{value:0},height:{value:44},fill:{value:'transparent'},tooltip:{signal:horizonTip},
      description:{signal:"datum.team + ', ' + datum.season + ': ' + format(datum.wins/datum.played,'.1%') + ' games won'"}

@@ -7,14 +7,14 @@
     "contains": "padding",
     "resize": true
   },
-  "height": 468,
+  "height": 324,
   "padding": {
     "top": 4,
     "left": 4,
     "right": 4,
     "bottom": 32
   },
-  "description": "Six small-multiple area charts show annual win rates on the same 0–100% scale. Dark-green height is directly proportional to games won; the pale-green remainder completes 100%. Club names and percentages flank each strip. Compact row notes identify the six case studies. All six strips count as one chart. Hover reports real season records.",
+  "description": "Six small-multiple area charts show annual win rates on the same 0–100% scale. Dark-green height is directly proportional to games won; the pale-green remainder completes 100%. Club names and percentages flank each compact strip. All six strips count as one chart. Hover reports real season records.",
   "signals": [
     {
       "name": "detailSeason",
@@ -32,7 +32,7 @@
     },
     {
       "name": "plotLeft",
-      "update": "compact ? 104 : 184"
+      "update": "compact ? 104 : 128"
     },
     {
       "name": "readoutWidth",
@@ -331,7 +331,7 @@
                 "value": 0
               },
               "y": {
-                "signal": "compact ? 22 : 13"
+                "signal": "22"
               },
               "baseline": {
                 "value": "middle"
@@ -483,96 +483,6 @@
           }
         },
         {
-          "name": "club_story_note_0",
-          "type": "text",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "value": 0
-              },
-              "y": {
-                "signal": "compact ? 49 : 27"
-              },
-              "baseline": {
-                "value": "top"
-              },
-              "text": {
-                "value": "12/14 finals seasons"
-              },
-              "lineBreak": {
-                "value": "\n"
-              },
-              "lineHeight": {
-                "value": 18
-              },
-              "font": {
-                "value": "Helvetica Neue, Arial, sans-serif"
-              },
-              "fontSize": {
-                "value": 15
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_leader_0",
-          "type": "rule",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? 168 : plotLeft - 22"
-              },
-              "y": {
-                "signal": "compact ? 55 : 35"
-              },
-              "x2": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y2": {
-                "signal": "compact ? 41 : 35"
-              },
-              "stroke": {
-                "value": "#21372b"
-              },
-              "strokeWidth": {
-                "value": 1
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_arrow_0",
-          "type": "symbol",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y": {
-                "signal": "compact ? 41 : 35"
-              },
-              "shape": {
-                "value": "triangle-up"
-              },
-              "size": {
-                "value": 35
-              },
-              "angle": {
-                "signal": "compact ? atan2(-14, plotLeft + plotWidth / 2 - 168) * 180 / PI + 90 : 90"
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
           "name": "season_targets",
           "type": "rect",
           "from": {
@@ -617,7 +527,7 @@
             "value": 0
           },
           "y": {
-            "value": 74
+            "value": 52
           },
           "width": {
             "signal": "width"
@@ -654,7 +564,7 @@
                 "value": 0
               },
               "y": {
-                "signal": "compact ? 22 : 13"
+                "signal": "22"
               },
               "baseline": {
                 "value": "middle"
@@ -806,96 +716,6 @@
           }
         },
         {
-          "name": "club_story_note_1",
-          "type": "text",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "value": 0
-              },
-              "y": {
-                "signal": "compact ? 49 : 27"
-              },
-              "baseline": {
-                "value": "top"
-              },
-              "text": {
-                "value": "11/14 finals seasons"
-              },
-              "lineBreak": {
-                "value": "\n"
-              },
-              "lineHeight": {
-                "value": 18
-              },
-              "font": {
-                "value": "Helvetica Neue, Arial, sans-serif"
-              },
-              "fontSize": {
-                "value": 15
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_leader_1",
-          "type": "rule",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? 168 : plotLeft - 22"
-              },
-              "y": {
-                "signal": "compact ? 55 : 35"
-              },
-              "x2": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y2": {
-                "signal": "compact ? 41 : 35"
-              },
-              "stroke": {
-                "value": "#21372b"
-              },
-              "strokeWidth": {
-                "value": 1
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_arrow_1",
-          "type": "symbol",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y": {
-                "signal": "compact ? 41 : 35"
-              },
-              "shape": {
-                "value": "triangle-up"
-              },
-              "size": {
-                "value": 35
-              },
-              "angle": {
-                "signal": "compact ? atan2(-14, plotLeft + plotWidth / 2 - 168) * 180 / PI + 90 : 90"
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
           "name": "season_targets",
           "type": "rect",
           "from": {
@@ -940,7 +760,7 @@
             "value": 0
           },
           "y": {
-            "value": 144
+            "value": 100
           },
           "width": {
             "signal": "width"
@@ -977,7 +797,7 @@
                 "value": 0
               },
               "y": {
-                "signal": "compact ? 22 : 13"
+                "signal": "22"
               },
               "baseline": {
                 "value": "middle"
@@ -1129,96 +949,6 @@
           }
         },
         {
-          "name": "club_story_note_2",
-          "type": "text",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "value": 0
-              },
-              "y": {
-                "signal": "compact ? 49 : 27"
-              },
-              "baseline": {
-                "value": "top"
-              },
-              "text": {
-                "value": "3 titles, 2013–2015"
-              },
-              "lineBreak": {
-                "value": "\n"
-              },
-              "lineHeight": {
-                "value": 18
-              },
-              "font": {
-                "value": "Helvetica Neue, Arial, sans-serif"
-              },
-              "fontSize": {
-                "value": 15
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_leader_2",
-          "type": "rule",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? 168 : plotLeft - 22"
-              },
-              "y": {
-                "signal": "compact ? 55 : 35"
-              },
-              "x2": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y2": {
-                "signal": "compact ? 41 : 35"
-              },
-              "stroke": {
-                "value": "#21372b"
-              },
-              "strokeWidth": {
-                "value": 1
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_arrow_2",
-          "type": "symbol",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y": {
-                "signal": "compact ? 41 : 35"
-              },
-              "shape": {
-                "value": "triangle-up"
-              },
-              "size": {
-                "value": 35
-              },
-              "angle": {
-                "signal": "compact ? atan2(-14, plotLeft + plotWidth / 2 - 168) * 180 / PI + 90 : 90"
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
           "name": "season_targets",
           "type": "rect",
           "from": {
@@ -1263,7 +993,7 @@
             "value": 0
           },
           "y": {
-            "value": 214
+            "value": 148
           },
           "width": {
             "signal": "width"
@@ -1300,7 +1030,7 @@
                 "value": 0
               },
               "y": {
-                "signal": "compact ? 22 : 13"
+                "signal": "22"
               },
               "baseline": {
                 "value": "middle"
@@ -1452,96 +1182,6 @@
           }
         },
         {
-          "name": "club_story_note_3",
-          "type": "text",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "value": 0
-              },
-              "y": {
-                "signal": "compact ? 49 : 27"
-              },
-              "baseline": {
-                "value": "top"
-              },
-              "text": {
-                "value": "3 titles, 2017/19/20"
-              },
-              "lineBreak": {
-                "value": "\n"
-              },
-              "lineHeight": {
-                "value": 18
-              },
-              "font": {
-                "value": "Helvetica Neue, Arial, sans-serif"
-              },
-              "fontSize": {
-                "value": 15
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_leader_3",
-          "type": "rule",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? 168 : plotLeft - 22"
-              },
-              "y": {
-                "signal": "compact ? 55 : 35"
-              },
-              "x2": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y2": {
-                "signal": "compact ? 41 : 35"
-              },
-              "stroke": {
-                "value": "#21372b"
-              },
-              "strokeWidth": {
-                "value": 1
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_arrow_3",
-          "type": "symbol",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y": {
-                "signal": "compact ? 41 : 35"
-              },
-              "shape": {
-                "value": "triangle-up"
-              },
-              "size": {
-                "value": 35
-              },
-              "angle": {
-                "signal": "compact ? atan2(-14, plotLeft + plotWidth / 2 - 168) * 180 / PI + 90 : 90"
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
           "name": "season_targets",
           "type": "rect",
           "from": {
@@ -1586,7 +1226,7 @@
             "value": 0
           },
           "y": {
-            "value": 284
+            "value": 196
           },
           "width": {
             "signal": "width"
@@ -1623,7 +1263,7 @@
                 "value": 0
               },
               "y": {
-                "signal": "compact ? 14 : 13"
+                "signal": "compact ? 14 : 22"
               },
               "baseline": {
                 "value": "middle"
@@ -1775,96 +1415,6 @@
           }
         },
         {
-          "name": "club_story_note_4",
-          "type": "text",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "value": 0
-              },
-              "y": {
-                "signal": "compact ? 49 : 27"
-              },
-              "baseline": {
-                "value": "top"
-              },
-              "text": {
-                "value": "Largest rise: +41.8 pp"
-              },
-              "lineBreak": {
-                "value": "\n"
-              },
-              "lineHeight": {
-                "value": 18
-              },
-              "font": {
-                "value": "Helvetica Neue, Arial, sans-serif"
-              },
-              "fontSize": {
-                "value": 15
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_leader_4",
-          "type": "rule",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? 168 : plotLeft - 22"
-              },
-              "y": {
-                "signal": "compact ? 55 : 35"
-              },
-              "x2": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y2": {
-                "signal": "compact ? 41 : 35"
-              },
-              "stroke": {
-                "value": "#21372b"
-              },
-              "strokeWidth": {
-                "value": 1
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_arrow_4",
-          "type": "symbol",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y": {
-                "signal": "compact ? 41 : 35"
-              },
-              "shape": {
-                "value": "triangle-up"
-              },
-              "size": {
-                "value": 35
-              },
-              "angle": {
-                "signal": "compact ? atan2(-14, plotLeft + plotWidth / 2 - 168) * 180 / PI + 90 : 90"
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
           "name": "season_targets",
           "type": "rect",
           "from": {
@@ -1909,7 +1459,7 @@
             "value": 0
           },
           "y": {
-            "value": 354
+            "value": 244
           },
           "width": {
             "signal": "width"
@@ -1946,7 +1496,7 @@
                 "value": 0
               },
               "y": {
-                "signal": "compact ? 22 : 13"
+                "signal": "22"
               },
               "baseline": {
                 "value": "middle"
@@ -2093,96 +1643,6 @@
               },
               "strokeOpacity": {
                 "value": 0.65
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_note_5",
-          "type": "text",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "value": 0
-              },
-              "y": {
-                "signal": "compact ? 49 : 27"
-              },
-              "baseline": {
-                "value": "top"
-              },
-              "text": {
-                "value": "Largest fall: −30.1 pp"
-              },
-              "lineBreak": {
-                "value": "\n"
-              },
-              "lineHeight": {
-                "value": 18
-              },
-              "font": {
-                "value": "Helvetica Neue, Arial, sans-serif"
-              },
-              "fontSize": {
-                "value": 15
-              },
-              "fill": {
-                "value": "#21372b"
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_leader_5",
-          "type": "rule",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? 168 : plotLeft - 22"
-              },
-              "y": {
-                "signal": "compact ? 55 : 35"
-              },
-              "x2": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y2": {
-                "signal": "compact ? 41 : 35"
-              },
-              "stroke": {
-                "value": "#21372b"
-              },
-              "strokeWidth": {
-                "value": 1
-              }
-            }
-          }
-        },
-        {
-          "name": "club_story_arrow_5",
-          "type": "symbol",
-          "interactive": false,
-          "encode": {
-            "update": {
-              "x": {
-                "signal": "compact ? plotLeft + plotWidth / 2 : plotLeft - 4"
-              },
-              "y": {
-                "signal": "compact ? 41 : 35"
-              },
-              "shape": {
-                "value": "triangle-up"
-              },
-              "size": {
-                "value": 35
-              },
-              "angle": {
-                "signal": "compact ? atan2(-14, plotLeft + plotWidth / 2 - 168) * 180 / PI + 90 : 90"
-              },
-              "fill": {
-                "value": "#21372b"
               }
             }
           }
