@@ -213,7 +213,7 @@
       "name": "journey_summary",
       "title": {
         "text": "Games won in the selected seasons",
-        "offset": 60
+        "offset": 14
       },
       "width": 900,
       "height": 145,

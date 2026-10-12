@@ -48,7 +48,6 @@ function initialiseReadingAnnotations(element, name) {
     return to;
   }
   const guides={
-    ladder_bump:[],
     state_choropleth:[
       {text:d=>`${d.finals} finalist${d.finals===1?'':'s'} / ${d.clubs} clubs`,at:target('.state_count_labels_marks text',d=>d?.state==='WA',.5,1)}
     ],
@@ -87,7 +86,7 @@ function initialiseReadingAnnotations(element, name) {
     const stacked=lengths.reduce((a,b)=>a+b,0)+annotations.length*20>width;
     if(!stacked&&!map)annotations.sort((a,b)=>a.at.x-b.at.x);
     const histogramInset=name==='rank_changes'&&width>=600;
-    const top=map||histogramInset||name==='ladder_bump'?0:stacked?annotations.length*25+24:62;
+    const top=map||histogramInset?0:stacked?annotations.length*25+24:62;
     element.style.paddingTop=top+'px';
     const mapFooter=map&&width<650;
     element.style.paddingBottom=mapFooter?(annotations.length*26+24)+'px':'0px';
@@ -129,15 +128,6 @@ function initialiseReadingAnnotations(element, name) {
       if(a.also){const second=a.also();if(second)arrow(from,second,lane);}
     });
     nodes.forEach(({t})=>overlay.append(t));
-    if(name==='ladder_bump'){
-      const bar=target('.journey_bars_marks path',team('Geelong'),.8,0)();
-      if(bar){
-        const text=label('Length = wins ÷ games',Math.max(4,bar.x-152),bar.y-36);
-        const box=text.getBBox();
-        arrow({x:box.x+box.width/2,y:box.y+box.height+6},bar);
-        overlay.append(text);
-      }
-    }
   }
   function schedule(){cancelAnimationFrame(frame);frame=requestAnimationFrame(draw);}
   const source=element.querySelector('.vega-embed svg');

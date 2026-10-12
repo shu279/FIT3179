@@ -15,12 +15,7 @@ function chartLayout(spec, availableWidth) {
     const panels = journey ? spec.vconcat.flatMap(view=>view.hconcat||[view]) : spec.vconcat;
     panels.forEach(view => {
       view.width = plotWidth;
-      if (journey) {
-        if(view.name!=='journey_overview'){
-          // Only the win-rate panel needs space for its reading note.
-          view.title.offset=view.name==='journey_summary'?60:14;
-        }
-      }
+      if(journey && view.name!=='journey_overview')view.title.offset=14;
     });
     if(journey){
       const detail=panels.find(view=>view.name==='journey_detail');
@@ -28,11 +23,6 @@ function chartLayout(spec, availableWidth) {
       const overview=panels.find(view=>view.name==='journey_overview');
       const sideBySide=available>=900;
       summary.height=sideBySide?260:145;
-      if(sideBySide){
-        summary.title.offset=14;
-        // Keep the reading note above the bars, within the shared plot height.
-        summary.encoding.y.scale.range=[46,260];
-      }else delete summary.encoding.y.scale.range;
       if(sideBySide){
         // Leave room for axes and the gap between panels.
         const plotBudget=available-225;
