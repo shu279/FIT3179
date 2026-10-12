@@ -152,33 +152,28 @@
       },
       "mark": {
         "type": "text",
-        "align": {
-          "expr": "width >= 300 ? 'center' : 'left'"
-        },
+        "align": "center",
         "baseline": "top",
-        "fontSize": {
-          "expr": "width >= 300 ? 18 : 15"
-        },
-        "lineHeight": {
-          "expr": "width >= 300 ? 24 : 19"
-        },
+        "lineHeight": 19,
         "lineBreak": "\n",
-        "color": "#21372b"
+        "color": "#21372b",
+        "fontSize": 15,
+        "fontWeight": "normal"
       },
       "encoding": {
         "x": {
           "value": {
-            "expr": "width >= 300 ? width * .24 : 3"
+            "expr": "width * .24"
           }
         },
         "y": {
           "value": {
-            "expr": "width >= 300 ? height * .16 : scale('y','Brisbane Lions') + 18"
+            "expr": "height * .16"
           }
         },
         "text": {
           "value": {
-            "expr": "width >= 300 ? 'Brisbane\\n+41.8 points' : 'Brisbane\\n+41.8\\npoints'"
+            "expr": "width >= 400 ? 'Brisbane +41.8 pp' : '+41.8 pp'"
           }
         },
         "tooltip": {
@@ -207,12 +202,12 @@
       "encoding": {
         "x": {
           "value": {
-            "expr": "width >= 300 ? width * .38 : width * .25"
+            "expr": "width * .24"
           }
         },
         "y": {
           "value": {
-            "expr": "width >= 300 ? height * .14 : scale('y','Brisbane Lions') + 13"
+            "expr": "height * .16 - 8"
           }
         },
         "x2": {
@@ -245,33 +240,28 @@
       },
       "mark": {
         "type": "text",
-        "align": {
-          "expr": "width >= 300 ? 'center' : 'left'"
-        },
+        "align": "center",
         "baseline": "top",
-        "fontSize": {
-          "expr": "width >= 300 ? 18 : 15"
-        },
-        "lineHeight": {
-          "expr": "width >= 300 ? 24 : 19"
-        },
+        "lineHeight": 19,
         "lineBreak": "\n",
-        "color": "#21372b"
+        "color": "#21372b",
+        "fontSize": 15,
+        "fontWeight": "normal"
       },
       "encoding": {
         "x": {
           "value": {
-            "expr": "width >= 300 ? width * .76 : width * .52"
+            "expr": "width * .76"
           }
         },
         "y": {
           "value": {
-            "expr": "width >= 300 ? height * .72 : scale('y','West Coast') - 65"
+            "expr": "height * .72"
           }
         },
         "text": {
           "value": {
-            "expr": "width < 200 ? 'West\\nCoast\\n−30.1 pts' : 'West Coast\\n−30.1 points'"
+            "expr": "width >= 400 ? 'West Coast −30.1 pp' : '−30.1 pp'"
           }
         },
         "tooltip": {
@@ -300,12 +290,12 @@
       "encoding": {
         "x": {
           "value": {
-            "expr": "width >= 300 ? width * .63 : width * .72"
+            "expr": "width * .76"
           }
         },
         "y": {
           "value": {
-            "expr": "width >= 300 ? height * .85 : scale('y','West Coast') + 8"
+            "expr": "height * .72 + 25"
           }
         },
         "x2": {

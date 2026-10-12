@@ -59,6 +59,17 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const borderLayer=()=>({name:'cultural_borders',data:borders,transform:[{filter:'showCultural'}],mark:{type:'geoshape',clip:true,filled:false,stroke:'#748679',strokeWidth:0.8}});
  const stateLabels=[{state:'WA',lon:122,lat:-26},{state:'NT',lon:133,lat:-21},{state:'SA',lon:135,lat:-30},{state:'QLD',lon:145,lat:-22},{state:'NSW',lon:147,lat:-32},{state:'VIC',lon:143,lat:-36.7},{state:'TAS',lon:146.5,lat:-42}];
  const loc={longitude:{field:'longitude',type:'quantitative'},latitude:{field:'latitude',type:'quantitative'}};
+ // Keep explanatory leaders in screen pixels while following projected locations,
+ // including zoom, panning and changes to the selected season.
+ const px="geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0]";
+ const py="geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1]";
+ const calloutArrow=(name,source,dx,dy,tx,ty)=>[
+  {...source,name:name+'_leader',mark:{type:'rule',clip:true,color:ink,strokeWidth:1,aria:false},
+   encoding:{x:{value:{expr:px+' + ('+dx+')'}},y:{value:{expr:py+' + ('+dy+')'}},x2:{value:{expr:px+' + ('+tx+')'}},y2:{value:{expr:py+' + ('+ty+')'}}}},
+  {...source,name:name+'_arrow',mark:{type:'point',clip:true,shape:'triangle-up',filled:true,color:ink,size:35,opacity:1,aria:false,
+    angle:{expr:'atan2(('+ty+')-('+dy+'), ('+tx+')-('+dx+')) * 180 / PI + 90'}},
+   encoding:{x:{value:{expr:px+' + ('+tx+')'}},y:{value:{expr:py+' + ('+ty+')'}}}}
+ ];
  const cityLabels=(finalistsOnly=false)=>[
   // Shared-city matchups have their own city and club annotation.
   {name:'cultural_city_labels',data:table(finalistsOnly?'city_seasons':'cities'),transform:[...(finalistsOnly?[{filter:'datum.season === selectedSeason && datum.grand_finals === 1'}]:[]),{filter:"(width >= 500 || mapZoom >= 2) && showCultural && datum.city !== 'Geelong' && datum.city !== 'Gold Coast'"}],
@@ -113,7 +124,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const championTransform=[{filter:periodFilter},
   {joinaggregate:[{op:'distinct',field:'season',as:'visible_seasons'}]},
   {filter:'datum.visible_seasons === 1 && datum.premierships > 0'}];
- const championText={type:'text',clip:true,fontSize:15,fontWeight:600,lineHeight:18,
+ const championText={type:'text',clip:true,fontSize:15,fontWeight:'normal',lineHeight:18,
   align:{expr:"mapZoom > 1 ? 'center' : datum.city === 'Perth' ? 'left' : 'right'"},
   dx:{expr:"mapZoom > 1 ? 0 : datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"},
   dy:{expr:"mapZoom > 1 ? -54 : datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"}};
@@ -141,6 +152,11 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
       mark:{type:'point',clip:true,shape:'diamond',filled:true,size:180,color:orange,stroke:'#ffffff',strokeWidth:1},
       encoding:{...loc,tooltip:[{field:'season',type:'quantitative',format:'d',title:'Season'},{field:'premier',type:'nominal',title:'Premier'},{field:'city',type:'nominal',title:'Home city'}]}},
      ...cityLabels(),
+     ...calloutArrow('champion_annotation',{data:table('city_seasons'),transform:championTransform},
+      "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 11 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 29 : -11",
+      "mapZoom > 1 ? -24 : datum.city === 'Perth' ? -44 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 30 : -34) : -28",
+      "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3",
+      "mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 10 : -10"),
      {...championAnnotation,name:'champion_annotation_halo',mark:{...championText,fill:'#f3f2e9',stroke:'#f3f2e9',strokeWidth:4,aria:false}},
      {...championAnnotation,name:'champion_annotation',mark:{...championText,color:orange}}
     ]},
@@ -157,7 +173,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
   {filter:'datum.season === selectedSeason && datum.winner_city === datum.runner_city'},
   {lookup:'winner_city',from:{data:table('cities'),key:'city',fields:['longitude','latitude']}},
   {calculate:"['Same-city final: ' + datum.winner_city, datum.winner + ' (Premier)', datum.runner_up + ' (Runner-up)']",as:'matchup_label'}]};
- const sameCityText={type:'text',clip:true,align:'right',dx:{expr:'width < 500 ? 30 : -28'},dy:-94,fontSize:15,fontWeight:600,lineHeight:20};
+ const sameCityText={type:'text',clip:true,align:'right',dx:{expr:'width < 500 ? 30 : -28'},dy:-94,fontSize:15,fontWeight:'normal',lineHeight:20};
  save('grand_final_flows',{
   description:'A season-by-season connection map of the home cities of Grand Final opponents. A loop and direct club labels show opponents sharing the same home city. Lines and loops represent matchups, not travel.',
   usermeta:{layout:'connection-map'},
@@ -177,6 +193,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
      fill:{field:'result',type:'nominal',scale:{domain:['Runner-up','Premier'],range:['#f3f2e9',orange]},legend:null},stroke:{condition:{test:"datum.result === 'Premier'",value:orange},value:ink},
      tooltip:[{field:'team',type:'nominal',title:'Club'},{field:'result',type:'nominal',title:'Result'},{field:'city',type:'nominal',title:'Home city'}]}},
    ...cityLabels(true),
+   ...calloutArrow('same_city_annotation',sameCityMatchup,'width < 500 ? 30 : -22','-40','width < 500 ? 10 : -10','-10'),
    {...sameCityMatchup,name:'same_city_annotation_halo',mark:{...sameCityText,fill:'#f3f2e9',stroke:'#f3f2e9',strokeWidth:4,aria:false},encoding:{...loc,text:{field:'matchup_label',type:'nominal'}}},
    {...sameCityMatchup,name:'same_city_annotation',mark:{...sameCityText,color:ink},encoding:{...loc,text:{field:'matchup_label',type:'nominal'}}}]
  });

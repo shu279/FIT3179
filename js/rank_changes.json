@@ -70,14 +70,11 @@
         "type": "text",
         "align": "center",
         "baseline": "top",
-        "fontSize": {
-          "expr": "width >= 650 ? 22 : width >= 300 ? 18 : 16"
-        },
-        "lineHeight": {
-          "expr": "width >= 650 ? 28 : width >= 300 ? 23 : 20"
-        },
+        "lineHeight": 19,
         "lineBreak": "\n",
-        "color": "#21372b"
+        "color": "#21372b",
+        "fontSize": 15,
+        "fontWeight": "normal"
       },
       "encoding": {
         "x": {
@@ -92,7 +89,7 @@
         },
         "text": {
           "value": {
-            "expr": "width >= 650 ? '55% of yearly changes were within ±3 places.\\n129 of 234 club-season comparisons' : '55% of changes\\nwere within ±3 places.\\n129 of 234 comparisons'"
+            "expr": "width >= 500 ? '55% of yearly changes were within ±3 places (129 of 234).' : '55% stayed within ±3 places.'"
           }
         },
         "tooltip": {
@@ -126,7 +123,7 @@
         },
         "y": {
           "value": {
-            "expr": "width >= 650 ? 66 : width >= 300 ? 80 : 71"
+            "expr": "30"
           }
         },
         "x2": {
@@ -136,7 +133,7 @@
         },
         "y2": {
           "value": {
-            "expr": "scale('y',26)"
+            "expr": "scale('y',26) - 4"
           }
         },
         "tooltip": {
@@ -144,6 +141,40 @@
         },
         "opacity": {
           "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "rank_change_arrow",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "point",
+        "shape": "triangle-down",
+        "filled": true,
+        "color": "#21372b",
+        "size": 35,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',0) + bandwidth('x')/2"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y',26) - 4"
+          }
+        },
+        "tooltip": {
+          "value": null
         },
         "color": {
           "value": "#21372b"

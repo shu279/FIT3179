@@ -17,15 +17,16 @@ const save=(name,spec)=>fs.writeFileSync(path.join(root,'js',name+'.json'),JSON.
 const focus=[{name:'focusTeam',value:'All clubs'}];
 const focused={condition:{test:"focusTeam === 'All clubs' || datum.team === focusTeam",value:1},value:0.22};
 const years=[2012,2015,2018,2021,2025];
-// Notes use the available plot space; type size and line breaks adapt to its width.
-// Pass an expression instead of lines when a narrow plot needs shorter wording.
+// Explanatory notes match the 15px body copy at every width.
+// Shorten narrow-screen wording instead of shrinking or wrapping the text.
 const note=(name,lines,x,y,extra={})=>({
  name,data:{values:[{}]},
- mark:{type:'text',align:'left',baseline:'top',fontSize:15,lineHeight:19,lineBreak:'\n',color:ink,...extra},
+ mark:{type:'text',align:'left',baseline:'top',lineHeight:19,lineBreak:'\n',color:ink,...extra,fontSize:15,fontWeight:'normal'},
  encoding:{x:{value:{expr:x}},y:{value:{expr:y}},text:{value:Array.isArray(lines)?lines.join('\n'):lines},
   tooltip:{value:null},opacity:{value:1},color:{value:ink}}
 });
 const leader=(name,x,y,x2,y2)=>({name,data:{values:[{}]},mark:{type:'rule',color:ink,strokeWidth:1},encoding:{x:{value:{expr:x}},y:{value:{expr:y}},x2:{value:{expr:x2}},y2:{value:{expr:y2}},tooltip:{value:null},opacity:{value:1},color:{value:ink}}});
+const arrow=(name,x,y,shape)=>({name,data:{values:[{}]},mark:{type:'point',shape,filled:true,color:ink,size:35,opacity:1},encoding:{x:{value:{expr:x}},y:{value:{expr:y}},tooltip:{value:null},color:{value:ink}}});
 
 // Each observation compares the same club in consecutive completed seasons.
 const byClubSeason=new Map(seasons.map(d=>[`${d.id}:${d.season}`,d]));
@@ -47,8 +48,9 @@ save('rank_changes',{
  description:'Distribution of 234 year-to-year ladder changes across 18 clubs and 13 consecutive-season pairs. Positive values indicate improvement.',height:340,
  data:data('season_transitions'),
  layer:[{mark:{type:'bar',stroke:'#f3f2e9',strokeWidth:1}},
-  note('rank_change_note',{expr:"width >= 650 ? '55% of yearly changes were within ±3 places.\\n129 of 234 club-season comparisons' : '55% of changes\\nwere within ±3 places.\\n129 of 234 comparisons'"},'width / 2','6',{align:'center',fontSize:{expr:'width >= 650 ? 22 : width >= 300 ? 18 : 16'},lineHeight:{expr:'width >= 650 ? 28 : width >= 300 ? 23 : 20'}}),
-  leader('rank_change_leader','width / 2','width >= 650 ? 66 : width >= 300 ? 80 : 71',"scale('x',0) + bandwidth('x')/2", "scale('y',26)"),
+  note('rank_change_note',{expr:"width >= 500 ? '55% of yearly changes were within ±3 places (129 of 234).' : '55% stayed within ±3 places.'"},'width / 2','6',{align:'center'}),
+  leader('rank_change_leader','width / 2','30',"scale('x',0) + bandwidth('x')/2", "scale('y',26) - 4"),
+  arrow('rank_change_arrow',"scale('x',0) + bandwidth('x')/2","scale('y',26) - 4",'triangle-down'),
   leader('rank_change_bracket',"scale('x',-3)","scale('y',26)","scale('x',3) + bandwidth('x')","scale('y',26)"),
   leader('rank_change_bracket_left',"scale('x',-3)","scale('y',26)","scale('x',-3)","scale('y',25)"),
   leader('rank_change_bracket_right',"scale('x',3) + bandwidth('x')","scale('y',26)","scale('x',3) + bandwidth('x')","scale('y',25)")],
@@ -210,10 +212,10 @@ save('era_change',{
    tooltip:[tip('team','Club'),tip('early_rate','2012–2018 win rate (%)','.1f'),tip('recent_rate','2019–2025 win rate (%)','.1f'),tip('change','Change (percentage points)','+.1f')]
   }},
   {data:{values:[{}]},mark:{type:'rule',color:ink,strokeWidth:1.2},encoding:{x:{datum:0}}},
-  note('rise_note',{expr:"width >= 300 ? 'Brisbane\\n+41.8 points' : 'Brisbane\\n+41.8\\npoints'"},'width >= 300 ? width * .24 : 3',"width >= 300 ? height * .16 : scale('y','Brisbane Lions') + 18",{align:{expr:"width >= 300 ? 'center' : 'left'"},fontSize:{expr:'width >= 300 ? 18 : 15'},lineHeight:{expr:'width >= 300 ? 24 : 19'}}),
-  leader('rise_leader','width >= 300 ? width * .38 : width * .25',"width >= 300 ? height * .14 : scale('y','Brisbane Lions') + 13","scale('x',0) - 5","scale('y','Brisbane Lions') + bandwidth('y')/2"),
-  note('fall_note',{expr:"width < 200 ? 'West\\nCoast\\n−30.1 pts' : 'West Coast\\n−30.1 points'"},'width >= 300 ? width * .76 : width * .52',"width >= 300 ? height * .72 : scale('y','West Coast') - 65",{align:{expr:"width >= 300 ? 'center' : 'left'"},fontSize:{expr:'width >= 300 ? 18 : 15'},lineHeight:{expr:'width >= 300 ? 24 : 19'}}),
-  leader('fall_leader','width >= 300 ? width * .63 : width * .72',"width >= 300 ? height * .85 : scale('y','West Coast') + 8","scale('x',0) + 5","scale('y','West Coast') + bandwidth('y')/2"),
+  note('rise_note',{expr:"width >= 400 ? 'Brisbane +41.8 pp' : '+41.8 pp'"},'width * .24',"height * .16",{align:'center'}),
+  leader('rise_leader','width * .24',"height * .16 - 8","scale('x',0) - 5","scale('y','Brisbane Lions') + bandwidth('y')/2"),
+  note('fall_note',{expr:"width >= 400 ? 'West Coast −30.1 pp' : '−30.1 pp'"},'width * .76',"height * .72",{align:'center'}),
+  leader('fall_leader','width * .76',"height * .72 + 25","scale('x',0) + 5","scale('y','West Coast') + bandwidth('y')/2"),
   {name:'rise_arrow',data:{values:[{}]},mark:{type:'point',shape:'triangle-right',filled:true,color:ink,size:35},encoding:{x:{value:{expr:"scale('x',0)-5"}},y:{value:{expr:"scale('y','Brisbane Lions') + bandwidth('y')/2"}}}},
   {name:'fall_arrow',data:{values:[{}]},mark:{type:'point',shape:'triangle-left',filled:true,color:ink,size:35},encoding:{x:{value:{expr:"scale('x',0)+5"}},y:{value:{expr:"scale('y','West Coast') + bandwidth('y')/2"}}}}
  ]
@@ -292,15 +294,25 @@ save('premiership_bars',{
  description:'Horizontal bars show the nine premiership-winning clubs in 2012–2025, ordered by title count. Hawthorn and Richmond each won three titles and are highlighted in orange. Bar lengths start at zero; direct labels show the count and tooltips list winning years.',
  height:380,data:{url:'data/premiership_totals.json?v='+totalsVersion},
  encoding:{
-  y:field('team','nominal',{sort:titleTotals.map(d=>d.team),scale:{range:[0,{expr:'width < 350 ? height - 110 : height'}]},axis:{title:null,ticks:false,labelLimit:180}}),
+  y:field('team','nominal',{sort:titleTotals.map(d=>d.team),scale:{range:[0,{expr:'width < 500 ? height - 70 : height'}]},axis:{title:null,ticks:false,labelLimit:180}}),
   x:field('premierships','quantitative',{scale:{domain:[0,3],range:[0,{expr:'width - 24'}],nice:false},axis:{title:'Premierships',values:[0,1,2,3],format:'d',grid:false}}),
   tooltip:[tip('team','Club'),tip('premierships','Premierships'),{field:'title_years',type:'nominal',title:'Winning years'}]
  },
  layer:[
-  {name:'title_bars',mark:{type:'bar',size:26},encoding:{color:{condition:{test:'datum.premierships === 3',value:orange},value:green}}},
+  {name:'title_bars',mark:{type:'bar',size:{expr:"min(26, bandwidth('y') * .8)"}},encoding:{color:{condition:{test:'datum.premierships === 3',value:orange},value:green}}},
   {name:'title_counts',mark:{type:'text',align:'left',dx:8,fontSize:15,fontWeight:500,color:ink},encoding:{text:field('premierships')}},
   {name:'winning_years',transform:[{filter:'datum.premierships >= 2 && width >= 400'}],mark:{type:'text',align:'left',fontSize:15,color:'#ffffff'},encoding:{x:{value:10},text:field('title_years','nominal')}},
-  note('titles_note',{expr:"width >= 850 ? 'Hawthorn and Richmond won 6 of 14 titles.' : width >= 460 ? 'Hawthorn and Richmond\\nwon 6 of 14 titles.' : 'Hawthorn and\\nRichmond won\\n6 of 14 titles.'"},'width < 350 ? width / 2 : width * .68','width < 350 ? height - 85 : height * .6',{align:'center',fontSize:{expr:'width >= 460 ? 22 : width >= 180 ? 18 : 16'},lineHeight:{expr:'width >= 460 ? 29 : width >= 180 ? 24 : 21'}})
+  note('titles_note',{expr:"width >= 500 ? 'Hawthorn and Richmond won 6 of 14 titles.' : 'Together: 6 of 14 titles.'"},'width < 500 ? width - 8 : width * .68','width < 500 ? height - 35 : height * .6',{align:{expr:"width < 500 ? 'right' : 'center'"}}),
+  leader('titles_note_elbow','width < 500 ? width - 4 : width * .68','width < 500 ? height - 43 : height * .6 - 8','width - 4','width < 500 ? height - 43 : height * .6 - 8'),
+  leader('titles_leader','width - 4','width < 500 ? height - 43 : height * .6 - 8','width - 4',"scale('y','Hawthorn') + bandwidth('y') + 4"),
+  ...['Hawthorn','Richmond'].flatMap((team,i)=>{
+   const centre="scale('y','"+team+"') + bandwidth('y') / 2";
+   const gap="scale('y','"+team+"') + bandwidth('y') + 4";
+   const tip=centre+" + min(26, bandwidth('y') * .8) / 2 + 3";
+   return [leader('titles_branch_'+i,'width - 4',gap,"scale('x',3) - 12",gap),
+    leader('titles_stem_'+i,"scale('x',3) - 12",gap,"scale('x',3) - 12",tip),
+    arrow('titles_arrow_'+i,"scale('x',3) - 12",tip,'triangle-up')];
+  })
  ]
 });
 console.log('Created 15 chart specs.');

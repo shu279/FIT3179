@@ -720,6 +720,106 @@
             },
             {
               "filter": "datum.visible_seasons === 1 && datum.premierships > 0"
+            }
+          ],
+          "name": "champion_annotation_leader",
+          "mark": {
+            "type": "rule",
+            "clip": true,
+            "color": "#21372b",
+            "strokeWidth": 1,
+            "aria": false
+          },
+          "encoding": {
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 11 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 29 : -11)"
+              }
+            },
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (mapZoom > 1 ? -24 : datum.city === 'Perth' ? -44 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 30 : -34) : -28)"
+              }
+            },
+            "x2": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3)"
+              }
+            },
+            "y2": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 10 : -10)"
+              }
+            }
+          }
+        },
+        {
+          "data": {
+            "url": "data/city_seasons.json"
+          },
+          "transform": [
+            {
+              "filter": "usePeriod ? datum.season >= periodStart && datum.season <= periodEnd : datum.season === selectedSeason"
+            },
+            {
+              "joinaggregate": [
+                {
+                  "op": "distinct",
+                  "field": "season",
+                  "as": "visible_seasons"
+                }
+              ]
+            },
+            {
+              "filter": "datum.visible_seasons === 1 && datum.premierships > 0"
+            }
+          ],
+          "name": "champion_annotation_arrow",
+          "mark": {
+            "type": "point",
+            "clip": true,
+            "shape": "triangle-up",
+            "filled": true,
+            "color": "#21372b",
+            "size": 35,
+            "opacity": 1,
+            "aria": false,
+            "angle": {
+              "expr": "atan2((mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 10 : -10)-(mapZoom > 1 ? -24 : datum.city === 'Perth' ? -44 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 30 : -34) : -28), (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3)-(mapZoom > 1 ? 0 : datum.city === 'Perth' ? 11 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 29 : -11)) * 180 / PI + 90"
+            }
+          },
+          "encoding": {
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3)"
+              }
+            },
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 10 : -10)"
+              }
+            }
+          }
+        },
+        {
+          "data": {
+            "url": "data/city_seasons.json"
+          },
+          "transform": [
+            {
+              "filter": "usePeriod ? datum.season >= periodStart && datum.season <= periodEnd : datum.season === selectedSeason"
+            },
+            {
+              "joinaggregate": [
+                {
+                  "op": "distinct",
+                  "field": "season",
+                  "as": "visible_seasons"
+                }
+              ]
+            },
+            {
+              "filter": "datum.visible_seasons === 1 && datum.premierships > 0"
             },
             {
               "calculate": "[format(datum.season, 'd') + ' champions', datum.premier]",
@@ -745,7 +845,7 @@
             "type": "text",
             "clip": true,
             "fontSize": 15,
-            "fontWeight": 600,
+            "fontWeight": "normal",
             "lineHeight": 18,
             "align": {
               "expr": "mapZoom > 1 ? 'center' : datum.city === 'Perth' ? 'left' : 'right'"
@@ -806,7 +906,7 @@
             "type": "text",
             "clip": true,
             "fontSize": 15,
-            "fontWeight": 600,
+            "fontWeight": "normal",
             "lineHeight": 18,
             "align": {
               "expr": "mapZoom > 1 ? 'center' : datum.city === 'Perth' ? 'left' : 'right'"

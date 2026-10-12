@@ -567,6 +567,116 @@
           "as": "matchup_label"
         }
       ],
+      "name": "same_city_annotation_leader",
+      "mark": {
+        "type": "rule",
+        "clip": true,
+        "color": "#21372b",
+        "strokeWidth": 1,
+        "aria": false
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (width < 500 ? 30 : -22)"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (-40)"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (width < 500 ? 10 : -10)"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (-10)"
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/grand_finals.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.season === selectedSeason && datum.winner_city === datum.runner_city"
+        },
+        {
+          "lookup": "winner_city",
+          "from": {
+            "data": {
+              "url": "data/cities.json"
+            },
+            "key": "city",
+            "fields": [
+              "longitude",
+              "latitude"
+            ]
+          }
+        },
+        {
+          "calculate": "['Same-city final: ' + datum.winner_city, datum.winner + ' (Premier)', datum.runner_up + ' (Runner-up)']",
+          "as": "matchup_label"
+        }
+      ],
+      "name": "same_city_annotation_arrow",
+      "mark": {
+        "type": "point",
+        "clip": true,
+        "shape": "triangle-up",
+        "filled": true,
+        "color": "#21372b",
+        "size": 35,
+        "opacity": 1,
+        "aria": false,
+        "angle": {
+          "expr": "atan2((-10)-(-40), (width < 500 ? 10 : -10)-(width < 500 ? 30 : -22)) * 180 / PI + 90"
+        }
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (width < 500 ? 10 : -10)"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (-10)"
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/grand_finals.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.season === selectedSeason && datum.winner_city === datum.runner_city"
+        },
+        {
+          "lookup": "winner_city",
+          "from": {
+            "data": {
+              "url": "data/cities.json"
+            },
+            "key": "city",
+            "fields": [
+              "longitude",
+              "latitude"
+            ]
+          }
+        },
+        {
+          "calculate": "['Same-city final: ' + datum.winner_city, datum.winner + ' (Premier)', datum.runner_up + ' (Runner-up)']",
+          "as": "matchup_label"
+        }
+      ],
       "name": "same_city_annotation_halo",
       "mark": {
         "type": "text",
@@ -577,7 +687,7 @@
         },
         "dy": -94,
         "fontSize": 15,
-        "fontWeight": 600,
+        "fontWeight": "normal",
         "lineHeight": 20,
         "fill": "#f3f2e9",
         "stroke": "#f3f2e9",
@@ -635,7 +745,7 @@
         },
         "dy": -94,
         "fontSize": 15,
-        "fontWeight": 600,
+        "fontWeight": "normal",
         "lineHeight": 20,
         "color": "#21372b"
       },

@@ -128,6 +128,14 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
      x:{value:0},y:{signal:'compact ? 49 : 27'},baseline:{value:'top'},text:{value:rowNotes[i]},
      lineBreak:{value:'\n'},lineHeight:{value:18},font:{value:font},fontSize:{value:15},fill:{value:ink}
     }}},
+    {name:'club_story_leader_'+i,type:'rule',interactive:false,encode:{update:{
+     x:{signal:'compact ? 168 : plotLeft - 22'},y:{signal:'compact ? 55 : 35'},
+     x2:{signal:'compact ? plotLeft + plotWidth / 2 : plotLeft - 4'},y2:{signal:'compact ? 41 : 35'},stroke:{value:ink},strokeWidth:{value:1}
+    }}},
+    {name:'club_story_arrow_'+i,type:'symbol',interactive:false,encode:{update:{
+     x:{signal:'compact ? plotLeft + plotWidth / 2 : plotLeft - 4'},y:{signal:'compact ? 41 : 35'},
+     shape:{value:'triangle-up'},size:{value:35},angle:{signal:'compact ? atan2(-14, plotLeft + plotWidth / 2 - 168) * 180 / PI + 90 : 90'},fill:{value:ink}
+    }}},
     {name:'season_targets',type:'rect',from:{data:'records_'+i},encode:{update:{
      x:{scale:'year',signal:'max(2012,datum.season-0.5)'},x2:{scale:'year',signal:'min(2025,datum.season+0.5)'},y:{value:0},height:{value:44},fill:{value:'transparent'},tooltip:{signal:horizonTip},
      description:{signal:"datum.team + ', ' + datum.season + ': ' + format(datum.wins/datum.played,'.1%') + ' games won'"}

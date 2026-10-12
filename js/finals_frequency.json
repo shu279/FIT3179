@@ -358,10 +358,11 @@
         "type": "text",
         "align": "right",
         "baseline": "top",
-        "fontSize": 15,
         "lineHeight": 19,
         "lineBreak": "\n",
-        "color": "#21372b"
+        "color": "#21372b",
+        "fontSize": 15,
+        "fontWeight": "normal"
       },
       "encoding": {
         "x": {

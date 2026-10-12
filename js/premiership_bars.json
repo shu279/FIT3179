@@ -70,7 +70,7 @@
         "range": [
           0,
           {
-            "expr": "width < 350 ? height - 110 : height"
+            "expr": "width < 500 ? height - 70 : height"
           }
         ]
       },
@@ -131,7 +131,9 @@
       "name": "title_bars",
       "mark": {
         "type": "bar",
-        "size": 26
+        "size": {
+          "expr": "min(26, bandwidth('y') * .8)"
+        }
       },
       "encoding": {
         "color": {
@@ -192,31 +194,30 @@
       },
       "mark": {
         "type": "text",
-        "align": "center",
+        "align": {
+          "expr": "width < 500 ? 'right' : 'center'"
+        },
         "baseline": "top",
-        "fontSize": {
-          "expr": "width >= 460 ? 22 : width >= 180 ? 18 : 16"
-        },
-        "lineHeight": {
-          "expr": "width >= 460 ? 29 : width >= 180 ? 24 : 21"
-        },
+        "lineHeight": 19,
         "lineBreak": "\n",
-        "color": "#21372b"
+        "color": "#21372b",
+        "fontSize": 15,
+        "fontWeight": "normal"
       },
       "encoding": {
         "x": {
           "value": {
-            "expr": "width < 350 ? width / 2 : width * .68"
+            "expr": "width < 500 ? width - 8 : width * .68"
           }
         },
         "y": {
           "value": {
-            "expr": "width < 350 ? height - 85 : height * .6"
+            "expr": "width < 500 ? height - 35 : height * .6"
           }
         },
         "text": {
           "value": {
-            "expr": "width >= 850 ? 'Hawthorn and Richmond won 6 of 14 titles.' : width >= 460 ? 'Hawthorn and Richmond\\nwon 6 of 14 titles.' : 'Hawthorn and\\nRichmond won\\n6 of 14 titles.'"
+            "expr": "width >= 500 ? 'Hawthorn and Richmond won 6 of 14 titles.' : 'Together: 6 of 14 titles.'"
           }
         },
         "tooltip": {
@@ -224,6 +225,338 @@
         },
         "opacity": {
           "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_note_elbow",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width < 500 ? width - 4 : width * .68"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "width < 500 ? height - 43 : height * .6 - 8"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "width - 4"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "width < 500 ? height - 43 : height * .6 - 8"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_leader",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width - 4"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "width < 500 ? height - 43 : height * .6 - 8"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "width - 4"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') + 4"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_branch_0",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width - 4"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') + 4"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') + 4"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_stem_0",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') + 4"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') / 2 + min(26, bandwidth('y') * .8) / 2 + 3"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_arrow_0",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "point",
+        "shape": "triangle-up",
+        "filled": true,
+        "color": "#21372b",
+        "size": 35,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') / 2 + min(26, bandwidth('y') * .8) / 2 + 3"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_branch_1",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width - 4"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Richmond') + bandwidth('y') + 4"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Richmond') + bandwidth('y') + 4"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_stem_1",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Richmond') + bandwidth('y') + 4"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Richmond') + bandwidth('y') / 2 + min(26, bandwidth('y') * .8) / 2 + 3"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_arrow_1",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "point",
+        "shape": "triangle-up",
+        "filled": true,
+        "color": "#21372b",
+        "size": 35,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Richmond') + bandwidth('y') / 2 + min(26, bandwidth('y') * .8) / 2 + 3"
+          }
+        },
+        "tooltip": {
+          "value": null
         },
         "color": {
           "value": "#21372b"
