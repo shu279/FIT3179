@@ -27,9 +27,7 @@ function initialiseReadingAnnotations(element, name) {
   const guides={
     ladder_bump:[],
     state_choropleth:[
-      {text:'Darker green = higher finals share',at:target('.state_count_labels_marks text',d=>d?.state==='WA',.5,-1.2)},
-      {text:d=>`${d.finals} finalist${d.finals===1?'':'s'} / ${d.clubs} clubs`,at:target('.state_count_labels_marks text',d=>d?.state==='WA',.5,1)},
-      {text:'Grey = no clubs',at:target('.state_rates_marks path',d=>d?.state==='NT',.2,.3)}
+      {text:d=>`${d.finals} finalist${d.finals===1?'':'s'} / ${d.clubs} clubs`,at:target('.state_count_labels_marks text',d=>d?.state==='WA',.5,1)}
     ],
     premiership_symbols:[
       {text:()=>find('.city_symbols_marks path',d=>d?.city==='Perth')?.__data__?.datum?.season_count>1?'Area = average finalists per season':'Area = finalists per season',at:target('.city_symbols_marks path',d=>d?.city==='Perth',.2,1)},
