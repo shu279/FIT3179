@@ -86,10 +86,23 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .map-study .chart-actions button:disabled{opacity:.5;cursor:default}
 @media(max-width:700px){.map-with-legend{grid-template-columns:1fr;gap:12px}.map-legend{max-width:240px;margin-top:0}}
 
-/* City legends sit below the enlarged map; both scales retain vertical keys. */
-.city-map-legend{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;max-width:420px;margin:0}
-.city-map-legend .micro{margin:0 0 12px}
+/* Compact, fixed legends use the ocean space at the map's top left. */
+.city-map-study .map-story-visual{container-type:inline-size}
+.city-map-frame{position:relative}
+.city-map-frame .vega-bindings:empty{display:none}
+.city-map-legend{position:absolute;top:12px;left:36px;z-index:1;display:grid;grid-template-columns:max-content max-content;gap:12px;max-width:none;margin:0;pointer-events:none}
+.city-map-legend .micro{margin:0 0 4px;line-height:21px}
+.city-map-legend .map-rate-legend>span{min-height:22px;padding:0 0 0 28px;line-height:22px}
+.city-map-legend .map-rate-legend>span::before{width:18px}
 .city-map-legend .map-size-legend{margin:0}
+.city-map-legend .map-size-legend ul{gap:0}
+.city-map-legend .map-size-legend li{gap:4px}
+.city-map-tools{gap:8px 16px;margin:12px 0 8px}
+/* Narrow maps reserve an ocean-coloured strip so the key never hides a city. */
+@container(max-width:600px){
+ .city-map-legend{left:12px}
+ .city-map-frame{padding-top:154px;background:linear-gradient(#e4eff0 0 160px,transparent 160px)}
+}
 
 /* Keep prose to a short reading measure; chart labels carry the numerical story. */
 .hero-description,.chapter p,.chapter figcaption,.sources p,.sources li{max-width:48ch}

@@ -9,7 +9,7 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=11be595e1925">
+  <link rel="stylesheet" href="css/style.css?v=684451247fd6">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -114,7 +114,24 @@
             </div>
           </figcaption>
           <div class="map-story-visual">
-            <div class="chart" data-spec="premiership_symbols" aria-label="Proportional-symbol map of finalists by home city, with Single season and Compare period modes. Circle area shows finalists per season and colour shows finals rate."></div>
+            <div class="city-map-frame">
+              <div class="chart" data-spec="premiership_symbols" aria-label="Proportional-symbol map of finalists by home city, with Single season and Compare period modes. Circle area shows finalists per season and colour shows finals rate."></div>
+              <aside class="map-legend city-map-legend" aria-label="Map legends: finals rate and finalists per season">
+                <div>
+                  <p class="micro"><strong>Clubs reaching finals</strong></p>
+                  <div class="map-rate-legend"><span style="--swatch:#c1c6b7">0–&lt;30%</span><span style="--swatch:#a8bd9c">30–&lt;40%</span><span style="--swatch:#819978">40–&lt;50%</span><span style="--swatch:#587651">50–&lt;100%</span><span style="--swatch:#31553b">100%</span></div>
+                </div>
+                <div class="map-size-legend" role="group" aria-label="Circle size: finalists per season">
+                  <p class="micro"><strong>Finalists</strong></p>
+                  <!-- Three size examples retain the observed maximum of 4. Match Vega's area scale: radius = sqrt(2400 × count / 9) / 2. -->
+                  <ul>
+                    <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="8.165"/></svg><span>1</span></li>
+                    <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="11.547"/></svg><span>2</span></li>
+                    <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="16.33"/></svg><span>4</span></li>
+                  </ul>
+                </div>
+              </aside>
+            </div>
             <div class="city-map-tools">
               <fieldset class="city-time-mode" aria-label="City map time mode">
                 <label><input type="radio" name="city-time-mode" id="city-mode-single" value="single" checked disabled> Single season</label>
@@ -129,21 +146,6 @@
                 <div id="city-zoom-control" class="vega-bindings"></div>
               </div>
             </div>
-            <aside class="map-legend city-map-legend" aria-label="Map legends: finals rate and finalists per season">
-              <div>
-                <p class="micro"><strong>Clubs reaching finals</strong></p>
-                <div class="map-rate-legend"><span style="--swatch:#c1c6b7">0–&lt;30%</span><span style="--swatch:#a8bd9c">30–&lt;40%</span><span style="--swatch:#819978">40–&lt;50%</span><span style="--swatch:#587651">50–&lt;100%</span><span style="--swatch:#31553b">100%</span></div>
-              </div>
-              <div class="map-size-legend" role="group" aria-label="Circle size: finalists per season">
-                <p class="micro"><strong>Finalists</strong></p>
-                <!-- Three size examples retain the observed maximum of 4. Match Vega's area scale: radius = sqrt(2400 × count / 9) / 2. -->
-                <ul>
-                  <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="8.165"/></svg><span>1</span></li>
-                  <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="11.547"/></svg><span>2</span></li>
-                  <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="16.33"/></svg><span>4</span></li>
-                </ul>
-              </div>
-            </aside>
             <p class="map-key micro"><i class="legend-diamond" aria-hidden="true"></i> Season champion · Small empty ring: no finalists.</p>
           </div>
         </figure>
