@@ -9,7 +9,7 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=6bdba25dd537">
+  <link rel="stylesheet" href="css/style.css?v=4d29a56a4619">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -91,18 +91,18 @@
         <figure class="figure-wide map-study state-map-study">
           <h3 id="map-season-summary" aria-live="polite">Clubs reaching finals by state in 2025</h3>
           <div class="map-story-copy"><p>Follow the changing shades to see where finals qualification was most widespread in each season. Darker greens mean a higher share of local clubs reached finals.</p><p>The fractions keep the club base visible: <strong>1/2</strong> means one finalist out of two clubs. Colour classes stay fixed across years; grey means no clubs.</p></div>
-          <div class="map-with-legend">
-            <div class="map-panel">
+          <div class="map-story-visual">
+            <div class="state-map-frame">
               <div class="chart" data-spec="state_choropleth" aria-label="State choropleth with season selection. Colour shows the percentage of clubs reaching finals; fraction labels show finalists out of all clubs in each state."></div>
-              <div class="map-controls-row">
-                <div id="map-season-control" class="vega-bindings"></div>
-                <div class="chart-actions"><button type="button" id="play-map" aria-pressed="false">Play</button><button type="button" id="reset-map">Reset</button></div>
-              </div>
+              <aside class="map-legend state-map-legend" aria-label="Finals rate: five fixed percentage classes">
+                <p class="micro"><strong>Clubs reaching finals</strong></p>
+                <div class="map-rate-legend"><span style="--swatch:#c1c6b7">0–&lt;30%</span><span style="--swatch:#a8bd9c">30–&lt;40%</span><span style="--swatch:#819978">40–&lt;50%</span><span style="--swatch:#587651">50–&lt;100%</span><span style="--swatch:#31553b">100%</span></div>
+              </aside>
             </div>
-            <aside class="map-legend" aria-label="Finals rate: five fixed percentage classes">
-              <p class="micro"><strong>Clubs reaching finals</strong></p>
-              <div class="map-rate-legend"><span style="--swatch:#c1c6b7">0–&lt;30%</span><span style="--swatch:#a8bd9c">30–&lt;40%</span><span style="--swatch:#819978">40–&lt;50%</span><span style="--swatch:#587651">50–&lt;100%</span><span style="--swatch:#31553b">100%</span></div>
-            </aside>
+            <div class="map-controls-row">
+              <div id="map-season-control" class="vega-bindings"></div>
+              <div class="chart-actions"><button type="button" id="play-map" aria-pressed="false">Play</button><button type="button" id="reset-map">Reset</button></div>
+            </div>
           </div>
           <figcaption>Season and Play update all maps in Single season mode.</figcaption>
         </figure>
