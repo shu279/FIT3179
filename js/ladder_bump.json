@@ -108,7 +108,7 @@
     {
       "name": "journey_detail",
       "title": {
-        "text": "Ladder positions in the selected period"
+        "text": "Ladder positions"
       },
       "width": 900,
       "height": 260,
@@ -212,7 +212,7 @@
     {
       "name": "journey_summary",
       "title": {
-        "text": "Games won in the selected seasons",
+        "text": "Games won",
         "offset": 14
       },
       "width": 900,
