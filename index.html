@@ -107,7 +107,7 @@
         </figure>
         <figure class="figure-wide map-study">
           <h3 id="map-period-summary" aria-live="polite">City finalists in 2025</h3>
-          <p class="chart-deck">Larger circles mean more finalists per season. Colour shows the share of the city’s clubs reaching finals. The orange diamond and annotation identify the selected year’s champion.</p>
+          <p class="chart-deck">Circle area shows the number of finalists per season. Colour shows finalists as a percentage of all clubs based in the city: darker green means a higher share. The orange diamond marks the season champion.</p>
           <div class="map-controls-row city-map-controls">
             <div class="chart-actions"><button type="button" id="reset-city-map" disabled>Reset</button></div>
             <div id="city-zoom-control" class="vega-bindings"></div>
@@ -119,18 +119,17 @@
               <div class="map-rate-legend"><span style="--swatch:#edf8e9">0–&lt;30%</span><span style="--swatch:#bae4b3">30–&lt;40%</span><span style="--swatch:#74c476">40–&lt;50%</span><span style="--swatch:#31a354">50–&lt;100%</span><span style="--swatch:#006d2c">100%</span></div>
               <div class="map-size-legend" role="group" aria-label="Circle size: finalists per season">
                 <p class="micro">Finalists</p>
-                <!-- Observed finalists range from 0 to 4 per city-season. Match Vega's fixed size scale: radius = sqrt(2400 × count / 9) / 2. -->
+                <!-- Three size examples retain the observed maximum of 4. Match Vega's area scale: radius = sqrt(2400 × count / 9) / 2. -->
                 <ul>
                   <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="8.165"/></svg><span>1</span></li>
                   <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="11.547"/></svg><span>2</span></li>
-                  <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="14.142"/></svg><span>3</span></li>
                   <li><svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="16.33"/></svg><span>4</span></li>
                 </ul>
               </div>
             </aside>
           </div>
           <p class="map-key micro"><i class="legend-diamond" aria-hidden="true"></i> Season champion · Small empty ring: no finalists.</p>
-          <figcaption>Drag a range on the timeline to compare those seasons on the city map. Change the year or turn off “Compare the brushed period” to return to a single season. Period comparisons use finals appearances ÷ club-seasons for colour, and finals appearances ÷ seasons for area; scales stay fixed. The champion marker and annotation appear when one season is selected and disappear for multiple seasons. City locations are fixed club bases: the circles change size and the champion marker changes location as seasons change. Hover or tap a circle for its city and record. Zoom in and drag to separate nearby cities such as Melbourne and Geelong. Circle sizes stay fixed when zooming so they still match the legend. Perth includes Fremantle.</figcaption>
+          <figcaption>Drag a range on the timeline to compare those seasons on the city map. Change the year or turn off “Compare the brushed period” to return to a single season. Period comparisons use finals appearances ÷ club-seasons for colour, and finals appearances ÷ seasons for area; scales stay fixed. The five green percentage bands match the state map. The champion marker and annotation appear when one season is selected and disappear for multiple seasons. City locations are fixed club bases: the circles change size and the champion marker changes location as seasons change. Hover or tap a circle for its city and record. Zoom in and drag to separate nearby cities such as Melbourne and Geelong. Circle sizes stay fixed when zooming so they still match the legend. Perth includes Fremantle.</figcaption>
         </figure>
         <figure class="figure-wide map-study grand-final-study">
           <figcaption class="map-story-copy">
