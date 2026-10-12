@@ -52,7 +52,7 @@ function initialiseReadingAnnotations(element, name) {
       {text:d=>`${d.finals} finalist${d.finals===1?'':'s'} / ${d.clubs} clubs`,at:target('.state_count_labels_marks text',d=>d?.state==='WA',.5,1)}
     ],
     season_boxplot:[
-      {text:'Box = middle 50% of seasons',at:target('.layer_4_marks path',team('Geelong'),.25,0)},
+      {text:'Geelong: tightest middle 50% (66–76%).',short:'Geelong: tightest middle 50%.',at:target('.layer_4_marks path',team('Geelong'),.25,0)},
       {text:'Line = median',at:target('.layer_5_marks path',team('Geelong'),.5,0)}
     ],
     era_change:[{text:'Length = change in percentage points',short:'Length = change (pp)',at:target('.layer_0_marks path',team('Brisbane Lions'),.8)}],
@@ -60,7 +60,7 @@ function initialiseReadingAnnotations(element, name) {
   };
   const map=name==='state_choropleth';
   if(!guides[name])return {destroy(){}};
-  const overlay=svgElement('svg',{'class':'chart-reading-annotations',role:'group','aria-label':'How to read this chart'});
+  const overlay=svgElement('svg',{'class':'chart-reading-annotations',role:'group','aria-label':name==='season_boxplot'?'Chart insight and reading guide':'How to read this chart'});
   element.append(overlay);
   const markerId='reading-arrow-'+name;
   function arrow(from,to,elbow){
