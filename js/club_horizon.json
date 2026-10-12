@@ -7,14 +7,14 @@
     "contains": "padding",
     "resize": true
   },
-  "height": 596,
+  "height": 682,
   "padding": {
-    "top": 6,
+    "top": 12,
     "left": 4,
     "right": 4,
-    "bottom": 36
+    "bottom": 38
   },
-  "description": "Six horizon strips compare annual win rates relative to 50%. Orange is above 50%, green below. The first 25 percentage points fill a light band; a second 25-point band folds over it in a darker shade. All six strips count as one chart. Interpolated fold crossings are for drawing only; hover reports real season records.",
+  "description": "Six horizon strips show absolute annual win rates from 0 to 100%, folded into four consecutive 25-percentage-point bands. Higher bands overlay lower bands in pale green, sage, dark green and orange. A full band has a flat upper edge, inset from the row boundary. All six strips count as one chart. Interpolated fold crossings are for drawing only; hover reports real season records.",
   "signals": [
     {
       "name": "detailSeason",
@@ -34,23 +34,23 @@
       "transform": [
         {
           "type": "formula",
-          "expr": "clamp(50-datum.rate,0,25)",
-          "as": "below_first"
+          "expr": "clamp(datum.rate,0,25)",
+          "as": "band_0_25"
+        },
+        {
+          "type": "formula",
+          "expr": "clamp(datum.rate-25,0,25)",
+          "as": "band_25_50"
         },
         {
           "type": "formula",
           "expr": "clamp(datum.rate-50,0,25)",
-          "as": "above_first"
-        },
-        {
-          "type": "formula",
-          "expr": "clamp(25-datum.rate,0,25)",
-          "as": "below_second"
+          "as": "band_50_75"
         },
         {
           "type": "formula",
           "expr": "clamp(datum.rate-75,0,25)",
-          "as": "above_second"
+          "as": "band_75_100"
         }
       ]
     },
@@ -293,13 +293,13 @@
             "value": 0
           },
           "y": {
-            "value": 20
+            "value": 28
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 52
+            "value": 64
           }
         }
       },
@@ -312,8 +312,8 @@
             25
           ],
           "range": [
-            52,
-            0
+            58,
+            6
           ],
           "zero": true,
           "nice": false
@@ -397,7 +397,7 @@
                 "signal": "width"
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "#eeeee3"
@@ -406,7 +406,7 @@
           }
         },
         {
-          "name": "below_first_0",
+          "name": "band_0_25_0",
           "type": "area",
           "interactive": false,
           "from": {
@@ -423,10 +423,42 @@
               },
               "y": {
                 "scale": "band",
-                "field": "below_first"
+                "field": "band_0_25"
               },
               "y2": {
-                "value": 52
+                "value": 58
+              },
+              "fill": {
+                "value": "#d6dace"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "band_25_50_0",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_0"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "band_25_50"
+              },
+              "y2": {
+                "value": 58
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -438,7 +470,7 @@
           }
         },
         {
-          "name": "above_first_0",
+          "name": "band_50_75_0",
           "type": "area",
           "interactive": false,
           "from": {
@@ -455,42 +487,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_first"
+                "field": "band_50_75"
               },
               "y2": {
-                "value": 52
-              },
-              "fill": {
-                "value": "#e6b494"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "below_second_0",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_0"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "below_second"
-              },
-              "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#31553b"
@@ -502,7 +502,7 @@
           }
         },
         {
-          "name": "above_second_0",
+          "name": "band_75_100_0",
           "type": "area",
           "interactive": false,
           "from": {
@@ -519,10 +519,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_second"
+                "field": "band_75_100"
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#c96636"
@@ -543,10 +543,10 @@
                 "signal": "detailSeason"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "stroke": {
                 "value": "#21372b"
@@ -583,7 +583,7 @@
                 "value": 0
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "transparent"
@@ -608,13 +608,13 @@
             "value": 0
           },
           "y": {
-            "value": 116
+            "value": 136
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 52
+            "value": 64
           }
         }
       },
@@ -627,8 +627,8 @@
             25
           ],
           "range": [
-            52,
-            0
+            58,
+            6
           ],
           "zero": true,
           "nice": false
@@ -712,7 +712,7 @@
                 "signal": "width"
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "#eeeee3"
@@ -721,7 +721,7 @@
           }
         },
         {
-          "name": "below_first_1",
+          "name": "band_0_25_1",
           "type": "area",
           "interactive": false,
           "from": {
@@ -738,10 +738,42 @@
               },
               "y": {
                 "scale": "band",
-                "field": "below_first"
+                "field": "band_0_25"
               },
               "y2": {
-                "value": 52
+                "value": 58
+              },
+              "fill": {
+                "value": "#d6dace"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "band_25_50_1",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_1"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "band_25_50"
+              },
+              "y2": {
+                "value": 58
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -753,7 +785,7 @@
           }
         },
         {
-          "name": "above_first_1",
+          "name": "band_50_75_1",
           "type": "area",
           "interactive": false,
           "from": {
@@ -770,42 +802,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_first"
+                "field": "band_50_75"
               },
               "y2": {
-                "value": 52
-              },
-              "fill": {
-                "value": "#e6b494"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "below_second_1",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_1"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "below_second"
-              },
-              "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#31553b"
@@ -817,7 +817,7 @@
           }
         },
         {
-          "name": "above_second_1",
+          "name": "band_75_100_1",
           "type": "area",
           "interactive": false,
           "from": {
@@ -834,10 +834,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_second"
+                "field": "band_75_100"
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#c96636"
@@ -858,10 +858,10 @@
                 "signal": "detailSeason"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "stroke": {
                 "value": "#21372b"
@@ -898,7 +898,7 @@
                 "value": 0
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "transparent"
@@ -923,13 +923,13 @@
             "value": 0
           },
           "y": {
-            "value": 212
+            "value": 244
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 52
+            "value": 64
           }
         }
       },
@@ -942,8 +942,8 @@
             25
           ],
           "range": [
-            52,
-            0
+            58,
+            6
           ],
           "zero": true,
           "nice": false
@@ -1027,7 +1027,7 @@
                 "signal": "width"
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "#eeeee3"
@@ -1036,7 +1036,7 @@
           }
         },
         {
-          "name": "below_first_2",
+          "name": "band_0_25_2",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1053,10 +1053,42 @@
               },
               "y": {
                 "scale": "band",
-                "field": "below_first"
+                "field": "band_0_25"
               },
               "y2": {
-                "value": 52
+                "value": 58
+              },
+              "fill": {
+                "value": "#d6dace"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "band_25_50_2",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_2"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "band_25_50"
+              },
+              "y2": {
+                "value": 58
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -1068,7 +1100,7 @@
           }
         },
         {
-          "name": "above_first_2",
+          "name": "band_50_75_2",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1085,42 +1117,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_first"
+                "field": "band_50_75"
               },
               "y2": {
-                "value": 52
-              },
-              "fill": {
-                "value": "#e6b494"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "below_second_2",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_2"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "below_second"
-              },
-              "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#31553b"
@@ -1132,7 +1132,7 @@
           }
         },
         {
-          "name": "above_second_2",
+          "name": "band_75_100_2",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1149,10 +1149,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_second"
+                "field": "band_75_100"
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#c96636"
@@ -1173,10 +1173,10 @@
                 "signal": "detailSeason"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "stroke": {
                 "value": "#21372b"
@@ -1213,7 +1213,7 @@
                 "value": 0
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "transparent"
@@ -1238,13 +1238,13 @@
             "value": 0
           },
           "y": {
-            "value": 308
+            "value": 352
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 52
+            "value": 64
           }
         }
       },
@@ -1257,8 +1257,8 @@
             25
           ],
           "range": [
-            52,
-            0
+            58,
+            6
           ],
           "zero": true,
           "nice": false
@@ -1342,7 +1342,7 @@
                 "signal": "width"
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "#eeeee3"
@@ -1351,7 +1351,7 @@
           }
         },
         {
-          "name": "below_first_3",
+          "name": "band_0_25_3",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1368,10 +1368,42 @@
               },
               "y": {
                 "scale": "band",
-                "field": "below_first"
+                "field": "band_0_25"
               },
               "y2": {
-                "value": 52
+                "value": 58
+              },
+              "fill": {
+                "value": "#d6dace"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "band_25_50_3",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_3"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "band_25_50"
+              },
+              "y2": {
+                "value": 58
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -1383,7 +1415,7 @@
           }
         },
         {
-          "name": "above_first_3",
+          "name": "band_50_75_3",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1400,42 +1432,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_first"
+                "field": "band_50_75"
               },
               "y2": {
-                "value": 52
-              },
-              "fill": {
-                "value": "#e6b494"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "below_second_3",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_3"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "below_second"
-              },
-              "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#31553b"
@@ -1447,7 +1447,7 @@
           }
         },
         {
-          "name": "above_second_3",
+          "name": "band_75_100_3",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1464,10 +1464,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_second"
+                "field": "band_75_100"
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#c96636"
@@ -1488,10 +1488,10 @@
                 "signal": "detailSeason"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "stroke": {
                 "value": "#21372b"
@@ -1528,7 +1528,7 @@
                 "value": 0
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "transparent"
@@ -1553,13 +1553,13 @@
             "value": 0
           },
           "y": {
-            "value": 404
+            "value": 460
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 52
+            "value": 64
           }
         }
       },
@@ -1572,8 +1572,8 @@
             25
           ],
           "range": [
-            52,
-            0
+            58,
+            6
           ],
           "zero": true,
           "nice": false
@@ -1657,7 +1657,7 @@
                 "signal": "width"
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "#eeeee3"
@@ -1666,7 +1666,7 @@
           }
         },
         {
-          "name": "below_first_4",
+          "name": "band_0_25_4",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1683,10 +1683,42 @@
               },
               "y": {
                 "scale": "band",
-                "field": "below_first"
+                "field": "band_0_25"
               },
               "y2": {
-                "value": 52
+                "value": 58
+              },
+              "fill": {
+                "value": "#d6dace"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "band_25_50_4",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_4"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "band_25_50"
+              },
+              "y2": {
+                "value": 58
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -1698,7 +1730,7 @@
           }
         },
         {
-          "name": "above_first_4",
+          "name": "band_50_75_4",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1715,42 +1747,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_first"
+                "field": "band_50_75"
               },
               "y2": {
-                "value": 52
-              },
-              "fill": {
-                "value": "#e6b494"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "below_second_4",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_4"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "below_second"
-              },
-              "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#31553b"
@@ -1762,7 +1762,7 @@
           }
         },
         {
-          "name": "above_second_4",
+          "name": "band_75_100_4",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1779,10 +1779,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_second"
+                "field": "band_75_100"
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#c96636"
@@ -1803,10 +1803,10 @@
                 "signal": "detailSeason"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "stroke": {
                 "value": "#21372b"
@@ -1843,7 +1843,7 @@
                 "value": 0
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "transparent"
@@ -1868,13 +1868,13 @@
             "value": 0
           },
           "y": {
-            "value": 500
+            "value": 568
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 52
+            "value": 64
           }
         }
       },
@@ -1887,8 +1887,8 @@
             25
           ],
           "range": [
-            52,
-            0
+            58,
+            6
           ],
           "zero": true,
           "nice": false
@@ -1972,7 +1972,7 @@
                 "signal": "width"
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "#eeeee3"
@@ -1981,7 +1981,7 @@
           }
         },
         {
-          "name": "below_first_5",
+          "name": "band_0_25_5",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1998,10 +1998,42 @@
               },
               "y": {
                 "scale": "band",
-                "field": "below_first"
+                "field": "band_0_25"
               },
               "y2": {
-                "value": 52
+                "value": 58
+              },
+              "fill": {
+                "value": "#d6dace"
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        },
+        {
+          "name": "band_25_50_5",
+          "type": "area",
+          "interactive": false,
+          "from": {
+            "data": "curve_5"
+          },
+          "sort": {
+            "field": "datum.season"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "scale": "year",
+                "field": "season"
+              },
+              "y": {
+                "scale": "band",
+                "field": "band_25_50"
+              },
+              "y2": {
+                "value": 58
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -2013,7 +2045,7 @@
           }
         },
         {
-          "name": "above_first_5",
+          "name": "band_50_75_5",
           "type": "area",
           "interactive": false,
           "from": {
@@ -2030,42 +2062,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_first"
+                "field": "band_50_75"
               },
               "y2": {
-                "value": 52
-              },
-              "fill": {
-                "value": "#e6b494"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "below_second_5",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_5"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "below_second"
-              },
-              "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#31553b"
@@ -2077,7 +2077,7 @@
           }
         },
         {
-          "name": "above_second_5",
+          "name": "band_75_100_5",
           "type": "area",
           "interactive": false,
           "from": {
@@ -2094,10 +2094,10 @@
               },
               "y": {
                 "scale": "band",
-                "field": "above_second"
+                "field": "band_75_100"
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "fill": {
                 "value": "#c96636"
@@ -2118,10 +2118,10 @@
                 "signal": "detailSeason"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "y2": {
-                "value": 52
+                "value": 58
               },
               "stroke": {
                 "value": "#21372b"
@@ -2158,7 +2158,7 @@
                 "value": 0
               },
               "height": {
-                "value": 52
+                "value": 64
               },
               "fill": {
                 "value": "transparent"

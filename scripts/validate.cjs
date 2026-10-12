@@ -196,10 +196,16 @@ async function main(){
            const interpolated=before.wins/before.played*100+(after.wins/after.played-before.wins/before.played)*100*(d.season-before.season);
            assert.ok(Math.abs(interpolated-d.rate)<1e-8);
          }
-         for(const field of ['above_first','above_second','below_first','below_second'])assert.ok(d[field]>=0&&d[field]<=25);
-         assert.ok(Math.abs(50+d.above_first+d.above_second-d.below_first-d.below_second-d.rate)<1e-8,'Folding preserves the exact win rate');
-         assert.ok(!(d.above_first&&d.below_first),'Positive and negative bands never overlap');
+         for(const field of ['band_0_25','band_25_50','band_50_75','band_75_100'])assert.ok(d[field]>=0&&d[field]<=25);
+         assert.ok(Math.abs(d.band_0_25+d.band_25_50+d.band_50_75+d.band_75_100-d.rate)<1e-8,'Folding preserves the exact win rate');
+         if(d.rate>50)assert.equal(d.band_25_50,25,'Higher rates retain the completed lower bands');
        }
+       const areas=items(view,item=>item.mark?.marktype==='area'&&item.datum?.team);
+       assert.equal(areas.length,curves.length*4);
+       for(const area of areas){assert.ok(area.y>=6&&area.y<=58,'Folded areas keep space above and below');assert.equal(area.y2,58);}
+       const example=curves.find(d=>d.observed&&d.rate>50&&d.rate<75);
+       assert.equal(example.band_0_25,25);assert.equal(example.band_25_50,25);
+       assert.ok(Math.abs(example.band_50_75-(example.rate-50))<1e-8);assert.equal(example.band_75_100,0);
        assert.equal(items(view,item=>item.mark?.name==='season_targets').length,84,'Only observed seasons are interactive');
        for(const season of [2012,2018,2025]){
          await view.signal('detailSeason',season).runAsync();
