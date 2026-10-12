@@ -232,9 +232,9 @@ const successComparison={
  description:'Paired horizontal bars compare Geelong and Hawthorn on five separate measures in 2012–2025. All bars share a fixed 0–100% scale, with counts directly labelled. Top-four finishes means regular-season ladder ranks 1–4 out of 14 seasons. Games won uses games played; all other measures use seasons.',
  width:700,height:360,padding:{top:4,left:4,right:4,bottom:36},autosize:{type:'none',contains:'padding',resize:true},background:'transparent',
  signals:[
-  {name:'compact',update:'width < 600'},
+  {name:'compact',update:'width < 560'},
   {name:'plotStart',update:'compact ? (width < 440 ? 110 : 160) : 240'},
-  {name:'plotEnd',update:'compact ? width : width - 142'},
+  {name:'plotEnd',update:'width'},
   {name:'plotWidth',update:'plotEnd - plotStart'},
   {name:'barHeight',update:'compact ? 10 : 18'}
  ],
