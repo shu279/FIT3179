@@ -54,7 +54,6 @@ function initialiseReadingAnnotations(element, name) {
     ],
     premiership_bars:[{text:'Bar length = titles',at:target('.title_bars_marks path',team('Hawthorn'),.95)}],
     season_boxplot:[
-      {text:'Whiskers = lowest and highest',at:target('.layer_2_marks path',team('Geelong'),.5,0),also:target('.layer_3_marks path',team('Geelong'),.5,0)},
       {text:'Box = middle 50% of seasons',at:target('.layer_4_marks path',team('Geelong'),.25,0)},
       {text:'Line = median',at:target('.layer_5_marks path',team('Geelong'),.5,0)}
     ],
