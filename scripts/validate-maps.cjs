@@ -108,9 +108,17 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
      await view.signal('selectedSeason',year).runAsync();
      const lines=items(view,i=>i.mark?.marktype==='shape'&&i.datum?.properties?.winner);
      assert.equal(lines.length,year===2021?0:1);
+     const loops=items(view,i=>i.mark?.name==='same_city_loop_marks');
+     const annotations=items(view,i=>i.mark?.name==='same_city_annotation_marks');
+     assert.equal(lines.length+loops.length,1,'Every season must display a matchup connection');
+     assert.equal(annotations.length,year===2021?1:0);
      const participants=items(view,i=>i.mark?.marktype==='symbol'&&i.datum?.result);
      assert.equal(participants.length,2);
      assert.equal(participants.filter(i=>i.datum.result==='Premier').length,1);
+     if(year===2021){
+      assert.deepEqual(annotations[0].text,['Same-city final: Melbourne','Melbourne (Premier)','Western Bulldogs (Runner-up)']);
+      for(const participant of participants){assert.equal(loops[0].x,participant.x);assert.equal(loops[0].y,participant.y);}
+     }
     }
    }
    const before=await view.toSVG();
@@ -197,6 +205,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  await chartViews.get('grand_final_flows').view.signal('selectedSeason',2021).signal('mapCentre',[13,-33]).runAsync();await settle();
  for(const {view} of chartViews.values()){assert.equal(view.signal('selectedSeason'),2021);assert.deepEqual(view.signal('mapCentre'),[13,-33]);}
  assert.match(elements.get('#map-final-context').textContent,/same city/);
+ assert.match(elements.get('#map-final-context').textContent,/loop/);
  await elements.get('#reset-map').listeners.click();await settle();
  for(const {view} of chartViews.values()){assert.equal(view.signal('selectedSeason'),2025);assert.equal(view.signal('showPhysical'),true);}
  assert.equal(symbols.signal('mapZoom'),1);assert.deepEqual(Array.from(symbols.signal('mapPan')),[0,0]);

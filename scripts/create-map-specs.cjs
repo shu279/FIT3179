@@ -60,12 +60,12 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const stateLabels=[{state:'WA',lon:122,lat:-26},{state:'NT',lon:133,lat:-21},{state:'SA',lon:135,lat:-30},{state:'QLD',lon:145,lat:-22},{state:'NSW',lon:147,lat:-32},{state:'VIC',lon:143,lat:-36.7},{state:'TAS',lon:146.5,lat:-42}];
  const loc={longitude:{field:'longitude',type:'quantitative'},latitude:{field:'latitude',type:'quantitative'}};
  const cityLabels=(finalistsOnly=false)=>[
-  // Restrict labels to the two participating home cities in the connection map.
-  {name:'cultural_city_labels',data:table(finalistsOnly?'city_seasons':'cities'),transform:[...(finalistsOnly?[{filter:'datum.season === selectedSeason && datum.grand_finals > 0'}]:[]),{filter:"(width >= 500 || mapZoom >= 2) && showCultural && datum.city !== 'Geelong' && datum.city !== 'Gold Coast'"}],
+  // Shared-city matchups have their own city and club annotation.
+  {name:'cultural_city_labels',data:table(finalistsOnly?'city_seasons':'cities'),transform:[...(finalistsOnly?[{filter:'datum.season === selectedSeason && datum.grand_finals === 1'}]:[]),{filter:"(width >= 500 || mapZoom >= 2) && showCultural && datum.city !== 'Geelong' && datum.city !== 'Gold Coast'"}],
    mark:{type:'text',clip:true,align:'left',dx:12,dy:-12,fontSize:15,color:ink},encoding:{...loc,text:{field:'city',type:'nominal'}}},
-  {name:'cultural_geelong_label',data:table(finalistsOnly?'city_seasons':'cities'),transform:[...(finalistsOnly?[{filter:'datum.season === selectedSeason && datum.grand_finals > 0'}]:[]),{filter:"(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Geelong'"}],
+  {name:'cultural_geelong_label',data:table(finalistsOnly?'city_seasons':'cities'),transform:[...(finalistsOnly?[{filter:'datum.season === selectedSeason && datum.grand_finals === 1'}]:[]),{filter:"(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Geelong'"}],
    mark:{type:'text',clip:true,align:'right',dx:-12,dy:22,fontSize:15,color:ink},encoding:{...loc,text:{field:'city',type:'nominal'}}},
-  {name:'cultural_gold_coast_label',data:table(finalistsOnly?'city_seasons':'cities'),transform:[...(finalistsOnly?[{filter:'datum.season === selectedSeason && datum.grand_finals > 0'}]:[]),{filter:"(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Gold Coast'"}],
+  {name:'cultural_gold_coast_label',data:table(finalistsOnly?'city_seasons':'cities'),transform:[...(finalistsOnly?[{filter:'datum.season === selectedSeason && datum.grand_finals === 1'}]:[]),{filter:"(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Gold Coast'"}],
    mark:{type:'text',clip:true,align:'left',dx:12,dy:19,fontSize:15,color:ink},encoding:{...loc,text:{field:'city',type:'nominal'}}}
  ];
  const rateColor={field:'finals_rate',type:'quantitative',scale:{type:'threshold',domain:palette.thresholds,range:palette.colours},legend:null};
@@ -150,19 +150,30 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
      tooltip:[{field:'season',type:'quantitative',format:'d',title:'Season'},{field:'finals',type:'quantitative',title:'Melbourne clubs reaching finals'},{field:'finalists',type:'nominal',title:'Clubs'}]}}
   ]
  });
+ const sameCityMatchup={data:table('grand_finals'),transform:[
+  {filter:'datum.season === selectedSeason && datum.winner_city === datum.runner_city'},
+  {lookup:'winner_city',from:{data:table('cities'),key:'city',fields:['longitude','latitude']}},
+  {calculate:"['Same-city final: ' + datum.winner_city, datum.winner + ' (Premier)', datum.runner_up + ' (Runner-up)']",as:'matchup_label'}]};
+ const sameCityText={type:'text',clip:true,align:'right',dx:{expr:'width < 500 ? 30 : -28'},dy:-94,fontSize:15,fontWeight:600,lineHeight:20};
  save('grand_final_flows',{
-  description:'A season-by-season connection map of the home cities of Grand Final opponents. The common year and map controls update it alongside the other maps. Lines represent matchups, not travel.',
+  description:'A season-by-season connection map of the home cities of Grand Final opponents. A loop and direct club labels show opponents sharing the same home city. Lines and loops represent matchups, not travel.',
   height:400,params:commonParams(true),projection,
   layer:[...physicalLayers(),borderLayer(),
    {name:'annual_matchup',data:table('grand_final_seasons'),transform:[{filter:'datum.properties.season === selectedSeason'}],
     mark:{type:'geoshape',clip:true,filled:false,stroke:green,strokeWidth:3,opacity:0.8},
     encoding:{tooltip:[{field:'properties.season',type:'quantitative',format:'d',title:'Season'},{field:'properties.winner',type:'nominal',title:'Premier'},{field:'properties.runner_up',type:'nominal',title:'Runner-up'}]}},
+   {...sameCityMatchup,name:'same_city_loop',
+    mark:{type:'point',clip:true,shape:'M0,0 C-1.1,-0.55 -1.1,-1.65 0,-1.65 C1.1,-1.65 1.1,-0.55 0,0',size:2000,filled:false,stroke:green,strokeWidth:3,opacity:0.8},
+    encoding:{...loc,tooltip:[{field:'season',type:'quantitative',format:'d',title:'Season'},{field:'winner_city',type:'nominal',title:'Shared home city'},
+     {field:'winner',type:'nominal',title:'Premier'},{field:'runner_up',type:'nominal',title:'Runner-up'}]}},
    {name:'finalist_locations',data:table('grand_final_participants'),transform:[{filter:'datum.season === selectedSeason'}],
     mark:{type:'point',clip:true,strokeWidth:2},encoding:{...loc,
      shape:{field:'result',type:'nominal',scale:{domain:['Runner-up','Premier'],range:['circle','diamond']},legend:null},
      size:{condition:{test:"datum.result === 'Runner-up'",value:300},value:150},
      fill:{field:'result',type:'nominal',scale:{domain:['Runner-up','Premier'],range:['#f3f2e9',orange]},legend:null},stroke:{condition:{test:"datum.result === 'Premier'",value:orange},value:ink},
      tooltip:[{field:'team',type:'nominal',title:'Club'},{field:'result',type:'nominal',title:'Result'},{field:'city',type:'nominal',title:'Home city'}]}},
-   ...cityLabels(true)]
+   ...cityLabels(true),
+   {...sameCityMatchup,name:'same_city_annotation_halo',mark:{...sameCityText,fill:'#f3f2e9',stroke:'#f3f2e9',strokeWidth:4,aria:false},encoding:{...loc,text:{field:'matchup_label',type:'nominal'}}},
+   {...sameCityMatchup,name:'same_city_annotation',mark:{...sameCityText,color:ink},encoding:{...loc,text:{field:'matchup_label',type:'nominal'}}}]
  });
 };

@@ -14,7 +14,7 @@
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
   <script defer src="js/chart-layout.js?v=ffa0cdc99558"></script>
-  <script defer src="js/map-controls.js?v=a72dc1a58c57"></script>
+  <script defer src="js/map-controls.js?v=bbb37b82b00e"></script>
   <script defer src="js/city-map-navigation.js?v=03f4ed95991a"></script>
   <script defer src="js/main.js?v=fec85b6937c8"></script>
 </head>
@@ -135,12 +135,12 @@
         <figure class="figure-wide map-study">
           <h3 id="map-final-summary" aria-live="polite">2025: Brisbane Lions (Brisbane) defeated Geelong (Geelong).</h3>
           <p id="map-final-context" class="chart-deck">The line connects club home cities; it does not represent travel.</p>
-          <div class="chart" data-spec="grand_final_flows" aria-label="Time-selectable connection map between Grand Final opponents’ home cities, with premier and runner-up markers."></div>
+          <div class="chart" data-spec="grand_final_flows" aria-label="Time-selectable connection map between Grand Final opponents’ home cities. Lines connect different cities; a loop and club labels show a same-city matchup, with premier and runner-up markers."></div>
           <div class="map-controls-row map-final-controls">
             <div class="chart-legend" role="group" aria-label="Grand Final results"><span><i class="legend-circle hollow" aria-hidden="true"></i> Runner-up</span><span><i class="legend-diamond" aria-hidden="true"></i> Premier</span></div>
             <div id="map-final-season-control" class="vega-bindings"></div>
           </div>
-          <figcaption>Thirteen of the fourteen Grand Finals paired clubs from different home cities. In 2021, both clubs were based in Melbourne, so their markers share a location and no line is drawn.</figcaption>
+          <figcaption>Thirteen of the fourteen Grand Finals paired clubs from different home cities. In 2021, Melbourne and Western Bulldogs shared Melbourne as their home city. A loop marks this same-city matchup, with both clubs and their results labelled on the map.</figcaption>
         </figure>
       </section>
 

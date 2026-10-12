@@ -44,7 +44,7 @@ async function initialiseMapControls(chartViews, resetCityBrush) {
     flowStatus.textContent=final?`${year}: ${final.winner} (${final.winner_city}) defeated ${final.runner_up} (${final.runner_city}).`:
       `${year}: Grand Final opponents`;
     flowContext.textContent=final && final.winner_city===final.runner_city?
-      'Both clubs were based in the same city, so there is no connecting line.':
+      'The loop marks opponents based in the same city; it does not represent travel.':
       'The line connects club home cities; it does not represent travel.';
     updatePeriod();
   }

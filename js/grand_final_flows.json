@@ -50,7 +50,7 @@
   "usermeta": {
     "layout": "map"
   },
-  "description": "A season-by-season connection map of the home cities of Grand Final opponents. The common year and map controls update it alongside the other maps. Lines represent matchups, not travel.",
+  "description": "A season-by-season connection map of the home cities of Grand Final opponents. A loop and direct club labels show opponents sharing the same home city. Lines and loops represent matchups, not travel.",
   "params": [
     {
       "name": "selectedSeason",
@@ -273,6 +273,77 @@
       }
     },
     {
+      "data": {
+        "url": "data/grand_finals.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.season === selectedSeason && datum.winner_city === datum.runner_city"
+        },
+        {
+          "lookup": "winner_city",
+          "from": {
+            "data": {
+              "url": "data/cities.json"
+            },
+            "key": "city",
+            "fields": [
+              "longitude",
+              "latitude"
+            ]
+          }
+        },
+        {
+          "calculate": "['Same-city final: ' + datum.winner_city, datum.winner + ' (Premier)', datum.runner_up + ' (Runner-up)']",
+          "as": "matchup_label"
+        }
+      ],
+      "name": "same_city_loop",
+      "mark": {
+        "type": "point",
+        "clip": true,
+        "shape": "M0,0 C-1.1,-0.55 -1.1,-1.65 0,-1.65 C1.1,-1.65 1.1,-0.55 0,0",
+        "size": 2000,
+        "filled": false,
+        "stroke": "#31553b",
+        "strokeWidth": 3,
+        "opacity": 0.8
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {
+            "field": "season",
+            "type": "quantitative",
+            "format": "d",
+            "title": "Season"
+          },
+          {
+            "field": "winner_city",
+            "type": "nominal",
+            "title": "Shared home city"
+          },
+          {
+            "field": "winner",
+            "type": "nominal",
+            "title": "Premier"
+          },
+          {
+            "field": "runner_up",
+            "type": "nominal",
+            "title": "Runner-up"
+          }
+        ]
+      }
+    },
+    {
       "name": "finalist_locations",
       "data": {
         "url": "data/grand_final_participants.json"
@@ -366,7 +437,7 @@
       },
       "transform": [
         {
-          "filter": "datum.season === selectedSeason && datum.grand_finals > 0"
+          "filter": "datum.season === selectedSeason && datum.grand_finals === 1"
         },
         {
           "filter": "(width >= 500 || mapZoom >= 2) && showCultural && datum.city !== 'Geelong' && datum.city !== 'Gold Coast'"
@@ -403,7 +474,7 @@
       },
       "transform": [
         {
-          "filter": "datum.season === selectedSeason && datum.grand_finals > 0"
+          "filter": "datum.season === selectedSeason && datum.grand_finals === 1"
         },
         {
           "filter": "(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Geelong'"
@@ -440,7 +511,7 @@
       },
       "transform": [
         {
-          "filter": "datum.season === selectedSeason && datum.grand_finals > 0"
+          "filter": "datum.season === selectedSeason && datum.grand_finals === 1"
         },
         {
           "filter": "(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Gold Coast'"
@@ -466,6 +537,119 @@
         },
         "text": {
           "field": "city",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/grand_finals.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.season === selectedSeason && datum.winner_city === datum.runner_city"
+        },
+        {
+          "lookup": "winner_city",
+          "from": {
+            "data": {
+              "url": "data/cities.json"
+            },
+            "key": "city",
+            "fields": [
+              "longitude",
+              "latitude"
+            ]
+          }
+        },
+        {
+          "calculate": "['Same-city final: ' + datum.winner_city, datum.winner + ' (Premier)', datum.runner_up + ' (Runner-up)']",
+          "as": "matchup_label"
+        }
+      ],
+      "name": "same_city_annotation_halo",
+      "mark": {
+        "type": "text",
+        "clip": true,
+        "align": "right",
+        "dx": {
+          "expr": "width < 500 ? 30 : -28"
+        },
+        "dy": -94,
+        "fontSize": 15,
+        "fontWeight": 600,
+        "lineHeight": 20,
+        "fill": "#f3f2e9",
+        "stroke": "#f3f2e9",
+        "strokeWidth": 4,
+        "aria": false
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "matchup_label",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/grand_finals.json"
+      },
+      "transform": [
+        {
+          "filter": "datum.season === selectedSeason && datum.winner_city === datum.runner_city"
+        },
+        {
+          "lookup": "winner_city",
+          "from": {
+            "data": {
+              "url": "data/cities.json"
+            },
+            "key": "city",
+            "fields": [
+              "longitude",
+              "latitude"
+            ]
+          }
+        },
+        {
+          "calculate": "['Same-city final: ' + datum.winner_city, datum.winner + ' (Premier)', datum.runner_up + ' (Runner-up)']",
+          "as": "matchup_label"
+        }
+      ],
+      "name": "same_city_annotation",
+      "mark": {
+        "type": "text",
+        "clip": true,
+        "align": "right",
+        "dx": {
+          "expr": "width < 500 ? 30 : -28"
+        },
+        "dy": -94,
+        "fontSize": 15,
+        "fontWeight": 600,
+        "lineHeight": 20,
+        "color": "#21372b"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "matchup_label",
           "type": "nominal"
         }
       }
