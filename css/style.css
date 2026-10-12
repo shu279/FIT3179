@@ -129,6 +129,7 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .section-intro .intro-copy{display:block}
 .reading-notes p{margin:0 0 14px}
 .reading-notes p:last-child{margin-bottom:0}
+.chart>.chart-reading-annotations{position:absolute;inset:0;max-width:none;height:100%;overflow:visible;pointer-events:none;font-family:var(--body);z-index:1}
 .chapter figcaption.city-map-caption{max-width:none}
 .state-map-study{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:24px 32px;align-items:start}
 .state-map-study>h3{grid-column:1/-1}

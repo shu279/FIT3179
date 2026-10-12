@@ -9,6 +9,7 @@ function chartLayout(spec, availableWidth) {
     return {type:'facet', columns, plotWidth};
   }
   if (spec.vconcat) {
+    if(spec.usermeta?.layout==='map-timeline')spec.spacing=available<650?110:28;
     const journey = spec.usermeta?.layout === 'journey';
     const sideLegend = journey && available >= 600;
     const plotWidth = Math.max(120, available - (spec.usermeta?.layout === 'map-timeline' ? (spec.vconcat.length===1 ? 10 : 75) : sideLegend ? 300 : 175));
@@ -18,6 +19,10 @@ function chartLayout(spec, availableWidth) {
         // Reserve a side column on wide screens; preserve the plot width on phones.
         view.encoding.color.legend.orient = sideLegend ? 'right' : 'top';
         view.encoding.color.legend.columns = sideLegend ? 1 : {expr:'width < 385 ? 1 : 2'};
+        if(view.name!=='journey_overview'){
+          view.encoding.color.legend.offset=sideLegend?16:54;
+          view.title.offset=sideLegend?60:14;
+        }
       }
     });
     const mapHeight = spec.usermeta?.layout === 'map-timeline' ? Math.max(220,Math.min(440,Math.round(available*0.55))) : null;

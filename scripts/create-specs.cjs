@@ -168,7 +168,7 @@ saveMultiple('ladder_bump',{
     {name:'journey_lines',mark:{type:'line',clip:true,strokeWidth:2.8}},
     {mark:{type:'point',clip:true,filled:true,size:42}}
    ]},
-  {name:'journey_summary',title:journeyTitle('Games won in the selected seasons',['Games won in the','selected seasons']),width:900,height:145,
+  {name:'journey_summary',title:{...journeyTitle('Games won in the selected seasons',['Games won in the','selected seasons']),offset:60},width:900,height:145,
    transform:[{filter:{param:'seasonBrush'}},{aggregate:[{op:'sum',field:'wins',as:'wins'},{op:'sum',field:'played',as:'games'},{op:'count',as:'seasons'},{op:'min',field:'season',as:'first'},{op:'max',field:'season',as:'last'}],groupby:['team']},{calculate:'datum.wins / datum.games * 100',as:'period_win_rate'},{window:[{op:'rank',as:'period_rank'}],sort:[{field:'period_win_rate',order:'descending'}]}],
    encoding:{y:field('team','nominal',{scale:{domain:journeyTeams},axis:{title:null,ticks:false,labelLimit:150}}),x:field('period_win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:'Games won (%)',values:[0,25,50,75,100]}}),color:{...journeyColor,legend:{...journeyColor.legend,symbolType:'square',symbolSize:80}},opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('seasons','Seasons'),tip('wins','Wins'),tip('games','Games played'),tip('period_win_rate','Win rate (%)','.1f')]},
    layer:[{name:'journey_bars',mark:{type:'bar',size:19}},{transform:[{filter:'datum.period_rank === 1'}],mark:{type:'text',align:'right',dx:-7,fontSize:15,fontWeight:600,color:'#ffffff'},encoding:{text:{value:'Best'},color:{value:'#ffffff'}}}]},
@@ -302,7 +302,7 @@ save('premiership_bars',{
   {name:'title_bars',mark:{type:'bar',size:{expr:"min(26, bandwidth('y') * .8)"}},encoding:{color:{condition:{test:'datum.premierships === 3',value:orange},value:green}}},
   {name:'title_counts',mark:{type:'text',align:'left',dx:8,fontSize:15,fontWeight:500,color:ink},encoding:{text:field('premierships')}},
   {name:'winning_years',transform:[{filter:'datum.premierships >= 2 && width >= 400'}],mark:{type:'text',align:'left',fontSize:15,color:'#ffffff'},encoding:{x:{value:10},text:field('title_years','nominal')}},
-  note('titles_note',{expr:"width >= 500 ? 'Hawthorn and Richmond won 6 of 14 titles.' : 'Together: 6 of 14 titles.'"},'width < 500 ? width - 8 : width * .68','width < 500 ? height - 35 : height * .6',{align:{expr:"width < 500 ? 'right' : 'center'"}}),
+  note('titles_note',{expr:"width >= 500 ? 'Orange: joint leaders, 6 of 14 titles.' : 'Orange: joint leaders.'"},'width < 500 ? width - 8 : width * .68','width < 500 ? height - 35 : height * .6',{align:{expr:"width < 500 ? 'right' : 'center'"}}),
   leader('titles_note_elbow','width < 500 ? width - 4 : width * .68','width < 500 ? height - 43 : height * .6 - 8','width - 4','width < 500 ? height - 43 : height * .6 - 8'),
   leader('titles_leader','width - 4','width < 500 ? height - 43 : height * .6 - 8','width - 4',"scale('y','Hawthorn') + bandwidth('y') + 4"),
   ...['Hawthorn','Richmond'].flatMap((team,i)=>{

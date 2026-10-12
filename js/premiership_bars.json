@@ -217,7 +217,7 @@
         },
         "text": {
           "value": {
-            "expr": "width >= 500 ? 'Hawthorn and Richmond won 6 of 14 titles.' : 'Together: 6 of 14 titles.'"
+            "expr": "width >= 500 ? 'Orange: joint leaders, 6 of 14 titles.' : 'Orange: joint leaders.'"
           }
         },
         "tooltip": {

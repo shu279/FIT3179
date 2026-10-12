@@ -51,6 +51,7 @@ async function embedChart(element, {resetMapPeriod=false,cityMode,cityPeriod,pre
   if(cityState && cityPeriod)cityState.mapTimeBrush={season:cityPeriod};
   if(cityState)mapControls?.pause();
   previous?.navigation?.destroy();
+  previous?.readingAnnotations?.destroy();
   chartViews.get(name)?.view.finalize();
   chartViews.delete(name);
   element.setAttribute('aria-busy','true');
@@ -85,7 +86,8 @@ async function embedChart(element, {resetMapPeriod=false,cityMode,cityPeriod,pre
       mode:isVega?'vega':'vega-lite'
     });
     const navigation=name==='premiership_symbols'?initialiseCityMapNavigation(result.view,element):null;
-    chartViews.set(name,{view:result.view,element,isVega,width:element.clientWidth,spec,layout,navigation});
+    const readingAnnotations=initialiseReadingAnnotations(element,name);
+    chartViews.set(name,{view:result.view,element,isVega,width:element.clientWidth,spec,layout,navigation,readingAnnotations});
     if(name==='premiership_symbols')mapControls?.replaceCityView(result.view);
     if(name==='ladder_bump'){
       const updatePeriod=(_signal,selection)=>{
@@ -159,7 +161,7 @@ function initialiseResize() {
     },160);
   });
   chartViews.forEach(entry=>observer.observe(entry.element));
-  window.addEventListener('pagehide',()=>{observer.disconnect();chartViews.forEach(entry=>entry.view.finalize());},{once:true});
+  window.addEventListener('pagehide',()=>{observer.disconnect();chartViews.forEach(entry=>{entry.readingAnnotations?.destroy();entry.view.finalize();});},{once:true});
 }
 
 async function initialise() {

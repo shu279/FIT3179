@@ -251,7 +251,8 @@
       "title": {
         "text": {
           "expr": "width < 200 ? [\"Games won in the\",\"selected seasons\"] : \"Games won in the selected seasons\""
-        }
+        },
+        "offset": 60
       },
       "width": 900,
       "height": 145,
