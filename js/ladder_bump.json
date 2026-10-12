@@ -126,9 +126,7 @@
     {
       "name": "journey_detail",
       "title": {
-        "text": {
-          "expr": "width < 200 ? [\"Ladder positions in\",\"the selected period\"] : \"Ladder positions in the selected period\""
-        }
+        "text": "Ladder positions in the selected period"
       },
       "width": 900,
       "height": 260,
@@ -249,9 +247,7 @@
     {
       "name": "journey_summary",
       "title": {
-        "text": {
-          "expr": "width < 200 ? [\"Games won in the\",\"selected seasons\"] : \"Games won in the selected seasons\""
-        },
+        "text": "Games won in the selected seasons",
         "offset": 60
       },
       "width": 900,
@@ -453,9 +449,7 @@
     {
       "name": "journey_overview",
       "title": {
-        "text": {
-          "expr": "width < 200 ? [\"Drag to select\",\"a season range\"] : \"Drag to select a season range\""
-        }
+        "text": "Drag to select a season range"
       },
       "width": 900,
       "height": 90,

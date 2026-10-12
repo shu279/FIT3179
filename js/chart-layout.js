@@ -12,7 +12,9 @@ function chartLayout(spec, availableWidth) {
     const journey = spec.usermeta?.layout === 'journey';
     const sideLegend = journey && available >= 600;
     const plotWidth = Math.max(120, available - (spec.usermeta?.layout === 'map-timeline' ? (spec.vconcat.length===1 ? 10 : 75) : sideLegend ? 300 : 175));
-    spec.vconcat.forEach(view => {
+    // Flatten the previous arrangement before a resize chooses a new one.
+    const panels = journey ? spec.vconcat.flatMap(view=>view.hconcat||[view]) : spec.vconcat;
+    panels.forEach(view => {
       view.width = plotWidth;
       if (journey) {
         // Reserve a side column on wide screens; preserve the plot width on phones.
@@ -28,6 +30,35 @@ function chartLayout(spec, availableWidth) {
         }
       }
     });
+    if(journey){
+      const detail=panels.find(view=>view.name==='journey_detail');
+      const summary=panels.find(view=>view.name==='journey_summary');
+      const overview=panels.find(view=>view.name==='journey_overview');
+      const sideBySide=available>=900;
+      summary.height=sideBySide?260:145;
+      if(sideBySide){
+        summary.title.offset=14;
+        // Keep the reading note above the bars, within the shared plot height.
+        summary.encoding.y.scale.range=[46,260];
+      }else delete summary.encoding.y.scale.range;
+      if(sideBySide){
+        // Leave room for axes, the line legend and the gap between panels.
+        const plotBudget=available-365;
+        detail.width=Math.floor(plotBudget*.62);
+        summary.width=plotBudget-detail.width;
+        spec.vconcat=[{hconcat:[detail,summary],spacing:32,resolve:{scale:{x:'independent',y:'independent',color:'shared'},legend:{color:'independent'}}},overview];
+      }else spec.vconcat=panels;
+      for(const panel of panels){
+        const text=Array.isArray(panel.title.text)?panel.title.text.join(' '):panel.title.text;
+        const lines=[''];
+        for(const word of text.split(' ')){
+          const last=lines.length-1;
+          if(lines[last]&&lines[last].length+word.length+1>20)lines.push(word);
+          else lines[last]+=(lines[last]?' ':'')+word;
+        }
+        panel.title.text=panel.width<200?lines:text;
+      }
+    }
     const mapHeight = spec.usermeta?.layout === 'map-timeline' ? Math.max(220,Math.min(440,Math.round(available*0.55))) : null;
     if(mapHeight) spec.vconcat[0].height = mapHeight;
     return {type:'concat', plotWidth, mapHeight};
