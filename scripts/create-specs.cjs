@@ -290,6 +290,8 @@ const titleTotals=summary.filter(d=>d.premierships>0).map(d=>({team:d.team,premi
 const totalsJSON=JSON.stringify(titleTotals,null,2)+'\n';
 fs.writeFileSync(path.join(root,'data/premiership_totals.json'),totalsJSON);
 const totalsVersion=crypto.createHash('sha256').update(totalsJSON).digest('hex').slice(0,12);
+const titlesNoteRight='width < 500 ? width - 38 : width * .68 + 90';
+const titlesNoteY='width < 500 ? height - 35 : height * .6';
 save('premiership_bars',{
  description:'Horizontal bars show the nine premiership-winning clubs in 2012–2025, ordered by title count. Hawthorn and Richmond each won three titles and are highlighted in orange. Bar lengths start at zero; direct labels show the count and tooltips list winning years.',
  height:380,data:{url:'data/premiership_totals.json?v='+totalsVersion},
@@ -302,9 +304,9 @@ save('premiership_bars',{
   {name:'title_bars',mark:{type:'bar',size:{expr:"min(26, bandwidth('y') * .8)"}},encoding:{color:{condition:{test:'datum.premierships === 3',value:orange},value:green}}},
   {name:'title_counts',mark:{type:'text',align:'left',dx:8,fontSize:15,fontWeight:500,color:ink},encoding:{text:field('premierships')}},
   {name:'winning_years',transform:[{filter:'datum.premierships >= 2 && width >= 400'}],mark:{type:'text',align:'left',fontSize:15,color:'#ffffff'},encoding:{x:{value:10},text:field('title_years','nominal')}},
-  note('titles_note',{expr:"width >= 500 ? 'Orange: joint leaders, 6 of 14 titles.' : 'Orange: joint leaders.'"},'width < 500 ? width - 8 : width * .68','width < 500 ? height - 35 : height * .6',{align:{expr:"width < 500 ? 'right' : 'center'"}}),
-  leader('titles_note_elbow','width < 500 ? width - 4 : width * .68','width < 500 ? height - 43 : height * .6 - 8','width - 4','width < 500 ? height - 43 : height * .6 - 8'),
-  leader('titles_leader','width - 4','width < 500 ? height - 43 : height * .6 - 8','width - 4',"scale('y','Hawthorn') + bandwidth('y') + 4"),
+  note('titles_note',{expr:"width >= 500 ? 'Joint leaders, 6 of 14 titles.' : '6 of 14 titles.'"},titlesNoteRight,titlesNoteY,{align:'right',baseline:'middle'}),
+  leader('titles_note_elbow','('+titlesNoteRight+') + 8',titlesNoteY,'width - 4',titlesNoteY),
+  leader('titles_leader','width - 4',titlesNoteY,'width - 4',"scale('y','Hawthorn') + bandwidth('y') + 4"),
   ...['Hawthorn','Richmond'].flatMap((team,i)=>{
    const centre="scale('y','"+team+"') + bandwidth('y') / 2";
    const gap="scale('y','"+team+"') + bandwidth('y') + 4";

@@ -194,10 +194,8 @@
       },
       "mark": {
         "type": "text",
-        "align": {
-          "expr": "width < 500 ? 'right' : 'center'"
-        },
-        "baseline": "top",
+        "align": "right",
+        "baseline": "middle",
         "lineHeight": 19,
         "lineBreak": "\n",
         "color": "#21372b",
@@ -207,7 +205,7 @@
       "encoding": {
         "x": {
           "value": {
-            "expr": "width < 500 ? width - 8 : width * .68"
+            "expr": "width < 500 ? width - 38 : width * .68 + 90"
           }
         },
         "y": {
@@ -217,7 +215,7 @@
         },
         "text": {
           "value": {
-            "expr": "width >= 500 ? 'Orange: joint leaders, 6 of 14 titles.' : 'Orange: joint leaders.'"
+            "expr": "width >= 500 ? 'Joint leaders, 6 of 14 titles.' : '6 of 14 titles.'"
           }
         },
         "tooltip": {
@@ -246,12 +244,12 @@
       "encoding": {
         "x": {
           "value": {
-            "expr": "width < 500 ? width - 4 : width * .68"
+            "expr": "(width < 500 ? width - 38 : width * .68 + 90) + 8"
           }
         },
         "y": {
           "value": {
-            "expr": "width < 500 ? height - 43 : height * .6 - 8"
+            "expr": "width < 500 ? height - 35 : height * .6"
           }
         },
         "x2": {
@@ -261,7 +259,7 @@
         },
         "y2": {
           "value": {
-            "expr": "width < 500 ? height - 43 : height * .6 - 8"
+            "expr": "width < 500 ? height - 35 : height * .6"
           }
         },
         "tooltip": {
@@ -295,7 +293,7 @@
         },
         "y": {
           "value": {
-            "expr": "width < 500 ? height - 43 : height * .6 - 8"
+            "expr": "width < 500 ? height - 35 : height * .6"
           }
         },
         "x2": {
