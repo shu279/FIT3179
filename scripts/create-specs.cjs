@@ -17,8 +17,7 @@ const save=(name,spec)=>fs.writeFileSync(path.join(root,'js',name+'.json'),JSON.
 const focus=[{name:'focusTeam',value:'All clubs'}];
 const focused={condition:{test:"focusTeam === 'All clubs' || datum.team === focusTeam",value:1},value:0.22};
 const years=[2012,2015,2018,2021,2025];
-// Explanatory notes match the 15px body copy at every width.
-// Shorten narrow-screen wording instead of shrinking or wrapping the text.
+// Explanatory notes use the available space and retain the 15px body size.
 const note=(name,lines,x,y,extra={})=>({
  name,data:{values:[{}]},
  mark:{type:'text',align:'left',baseline:'top',lineHeight:19,lineBreak:'\n',color:ink,...extra,fontSize:15,fontWeight:'normal'},
@@ -289,11 +288,17 @@ fs.writeFileSync(path.join(root,'data/premiership_totals.json'),totalsJSON);
 const totalsVersion=crypto.createHash('sha256').update(totalsJSON).digest('hex').slice(0,12);
 const titlesNoteRight='width < 500 ? width - 38 : width * .68 + 90';
 const titlesNoteY='width < 500 ? height - 35 : height * .6';
+const titlesSharedX="width < 500 ? width - 24 : (scale('x',1) + width) / 2";
+const titlesSharedY='width < 500 ? height - 77 : height * .88';
+const titlesSharedFromX="width < 500 ? scale('x',1) - 12 : ("+titlesSharedX+") - 170";
+const titlesSharedFromY='width < 500 ? ('+titlesSharedY+') - 12 : ('+titlesSharedY+')';
+const titlesSharedTipX="scale('x',1) - 12";
+const titlesSharedTipY="scale('y', '"+titleTotals.at(-1).team+"') + bandwidth('y') / 2 + (width < 500 ? 1 : -1) * (min(26, bandwidth('y') * .8) / 2 + 3)";
 save('premiership_bars',{
  description:'Horizontal bars show the nine premiership-winning clubs in 2012–2025, ordered by title count. Hawthorn and Richmond each won three titles and are highlighted in orange. Bar lengths start at zero; direct labels show the count and tooltips list winning years.',
  height:380,data:{url:'data/premiership_totals.json?v='+totalsVersion},
  encoding:{
-  y:field('team','nominal',{sort:titleTotals.map(d=>d.team),scale:{range:[0,{expr:'width < 500 ? height - 70 : height'}]},axis:{title:null,ticks:false,labelLimit:180}}),
+  y:field('team','nominal',{sort:titleTotals.map(d=>d.team),scale:{range:[0,{expr:'width < 500 ? height - 110 : height'}]},axis:{title:null,ticks:false,labelLimit:180}}),
   x:field('premierships','quantitative',{scale:{domain:[0,3],range:[0,{expr:'width - 24'}],nice:false},axis:{title:'Premierships',values:[0,1,2,3],format:'d',grid:false}}),
   tooltip:[tip('team','Club'),tip('premierships','Premierships'),{field:'title_years',type:'nominal',title:'Winning years'}]
  },
@@ -301,6 +306,9 @@ save('premiership_bars',{
   {name:'title_bars',mark:{type:'bar',size:{expr:"min(26, bandwidth('y') * .8)"}},encoding:{color:{condition:{test:'datum.premierships === 3',value:orange},value:green}}},
   {name:'title_counts',mark:{type:'text',align:'left',dx:8,fontSize:15,fontWeight:500,color:ink},encoding:{text:field('premierships')}},
   {name:'winning_years',transform:[{filter:'datum.premierships >= 2 && width >= 400'}],mark:{type:'text',align:'left',fontSize:15,color:'#ffffff'},encoding:{x:{value:10},text:field('title_years','nominal')}},
+  note('titles_shared_note',{expr:"width >= 500 ? 'Nine clubs shared the fourteen premierships.' : 'Nine clubs shared the\\nfourteen premierships.'"},titlesSharedX,titlesSharedY,{align:{expr:"width < 500 ? 'right' : 'center'"},baseline:'middle'}),
+  leader('titles_shared_leader',titlesSharedFromX,titlesSharedFromY,titlesSharedTipX,titlesSharedTipY),
+  {name:'titles_shared_arrow',data:{values:[{}]},mark:{type:'point',shape:'triangle-up',filled:true,color:ink,size:35,angle:{expr:'atan2(('+titlesSharedTipY+') - ('+titlesSharedFromY+'), ('+titlesSharedTipX+') - ('+titlesSharedFromX+')) * 180 / PI + 90'}},encoding:{x:{value:{expr:titlesSharedTipX}},y:{value:{expr:titlesSharedTipY}},tooltip:{value:null},opacity:{value:1},color:{value:ink}}},
   note('titles_note',{expr:"width >= 500 ? 'Joint leaders, 6 of 14 titles.' : '6 of 14 titles.'"},titlesNoteRight,titlesNoteY,{align:'right',baseline:'middle'}),
   leader('titles_note_elbow','('+titlesNoteRight+') + 8',titlesNoteY,'width - 4',titlesNoteY),
   leader('titles_leader','width - 4',titlesNoteY,'width - 4',"scale('y','Hawthorn') + bandwidth('y') + 4"),
