@@ -34,20 +34,6 @@ function initialiseReadingAnnotations(element, name) {
     return inView(result)?result:null;
   };
   const guides={
-    ladder_heatmap:[
-      {text:'Fill = ladder rank',at:target('.ladder_cells_marks path',d=>d?.team==='Geelong'&&d.season===2012)},
-      {text:'Orange outline = champion',at:target('.champion_outlines_marks path',team('Geelong'))}
-    ],
-    finals_frequency:[{text:'One count per finals season',at:target('.mark-symbol.role-mark path',team('Geelong'))}],
-    finals_streaks:[{text:'Bar = uninterrupted finals run',at:target('.layer_0_marks path',team('Geelong'))}],
-    top_four_treemap:[
-      {text:'Area = share of 56 top-four places',at:target('.top_four_tiles path',team('Geelong'),.8)},
-      {text:'Orange = Geelong',at:target('.top_four_tiles path',team('Geelong'),.25)}
-    ],
-    finals_return:[
-      {text:'Thicker = more transitions',at:target('.mark-path.role-mark path',d=>d?.from===1&&d.to===1,.6,.15)},
-      {text:'% of the starting group',at:target('.flow_values text',d=>d?.from===1&&d.to===1)}
-    ],
     ladder_bump:[],
     state_choropleth:[
       {text:'Darker green = higher finals share',at:target('.state_count_labels_marks text',d=>d?.state==='WA',.5,-1.2)},
@@ -60,10 +46,6 @@ function initialiseReadingAnnotations(element, name) {
     ],
     grand_final_flows:[{text:()=>find('.same_city_loop_marks path')?'Loop = clubs sharing a home city':'Line = home-city matchup, not travel',at:()=>pointOnPath('.annual_matchup_marks path',.5)()||pointOnPath('.same_city_loop_marks path',.6)()}],
     premiership_bars:[{text:'Bar length = titles',at:target('.title_bars_marks path',team('Hawthorn'),.95)}],
-    success_comparison:[
-      {text:'Length = percentage',at:target('.profile_bars path',d=>d?.team==='Geelong'&&d.metric==='wins',.95)},
-      {text:'Labels = counts',at:target('.profile_values text',d=>d?.team==='Geelong'&&d.metric==='wins')}
-    ],
     season_boxplot:[
       {text:'Whiskers = lowest and highest',at:target('.layer_2_marks path',team('Geelong'),.5,0),also:target('.layer_3_marks path',team('Geelong'),.5,0)},
       {text:'Box = middle 50% of seasons',at:target('.layer_4_marks path',team('Geelong'),.25,0)},
