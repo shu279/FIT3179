@@ -9,7 +9,7 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=464e7d43f490">
+  <link rel="stylesheet" href="css/style.css?v=47fbfb005573">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -100,7 +100,7 @@
             </div>
             <aside class="map-legend" aria-label="Finals rate: five fixed percentage classes">
               <p class="micro">Clubs reaching finals</p>
-              <div class="map-rate-legend"><span style="--swatch:#edf8e9">0–&lt;30%</span><span style="--swatch:#bae4b3">30–&lt;40%</span><span style="--swatch:#74c476">40–&lt;50%</span><span style="--swatch:#31a354">50–&lt;100%</span><span style="--swatch:#006d2c">100%</span></div>
+              <div class="map-rate-legend"><span style="--swatch:#c1c6b7">0–&lt;30%</span><span style="--swatch:#a8bd9c">30–&lt;40%</span><span style="--swatch:#819978">40–&lt;50%</span><span style="--swatch:#587651">50–&lt;100%</span><span style="--swatch:#31553b">100%</span></div>
             </aside>
           </div>
           <figcaption>Labels show finalists / all clubs in each state: 1/2 means one of two clubs reached finals. Darker greens show higher percentages; grey means no clubs. The unequal intervals separate the five observed state rates: 0%, 30%, 40%, 50% and 100%. Cutoffs stay fixed across all years, and a value on a boundary enters the higher class. The physical layer shows land, ocean and a coordinate grid; the cultural layer shows state borders and finalist counts.</figcaption>
@@ -131,7 +131,7 @@
             <div class="chart" data-spec="premiership_symbols" aria-label="Proportional-symbol map of finalists by home city, with Single season and Compare period modes. Circle area shows finalists per season and colour shows finals rate."></div>
             <aside class="map-legend" aria-label="Map legends: finals rate and finalists per season">
               <p class="micro">Clubs reaching finals</p>
-              <div class="map-rate-legend"><span style="--swatch:#edf8e9">0–&lt;30%</span><span style="--swatch:#bae4b3">30–&lt;40%</span><span style="--swatch:#74c476">40–&lt;50%</span><span style="--swatch:#31a354">50–&lt;100%</span><span style="--swatch:#006d2c">100%</span></div>
+              <div class="map-rate-legend"><span style="--swatch:#c1c6b7">0–&lt;30%</span><span style="--swatch:#a8bd9c">30–&lt;40%</span><span style="--swatch:#819978">40–&lt;50%</span><span style="--swatch:#587651">50–&lt;100%</span><span style="--swatch:#31553b">100%</span></div>
               <div class="map-size-legend" role="group" aria-label="Circle size: finalists per season">
                 <p class="micro">Finalists</p>
                 <!-- Three size examples retain the observed maximum of 4. Match Vega's area scale: radius = sqrt(2400 × count / 9) / 2. -->
@@ -217,7 +217,6 @@
         <ul>
           <li><a href="https://afltables.com/afl/teams/geelong/season.html">AFL Tables</a>: club-season records, ladder ranks and finals outcomes.</li>
           <li><a href="https://www.naturalearthdata.com/downloads/">Natural Earth</a>: public-domain land, ocean, coordinate grid and state boundaries, clipped and simplified with <a href="https://mapshaper.org/">Mapshaper</a>.</li>
-          <li><a href="https://colorbrewer2.org/#type=sequential&amp;scheme=Greens&amp;n=5">ColorBrewer 2.0</a>: five-class Greens sequential palette, developed by Cynthia Brewer and colleagues. Fixed, unequal class boundaries at 30%, 40%, 50% and 100% separate the observed state rates and are shared with the city map.</li>
           <li><a href="https://www.wikidata.org/">Wikidata contributors</a>: city coordinates; CC0. Cities are representative locations, not stadium positions.</li>
           <li><a href="https://commons.wikimedia.org/wiki/File:MCG_Grand_Final_panorama.jpg">MCG Grand Final panorama</a>: photograph of the 2013 AFL Grand Final by Steve Davidson, licensed under <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>. Cropped to fit the title area and displayed with a cream gradient overlay.</li>
         </ul>

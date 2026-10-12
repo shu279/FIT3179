@@ -60,12 +60,11 @@ const manifest={
  land_derivation:{source:'states',operation:'Dissolve state polygons after simplification; remove internal boundaries; preserve exterior coast and islands.',output:'natural_earth_states.topojson',object:'land'},
  layers,commands,
  outputs:['natural_earth_physical.topojson','natural_earth_states.topojson'].map(file=>({file,bytes:fs.statSync(path.join(dest,file)).size})),
- colour:{provider:'ColorBrewer 2.0',scheme:'Greens',classes:5,thresholds:[30,40,50,100],
-  colours:['#edf8e9','#bae4b3','#74c476','#31a354','#006d2c'],
+ colour:{provider:'Custom site palette',scheme:'Muted greens',classes:5,thresholds:[30,40,50,100],
+  colours:['#c1c6b7','#a8bd9c','#819978','#587651','#31553b'],
   intervals:['0–<30%','30–<40%','40–<50%','50–<100%','100%'],
   classification:'Fixed, unequal intervals separate all five observed state rates (0, 30, 40, 50, 100) across 2012–2025. The same thresholds apply to every year and city-period comparison; 100% is a separate class. No-club regions are excluded and shown in grey.',
-  url:'https://colorbrewer2.org/#type=sequential&scheme=Greens&n=5',
-  specification_source:'https://github.com/axismaps/colorbrewer/blob/master/colorbrewer_schemes.js'}
+  light_labels_from:50}
 };
 fs.writeFileSync(path.join(dest,'map_sources.json'),JSON.stringify(manifest,null,2)+'\n');
 console.log(JSON.stringify(manifest.outputs));

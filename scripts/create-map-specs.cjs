@@ -74,7 +74,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  const mapTitle=text=>({text,anchor:'start',fontSize:15,color:ink,fontWeight:'normal',limit:{expr:'width'}});
  const save=(name,spec)=>write('js/'+name+'.json',{...base,usermeta:{layout:'map'},...spec});
  save('state_choropleth',{
-  description:'State choropleth with a five-class ColorBrewer Greens palette and fixed, unequal thresholds at 30%, 40%, 50% and 100%, separating all observed state rates. Labels show clubs reaching finals / all clubs in each state. States without clubs remain grey and have no fraction label.',
+  description:'State choropleth with a custom five-class muted green palette matching the site and fixed, unequal thresholds at 30%, 40%, 50% and 100%, separating all observed state rates. Labels show clubs reaching finals / all clubs in each state. States without clubs remain grey and have no fraction label.',
   height:440,params:commonParams(true),projection,
   layer:[...physicalLayers(),
    {name:'state_rates',data:table('state_seasons'),transform:[{filter:'datum.season === selectedSeason'},
@@ -93,7 +93,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
      tooltip:[{field:'state_name',type:'nominal',title:'State'},{field:'season',type:'quantitative',format:'d',title:'Season'},
       {field:'finals',type:'quantitative',title:'Clubs reaching finals'},{field:'clubs',type:'quantitative',title:'All clubs in state'},
       {field:'finals_rate',type:'quantitative',format:'.1f',title:'Finals rate (%)'}],
-     color:{condition:{test:`datum.finals_rate < ${palette.thresholds.at(-1)}`,value:'#000000'},value:'#ffffff'}}}
+     color:{condition:{test:`datum.finals_rate < ${palette.light_labels_from}`,value:'#000000'},value:'#ffffff'}}}
   ]
  });
  // Resolve continuous brush edges to inclusive, whole seasons. Even a narrow

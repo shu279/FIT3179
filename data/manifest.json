@@ -138,8 +138,7 @@
         "url": "https://www.wikidata.org/wiki/Q140075"
       }
     ],
-    "natural_earth": "https://www.naturalearthdata.com/downloads/",
-    "colorbrewer": "https://colorbrewer2.org/#type=sequential&scheme=Greens&n=5"
+    "natural_earth": "https://www.naturalearthdata.com/downloads/"
   },
   "home_city_groupings": [
     {
