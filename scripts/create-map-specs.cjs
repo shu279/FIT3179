@@ -63,21 +63,38 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
  // including zoom, panning and changes to the selected season.
  const px="geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0]";
  const py="geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1]";
- const calloutArrow=(name,source,dx,dy,tx,ty)=>[
+ // Separate nearby cities in screen pixels, with leaders to their true locations.
+ // Zoom gradually removes an offset once the geographic spacing is sufficient.
+ const projected=(city,axis)=>"geoCentroid('projection', {type:'Point', coordinates:["+lookup[city].longitude+','+lookup[city].latitude+']})['+axis+']';
+ const geelongDX='('+projected('Geelong',0)+' - '+projected('Melbourne',0)+')';
+ const geelongDY='('+projected('Geelong',1)+' - '+projected('Melbourne',1)+')';
+ const cityDistance='sqrt(pow('+geelongDX+',2) + pow('+geelongDY+',2))';
+ const cityGap=Math.sqrt(2400)/2+Math.sqrt(600)/2+6;
+ const separationFactor='max(0, '+cityGap+' / max(1, '+cityDistance+') - 1)';
+ const offsetX='('+geelongDX+' * '+separationFactor+')';
+ const offsetY='('+geelongDY+' * '+separationFactor+')';
+ const goldDX='('+projected('Gold Coast',0)+' - '+projected('Brisbane',0)+')';
+ const goldDY='('+projected('Gold Coast',1)+' - '+projected('Brisbane',1)+')';
+ const goldGap=Math.sqrt(600)+6;
+ const goldOffset='max(0, sqrt(max(0, '+goldGap+' * '+goldGap+' - pow('+goldDY+',2))) - '+goldDX+')';
+ const cityX=px+" + (datum.city === 'Geelong' ? "+offsetX+" : datum.city === 'Gold Coast' ? "+goldOffset+' : 0)';
+ const cityY=py+" + (datum.city === 'Geelong' ? "+offsetY+' : 0)';
+ const cityLoc={x:{value:{expr:cityX}},y:{value:{expr:cityY}}};
+ const calloutArrow=(name,source,dx,dy,tx,ty,anchor={x:px,y:py})=>[
   {...source,name:name+'_leader',mark:{type:'rule',clip:true,color:ink,strokeWidth:1,aria:false},
-   encoding:{x:{value:{expr:px+' + ('+dx+')'}},y:{value:{expr:py+' + ('+dy+')'}},x2:{value:{expr:px+' + ('+tx+')'}},y2:{value:{expr:py+' + ('+ty+')'}}}},
+   encoding:{x:{value:{expr:anchor.x+' + ('+dx+')'}},y:{value:{expr:anchor.y+' + ('+dy+')'}},x2:{value:{expr:anchor.x+' + ('+tx+')'}},y2:{value:{expr:anchor.y+' + ('+ty+')'}}}},
   {...source,name:name+'_arrow',mark:{type:'point',clip:true,shape:'triangle-up',filled:true,color:ink,size:35,opacity:1,aria:false,
     angle:{expr:'atan2(('+ty+')-('+dy+'), ('+tx+')-('+dx+')) * 180 / PI + 90'}},
-   encoding:{x:{value:{expr:px+' + ('+tx+')'}},y:{value:{expr:py+' + ('+ty+')'}}}}
+   encoding:{x:{value:{expr:anchor.x+' + ('+tx+')'}},y:{value:{expr:anchor.y+' + ('+ty+')'}}}}
  ];
  const cityLabels=(finalistsOnly=false)=>[
   // Shared-city matchups have their own city and club annotation.
   {name:'cultural_city_labels',data:table(finalistsOnly?'city_seasons':'cities'),transform:[...(finalistsOnly?[{filter:'datum.season === selectedSeason && datum.grand_finals === 1'}]:[]),{filter:"(width >= 500 || mapZoom >= 2) && showCultural && datum.city !== 'Geelong' && datum.city !== 'Gold Coast'"}],
-   mark:{type:'text',clip:true,align:'left',dx:12,dy:-12,fontSize:15,color:ink},encoding:{...loc,text:{field:'city',type:'nominal'}}},
+   mark:{type:'text',clip:true,align:'left',dx:finalistsOnly?12:{expr:"datum.city === 'Melbourne' ? 28 : 20"},dy:-12,fontSize:15,color:ink},encoding:{...(finalistsOnly?loc:cityLoc),text:{field:'city',type:'nominal'}}},
   {name:'cultural_geelong_label',data:table(finalistsOnly?'city_seasons':'cities'),transform:[...(finalistsOnly?[{filter:'datum.season === selectedSeason && datum.grand_finals === 1'}]:[]),{filter:"(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Geelong'"}],
-   mark:{type:'text',clip:true,align:'right',dx:-12,dy:22,fontSize:15,color:ink},encoding:{...loc,text:{field:'city',type:'nominal'}}},
+   mark:{type:'text',clip:true,align:'right',dx:finalistsOnly?-12:-14,dy:22,fontSize:15,color:ink},encoding:{...(finalistsOnly?loc:cityLoc),text:{field:'city',type:'nominal'}}},
   {name:'cultural_gold_coast_label',data:table(finalistsOnly?'city_seasons':'cities'),transform:[...(finalistsOnly?[{filter:'datum.season === selectedSeason && datum.grand_finals === 1'}]:[]),{filter:"(width >= 500 || mapZoom >= 2) && showCultural && datum.city === 'Gold Coast'"}],
-   mark:{type:'text',clip:true,align:'left',dx:12,dy:19,fontSize:15,color:ink},encoding:{...loc,text:{field:'city',type:'nominal'}}}
+   mark:{type:'text',clip:true,align:'left',dx:12,dy:19,fontSize:15,color:ink},encoding:{...(finalistsOnly?loc:cityLoc),text:{field:'city',type:'nominal'}}}
  ];
  const rateColor={field:'finals_rate',type:'quantitative',scale:{type:'threshold',domain:palette.thresholds,range:palette.colours},legend:null};
  // Limit titles to their panel: an overflowing title makes fit autosizing shrink
@@ -125,14 +142,14 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
   {joinaggregate:[{op:'distinct',field:'season',as:'visible_seasons'}]},
   {filter:'datum.visible_seasons === 1 && datum.premierships > 0'}];
  const championText={type:'text',clip:true,fontSize:15,fontWeight:'normal',lineHeight:18,
-  align:{expr:"mapZoom > 1 ? 'center' : datum.city === 'Perth' ? 'left' : 'right'"},
-  dx:{expr:"mapZoom > 1 ? 0 : datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"},
-  dy:{expr:"mapZoom > 1 ? -54 : datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"}};
+  align:{expr:"mapZoom > 1 ? 'center' : datum.city === 'Perth' || width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Sydney') ? 'left' : 'right'"},
+  dx:{expr:"mapZoom > 1 ? 0 : datum.city === 'Perth' ? 16 : width >= 500 && datum.city === 'Melbourne' ? 40 : width >= 500 && datum.city === 'Sydney' ? 26 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"},
+  dy:{expr:"mapZoom > 1 ? -54 : datum.city === 'Perth' ? -52 : width >= 500 && datum.city === 'Sydney' ? 44 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"}};
  const championAnnotation={data:table('city_seasons'),transform:[...championTransform,
   {calculate:"[format(datum.season, 'd') + ' champions', datum.premier]",as:'champion_label'}],
-  encoding:{...loc,text:{field:'champion_label',type:'nominal'}}};
+  encoding:{...cityLoc,text:{field:'champion_label',type:'nominal'}}};
  write('js/premiership_symbols.json',{
-  '$schema':base.$schema,description:'A proportional-symbol map with Single season and Compare period modes. The period brush selects inclusive whole years; fractional endpoints resolve to their nearest seasons. Green circle area shows finalists per season. A diamond and annotation identify the champion when exactly one season is selected.',
+  '$schema':base.$schema,description:'A proportional-symbol map with Single season and Compare period modes. The period brush selects inclusive whole years; fractional endpoints resolve to their nearest seasons. Green circle area shows finalists per season on a fixed zero-to-four scale. Geelong and Gold Coast are offset when needed, with lines to their geographic locations. A diamond and annotation identify the champion when exactly one season is selected.',
   usermeta:{layout:'map-timeline'},padding:5,autosize:{type:'pad',resize:true},config:multiConfig,
   params:[...commonParams(true).map(param=>param.name==='mapZoom'?{...param,bind:{input:'range',min:1,max:8,step:0.25,name:'Zoom: ',element:'#city-zoom-control'}}:
    param.name==='selectedSeason'?{...param,bind:{...param.bind,element:'#city-season-control'}}:param),
@@ -143,20 +160,27 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
   vconcat:[
    {name:'city_map',width:900,height:440,projection:{...projection,scale:{expr:'mapZoom * min(width / 0.84, city_map_height / 0.72)'},translate:{expr:'[width * (0.5 + mapPan[0]), city_map_height * (0.5 + mapPan[1])]'}},
     layer:[...physicalLayers('city_map_height'),borderLayer(),
+     {name:'geelong_location_leader',data:table('city_seasons'),transform:[...cityTransform,{filter:"datum.city === 'Geelong'"}],
+      mark:{type:'rule',clip:true,color:ink,strokeWidth:1,aria:false},encoding:{x:{value:{expr:px}},y:{value:{expr:py}},
+       x2:{value:{expr:px+' + '+offsetX+' * max(0, 1 - (sqrt(max(35, datum.finals_per_season * 600)) / 2 + 1) / max(1, '+cityGap+' - '+cityDistance+'))'}},
+       y2:{value:{expr:py+' + '+offsetY+' * max(0, 1 - (sqrt(max(35, datum.finals_per_season * 600)) / 2 + 1) / max(1, '+cityGap+' - '+cityDistance+'))'}}}},
+     {name:'gold_coast_location_leader',data:table('city_seasons'),transform:[...cityTransform,{filter:"datum.city === 'Gold Coast'"}],
+      mark:{type:'rule',clip:true,color:ink,strokeWidth:1,aria:false},encoding:{x:{value:{expr:px}},y:{value:{expr:py}},
+       x2:{value:{expr:px+' + max(0, '+goldOffset+' - sqrt(max(35, datum.finals_per_season * 600)) / 2 - 1)'}},y2:{value:{expr:py}}}},
      {name:'city_symbols',data:table('city_seasons'),transform:cityTransform,
-      mark:{type:'circle',clip:true,color:green,stroke:ink,strokeWidth:1,opacity:0.85},encoding:{...loc,
-       size:{field:'finals_per_season',type:'quantitative',scale:{domain:[0,9],range:[0,2400]},legend:null},tooltip:cityTip}},
+      mark:{type:'circle',clip:true,color:green,stroke:ink,strokeWidth:1,opacity:0.85},encoding:{...cityLoc,
+       size:{field:'finals_per_season',type:'quantitative',scale:{domain:[0,4],range:[0,2400]},legend:null},tooltip:cityTip}},
      {name:'zero_city_symbols',data:table('city_seasons'),transform:[...cityTransform,{filter:'datum.finals === 0'}],
-      mark:{type:'point',clip:true,shape:'circle',size:35,filled:false,stroke:ink,strokeWidth:1.2},encoding:{...loc,tooltip:cityTip}},
+      mark:{type:'point',clip:true,shape:'circle',size:35,filled:false,stroke:ink,strokeWidth:1.2},encoding:{...cityLoc,tooltip:cityTip}},
      {name:'premier_location',data:table('city_seasons'),transform:championTransform,
       mark:{type:'point',clip:true,shape:'diamond',filled:true,size:180,color:orange,stroke:'#ffffff',strokeWidth:1},
-      encoding:{...loc,tooltip:[{field:'season',type:'quantitative',format:'d',title:'Season'},{field:'premier',type:'nominal',title:'Premier'},{field:'city',type:'nominal',title:'Home city'}]}},
+      encoding:{...cityLoc,tooltip:[{field:'season',type:'quantitative',format:'d',title:'Season'},{field:'premier',type:'nominal',title:'Premier'},{field:'city',type:'nominal',title:'Home city'}]}},
      ...cityLabels(),
      ...calloutArrow('champion_annotation',{data:table('city_seasons'),transform:championTransform},
-      "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 11 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 29 : -11",
-      "mapZoom > 1 ? -24 : datum.city === 'Perth' ? -44 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 30 : -34) : -28",
-      "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3",
-      "mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 10 : -10"),
+      "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 11 : width >= 500 && datum.city === 'Melbourne' ? 36 : width >= 500 && datum.city === 'Sydney' ? 21 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 29 : -11",
+      "mapZoom > 1 ? -24 : datum.city === 'Perth' ? -44 : width >= 500 && datum.city === 'Sydney' ? 30 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 30 : -34) : -28",
+      "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width >= 500 && datum.city === 'Sydney' ? 3 : width >= 500 && datum.city === 'Melbourne' ? 8 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3",
+      "mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong' || datum.city === 'Sydney') ? 10 : -10",{x:cityX,y:cityY}),
      {...championAnnotation,name:'champion_annotation_halo',mark:{...championText,fill:'#f3f2e9',stroke:'#f3f2e9',strokeWidth:4,aria:false}},
      {...championAnnotation,name:'champion_annotation',mark:{...championText,color:orange}}
     ]},

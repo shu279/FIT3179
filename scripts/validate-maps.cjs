@@ -70,6 +70,14 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
    }
    if(name==='premiership_symbols'){
     const circles=()=>items(view,i=>i.mark?.marktype==='symbol'&&Number.isFinite(i.datum?.finals_per_season));
+    const checkSizes=table=>{
+     for(const item of table.filter(i=>i.datum.finals>0))assert.ok(Math.abs(item.size-item.datum.finals_per_season*600)<1e-8,'Four finalists use the full 2400 area scale');
+     for(const pair of [['Melbourne','Geelong'],['Brisbane','Gold Coast']]){
+      const [a,b]=pair.map(city=>table.find(i=>i.datum.city===city));
+      const gap=Math.hypot(a.x-b.x,a.y-b.y)-(Math.sqrt(a.size)+Math.sqrt(b.size))/2;
+      assert.ok(gap>=6-1e-8,pair.join(' and ')+' circles stay separate');
+     }
+    };
     const annotations=()=>items(view,i=>i.mark?.name==='champion_annotation_marks');
     const championMarkers=()=>items(view,i=>i.mark?.marktype==='symbol'&&i.shape==='diamond'&&i.datum?.premierships===1);
     const checkChampion=year=>{
@@ -79,12 +87,15 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
      assert.equal(labels[0].datum.city,expected.city);
      const markers=championMarkers();assert.equal(markers.length,1);
      assert.equal(markers[0].datum.season,year);assert.equal(markers[0].datum.premier,expected.team);
+     const city=circles().find(i=>i.datum.city===expected.city&&i.datum.finals>0);
+     assert.ok(Math.abs(markers[0].x-city.x)<1e-8&&Math.abs(markers[0].y-city.y)<1e-8,'Champion diamond follows the displayed city circle');
     };
     // Includes either a filled positive symbol or the small empty zero ring.
     for(let year=2012;year<=2025;year++){
      await view.signal('selectedSeason',year).runAsync();
      const table=circles().filter(i=>i.datum.finals>0 || i.size===35);
      assert.equal(table.length,7);
+     checkSizes(table);
      assert.equal(table.reduce((n,i)=>n+i.datum.finals,0),8);
      for(const item of table.filter(i=>i.datum.finals>0))assert.equal(item.fill,'#31553b');
      assert.ok(Math.max(...table.map(i=>i.y))-Math.min(...table.map(i=>i.y))>40,'Projected cities must not collapse onto one point');
@@ -101,6 +112,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
      else{assert.equal(annotations().length,0);assert.equal(championMarkers().length,0);}
      const table=circles().filter(i=>i.datum.finals>0 || i.size===35);
      assert.equal(table.length,7);
+     checkSizes(table);
      for(const item of table){
       const expected=rows.filter(r=>r.city===item.datum.city&&r.season>=range[0]&&r.season<=range[1]);
       const finalists=expected.filter(r=>r.finalist).length;
@@ -187,7 +199,8 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  const symbolPositions=()=>items(symbols,i=>i.mark?.name==='city_symbols_marks').map(i=>({city:i.datum.city,x:i.x,y:i.y,size:i.size}));
  const original=symbolPositions();
  const separation=positions=>{
-  const a=positions.find(d=>d.city==='Melbourne'),b=positions.find(d=>d.city==='Geelong');
+  // Unshifted cities verify the geographic zoom factor independently of decluttering.
+  const a=positions.find(d=>d.city==='Melbourne'),b=positions.find(d=>d.city==='Sydney');
   return Math.hypot(a.x-b.x,a.y-b.y);
  };
  await symbols.signal('mapZoom',4).runAsync();await settle();

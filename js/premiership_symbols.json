@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "A proportional-symbol map with Single season and Compare period modes. The period brush selects inclusive whole years; fractional endpoints resolve to their nearest seasons. Green circle area shows finalists per season. A diamond and annotation identify the champion when exactly one season is selected.",
+  "description": "A proportional-symbol map with Single season and Compare period modes. The period brush selects inclusive whole years; fractional endpoints resolve to their nearest seasons. Green circle area shows finalists per season on a fixed zero-to-four scale. Geelong and Gold Coast are offset when needed, with lines to their geographic locations. A diamond and annotation identify the champion when exactly one season is selected.",
   "usermeta": {
     "layout": "map-timeline"
   },
@@ -278,6 +278,174 @@
           }
         },
         {
+          "name": "geelong_location_leader",
+          "data": {
+            "url": "data/city_seasons.json"
+          },
+          "transform": [
+            {
+              "filter": "usePeriod ? datum.season >= periodStart && datum.season <= periodEnd : datum.season === selectedSeason"
+            },
+            {
+              "aggregate": [
+                {
+                  "op": "sum",
+                  "field": "finals",
+                  "as": "finals"
+                },
+                {
+                  "op": "sum",
+                  "field": "clubs",
+                  "as": "club_seasons"
+                },
+                {
+                  "op": "count",
+                  "as": "season_count"
+                },
+                {
+                  "op": "min",
+                  "field": "season",
+                  "as": "first"
+                },
+                {
+                  "op": "max",
+                  "field": "season",
+                  "as": "last"
+                }
+              ],
+              "groupby": [
+                "city",
+                "longitude",
+                "latitude"
+              ]
+            },
+            {
+              "calculate": "datum.finals / datum.club_seasons * 100",
+              "as": "finals_rate"
+            },
+            {
+              "calculate": "datum.finals / datum.season_count",
+              "as": "finals_per_season"
+            },
+            {
+              "filter": "datum.city === 'Geelong'"
+            }
+          ],
+          "mark": {
+            "type": "rule",
+            "clip": true,
+            "color": "#21372b",
+            "strokeWidth": 1,
+            "aria": false
+          },
+          "encoding": {
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0]"
+              }
+            },
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1]"
+              }
+            },
+            "x2": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) * max(0, 1 - (sqrt(max(35, datum.finals_per_season * 600)) / 2 + 1) / max(1, 42.742346141747674 - sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))))"
+              }
+            },
+            "y2": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) * max(0, 1 - (sqrt(max(35, datum.finals_per_season * 600)) / 2 + 1) / max(1, 42.742346141747674 - sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))))"
+              }
+            }
+          }
+        },
+        {
+          "name": "gold_coast_location_leader",
+          "data": {
+            "url": "data/city_seasons.json"
+          },
+          "transform": [
+            {
+              "filter": "usePeriod ? datum.season >= periodStart && datum.season <= periodEnd : datum.season === selectedSeason"
+            },
+            {
+              "aggregate": [
+                {
+                  "op": "sum",
+                  "field": "finals",
+                  "as": "finals"
+                },
+                {
+                  "op": "sum",
+                  "field": "clubs",
+                  "as": "club_seasons"
+                },
+                {
+                  "op": "count",
+                  "as": "season_count"
+                },
+                {
+                  "op": "min",
+                  "field": "season",
+                  "as": "first"
+                },
+                {
+                  "op": "max",
+                  "field": "season",
+                  "as": "last"
+                }
+              ],
+              "groupby": [
+                "city",
+                "longitude",
+                "latitude"
+              ]
+            },
+            {
+              "calculate": "datum.finals / datum.club_seasons * 100",
+              "as": "finals_rate"
+            },
+            {
+              "calculate": "datum.finals / datum.season_count",
+              "as": "finals_per_season"
+            },
+            {
+              "filter": "datum.city === 'Gold Coast'"
+            }
+          ],
+          "mark": {
+            "type": "rule",
+            "clip": true,
+            "color": "#21372b",
+            "strokeWidth": 1,
+            "aria": false
+          },
+          "encoding": {
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0]"
+              }
+            },
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1]"
+              }
+            },
+            "x2": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + max(0, max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) - sqrt(max(35, datum.finals_per_season * 600)) / 2 - 1)"
+              }
+            },
+            "y2": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1]"
+              }
+            }
+          }
+        },
+        {
           "name": "city_symbols",
           "data": {
             "url": "data/city_seasons.json"
@@ -337,13 +505,15 @@
             "opacity": 0.85
           },
           "encoding": {
-            "longitude": {
-              "field": "longitude",
-              "type": "quantitative"
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0)"
+              }
             },
-            "latitude": {
-              "field": "latitude",
-              "type": "quantitative"
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0)"
+              }
             },
             "size": {
               "field": "finals_per_season",
@@ -351,7 +521,7 @@
               "scale": {
                 "domain": [
                   0,
-                  9
+                  4
                 ],
                 "range": [
                   0,
@@ -467,13 +637,15 @@
             "strokeWidth": 1.2
           },
           "encoding": {
-            "longitude": {
-              "field": "longitude",
-              "type": "quantitative"
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0)"
+              }
             },
-            "latitude": {
-              "field": "latitude",
-              "type": "quantitative"
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0)"
+              }
             },
             "tooltip": [
               {
@@ -551,13 +723,15 @@
             "strokeWidth": 1
           },
           "encoding": {
-            "longitude": {
-              "field": "longitude",
-              "type": "quantitative"
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0)"
+              }
             },
-            "latitude": {
-              "field": "latitude",
-              "type": "quantitative"
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0)"
+              }
             },
             "tooltip": [
               {
@@ -593,19 +767,23 @@
             "type": "text",
             "clip": true,
             "align": "left",
-            "dx": 12,
+            "dx": {
+              "expr": "datum.city === 'Melbourne' ? 28 : 20"
+            },
             "dy": -12,
             "fontSize": 15,
             "color": "#21372b"
           },
           "encoding": {
-            "longitude": {
-              "field": "longitude",
-              "type": "quantitative"
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0)"
+              }
             },
-            "latitude": {
-              "field": "latitude",
-              "type": "quantitative"
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0)"
+              }
             },
             "text": {
               "field": "city",
@@ -627,19 +805,21 @@
             "type": "text",
             "clip": true,
             "align": "right",
-            "dx": -12,
+            "dx": -14,
             "dy": 22,
             "fontSize": 15,
             "color": "#21372b"
           },
           "encoding": {
-            "longitude": {
-              "field": "longitude",
-              "type": "quantitative"
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0)"
+              }
             },
-            "latitude": {
-              "field": "latitude",
-              "type": "quantitative"
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0)"
+              }
             },
             "text": {
               "field": "city",
@@ -667,13 +847,15 @@
             "color": "#21372b"
           },
           "encoding": {
-            "longitude": {
-              "field": "longitude",
-              "type": "quantitative"
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0)"
+              }
             },
-            "latitude": {
-              "field": "latitude",
-              "type": "quantitative"
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0)"
+              }
             },
             "text": {
               "field": "city",
@@ -713,22 +895,22 @@
           "encoding": {
             "x": {
               "value": {
-                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 11 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 29 : -11)"
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0) + (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 11 : width >= 500 && datum.city === 'Melbourne' ? 36 : width >= 500 && datum.city === 'Sydney' ? 21 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 29 : -11)"
               }
             },
             "y": {
               "value": {
-                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (mapZoom > 1 ? -24 : datum.city === 'Perth' ? -44 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 30 : -34) : -28)"
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0) + (mapZoom > 1 ? -24 : datum.city === 'Perth' ? -44 : width >= 500 && datum.city === 'Sydney' ? 30 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 30 : -34) : -28)"
               }
             },
             "x2": {
               "value": {
-                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3)"
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0) + (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width >= 500 && datum.city === 'Sydney' ? 3 : width >= 500 && datum.city === 'Melbourne' ? 8 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3)"
               }
             },
             "y2": {
               "value": {
-                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 10 : -10)"
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0) + (mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong' || datum.city === 'Sydney') ? 10 : -10)"
               }
             }
           }
@@ -765,18 +947,18 @@
             "opacity": 1,
             "aria": false,
             "angle": {
-              "expr": "atan2((mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 10 : -10)-(mapZoom > 1 ? -24 : datum.city === 'Perth' ? -44 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 30 : -34) : -28), (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3)-(mapZoom > 1 ? 0 : datum.city === 'Perth' ? 11 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 29 : -11)) * 180 / PI + 90"
+              "expr": "atan2((mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong' || datum.city === 'Sydney') ? 10 : -10)-(mapZoom > 1 ? -24 : datum.city === 'Perth' ? -44 : width >= 500 && datum.city === 'Sydney' ? 30 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 30 : -34) : -28), (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width >= 500 && datum.city === 'Sydney' ? 3 : width >= 500 && datum.city === 'Melbourne' ? 8 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3)-(mapZoom > 1 ? 0 : datum.city === 'Perth' ? 11 : width >= 500 && datum.city === 'Melbourne' ? 36 : width >= 500 && datum.city === 'Sydney' ? 21 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 29 : -11)) * 180 / PI + 90"
             }
           },
           "encoding": {
             "x": {
               "value": {
-                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3)"
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0) + (mapZoom > 1 ? 0 : datum.city === 'Perth' ? 3 : width >= 500 && datum.city === 'Sydney' ? 3 : width >= 500 && datum.city === 'Melbourne' ? 8 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 5 : -3)"
               }
             },
             "y": {
               "value": {
-                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 10 : -10)"
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0) + (mapZoom === 1 && width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong' || datum.city === 'Sydney') ? 10 : -10)"
               }
             }
           }
@@ -807,13 +989,15 @@
             }
           ],
           "encoding": {
-            "longitude": {
-              "field": "longitude",
-              "type": "quantitative"
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0)"
+              }
             },
-            "latitude": {
-              "field": "latitude",
-              "type": "quantitative"
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0)"
+              }
             },
             "text": {
               "field": "champion_label",
@@ -828,13 +1012,13 @@
             "fontWeight": "normal",
             "lineHeight": 18,
             "align": {
-              "expr": "mapZoom > 1 ? 'center' : datum.city === 'Perth' ? 'left' : 'right'"
+              "expr": "mapZoom > 1 ? 'center' : datum.city === 'Perth' || width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Sydney') ? 'left' : 'right'"
             },
             "dx": {
-              "expr": "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"
+              "expr": "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 16 : width >= 500 && datum.city === 'Melbourne' ? 40 : width >= 500 && datum.city === 'Sydney' ? 26 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"
             },
             "dy": {
-              "expr": "mapZoom > 1 ? -54 : datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"
+              "expr": "mapZoom > 1 ? -54 : datum.city === 'Perth' ? -52 : width >= 500 && datum.city === 'Sydney' ? 44 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"
             },
             "fill": "#f3f2e9",
             "stroke": "#f3f2e9",
@@ -868,13 +1052,15 @@
             }
           ],
           "encoding": {
-            "longitude": {
-              "field": "longitude",
-              "type": "quantitative"
+            "x": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[0] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : datum.city === 'Gold Coast' ? max(0, sqrt(max(0, 30.49489742783178 * 30.49489742783178 - pow((geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[1] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[1]),2))) - (geoCentroid('projection', {type:'Point', coordinates:[153.4,-28.016666666667]})[0] - geoCentroid('projection', {type:'Point', coordinates:[153.02777777778,-27.467777777778]})[0])) : 0)"
+              }
             },
-            "latitude": {
-              "field": "latitude",
-              "type": "quantitative"
+            "y": {
+              "value": {
+                "expr": "geoCentroid('projection', {type:'Point', coordinates:[datum.longitude, datum.latitude]})[1] + (datum.city === 'Geelong' ? ((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]) * max(0, 42.742346141747674 / max(1, sqrt(pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[0] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[0]),2) + pow((geoCentroid('projection', {type:'Point', coordinates:[144.35,-38.15]})[1] - geoCentroid('projection', {type:'Point', coordinates:[144.96305555555554,-37.814166666666665]})[1]),2))) - 1)) : 0)"
+              }
             },
             "text": {
               "field": "champion_label",
@@ -889,13 +1075,13 @@
             "fontWeight": "normal",
             "lineHeight": 18,
             "align": {
-              "expr": "mapZoom > 1 ? 'center' : datum.city === 'Perth' ? 'left' : 'right'"
+              "expr": "mapZoom > 1 ? 'center' : datum.city === 'Perth' || width >= 500 && (datum.city === 'Melbourne' || datum.city === 'Sydney') ? 'left' : 'right'"
             },
             "dx": {
-              "expr": "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 16 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"
+              "expr": "mapZoom > 1 ? 0 : datum.city === 'Perth' ? 16 : width >= 500 && datum.city === 'Melbourne' ? 40 : width >= 500 && datum.city === 'Sydney' ? 26 : width < 500 && (datum.city === 'Melbourne' || datum.city === 'Geelong') ? 24 : -16"
             },
             "dy": {
-              "expr": "mapZoom > 1 ? -54 : datum.city === 'Perth' ? -52 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"
+              "expr": "mapZoom > 1 ? -54 : datum.city === 'Perth' ? -52 : width >= 500 && datum.city === 'Sydney' ? 44 : datum.city === 'Melbourne' || datum.city === 'Geelong' ? (width >= 500 ? 44 : -42) : -36"
             },
             "color": "#c96636"
           }
