@@ -123,7 +123,7 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 
 /* Introductions span their section; map notes and technical captions stay local. */
 .hero-description,.intro-copy,.chart-deck,.map-story-copy,.closing p,.sources p,.sources li{font-size:var(--body-size);line-height:1.65}
-.chapter figcaption,.map-story-copy p,.sources p,.sources li{max-width:48ch}
+.chapter figcaption,.map-story-copy p{max-width:48ch}
 .hero-description{max-width:none;margin-left:0}
 .chapter .chart-deck{max-width:none;min-height:0}
 .section-intro .intro-copy{display:block}
@@ -134,11 +134,6 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .closing{display:block}
 .closing>div:first-child,.closing>div:last-child{width:100%;padding:0}
 .closing h2{margin-bottom:18px}
-.sources ul{display:grid;grid-template-columns:repeat(2,minmax(0,48ch));gap:0 40px}
-.sources li{padding-right:12px}
-@media(max-width:700px){
- .sources ul{grid-template-columns:1fr;gap:16px}
-}
 
 /* Alternate the narrative side while keeping each legend with its chart. */
 .chart-story{display:grid;gap:22px;align-items:center}
