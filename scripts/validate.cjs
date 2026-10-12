@@ -202,7 +202,7 @@ async function main(){
        }
        const areas=items(view,item=>item.mark?.marktype==='area'&&item.datum?.team);
        assert.equal(areas.length,curves.length*4);
-       for(const area of areas){assert.ok(area.y>=6&&area.y<=58,'Folded areas keep space above and below');assert.equal(area.y2,58);}
+       for(const area of areas){assert.ok(area.y>=6&&area.y<=38,'Folded areas keep space above and below');assert.equal(area.y2,38);}
        const example=curves.find(d=>d.observed&&d.rate>50&&d.rate<75);
        assert.equal(example.band_0_25,25);assert.equal(example.band_25_50,25);
        assert.ok(Math.abs(example.band_50_75-(example.rate-50))<1e-8);assert.equal(example.band_75_100,0);
@@ -213,7 +213,7 @@ async function main(){
            const detail=view.data('detail_'+i);assert.equal(detail.length,1);
            assert.equal(detail[0].team,teams[i]);assert.equal(detail[0].season,season);
            const label=items(view,item=>item.mark?.name==='season_readout_'+i)[0];
-           assert.equal(label.text,`${season} · ${(detail[0].wins/detail[0].played*100).toFixed(1)}%`);
+           assert.equal(label.text,`${(detail[0].wins/detail[0].played*100).toFixed(1)}%`);
          }
        }
      }

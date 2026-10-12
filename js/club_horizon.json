@@ -7,14 +7,14 @@
     "contains": "padding",
     "resize": true
   },
-  "height": 944,
+  "height": 468,
   "padding": {
-    "top": 12,
+    "top": 4,
     "left": 4,
     "right": 4,
-    "bottom": 38
+    "bottom": 32
   },
-  "description": "Six horizon strips show absolute annual win rates from 0 to 100%, folded into four consecutive 25-percentage-point bands. Higher bands overlay lower bands in pale green, sage, dark green and orange. A full band has a flat upper edge, inset from the row boundary. All six strips count as one chart. Interpolated fold crossings are for drawing only; hover reports real season records.",
+  "description": "Six horizon strips show absolute annual win rates from 0 to 100%, folded into four consecutive 25-percentage-point bands. Higher bands overlay lower bands in pale green, sage, dark green and orange. A full band has a flat upper edge, inset from the row boundary. Club names and percentages flank each strip. Compact row notes identify the six case studies. All six strips count as one chart. Interpolated fold crossings are for drawing only; hover reports real season records.",
   "signals": [
     {
       "name": "detailSeason",
@@ -25,6 +25,22 @@
           "update": "datum.season"
         }
       ]
+    },
+    {
+      "name": "compact",
+      "update": "width < 650"
+    },
+    {
+      "name": "plotLeft",
+      "update": "compact ? 104 : 184"
+    },
+    {
+      "name": "readoutWidth",
+      "value": 58
+    },
+    {
+      "name": "plotWidth",
+      "update": "width - plotLeft - readoutWidth"
     }
   ],
   "data": [
@@ -253,7 +269,14 @@
         2012,
         2025
       ],
-      "range": "width",
+      "range": [
+        {
+          "signal": "plotLeft"
+        },
+        {
+          "signal": "width - readoutWidth"
+        }
+      ],
       "zero": false,
       "nice": false
     }
@@ -263,7 +286,7 @@
       "scale": "year",
       "orient": "bottom",
       "values": {
-        "signal": "width >= 700 ? sequence(2012,2026) : [2012,2018,2025]"
+        "signal": "plotWidth >= 700 ? sequence(2012,2026) : plotWidth >= 180 ? [2012,2018,2025] : [2012,2025]"
       },
       "format": "d",
       "domain": false,
@@ -293,13 +316,13 @@
             "value": 0
           },
           "y": {
-            "value": 28
+            "value": 4
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 64
+            "value": 44
           }
         }
       },
@@ -312,7 +335,7 @@
             25
           ],
           "range": [
-            58,
+            38,
             6
           ],
           "zero": true,
@@ -321,6 +344,7 @@
       ],
       "marks": [
         {
+          "name": "club_name_0",
           "type": "text",
           "interactive": false,
           "encode": {
@@ -329,10 +353,19 @@
                 "value": 0
               },
               "y": {
-                "value": -8
+                "signal": "compact ? 22 : 13"
+              },
+              "baseline": {
+                "value": "middle"
               },
               "text": {
-                "value": "Geelong"
+                "signal": "compact && \"Geelong\" === 'Brisbane Lions' ? 'Brisbane\\nLions' : \"Geelong\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 17
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -362,13 +395,16 @@
                 "signal": "width"
               },
               "y": {
-                "value": -8
+                "value": 22
+              },
+              "baseline": {
+                "value": "middle"
               },
               "align": {
                 "value": "right"
               },
               "text": {
-                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+                "signal": "format(datum.wins / datum.played,'.1%')"
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -388,16 +424,16 @@
           "encode": {
             "update": {
               "x": {
-                "value": 0
+                "signal": "plotLeft"
               },
               "y": {
                 "value": 0
               },
               "width": {
-                "signal": "width"
+                "signal": "plotWidth"
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "#eeeee3"
@@ -426,7 +462,7 @@
                 "field": "band_0_25"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#d6dace"
@@ -458,7 +494,7 @@
                 "field": "band_25_50"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -490,7 +526,7 @@
                 "field": "band_50_75"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#31553b"
@@ -522,7 +558,7 @@
                 "field": "band_75_100"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#c96636"
@@ -546,7 +582,7 @@
                 "value": 6
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "stroke": {
                 "value": "#21372b"
@@ -573,13 +609,13 @@
                 "value": 0
               },
               "y": {
-                "value": 72
+                "signal": "compact ? 49 : 27"
               },
               "baseline": {
                 "value": "top"
               },
               "text": {
-                "signal": "width >= 560 ? \"Most finals appearances: 12 of 14 seasons.\" : \"Most finals appearances:\\n12 of 14 seasons.\""
+                "value": "12/14 finals seasons"
               },
               "lineBreak": {
                 "value": "\n"
@@ -619,7 +655,7 @@
                 "value": 0
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "transparent"
@@ -644,13 +680,13 @@
             "value": 0
           },
           "y": {
-            "value": 176
+            "value": 74
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 64
+            "value": 44
           }
         }
       },
@@ -663,7 +699,7 @@
             25
           ],
           "range": [
-            58,
+            38,
             6
           ],
           "zero": true,
@@ -672,6 +708,7 @@
       ],
       "marks": [
         {
+          "name": "club_name_1",
           "type": "text",
           "interactive": false,
           "encode": {
@@ -680,10 +717,19 @@
                 "value": 0
               },
               "y": {
-                "value": -8
+                "signal": "compact ? 22 : 13"
+              },
+              "baseline": {
+                "value": "middle"
               },
               "text": {
-                "value": "Sydney"
+                "signal": "compact && \"Sydney\" === 'Brisbane Lions' ? 'Brisbane\\nLions' : \"Sydney\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 17
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -713,13 +759,16 @@
                 "signal": "width"
               },
               "y": {
-                "value": -8
+                "value": 22
+              },
+              "baseline": {
+                "value": "middle"
               },
               "align": {
                 "value": "right"
               },
               "text": {
-                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+                "signal": "format(datum.wins / datum.played,'.1%')"
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -739,16 +788,16 @@
           "encode": {
             "update": {
               "x": {
-                "value": 0
+                "signal": "plotLeft"
               },
               "y": {
                 "value": 0
               },
               "width": {
-                "signal": "width"
+                "signal": "plotWidth"
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "#eeeee3"
@@ -777,7 +826,7 @@
                 "field": "band_0_25"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#d6dace"
@@ -809,7 +858,7 @@
                 "field": "band_25_50"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -841,7 +890,7 @@
                 "field": "band_50_75"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#31553b"
@@ -873,7 +922,7 @@
                 "field": "band_75_100"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#c96636"
@@ -897,7 +946,7 @@
                 "value": 6
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "stroke": {
                 "value": "#21372b"
@@ -924,13 +973,13 @@
                 "value": 0
               },
               "y": {
-                "value": 72
+                "signal": "compact ? 49 : 27"
               },
               "baseline": {
                 "value": "top"
               },
               "text": {
-                "signal": "width >= 560 ? \"Second-most finals appearances: 11 of 14 seasons.\" : \"Second-most finals appearances:\\n11 of 14 seasons.\""
+                "value": "11/14 finals seasons"
               },
               "lineBreak": {
                 "value": "\n"
@@ -970,7 +1019,7 @@
                 "value": 0
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "transparent"
@@ -995,13 +1044,13 @@
             "value": 0
           },
           "y": {
-            "value": 324
+            "value": 144
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 64
+            "value": 44
           }
         }
       },
@@ -1014,7 +1063,7 @@
             25
           ],
           "range": [
-            58,
+            38,
             6
           ],
           "zero": true,
@@ -1023,6 +1072,7 @@
       ],
       "marks": [
         {
+          "name": "club_name_2",
           "type": "text",
           "interactive": false,
           "encode": {
@@ -1031,10 +1081,19 @@
                 "value": 0
               },
               "y": {
-                "value": -8
+                "signal": "compact ? 22 : 13"
+              },
+              "baseline": {
+                "value": "middle"
               },
               "text": {
-                "value": "Hawthorn"
+                "signal": "compact && \"Hawthorn\" === 'Brisbane Lions' ? 'Brisbane\\nLions' : \"Hawthorn\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 17
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -1064,13 +1123,16 @@
                 "signal": "width"
               },
               "y": {
-                "value": -8
+                "value": 22
+              },
+              "baseline": {
+                "value": "middle"
               },
               "align": {
                 "value": "right"
               },
               "text": {
-                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+                "signal": "format(datum.wins / datum.played,'.1%')"
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -1090,16 +1152,16 @@
           "encode": {
             "update": {
               "x": {
-                "value": 0
+                "signal": "plotLeft"
               },
               "y": {
                 "value": 0
               },
               "width": {
-                "signal": "width"
+                "signal": "plotWidth"
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "#eeeee3"
@@ -1128,7 +1190,7 @@
                 "field": "band_0_25"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#d6dace"
@@ -1160,7 +1222,7 @@
                 "field": "band_25_50"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -1192,7 +1254,7 @@
                 "field": "band_50_75"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#31553b"
@@ -1224,7 +1286,7 @@
                 "field": "band_75_100"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#c96636"
@@ -1248,7 +1310,7 @@
                 "value": 6
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "stroke": {
                 "value": "#21372b"
@@ -1275,13 +1337,13 @@
                 "value": 0
               },
               "y": {
-                "value": 72
+                "signal": "compact ? 49 : 27"
               },
               "baseline": {
                 "value": "top"
               },
               "text": {
-                "signal": "width >= 560 ? \"Three consecutive titles: 2013, 2014 and 2015.\" : \"Three consecutive titles:\\n2013, 2014 and 2015.\""
+                "value": "3 titles, 2013–2015"
               },
               "lineBreak": {
                 "value": "\n"
@@ -1321,7 +1383,7 @@
                 "value": 0
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "transparent"
@@ -1346,13 +1408,13 @@
             "value": 0
           },
           "y": {
-            "value": 472
+            "value": 214
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 64
+            "value": 44
           }
         }
       },
@@ -1365,7 +1427,7 @@
             25
           ],
           "range": [
-            58,
+            38,
             6
           ],
           "zero": true,
@@ -1374,6 +1436,7 @@
       ],
       "marks": [
         {
+          "name": "club_name_3",
           "type": "text",
           "interactive": false,
           "encode": {
@@ -1382,10 +1445,19 @@
                 "value": 0
               },
               "y": {
-                "value": -8
+                "signal": "compact ? 22 : 13"
+              },
+              "baseline": {
+                "value": "middle"
               },
               "text": {
-                "value": "Richmond"
+                "signal": "compact && \"Richmond\" === 'Brisbane Lions' ? 'Brisbane\\nLions' : \"Richmond\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 17
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -1415,13 +1487,16 @@
                 "signal": "width"
               },
               "y": {
-                "value": -8
+                "value": 22
+              },
+              "baseline": {
+                "value": "middle"
               },
               "align": {
                 "value": "right"
               },
               "text": {
-                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+                "signal": "format(datum.wins / datum.played,'.1%')"
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -1441,16 +1516,16 @@
           "encode": {
             "update": {
               "x": {
-                "value": 0
+                "signal": "plotLeft"
               },
               "y": {
                 "value": 0
               },
               "width": {
-                "signal": "width"
+                "signal": "plotWidth"
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "#eeeee3"
@@ -1479,7 +1554,7 @@
                 "field": "band_0_25"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#d6dace"
@@ -1511,7 +1586,7 @@
                 "field": "band_25_50"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -1543,7 +1618,7 @@
                 "field": "band_50_75"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#31553b"
@@ -1575,7 +1650,7 @@
                 "field": "band_75_100"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#c96636"
@@ -1599,7 +1674,7 @@
                 "value": 6
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "stroke": {
                 "value": "#21372b"
@@ -1626,13 +1701,13 @@
                 "value": 0
               },
               "y": {
-                "value": 72
+                "signal": "compact ? 49 : 27"
               },
               "baseline": {
                 "value": "top"
               },
               "text": {
-                "signal": "width >= 560 ? \"Three titles: 2017, 2019 and 2020.\" : \"Three titles:\\n2017, 2019 and 2020.\""
+                "value": "3 titles, 2017/19/20"
               },
               "lineBreak": {
                 "value": "\n"
@@ -1672,7 +1747,7 @@
                 "value": 0
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "transparent"
@@ -1697,13 +1772,13 @@
             "value": 0
           },
           "y": {
-            "value": 620
+            "value": 284
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 64
+            "value": 44
           }
         }
       },
@@ -1716,7 +1791,7 @@
             25
           ],
           "range": [
-            58,
+            38,
             6
           ],
           "zero": true,
@@ -1725,6 +1800,7 @@
       ],
       "marks": [
         {
+          "name": "club_name_4",
           "type": "text",
           "interactive": false,
           "encode": {
@@ -1733,10 +1809,19 @@
                 "value": 0
               },
               "y": {
-                "value": -8
+                "signal": "compact ? 14 : 13"
+              },
+              "baseline": {
+                "value": "middle"
               },
               "text": {
-                "value": "Brisbane Lions"
+                "signal": "compact && \"Brisbane Lions\" === 'Brisbane Lions' ? 'Brisbane\\nLions' : \"Brisbane Lions\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 17
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -1766,13 +1851,16 @@
                 "signal": "width"
               },
               "y": {
-                "value": -8
+                "value": 22
+              },
+              "baseline": {
+                "value": "middle"
               },
               "align": {
                 "value": "right"
               },
               "text": {
-                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+                "signal": "format(datum.wins / datum.played,'.1%')"
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -1792,16 +1880,16 @@
           "encode": {
             "update": {
               "x": {
-                "value": 0
+                "signal": "plotLeft"
               },
               "y": {
                 "value": 0
               },
               "width": {
-                "signal": "width"
+                "signal": "plotWidth"
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "#eeeee3"
@@ -1830,7 +1918,7 @@
                 "field": "band_0_25"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#d6dace"
@@ -1862,7 +1950,7 @@
                 "field": "band_25_50"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -1894,7 +1982,7 @@
                 "field": "band_50_75"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#31553b"
@@ -1926,7 +2014,7 @@
                 "field": "band_75_100"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#c96636"
@@ -1950,7 +2038,7 @@
                 "value": 6
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "stroke": {
                 "value": "#21372b"
@@ -1977,13 +2065,13 @@
                 "value": 0
               },
               "y": {
-                "value": 72
+                "signal": "compact ? 49 : 27"
               },
               "baseline": {
                 "value": "top"
               },
               "text": {
-                "signal": "width >= 560 ? \"Largest rise among title winners: +41.8 percentage points.\" : \"Largest rise among title winners:\\n+41.8 percentage points.\""
+                "value": "Largest rise: +41.8 pp"
               },
               "lineBreak": {
                 "value": "\n"
@@ -2023,7 +2111,7 @@
                 "value": 0
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "transparent"
@@ -2048,13 +2136,13 @@
             "value": 0
           },
           "y": {
-            "value": 768
+            "value": 354
           },
           "width": {
             "signal": "width"
           },
           "height": {
-            "value": 64
+            "value": 44
           }
         }
       },
@@ -2067,7 +2155,7 @@
             25
           ],
           "range": [
-            58,
+            38,
             6
           ],
           "zero": true,
@@ -2076,6 +2164,7 @@
       ],
       "marks": [
         {
+          "name": "club_name_5",
           "type": "text",
           "interactive": false,
           "encode": {
@@ -2084,10 +2173,19 @@
                 "value": 0
               },
               "y": {
-                "value": -8
+                "signal": "compact ? 22 : 13"
+              },
+              "baseline": {
+                "value": "middle"
               },
               "text": {
-                "value": "West Coast"
+                "signal": "compact && \"West Coast\" === 'Brisbane Lions' ? 'Brisbane\\nLions' : \"West Coast\""
+              },
+              "lineBreak": {
+                "value": "\n"
+              },
+              "lineHeight": {
+                "value": 17
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -2117,13 +2215,16 @@
                 "signal": "width"
               },
               "y": {
-                "value": -8
+                "value": 22
+              },
+              "baseline": {
+                "value": "middle"
               },
               "align": {
                 "value": "right"
               },
               "text": {
-                "signal": "datum.season + ' · ' + format(datum.wins / datum.played,'.1%')"
+                "signal": "format(datum.wins / datum.played,'.1%')"
               },
               "font": {
                 "value": "Helvetica Neue, Arial, sans-serif"
@@ -2143,16 +2244,16 @@
           "encode": {
             "update": {
               "x": {
-                "value": 0
+                "signal": "plotLeft"
               },
               "y": {
                 "value": 0
               },
               "width": {
-                "signal": "width"
+                "signal": "plotWidth"
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "#eeeee3"
@@ -2181,7 +2282,7 @@
                 "field": "band_0_25"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#d6dace"
@@ -2213,7 +2314,7 @@
                 "field": "band_25_50"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#a8bd9c"
@@ -2245,7 +2346,7 @@
                 "field": "band_50_75"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#31553b"
@@ -2277,7 +2378,7 @@
                 "field": "band_75_100"
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "fill": {
                 "value": "#c96636"
@@ -2301,7 +2402,7 @@
                 "value": 6
               },
               "y2": {
-                "value": 58
+                "value": 38
               },
               "stroke": {
                 "value": "#21372b"
@@ -2328,13 +2429,13 @@
                 "value": 0
               },
               "y": {
-                "value": 72
+                "signal": "compact ? 49 : 27"
               },
               "baseline": {
                 "value": "top"
               },
               "text": {
-                "signal": "width >= 560 ? \"Largest fall among title winners: −30.1 percentage points.\" : \"Largest fall among title winners:\\n−30.1 percentage points.\""
+                "value": "Largest fall: −30.1 pp"
               },
               "lineBreak": {
                 "value": "\n"
@@ -2374,7 +2475,7 @@
                 "value": 0
               },
               "height": {
-                "value": 64
+                "value": 44
               },
               "fill": {
                 "value": "transparent"
