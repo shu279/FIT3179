@@ -14,7 +14,7 @@
     "right": 4,
     "bottom": 32
   },
-  "description": "Six horizon strips show absolute annual win rates from 0 to 100%, folded into four consecutive 25-percentage-point bands. Higher bands overlay lower bands in pale green, sage, dark green and orange. A full band has a flat upper edge, inset from the row boundary. Club names and percentages flank each strip. Compact row notes identify the six case studies. All six strips count as one chart. Interpolated fold crossings are for drawing only; hover reports real season records.",
+  "description": "Six small-multiple area charts show annual win rates on the same 0–100% scale. Dark-green height is directly proportional to games won; the pale-green remainder completes 100%. Club names and percentages flank each strip. Compact row notes identify the six case studies. All six strips count as one chart. Hover reports real season records.",
   "signals": [
     {
       "name": "detailSeason",
@@ -46,29 +46,7 @@
   "data": [
     {
       "name": "curves",
-      "url": "data/club_win_rate_horizon.json?v=d8986dbeb66f",
-      "transform": [
-        {
-          "type": "formula",
-          "expr": "clamp(datum.rate,0,25)",
-          "as": "band_0_25"
-        },
-        {
-          "type": "formula",
-          "expr": "clamp(datum.rate-25,0,25)",
-          "as": "band_25_50"
-        },
-        {
-          "type": "formula",
-          "expr": "clamp(datum.rate-50,0,25)",
-          "as": "band_50_75"
-        },
-        {
-          "type": "formula",
-          "expr": "clamp(datum.rate-75,0,25)",
-          "as": "band_75_100"
-        }
-      ]
+      "url": "data/club_win_rate_horizon.json?v=32a16b265d62"
     },
     {
       "name": "records",
@@ -328,11 +306,11 @@
       },
       "scales": [
         {
-          "name": "band",
+          "name": "winRate",
           "type": "linear",
           "domain": [
             0,
-            25
+            100
           ],
           "range": [
             38,
@@ -419,6 +397,7 @@
           }
         },
         {
+          "name": "win_rate_background_0",
           "type": "rect",
           "interactive": false,
           "encode": {
@@ -427,54 +406,22 @@
                 "signal": "plotLeft"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "width": {
                 "signal": "plotWidth"
               },
               "height": {
-                "value": 44
-              },
-              "fill": {
-                "value": "#eeeee3"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_0_25_0",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_0"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_0_25"
-              },
-              "y2": {
-                "value": 38
+                "value": 32
               },
               "fill": {
                 "value": "#d6dace"
-              },
-              "interpolate": {
-                "value": "linear"
               }
             }
           }
         },
         {
-          "name": "band_25_50_0",
+          "name": "win_rate_area_0",
           "type": "area",
           "interactive": false,
           "from": {
@@ -490,78 +437,14 @@
                 "field": "season"
               },
               "y": {
-                "scale": "band",
-                "field": "band_25_50"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#a8bd9c"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_50_75_0",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_0"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_50_75"
+                "scale": "winRate",
+                "field": "rate"
               },
               "y2": {
                 "value": 38
               },
               "fill": {
                 "value": "#31553b"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_75_100_0",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_0"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_75_100"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#c96636"
               },
               "interpolate": {
                 "value": "linear"
@@ -746,11 +629,11 @@
       },
       "scales": [
         {
-          "name": "band",
+          "name": "winRate",
           "type": "linear",
           "domain": [
             0,
-            25
+            100
           ],
           "range": [
             38,
@@ -837,6 +720,7 @@
           }
         },
         {
+          "name": "win_rate_background_1",
           "type": "rect",
           "interactive": false,
           "encode": {
@@ -845,54 +729,22 @@
                 "signal": "plotLeft"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "width": {
                 "signal": "plotWidth"
               },
               "height": {
-                "value": 44
-              },
-              "fill": {
-                "value": "#eeeee3"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_0_25_1",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_1"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_0_25"
-              },
-              "y2": {
-                "value": 38
+                "value": 32
               },
               "fill": {
                 "value": "#d6dace"
-              },
-              "interpolate": {
-                "value": "linear"
               }
             }
           }
         },
         {
-          "name": "band_25_50_1",
+          "name": "win_rate_area_1",
           "type": "area",
           "interactive": false,
           "from": {
@@ -908,78 +760,14 @@
                 "field": "season"
               },
               "y": {
-                "scale": "band",
-                "field": "band_25_50"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#a8bd9c"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_50_75_1",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_1"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_50_75"
+                "scale": "winRate",
+                "field": "rate"
               },
               "y2": {
                 "value": 38
               },
               "fill": {
                 "value": "#31553b"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_75_100_1",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_1"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_75_100"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#c96636"
               },
               "interpolate": {
                 "value": "linear"
@@ -1164,11 +952,11 @@
       },
       "scales": [
         {
-          "name": "band",
+          "name": "winRate",
           "type": "linear",
           "domain": [
             0,
-            25
+            100
           ],
           "range": [
             38,
@@ -1255,6 +1043,7 @@
           }
         },
         {
+          "name": "win_rate_background_2",
           "type": "rect",
           "interactive": false,
           "encode": {
@@ -1263,54 +1052,22 @@
                 "signal": "plotLeft"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "width": {
                 "signal": "plotWidth"
               },
               "height": {
-                "value": 44
-              },
-              "fill": {
-                "value": "#eeeee3"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_0_25_2",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_2"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_0_25"
-              },
-              "y2": {
-                "value": 38
+                "value": 32
               },
               "fill": {
                 "value": "#d6dace"
-              },
-              "interpolate": {
-                "value": "linear"
               }
             }
           }
         },
         {
-          "name": "band_25_50_2",
+          "name": "win_rate_area_2",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1326,78 +1083,14 @@
                 "field": "season"
               },
               "y": {
-                "scale": "band",
-                "field": "band_25_50"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#a8bd9c"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_50_75_2",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_2"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_50_75"
+                "scale": "winRate",
+                "field": "rate"
               },
               "y2": {
                 "value": 38
               },
               "fill": {
                 "value": "#31553b"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_75_100_2",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_2"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_75_100"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#c96636"
               },
               "interpolate": {
                 "value": "linear"
@@ -1582,11 +1275,11 @@
       },
       "scales": [
         {
-          "name": "band",
+          "name": "winRate",
           "type": "linear",
           "domain": [
             0,
-            25
+            100
           ],
           "range": [
             38,
@@ -1673,6 +1366,7 @@
           }
         },
         {
+          "name": "win_rate_background_3",
           "type": "rect",
           "interactive": false,
           "encode": {
@@ -1681,54 +1375,22 @@
                 "signal": "plotLeft"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "width": {
                 "signal": "plotWidth"
               },
               "height": {
-                "value": 44
-              },
-              "fill": {
-                "value": "#eeeee3"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_0_25_3",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_3"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_0_25"
-              },
-              "y2": {
-                "value": 38
+                "value": 32
               },
               "fill": {
                 "value": "#d6dace"
-              },
-              "interpolate": {
-                "value": "linear"
               }
             }
           }
         },
         {
-          "name": "band_25_50_3",
+          "name": "win_rate_area_3",
           "type": "area",
           "interactive": false,
           "from": {
@@ -1744,78 +1406,14 @@
                 "field": "season"
               },
               "y": {
-                "scale": "band",
-                "field": "band_25_50"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#a8bd9c"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_50_75_3",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_3"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_50_75"
+                "scale": "winRate",
+                "field": "rate"
               },
               "y2": {
                 "value": 38
               },
               "fill": {
                 "value": "#31553b"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_75_100_3",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_3"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_75_100"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#c96636"
               },
               "interpolate": {
                 "value": "linear"
@@ -2000,11 +1598,11 @@
       },
       "scales": [
         {
-          "name": "band",
+          "name": "winRate",
           "type": "linear",
           "domain": [
             0,
-            25
+            100
           ],
           "range": [
             38,
@@ -2091,6 +1689,7 @@
           }
         },
         {
+          "name": "win_rate_background_4",
           "type": "rect",
           "interactive": false,
           "encode": {
@@ -2099,54 +1698,22 @@
                 "signal": "plotLeft"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "width": {
                 "signal": "plotWidth"
               },
               "height": {
-                "value": 44
-              },
-              "fill": {
-                "value": "#eeeee3"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_0_25_4",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_4"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_0_25"
-              },
-              "y2": {
-                "value": 38
+                "value": 32
               },
               "fill": {
                 "value": "#d6dace"
-              },
-              "interpolate": {
-                "value": "linear"
               }
             }
           }
         },
         {
-          "name": "band_25_50_4",
+          "name": "win_rate_area_4",
           "type": "area",
           "interactive": false,
           "from": {
@@ -2162,78 +1729,14 @@
                 "field": "season"
               },
               "y": {
-                "scale": "band",
-                "field": "band_25_50"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#a8bd9c"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_50_75_4",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_4"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_50_75"
+                "scale": "winRate",
+                "field": "rate"
               },
               "y2": {
                 "value": 38
               },
               "fill": {
                 "value": "#31553b"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_75_100_4",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_4"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_75_100"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#c96636"
               },
               "interpolate": {
                 "value": "linear"
@@ -2418,11 +1921,11 @@
       },
       "scales": [
         {
-          "name": "band",
+          "name": "winRate",
           "type": "linear",
           "domain": [
             0,
-            25
+            100
           ],
           "range": [
             38,
@@ -2509,6 +2012,7 @@
           }
         },
         {
+          "name": "win_rate_background_5",
           "type": "rect",
           "interactive": false,
           "encode": {
@@ -2517,54 +2021,22 @@
                 "signal": "plotLeft"
               },
               "y": {
-                "value": 0
+                "value": 6
               },
               "width": {
                 "signal": "plotWidth"
               },
               "height": {
-                "value": 44
-              },
-              "fill": {
-                "value": "#eeeee3"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_0_25_5",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_5"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_0_25"
-              },
-              "y2": {
-                "value": 38
+                "value": 32
               },
               "fill": {
                 "value": "#d6dace"
-              },
-              "interpolate": {
-                "value": "linear"
               }
             }
           }
         },
         {
-          "name": "band_25_50_5",
+          "name": "win_rate_area_5",
           "type": "area",
           "interactive": false,
           "from": {
@@ -2580,78 +2052,14 @@
                 "field": "season"
               },
               "y": {
-                "scale": "band",
-                "field": "band_25_50"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#a8bd9c"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_50_75_5",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_5"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_50_75"
+                "scale": "winRate",
+                "field": "rate"
               },
               "y2": {
                 "value": 38
               },
               "fill": {
                 "value": "#31553b"
-              },
-              "interpolate": {
-                "value": "linear"
-              }
-            }
-          }
-        },
-        {
-          "name": "band_75_100_5",
-          "type": "area",
-          "interactive": false,
-          "from": {
-            "data": "curve_5"
-          },
-          "sort": {
-            "field": "datum.season"
-          },
-          "encode": {
-            "update": {
-              "x": {
-                "scale": "year",
-                "field": "season"
-              },
-              "y": {
-                "scale": "band",
-                "field": "band_75_100"
-              },
-              "y2": {
-                "value": 38
-              },
-              "fill": {
-                "value": "#c96636"
               },
               "interpolate": {
                 "value": "linear"

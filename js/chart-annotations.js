@@ -55,7 +55,7 @@ function initialiseReadingAnnotations(element, name) {
     rank_changes:[{text:'Bar height = yearly comparisons',at:target('.layer_0_marks path',d=>d?.change===-9,.5,0)}]
   };
   const map=['state_choropleth','premiership_symbols','grand_final_flows'].includes(name);
-  if(!guides[name]&&name!=='club_horizon')return {destroy(){}};
+  if(!guides[name])return {destroy(){}};
   const overlay=svgElement('svg',{'class':'chart-reading-annotations',role:'group','aria-label':'How to read this chart'});
   element.append(overlay);
   const markerId='reading-arrow-'+name;
@@ -67,18 +67,6 @@ function initialiseReadingAnnotations(element, name) {
   function label(text,x,y,halo=false){
     const node=svgElement('text',{x,y,fill:ink,'font-size':15,'font-weight':'normal','dominant-baseline':'hanging',...(halo?{stroke:paper,'stroke-width':4,'paint-order':'stroke'}:{})},text);
     overlay.append(node);return node;
-  }
-  function drawHorizonExample(width){
-    const left=Math.max(0,(width-270)/2);
-    label('Example: 60% = 50% + 10 points',left+4,6);
-    const x=left+6,y=40,w=76,h=32;
-    overlay.append(svgElement('rect',{x,y,width:w,height:h,fill:'#a8bd9c'}));
-    overlay.append(svgElement('rect',{x,y:y+h*.6,width:w,height:h*.4,fill:'#31553b'}));
-    label('Two full bands = 50%',left+112,34);
-    arrow({x:left+106,y:43},{x:x+w-3,y:y+7});
-    label('Height adds 10 points',left+112,66);
-    arrow({x:left+106,y:73},{x:x+w-3,y:y+h-5});
-    overlay.append(svgElement('path',{d:`M${x+w+7},${y+h*.6} h5 M${x+w+10},${y+h*.6} V${y+h} M${x+w+7},${y+h} h5`,stroke:ink,fill:'none','stroke-width':1}));
   }
   let frame,closed=false;
   function draw(){
@@ -94,7 +82,7 @@ function initialiseReadingAnnotations(element, name) {
     const stacked=lengths.reduce((a,b)=>a+b,0)+annotations.length*20>width;
     if(!stacked&&!map)annotations.sort((a,b)=>a.at.x-b.at.x);
     const histogramInset=name==='rank_changes'&&width>=740;
-    const top=name==='club_horizon'?104:map||histogramInset||name==='ladder_bump'?0:stacked?annotations.length*25+24:62;
+    const top=map||histogramInset||name==='ladder_bump'?0:stacked?annotations.length*25+24:62;
     element.style.paddingTop=top+'px';
     const mapFooter=map&&width<650;
     const mapTimeline=name==='premiership_symbols'&&element.querySelector('.map_overview_group');
@@ -104,7 +92,6 @@ function initialiseReadingAnnotations(element, name) {
     marker.append(svgElement('path',{d:'M0 0 L8 4 L0 8 Z',fill:ink}));defs.append(marker);overlay.append(defs);
     overlay.setAttribute('width',width);overlay.setAttribute('height',element.offsetHeight);
     overlay.setAttribute('viewBox',`0 0 ${width} ${element.offsetHeight}`);
-    if(name==='club_horizon'){drawHorizonExample(width);return;}
     // Re-read the targets after reserving the note row. No stale pixel offsets.
     const nodes=annotations.map((a,i)=>{
       a.at=a.getTarget();

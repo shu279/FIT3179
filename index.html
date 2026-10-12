@@ -16,7 +16,7 @@
   <script defer src="js/chart-layout.js?v=dc00e7df269c"></script>
   <script defer src="js/map-controls.js?v=abfd3d78b316"></script>
   <script defer src="js/city-map-navigation.js?v=03f4ed95991a"></script>
-  <script defer src="js/chart-annotations.js?v=926a824bb170"></script>
+  <script defer src="js/chart-annotations.js?v=0454cbdddaec"></script>
   <script defer src="js/main.js?v=87225c03deb5"></script>
 </head>
 <body>
@@ -204,13 +204,11 @@
           <p class="chart-deck">These six title-winning clubs show three sides of success: Geelong and Sydney reached finals most often, Hawthorn and Richmond won the most titles, and Brisbane and West Coast had the largest rise and fall in win rate among premiership winners. Their season-by-season paths show what those totals leave out.</p>
           <p class="micro"><strong>Games won (%)</strong></p>
           <div class="chart-legend horizon-legend" aria-label="Win rate from zero to one hundred percent">
-            <span><i class="legend-square" style="background:#d6dace"></i> 0–25%</span>
-            <span><i class="legend-square sage"></i> &gt;25–50%</span>
-            <span><i class="legend-square green"></i> &gt;50–75%</span>
-            <span><i class="legend-square orange"></i> &gt;75–100%</span>
+            <span><i class="legend-square green"></i> Games won</span>
+            <span><i class="legend-square" style="background:#d6dace"></i> Games not won</span>
           </div>
 
-          <div class="chart" data-spec="club_horizon" aria-label="Horizon chart of six clubs’ annual win rates from zero to one hundred percent, folded into four twenty-five-point bands. Pale green shows zero to twenty-five percent, sage over twenty-five to fifty, dark green over fifty to seventy-five, and orange over seventy-five to one hundred. Hover or tap a season to compare exact win rates across all six clubs."></div>
+          <div class="chart" data-spec="club_horizon" aria-label="Six area charts of annual win rates, each on the same zero-to-one-hundred-percent scale. Dark-green height shows the percentage of games won. Pale green fills the remaining percentage up to one hundred. Hover or tap a season to compare exact win rates across all six clubs."></div>
 
         </figure>
         <div class="pure-g two-up"><figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Each club’s win rate varied from season to season.</h3><p class="chart-deck">The timelines show when results changed; these boxes show how widely they varied. Some clubs had similarly strong seasons year after year; others combined high points with much weaker years.</p><div class="chart" data-spec="season_boxplot" aria-label="Boxplots showing the distribution of season win rates for each club."></div></figure><figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Brisbane had the largest increase in win rate.</h3><p class="chart-deck">Splitting the study into 2012–2018 and 2019–2025 reveals a shift in fortunes. Brisbane’s improvement was the largest across all eighteen clubs, while several earlier contenders won a smaller share of games in the later period.</p><div class="chart-legend"><span><i class="legend-square orange"></i> Improved</span><span><i class="legend-square green"></i> Declined</span></div><div class="chart" data-spec="era_change" aria-label="Diverging bars showing the change in each club’s win rate from 2012–2018 to 2019–2025; bars to the right show improvement."></div></figure></div>

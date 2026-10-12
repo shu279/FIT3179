@@ -178,7 +178,7 @@ saveMultiple('ladder_bump',{
  ]
 });
 
-// Two distinct advanced idioms replace stacked bars and repeated line panels.
+// Top-four treemap and compact annual win-rate comparisons.
 require('./create-advanced-specs.cjs')({root,seasons,ink,green,orange,sage});
 
 // Week 8/10 map layers and coordinated time controls.

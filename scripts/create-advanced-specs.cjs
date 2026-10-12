@@ -1,4 +1,4 @@
-// Treemap and folded horizon views, derived from the same club-season records.
+// Treemap and annual win-rate views, derived from the same club-season records.
 const fs=require('node:fs');
 const path=require('node:path');
 const crypto=require('node:crypto');
@@ -52,30 +52,17 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
   ]
  });
 
- // Interpolate only the drawing at each fold boundary. Tooltips and values use
- // observed seasons, never these synthetic crossing points.
+ // Use one observed win rate per season on a shared, unfolded 0–100% scale.
  const teams=['Geelong','Sydney','Hawthorn','Richmond','Brisbane Lions','West Coast'];
  const curves=[];
  for(const team of teams){
   const rows=seasons.filter(d=>d.team===team).sort((a,b)=>a.season-b.season);
-  rows.forEach((d,index)=>{
+  rows.forEach(d=>{
    const rate=d.wins/d.played*100;
-   if(index){
-    const prev=rows[index-1],previous=prev.wins/prev.played*100;
-    const crossings=[25,50,75].filter(c=>c>Math.min(previous,rate)&&c<Math.max(previous,rate))
-     .map(c=>({team,season:prev.season+(c-previous)/(rate-previous),rate:c,observed:false})).sort((a,b)=>a.season-b.season);
-    curves.push(...crossings);
-   }
    curves.push({team,season:d.season,rate,observed:true});
   });
  }
  write('data/club_win_rate_horizon.json',curves);
- const folds=[
-  {name:'band_0_25',expr:'clamp(datum.rate,0,25)',color:'#d6dace'},
-  {name:'band_25_50',expr:'clamp(datum.rate-25,0,25)',color:sage},
-  {name:'band_50_75',expr:'clamp(datum.rate-50,0,25)',color:green},
-  {name:'band_75_100',expr:'clamp(datum.rate-75,0,25)',color:orange}
- ];
  const rowNotes=[
   '12/14 finals seasons',
   '11/14 finals seasons',
@@ -87,7 +74,7 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
  const horizonTip="{'Club':datum.team,'Season':datum.season,'Games won':format(datum.wins/datum.played,'.1%'),'Record':datum.wins + ' wins / ' + datum.played + ' games','Ladder position':datum.rank}";
  write('js/club_horizon.json',{
   ...base,height:468,padding:{top:4,left:4,right:4,bottom:32},
-  description:'Six horizon strips show absolute annual win rates from 0 to 100%, folded into four consecutive 25-percentage-point bands. Higher bands overlay lower bands in pale green, sage, dark green and orange. A full band has a flat upper edge, inset from the row boundary. Club names and percentages flank each strip. Compact row notes identify the six case studies. All six strips count as one chart. Interpolated fold crossings are for drawing only; hover reports real season records.',
+  description:'Six small-multiple area charts show annual win rates on the same 0–100% scale. Dark-green height is directly proportional to games won; the pale-green remainder completes 100%. Club names and percentages flank each strip. Compact row notes identify the six case studies. All six strips count as one chart. Hover reports real season records.',
   signals:[
    {name:'detailSeason',value:2025,on:[{events:'@season_targets:pointermove, @season_targets:click',update:'datum.season'}]},
    {name:'compact',update:'width < 650'},
@@ -96,7 +83,7 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
    {name:'plotWidth',update:'width - plotLeft - readoutWidth'}
   ],
   data:[
-   {name:'curves',url:versioned('data/club_win_rate_horizon.json'),transform:folds.map(f=>({type:'formula',expr:f.expr,as:f.name}))},
+   {name:'curves',url:versioned('data/club_win_rate_horizon.json')},
    {name:'records',url:'data/team_seasons.json',transform:[{type:'filter',expr:'indexof('+JSON.stringify(teams)+',datum.team) >= 0'}]},
    ...teams.flatMap((team,i)=>[
     {name:'curve_'+i,source:'curves',transform:[{type:'filter',expr:'datum.team === '+JSON.stringify(team)}]},
@@ -109,7 +96,7 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
    encode:{labels:{update:{align:{signal:"datum.value === 2012 ? 'left' : datum.value === 2025 ? 'right' : 'center'"}}}}}],
   marks:teams.map((team,i)=>({
    name:'horizon_row_'+i,type:'group',encode:{update:{x:{value:0},y:{value:i*70+4},width:{signal:'width'},height:{value:44}}},
-   scales:[{name:'band',type:'linear',domain:[0,25],range:[38,6],zero:true,nice:false}],
+   scales:[{name:'winRate',type:'linear',domain:[0,100],range:[38,6],zero:true,nice:false}],
    marks:[
     {name:'club_name_'+i,type:'text',interactive:false,encode:{update:{
      x:{value:0},y:{signal:team==='Brisbane Lions'?'compact ? 14 : 13':'compact ? 22 : 13'},baseline:{value:'middle'},
@@ -119,10 +106,10 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
     {name:'season_readout_'+i,type:'text',interactive:false,from:{data:'detail_'+i},encode:{update:{
      x:{signal:'width'},y:{value:22},baseline:{value:'middle'},align:{value:'right'},text:{signal:"format(datum.wins / datum.played,'.1%')"},font:{value:font},fontSize:{value:15},fill:{value:ink}
     }}},
-    {type:'rect',interactive:false,encode:{update:{x:{signal:'plotLeft'},y:{value:0},width:{signal:'plotWidth'},height:{value:44},fill:{value:'#eeeee3'}}}},
-    ...folds.map(f=>({name:f.name+'_'+i,type:'area',interactive:false,from:{data:'curve_'+i},sort:{field:'datum.season'},encode:{update:{
-     x:{scale:'year',field:'season'},y:{scale:'band',field:f.name},y2:{value:38},fill:{value:f.color},interpolate:{value:'linear'}
-    }}})),
+    {name:'win_rate_background_'+i,type:'rect',interactive:false,encode:{update:{x:{signal:'plotLeft'},y:{value:6},width:{signal:'plotWidth'},height:{value:32},fill:{value:'#d6dace'}}}},
+    {name:'win_rate_area_'+i,type:'area',interactive:false,from:{data:'curve_'+i},sort:{field:'datum.season'},encode:{update:{
+     x:{scale:'year',field:'season'},y:{scale:'winRate',field:'rate'},y2:{value:38},fill:{value:green},interpolate:{value:'linear'}
+    }}},
     {type:'rule',interactive:false,encode:{update:{x:{scale:'year',signal:'detailSeason'},y:{value:6},y2:{value:38},stroke:{value:ink},strokeDash:{value:[3,3]},strokeOpacity:{value:0.65}}}},
     {name:'club_story_note_'+i,type:'text',interactive:false,encode:{update:{
      x:{value:0},y:{signal:'compact ? 49 : 27'},baseline:{value:'top'},text:{value:rowNotes[i]},

@@ -185,28 +185,23 @@ async function main(){
      if(name==='club_horizon.json'){
        const teams=['Geelong','Sydney','Hawthorn','Richmond','Brisbane Lions','West Coast'];
        const curves=view.data('curves'),records=view.data('records');
-       assert.equal(records.length,84);assert.equal(curves.filter(d=>d.observed).length,84);
+       assert.equal(records.length,84);assert.equal(curves.length,84);
        assert.deepEqual(view.scale('year').domain(),[2012,2025]);
        for(const d of curves){
          const observed=rows.find(r=>r.team===d.team&&r.season===d.season);
-         if(d.observed)assert.equal(d.rate,observed.wins/observed.played*100);
-         else{
-           assert.ok([25,50,75].includes(d.rate),'Drawing-only points are fold crossings');
-           const before=rows.find(r=>r.team===d.team&&r.season===Math.floor(d.season));
-           const after=rows.find(r=>r.team===d.team&&r.season===Math.ceil(d.season));
-           const interpolated=before.wins/before.played*100+(after.wins/after.played-before.wins/before.played)*100*(d.season-before.season);
-           assert.ok(Math.abs(interpolated-d.rate)<1e-8);
-         }
-         for(const field of ['band_0_25','band_25_50','band_50_75','band_75_100'])assert.ok(d[field]>=0&&d[field]<=25);
-         assert.ok(Math.abs(d.band_0_25+d.band_25_50+d.band_50_75+d.band_75_100-d.rate)<1e-8,'Folding preserves the exact win rate');
-         if(d.rate>50)assert.equal(d.band_25_50,25,'Higher rates retain the completed lower bands');
+         assert.equal(d.observed,true,'Only observed seasons are plotted');
+         assert.equal(d.rate,observed.wins/observed.played*100);
        }
        const areas=items(view,item=>item.mark?.marktype==='area'&&item.datum?.team);
-       assert.equal(areas.length,curves.length*4);
-       for(const area of areas){assert.ok(area.y>=6&&area.y<=38,'Folded areas keep space above and below');assert.equal(area.y2,38);}
-       const example=curves.find(d=>d.observed&&d.rate>50&&d.rate<75);
-       assert.equal(example.band_0_25,25);assert.equal(example.band_25_50,25);
-       assert.ok(Math.abs(example.band_50_75-(example.rate-50))<1e-8);assert.equal(example.band_75_100,0);
+       assert.equal(areas.length,curves.length);
+       for(const area of areas){
+         assert.equal(area.fill,'#31553b');
+         assert.equal(area.y2,38);
+         assert.ok(Math.abs((area.y2-area.y)/32-area.datum.rate/100)<1e-8,'Dark-green height directly represents the full 0–100% win rate');
+       }
+       const backgrounds=items(view,item=>item.mark?.name?.startsWith('win_rate_background_'));
+       assert.equal(backgrounds.length,6);
+       for(const background of backgrounds){assert.equal(background.fill,'#d6dace');assert.equal(background.y,6);assert.equal(background.height,32);}
        assert.equal(items(view,item=>item.mark?.name==='season_targets').length,84,'Only observed seasons are interactive');
        for(const season of [2012,2018,2025]){
          await view.signal('detailSeason',season).runAsync();
@@ -281,6 +276,6 @@ async function main(){
  await require('./validate-maps.cjs')({vega,vl,loader,root,read,rows,stateSeasons,cities,items});
  const total=fs.readdirSync(path.join(root,'data')).reduce((s,f)=>s+fs.statSync(path.join(root,'data',f)).size,0);
  assert.ok(total<1000000,`Prepared data over budget: ${total}`);
- console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',streak_filter:'passed',legend_highlighting:'passed',brush_aggregates:'passed',year_map_joins:'passed',horizon_folding:'passed',treemap_areas:'passed',data_bytes:total,charts:report},null,2));
+ console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',streak_filter:'passed',legend_highlighting:'passed',brush_aggregates:'passed',year_map_joins:'passed',win_rate_areas:'passed',treemap_areas:'passed',data_bytes:total,charts:report},null,2));
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

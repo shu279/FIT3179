@@ -7,12 +7,6 @@
   },
   {
     "team": "Geelong",
-    "season": 2012.5,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Geelong",
     "season": 2013,
     "rate": 81.81818181818183,
     "observed": true
@@ -25,33 +19,15 @@
   },
   {
     "team": "Geelong",
-    "season": 2014.091304347826,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Geelong",
     "season": 2015,
     "rate": 52.38095238095239,
     "observed": true
   },
   {
     "team": "Geelong",
-    "season": 2015.908695652174,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Geelong",
     "season": 2016,
     "rate": 77.27272727272727,
     "observed": true
-  },
-  {
-    "team": "Geelong",
-    "season": 2016.25,
-    "rate": 75,
-    "observed": false
   },
   {
     "team": "Geelong",
@@ -85,39 +61,15 @@
   },
   {
     "team": "Geelong",
-    "season": 2021.25,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Geelong",
     "season": 2022,
     "rate": 81.81818181818183,
     "observed": true
   },
   {
     "team": "Geelong",
-    "season": 2022.1778350515465,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Geelong",
-    "season": 2022.8298969072166,
-    "rate": 50,
-    "observed": false
-  },
-  {
-    "team": "Geelong",
     "season": 2023,
     "rate": 43.47826086956522,
     "observed": true
-  },
-  {
-    "team": "Geelong",
-    "season": 2023.3,
-    "rate": 50,
-    "observed": false
   },
   {
     "team": "Geelong",
@@ -145,21 +97,9 @@
   },
   {
     "team": "Sydney",
-    "season": 2013.75,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Sydney",
     "season": 2014,
     "rate": 77.27272727272727,
     "observed": true
-  },
-  {
-    "team": "Sydney",
-    "season": 2014.5,
-    "rate": 75,
-    "observed": false
   },
   {
     "team": "Sydney",
@@ -169,21 +109,9 @@
   },
   {
     "team": "Sydney",
-    "season": 2015.5,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Sydney",
     "season": 2016,
     "rate": 77.27272727272727,
     "observed": true
-  },
-  {
-    "team": "Sydney",
-    "season": 2016.1666666666667,
-    "rate": 75,
-    "observed": false
   },
   {
     "team": "Sydney",
@@ -199,12 +127,6 @@
   },
   {
     "team": "Sydney",
-    "season": 2018.5,
-    "rate": 50,
-    "observed": false
-  },
-  {
-    "team": "Sydney",
     "season": 2019,
     "rate": 36.36363636363637,
     "observed": true
@@ -214,12 +136,6 @@
     "season": 2020,
     "rate": 29.411764705882355,
     "observed": true
-  },
-  {
-    "team": "Sydney",
-    "season": 2020.5310344827585,
-    "rate": 50,
-    "observed": false
   },
   {
     "team": "Sydney",
@@ -271,21 +187,9 @@
   },
   {
     "team": "Hawthorn",
-    "season": 2014.5,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Hawthorn",
     "season": 2015,
     "rate": 72.72727272727273,
     "observed": true
-  },
-  {
-    "team": "Hawthorn",
-    "season": 2015.5,
-    "rate": 75,
-    "observed": false
   },
   {
     "team": "Hawthorn",
@@ -295,27 +199,9 @@
   },
   {
     "team": "Hawthorn",
-    "season": 2016.0714285714287,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Hawthorn",
-    "season": 2016.857142857143,
-    "rate": 50,
-    "observed": false
-  },
-  {
-    "team": "Hawthorn",
     "season": 2017,
     "rate": 45.45454545454545,
     "observed": true
-  },
-  {
-    "team": "Hawthorn",
-    "season": 2017.2,
-    "rate": 50,
-    "observed": false
   },
   {
     "team": "Hawthorn",
@@ -355,12 +241,6 @@
   },
   {
     "team": "Hawthorn",
-    "season": 2023.642857142857,
-    "rate": 50,
-    "observed": false
-  },
-  {
-    "team": "Hawthorn",
     "season": 2024,
     "rate": 60.86956521739131,
     "observed": true
@@ -376,12 +256,6 @@
     "season": 2012,
     "rate": 45.45454545454545,
     "observed": true
-  },
-  {
-    "team": "Richmond",
-    "season": 2012.2,
-    "rate": 50,
-    "observed": false
   },
   {
     "team": "Richmond",
@@ -403,21 +277,9 @@
   },
   {
     "team": "Richmond",
-    "season": 2015.5714285714287,
-    "rate": 50,
-    "observed": false
-  },
-  {
-    "team": "Richmond",
     "season": 2016,
     "rate": 36.36363636363637,
     "observed": true
-  },
-  {
-    "team": "Richmond",
-    "season": 2016.4285714285713,
-    "rate": 50,
-    "observed": false
   },
   {
     "team": "Richmond",
@@ -427,21 +289,9 @@
   },
   {
     "team": "Richmond",
-    "season": 2017.5,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Richmond",
     "season": 2018,
     "rate": 81.81818181818183,
     "observed": true
-  },
-  {
-    "team": "Richmond",
-    "season": 2018.75,
-    "rate": 75,
-    "observed": false
   },
   {
     "team": "Richmond",
@@ -457,21 +307,9 @@
   },
   {
     "team": "Richmond",
-    "season": 2020.6936936936936,
-    "rate": 50,
-    "observed": false
-  },
-  {
-    "team": "Richmond",
     "season": 2021,
     "rate": 40.909090909090914,
     "observed": true
-  },
-  {
-    "team": "Richmond",
-    "season": 2021.5,
-    "rate": 50,
-    "observed": false
   },
   {
     "team": "Richmond",
@@ -481,21 +319,9 @@
   },
   {
     "team": "Richmond",
-    "season": 2022.5822784810127,
-    "rate": 50,
-    "observed": false
-  },
-  {
-    "team": "Richmond",
     "season": 2023,
     "rate": 43.47826086956522,
     "observed": true
-  },
-  {
-    "team": "Richmond",
-    "season": 2023.53125,
-    "rate": 25,
-    "observed": false
   },
   {
     "team": "Richmond",
@@ -529,12 +355,6 @@
   },
   {
     "team": "Brisbane Lions",
-    "season": 2014.5,
-    "rate": 25,
-    "observed": false
-  },
-  {
-    "team": "Brisbane Lions",
     "season": 2015,
     "rate": 18.181818181818183,
     "observed": true
@@ -559,39 +379,15 @@
   },
   {
     "team": "Brisbane Lions",
-    "season": 2018.0454545454545,
-    "rate": 25,
-    "observed": false
-  },
-  {
-    "team": "Brisbane Lions",
-    "season": 2018.5454545454545,
-    "rate": 50,
-    "observed": false
-  },
-  {
-    "team": "Brisbane Lions",
     "season": 2019,
     "rate": 72.72727272727273,
     "observed": true
   },
   {
     "team": "Brisbane Lions",
-    "season": 2019.236111111111,
-    "rate": 75,
-    "observed": false
-  },
-  {
-    "team": "Brisbane Lions",
     "season": 2020,
     "rate": 82.35294117647058,
     "observed": true
-  },
-  {
-    "team": "Brisbane Lions",
-    "season": 2020.5188679245282,
-    "rate": 75,
-    "observed": false
   },
   {
     "team": "Brisbane Lions",
@@ -631,12 +427,6 @@
   },
   {
     "team": "West Coast",
-    "season": 2012.6666666666667,
-    "rate": 50,
-    "observed": false
-  },
-  {
-    "team": "West Coast",
     "season": 2013,
     "rate": 40.909090909090914,
     "observed": true
@@ -685,21 +475,9 @@
   },
   {
     "team": "West Coast",
-    "season": 2020.8191489361702,
-    "rate": 50,
-    "observed": false
-  },
-  {
-    "team": "West Coast",
     "season": 2021,
     "rate": 45.45454545454545,
     "observed": true
-  },
-  {
-    "team": "West Coast",
-    "season": 2021.5625,
-    "rate": 25,
-    "observed": false
   },
   {
     "team": "West Coast",
