@@ -156,9 +156,11 @@ saveMultiple('ladder_bump',{
 });
 
 // Week 10: one shared template, split into club panels with fixed comparison scales.
+// Case studies: the two finals leaders, the two title leaders, and the largest
+// rise/fall in pooled win rate among title winners (2012–2018 versus 2019–2025).
 const panelTeams=['Geelong','Sydney','Hawthorn','Richmond','Brisbane Lions','West Coast'];
 saveMultiple('club_small_multiples',{
- description:'Six contrasting clubs on the same 2012–2025 time axis and 0–100% win-rate scale. A 50% reference line is shared by every panel.',
+ description:'Six selected case studies: Geelong and Sydney had the most finals appearances; Hawthorn and Richmond won the most titles; Brisbane Lions and West Coast had the largest rise and fall in pooled win rate among premiership winners, comparing 2012–2018 with 2019–2025. All panels share 2012–2025, a 0–100% win-rate scale and a 50% reference line.',
  data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:panelTeams}}],
  facet:{field:'team',type:'nominal',sort:panelTeams,header:{title:null,labelOrient:'top',labelAnchor:'start',labelPadding:10}},columns:3,spacing:30,
  spec:{width:280,height:155,layer:[

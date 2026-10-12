@@ -57,7 +57,7 @@
       "titleFontSize": 15
     }
   },
-  "description": "Six contrasting clubs on the same 2012–2025 time axis and 0–100% win-rate scale. A 50% reference line is shared by every panel.",
+  "description": "Six selected case studies: Geelong and Sydney had the most finals appearances; Hawthorn and Richmond won the most titles; Brisbane Lions and West Coast had the largest rise and fall in pooled win rate among premiership winners, comparing 2012–2018 with 2019–2025. All panels share 2012–2025, a 0–100% win-rate scale and a 50% reference line.",
   "data": {
     "url": "data/team_seasons.json"
   },
