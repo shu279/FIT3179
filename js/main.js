@@ -3,32 +3,6 @@
 const chartViews = new Map();
 let mapControls;
 let cityRenderQueue=Promise.resolve();
-let journeyControlsFrame;
-
-function positionJourneyControls() {
-  cancelAnimationFrame(journeyControlsFrame);
-  journeyControlsFrame=requestAnimationFrame(async()=>{
-    const entry=chartViews.get('ladder_bump');
-    const controls=document.querySelector('.journey-range-controls');
-    const heading=entry?.element.querySelector('.journey_overview_group .role-title-text text');
-    if(!heading)return;
-    const frame=controls.parentElement.getBoundingClientRect();
-    const title=heading.getBoundingClientRect();
-    const beside=frame.right-title.right-16>=580;
-    controls.style.left=`${beside?title.right-frame.left+16:0}px`;
-    const height=controls.offsetHeight;
-    // Let Vega reserve the controls' height before the overview legend and brush.
-    const space=Math.ceil(beside?Math.max(14,(height-title.height)/2+14):height+22);
-    if(entry.view.signal('journeyControlSpace')!==space){
-      try{await entry.view.signal('journeyControlSpace',space).runAsync();}
-      catch(error){if(chartViews.get('ladder_bump')===entry)console.error('Journey controls:',error);return;}
-    }
-    if(chartViews.get('ladder_bump')!==entry)return;
-    const current=heading.getBoundingClientRect(),origin=controls.parentElement.getBoundingClientRect();
-    controls.style.top=`${(beside?current.top+(current.height-height)/2:current.bottom+8)-origin.top}px`;
-    controls.dataset.ready='true';
-  });
-}
 
 function renderChart(element,options={}) {
   // Mode changes, year edits and responsive resizing can arrive together.
@@ -55,16 +29,11 @@ async function embedChart(element, {resetMapPeriod=false,cityMode,cityPeriod,pre
   chartViews.get(name)?.view.finalize();
   chartViews.delete(name);
   element.setAttribute('aria-busy','true');
-  if(name==='ladder_bump')delete document.querySelector('.journey-range-controls').dataset.ready;
   element.innerHTML = '<p class="chart-loading">Loading visualisation…</p>';
   try {
     const response = await fetch(`js/${name}.json`, {cache:'no-cache'});
     if (!response.ok) throw new Error(`Specification request failed (${response.status})`);
     const spec = await response.json();
-    if(name==='ladder_bump'){
-      spec.params.push({name:'journeyControlSpace',value:14});
-      spec.vconcat.find(panel=>panel.name==='journey_overview').title.offset={expr:'journeyControlSpace'};
-    }
     if(journeyState){
       if(journeyState.brush.season)spec.params.find(param=>param.name==='seasonBrush').value={season:journeyState.brush.season};
       if(journeyState.clubs.team?.length)spec.params.find(param=>param.name==='journeyClub').value=journeyState.clubs.team.map(team=>({team}));
@@ -89,18 +58,6 @@ async function embedChart(element, {resetMapPeriod=false,cityMode,cityPeriod,pre
     const readingAnnotations=initialiseReadingAnnotations(element,name);
     chartViews.set(name,{view:result.view,element,isVega,width:element.clientWidth,spec,layout,navigation,readingAnnotations});
     if(name==='premiership_symbols')mapControls?.replaceCityView(result.view);
-    if(name==='ladder_bump'){
-      const updatePeriod=(_signal,selection)=>{
-        const range=selection.season||[2012,2025];
-        const first=Math.max(2012,Math.ceil(range[0]));
-        const last=Math.min(2025,Math.floor(range[1]));
-        const status=document.querySelector('#journey-summary');
-        status.textContent=first>last?'This range falls between seasons. Widen the selection to include a year.':`${first}–${last} · ${last-first+1} season${last===first?'':'s'} included in the win-rate comparison.`;
-        positionJourneyControls();
-      };
-      result.view.addSignalListener('seasonBrush',updatePeriod);
-      updatePeriod('seasonBrush',result.view.signal('seasonBrush'));
-    }
     element.dataset.rendered='true';
   } catch(error) {
     console.error(`Could not render ${name}:`,error);
@@ -169,10 +126,6 @@ async function initialise() {
   // Render the opening charts first, then the rest in bounded groups.
   for(let i=0;i<figures.length;i+=3)await Promise.all(figures.slice(i,i+3).map(renderChart));
   await initialiseClubControl();
-  document.querySelector('#reset-journey').addEventListener('click',()=>{
-    const entry=chartViews.get('ladder_bump');
-    if(entry)renderChart(entry.element);
-  });
   mapControls=await initialiseMapControls(chartViews,options=>{
     const element=document.querySelector('[data-spec="premiership_symbols"]');
     return renderChart(element,options);
