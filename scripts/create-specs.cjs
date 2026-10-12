@@ -129,7 +129,7 @@ save('finals_frequency',{
   {mark:{type:'rule',strokeWidth:2,color:'#b8c4af'},encoding:{x2:{datum:0}}},
   {mark:{type:'point',filled:true,size:95,color:green}},
   {transform:[{calculate:"datum.finals >= 11 ? datum.finals + '/14' : '' + datum.finals",as:'finals_label'}],mark:{type:'text',align:'left',dx:9,fontSize:15,color:ink},encoding:{text:field('finals_label','nominal')}},
-  note('finals_note',{expr:"width >= 300 ? 'Geelong missed finals\\nonly in 2015 and 2023.' : 'Geelong missed\\nonly 2015\\nand 2023.'"},'width < 300 ? width / 2 : width * .66','width < 300 ? height - 70 : height * .68',{align:'center',fontSize:{expr:'width >= 300 ? 18 : 16'},lineHeight:{expr:'width >= 300 ? 24 : 21'}})
+  note('finals_note',{expr:"width >= 700 ? 'Geelong missed finals only in 2015 and 2023.' : width >= 300 ? 'Geelong missed finals\\nonly in 2015 and 2023.' : 'Geelong missed\\nonly 2015\\nand 2023.'"},'width < 300 ? width / 2 : width * .66','width < 300 ? height - 70 : height * .68',{align:'center',fontSize:{expr:'width >= 300 ? 18 : 16'},lineHeight:{expr:'width >= 300 ? 24 : 21'}})
  ]
 });
 
@@ -180,14 +180,14 @@ save('season_boxplot',{description:'Distribution of regular-season win rates for
 // Week 9: a range binding filters the data while keeping the club and year axes fixed.
 save('finals_streaks',{
  description:'Consecutive runs of finals appearances. Use the slider to show runs of at least the selected number of seasons.',
- height:535,data:data('streaks'),
+ height:475,data:data('streaks'),
  params:[{name:'minimumRun',value:1,bind:{input:'range',min:1,max:7,step:1,name:'Minimum run (seasons): '}}],
  transform:[{filter:'datum.length >= minimumRun'}],
  encoding:{
   x:field('start','quantitative',{scale:{domain:[2011.5,2025.5],nice:false},axis:{title:null,format:'d',values:years,labelExpr:"width >= 300 || datum.value == 2012 || datum.value == 2018 || datum.value == 2025 ? datum.label : ''"}}),
   x2:field('end'),
   y:field('team','nominal',{sort:order,scale:{domain:order},axis:{title:null,ticks:false}}),
-  color:field('length','quantitative',{scale:{domain:[1,7],range:['#b5c6a7',green]},legend:{title:['Consecutive finals','seasons'],titleFontWeight:600,orient:'top',direction:'horizontal',gradientLength:{expr:'min(240, width)'},gradientThickness:12,values:[1,3,5,7],offset:12}}),
+  color:field('length','quantitative',{scale:{domain:[1,7],range:['#b5c6a7',green]},legend:{title:'Consecutive finals seasons',titleLimit:260,titleFontWeight:600,titleOrient:'right',titleAngle:270,titleAnchor:'middle',titlePadding:10,orient:'right',direction:'vertical',gradientLength:220,gradientThickness:12,values:[1,3,5,7],offset:12}}),
   tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('length','Consecutive finals seasons')]
  },
  layer:[{mark:{type:'bar',size:18,cornerRadius:2}},{name:'longest_run_labels',transform:[{filter:'datum.length === 7'}],mark:{type:'text',fontSize:15,fontWeight:600,align:'center',baseline:'middle',color:'#ffffff'},encoding:{x2:null,x:{value:{expr:"(scale('x', datum.start) + scale('x', datum.end)) / 2"}},text:{value:{expr:"width >= 260 ? '7 seasons' : '7'"}},color:{value:'#ffffff'}}}]
@@ -293,7 +293,7 @@ save('premiership_bars',{
   {name:'title_bars',mark:{type:'bar',size:26},encoding:{color:{condition:{test:'datum.premierships === 3',value:orange},value:green}}},
   {name:'title_counts',mark:{type:'text',align:'left',dx:8,fontSize:15,fontWeight:500,color:ink},encoding:{text:field('premierships')}},
   {name:'winning_years',transform:[{filter:'datum.premierships >= 2 && width >= 400'}],mark:{type:'text',align:'left',fontSize:15,color:'#ffffff'},encoding:{x:{value:10},text:field('title_years','nominal')}},
-  note('titles_note',{expr:"width >= 460 ? 'Hawthorn and Richmond\\nwon 6 of 14 titles.' : 'Hawthorn and\\nRichmond won\\n6 of 14 titles.'"},'width < 350 ? width / 2 : width * .68','width < 350 ? height - 85 : height * .6',{align:'center',fontSize:{expr:'width >= 460 ? 22 : width >= 180 ? 18 : 16'},lineHeight:{expr:'width >= 460 ? 29 : width >= 180 ? 24 : 21'}})
+  note('titles_note',{expr:"width >= 850 ? 'Hawthorn and Richmond won 6 of 14 titles.' : width >= 460 ? 'Hawthorn and Richmond\\nwon 6 of 14 titles.' : 'Hawthorn and\\nRichmond won\\n6 of 14 titles.'"},'width < 350 ? width / 2 : width * .68','width < 350 ? height - 85 : height * .6',{align:'center',fontSize:{expr:'width >= 460 ? 22 : width >= 180 ? 18 : 16'},lineHeight:{expr:'width >= 460 ? 29 : width >= 180 ? 24 : 21'}})
  ]
 });
 console.log('Created 15 chart specs.');

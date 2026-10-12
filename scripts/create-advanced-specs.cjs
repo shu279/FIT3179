@@ -46,7 +46,7 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
     lineBreak:{value:'\n'},lineHeight:{value:18},font:{value:font},fontSize:{value:15},fill:{signal:"datum.team === 'Geelong' ? '"+ink+"' : '#ffffff'"}
    }}},
    {name:'geelong_top_four_note',type:'text',interactive:false,from:{data:'leaves'},encode:{update:{
-    x:{signal:'datum.x0 + 10'},y:{signal:'datum.y0 + 46'},text:{signal:"datum.team === 'Geelong' ? 'of 14\\nseasons' : ''"},
+    x:{signal:'datum.x0 + 10'},y:{signal:'datum.y0 + 46'},text:{signal:"datum.team === 'Geelong' ? (datum.x1-datum.x0 >= 130 ? 'of 14 seasons' : 'of 14\\nseasons') : ''"},
     lineBreak:{value:'\n'},lineHeight:{value:18},font:{value:font},fontSize:{value:15},fill:{value:ink}
    }}}
   ]

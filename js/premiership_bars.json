@@ -216,7 +216,7 @@
         },
         "text": {
           "value": {
-            "expr": "width >= 460 ? 'Hawthorn and Richmond\\nwon 6 of 14 titles.' : 'Hawthorn and\\nRichmond won\\n6 of 14 titles.'"
+            "expr": "width >= 850 ? 'Hawthorn and Richmond won 6 of 14 titles.' : width >= 460 ? 'Hawthorn and Richmond\\nwon 6 of 14 titles.' : 'Hawthorn and\\nRichmond won\\n6 of 14 titles.'"
           }
         },
         "tooltip": {

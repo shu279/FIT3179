@@ -201,7 +201,7 @@
             "signal": "datum.y0 + 46"
           },
           "text": {
-            "signal": "datum.team === 'Geelong' ? 'of 14\\nseasons' : ''"
+            "signal": "datum.team === 'Geelong' ? (datum.x1-datum.x0 >= 130 ? 'of 14 seasons' : 'of 14\\nseasons') : ''"
           },
           "lineBreak": {
             "value": "\n"

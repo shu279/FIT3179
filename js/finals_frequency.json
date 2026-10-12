@@ -215,7 +215,7 @@
         },
         "text": {
           "value": {
-            "expr": "width >= 300 ? 'Geelong missed finals\\nonly in 2015 and 2023.' : 'Geelong missed\\nonly 2015\\nand 2023.'"
+            "expr": "width >= 700 ? 'Geelong missed finals only in 2015 and 2023.' : width >= 300 ? 'Geelong missed finals\\nonly in 2015 and 2023.' : 'Geelong missed\\nonly 2015\\nand 2023.'"
           }
         },
         "tooltip": {
