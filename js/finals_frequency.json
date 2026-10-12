@@ -47,7 +47,7 @@
       ]
     }
   },
-  "description": "Finals seasons out of fourteen. Geelong and Sydney are labelled directly; a note in the unused lower-right area identifies Geelong’s two missed seasons.",
+  "description": "Finals seasons out of fourteen. A single-line annotation points to Geelong and identifies its two missed seasons.",
   "data": {
     "url": "data/team_summary.json"
   },
@@ -183,6 +183,171 @@
       }
     },
     {
+      "name": "finals_note_leader",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width - 2"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "width < 300 ? height - 43 : height * .68 - 8"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "width - 2"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "(scale('y','Geelong') + scale('y','Sydney') + bandwidth('y')) / 2"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "finals_note_elbow",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width - 2"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "(scale('y','Geelong') + scale('y','Sydney') + bandwidth('y')) / 2"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',12)"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "(scale('y','Geelong') + scale('y','Sydney') + bandwidth('y')) / 2"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "finals_note_tip",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',12)"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "(scale('y','Geelong') + scale('y','Sydney') + bandwidth('y')) / 2"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',12)"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Geelong') + bandwidth('y')/2 + 8"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "finals_note_arrow",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "point",
+        "shape": "triangle-up",
+        "filled": true,
+        "color": "#21372b",
+        "size": 35
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',12)"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Geelong') + bandwidth('y')/2 + 8"
+          }
+        },
+        "opacity": {
+          "value": 1
+        },
+        "tooltip": {
+          "value": null
+        }
+      }
+    },
+    {
       "name": "finals_note",
       "data": {
         "values": [
@@ -191,32 +356,26 @@
       },
       "mark": {
         "type": "text",
-        "align": "center",
+        "align": "right",
         "baseline": "top",
-        "fontSize": {
-          "expr": "width >= 300 ? 18 : 16"
-        },
-        "lineHeight": {
-          "expr": "width >= 300 ? 24 : 21"
-        },
+        "fontSize": 15,
+        "lineHeight": 19,
         "lineBreak": "\n",
         "color": "#21372b"
       },
       "encoding": {
         "x": {
           "value": {
-            "expr": "width < 300 ? width / 2 : width * .66"
+            "expr": "width - 6"
           }
         },
         "y": {
           "value": {
-            "expr": "width < 300 ? height - 70 : height * .68"
+            "expr": "width < 300 ? height - 35 : height * .68"
           }
         },
         "text": {
-          "value": {
-            "expr": "width >= 700 ? 'Geelong missed finals only in 2015 and 2023.' : width >= 300 ? 'Geelong missed finals\\nonly in 2015 and 2023.' : 'Geelong missed\\nonly 2015\\nand 2023.'"
-          }
+          "value": "Missed finals in 2015 and 2023."
         },
         "tooltip": {
           "value": null

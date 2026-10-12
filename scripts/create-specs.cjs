@@ -121,15 +121,21 @@ save('ladder_heatmap',{description:'Regular-season ladder position, sorted by se
  ]
 });
 
+const finalsNoteElbowY="(scale('y','Geelong') + scale('y','Sydney') + bandwidth('y')) / 2";
 save('finals_frequency',{
- description:'Finals seasons out of fourteen. Geelong and Sydney are labelled directly; a note in the unused lower-right area identifies Geelong’s two missed seasons.',
+ description:'Finals seasons out of fourteen. A single-line annotation points to Geelong and identifies its two missed seasons.',
  height:475,data:data('team_summary'),params:focus,
  encoding:{y:field('team','nominal',{sort:order,scale:{range:[0,{expr:'width < 300 ? height - 90 : height'}]},axis:{title:null,ticks:false}}),x:field('finals','quantitative',{scale:{domain:[0,18]},axis:{title:'Finals seasons',values:[0,4,8,12,14]}}),opacity:focused,tooltip:[tip('team','Club'),tip('finals','Finals seasons'),tip('finals_rate','Share of seasons (%)','.1f')]},
  layer:[
   {mark:{type:'rule',strokeWidth:2,color:'#b8c4af'},encoding:{x2:{datum:0}}},
   {mark:{type:'point',filled:true,size:95,color:green}},
   {transform:[{calculate:"datum.finals >= 11 ? datum.finals + '/14' : '' + datum.finals",as:'finals_label'}],mark:{type:'text',align:'left',dx:9,fontSize:15,color:ink},encoding:{text:field('finals_label','nominal')}},
-  note('finals_note',{expr:"width >= 700 ? 'Geelong missed finals only in 2015 and 2023.' : width >= 300 ? 'Geelong missed finals\\nonly in 2015 and 2023.' : 'Geelong missed\\nonly 2015\\nand 2023.'"},'width < 300 ? width / 2 : width * .66','width < 300 ? height - 70 : height * .68',{align:'center',fontSize:{expr:'width >= 300 ? 18 : 16'},lineHeight:{expr:'width >= 300 ? 24 : 21'}})
+  // Keep the leader outside the value labels, then approach Geelong from below.
+  leader('finals_note_leader','width - 2','width < 300 ? height - 43 : height * .68 - 8','width - 2',finalsNoteElbowY),
+  leader('finals_note_elbow','width - 2',finalsNoteElbowY,"scale('x',12)",finalsNoteElbowY),
+  leader('finals_note_tip',"scale('x',12)",finalsNoteElbowY,"scale('x',12)","scale('y','Geelong') + bandwidth('y')/2 + 8"),
+  {name:'finals_note_arrow',data:{values:[{}]},mark:{type:'point',shape:'triangle-up',filled:true,color:ink,size:35},encoding:{x:{value:{expr:"scale('x',12)"}},y:{value:{expr:"scale('y','Geelong') + bandwidth('y')/2 + 8"}},opacity:{value:1},tooltip:{value:null}}},
+  note('finals_note','Missed finals in 2015 and 2023.','width - 6','width < 300 ? height - 35 : height * .68',{align:'right',fontSize:15})
  ]
 });
 
