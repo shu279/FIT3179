@@ -80,13 +80,14 @@ async function initialiseClubControl() {
     // This small bridge shares its value with the separately embedded chart and prose.
     const updateClub=(_name,value)=>{
       const club=clubs.find(d=>d.team===value);
-      status.textContent=club?`${club.team}: ${club.finals} of 14 seasons in finals · ${club.win_rate.toFixed(1)}% of regular-season games won · ${club.premierships} premiership${club.premierships===1?'':'s'}.`:'Geelong and Sydney set the standard for returning to finals.';
+      status.textContent=club?`${club.team}: ${club.finals} of 14 seasons in finals · ${club.win_rate.toFixed(1)}% of regular-season games won · ${club.premierships} premiership${club.premierships===1?'':'s'}.`:'';
+      status.hidden=!club;
       const frequency=chartViews.get('finals_frequency');
       if(frequency)frequency.view.signal('focusTeam',value).runAsync().catch(error=>console.error('Club highlighting:',error));
     };
     heatmap.view.addSignalListener('focusTeam',updateClub);
     updateClub('focusTeam',heatmap.view.signal('focusTeam'));
-  } catch(error) {console.error(error);status.textContent='The club summary and linked highlighting are unavailable.';}
+  } catch(error) {console.error(error);status.textContent='The club summary and linked highlighting are unavailable.';status.hidden=false;}
 }
 
 function initialiseResize() {
