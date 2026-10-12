@@ -9,14 +9,14 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=4d29a56a4619">
+  <link rel="stylesheet" href="css/style.css?v=566eef56737e">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
   <script defer src="js/chart-layout.js?v=88cc1e3d6193"></script>
   <script defer src="js/map-controls.js?v=dd2f0929e238"></script>
   <script defer src="js/city-map-navigation.js?v=03f4ed95991a"></script>
-  <script defer src="js/main.js?v=adb541799545"></script>
+  <script defer src="js/main.js?v=11aa6c7d0f49"></script>
 </head>
 <body>
   <a class="skip-link" href="#story">Skip to the visualisations</a>
@@ -79,9 +79,13 @@
         <figure class="figure-wide journey-figure">
           <h3>Club rankings and win rates change over time.</h3>
           <p class="chart-deck">Geelong, Hawthorn, Richmond and Brisbane show how differently successful clubs can move through the ladder. Select a period in the timeline to compare their rankings and win rates during the same years, rather than relying on a fourteen-season average.</p>
-          <div class="chart-actions"><button type="button" id="reset-journey">Show all seasons</button></div>
-          <p id="journey-summary" class="micro" aria-live="polite">2012–2025 · 14 seasons included in the win-rate comparison.</p>
-          <div class="chart" data-spec="ladder_bump" aria-label="Linked views: drag a season range in the overview to zoom four clubs’ ladder journeys and update their win-rate bars."></div>
+          <div class="journey-chart-frame">
+            <div class="chart" data-spec="ladder_bump" aria-label="Linked views: drag a season range in the overview to zoom four clubs’ ladder journeys and update their win-rate bars."></div>
+            <div class="journey-range-controls">
+              <div class="chart-actions"><button type="button" id="reset-journey">Show all seasons</button></div>
+              <p id="journey-summary" class="micro" aria-live="polite">2012–2025 · 14 seasons included in the win-rate comparison.</p>
+            </div>
+          </div>
           <figcaption>Ranks run from first at the top to eighteenth below. Bars show wins ÷ games played in the selected period. “Best” marks the highest rate, including ties. Click legend labels to highlight clubs; Shift-click selects several.</figcaption>
         </figure>
       </section>
