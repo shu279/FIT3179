@@ -7,7 +7,8 @@ async function initialiseMapControls(chartViews, renderCity) {
   const controller=chartViews.get(names[0])?.view;
   let symbols=chartViews.get(names[1])?.view;
   const status=document.querySelector('#map-season-summary');
-  const flowStatus=document.querySelector('#map-final-summary');
+  const flowYear=document.querySelector('#map-final-year');
+  const flowResult=document.querySelector('#map-final-result');
   const flowContext=document.querySelector('#map-final-context');
   const play=document.querySelector('#play-map');
   const reset=document.querySelector('#reset-map');
@@ -43,8 +44,9 @@ async function initialiseMapControls(chartViews, renderCity) {
     const year=controller.signal('selectedSeason');
     const final=finals.find(row=>row.season===year);
     status.textContent=`Clubs reaching finals by state in ${year}`;
-    flowStatus.textContent=final?`${year}: ${final.winner} defeated ${final.runner_up}.`:
-      `${year}: Grand Final opponents`;
+    flowYear.textContent=`${year}:`;
+    flowResult.textContent=final?`${final.winner} defeated ${final.runner_up}.`:
+      'Grand Final opponents';
     flowContext.textContent=final && final.winner_city===final.runner_city?
       'The loop marks opponents based in the same city; it does not represent travel.':
       'The line connects club home cities; it does not represent travel.';

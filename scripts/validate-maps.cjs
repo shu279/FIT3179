@@ -155,7 +155,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
   }
  }
  const elements=new Map();
- for(const id of ['#map-season-summary','#map-final-summary','#map-final-context','#play-map','#reset-map',
+ for(const id of ['#map-season-summary','#map-final-year','#map-final-result','#map-final-context','#play-map','#reset-map',
   '#city-mode-single','#city-mode-period','#city-single-controls','#city-period-controls'])elements.set(id,{
   textContent:'',attributes:{},listeners:{},setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,fn){this.listeners[name]=fn;},checkValidity(){return true;}
  });
@@ -228,7 +228,8 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  assert.equal(controller.signal('selectedSeason'),2012);assert.equal(play.attributes['aria-pressed'],'true');
  await pending();await settle();assert.equal(controller.signal('selectedSeason'),2013);
  await play.listeners.click();assert.equal(play.attributes['aria-pressed'],'false');assert.equal(pending,null);
- assert.equal(elements.get('#map-final-summary').textContent,'2013: Hawthorn defeated Fremantle.');
+ assert.equal(elements.get('#map-final-year').textContent,'2013:');
+ assert.equal(elements.get('#map-final-result').textContent,'Hawthorn defeated Fremantle.');
  assert.match(elements.get('#map-final-context').textContent,/does not represent travel/);
  await symbols.signal('mapZoom',4).runAsync();await settle();
  await symbols.signal('mapPan',[0.2,-0.15]).runAsync();

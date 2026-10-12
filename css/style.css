@@ -64,6 +64,8 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .grand-final-study{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);grid-template-areas:"visual copy";gap:40px;align-items:center}
 .grand-final-study>.map-story-copy{grid-area:copy}
 .grand-final-study>.map-story-visual{grid-area:visual}
+#map-final-year{display:block;margin-bottom:4px}
+#map-final-result{display:block;min-height:2lh}
 .map-story-copy{margin:0}
 .map-story-copy .chart-deck{min-height:0;margin:16px 0}
 .map-story-copy p:last-child{margin-bottom:0}
