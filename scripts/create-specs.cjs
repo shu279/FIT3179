@@ -143,6 +143,8 @@ const saveMultiple=(name,spec)=>fs.writeFileSync(path.join(root,'js',name+'.json
 const journeyColor={field:'team',type:'nominal',scale:{domain:journeyTeams,range:journeyColors},legend:{title:null,orient:'top',columns:{expr:'width < 385 ? 1 : 2'},symbolType:'stroke',symbolStrokeWidth:3,labelLimit:180}};
 const rankAxis={field:'rank',type:'quantitative',scale:{domain:[18.5,0.5],nice:false},axis:{title:'Ladder position',values:[1,4,8,12,18]}};
 const journeyOpacity={condition:{param:'journeyClub',value:1},value:0.15};
+// Wrap long panel titles on narrow screens to avoid scaling the SVG and its brush.
+const journeyTitle=(text,lines)=>({text:{expr:'width < 200 ? '+JSON.stringify(lines)+' : '+JSON.stringify(text)}});
 saveMultiple('ladder_bump',{
  description:'Drag a season range in the overview to zoom the rank detail and compare pooled win rates for the same seasons. Legend selection highlights clubs across views.',
  data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:journeyTeams}}],spacing:32,
@@ -151,19 +153,19 @@ saveMultiple('ladder_bump',{
  // Repeat the shared colour key beside every view, keeping selection linked.
  resolve:{scale:{x:'independent',y:'independent',color:'shared'},legend:{color:'independent'}},
  vconcat:[
-  {name:'journey_detail',title:'Ladder positions in the selected period',width:900,height:260,
+  {name:'journey_detail',title:journeyTitle('Ladder positions in the selected period',['Ladder positions in','the selected period']),width:900,height:260,
    encoding:{x:field('season','quantitative',{scale:{domain:{param:'seasonBrush'},nice:false,zero:false},axis:{title:null,format:'d',tickMinStep:1,tickCount:6,grid:false}}),y:rankAxis,color:journeyColor,opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('season','Season','d'),tip('rank','Ladder position')]},
    layer:[
     {name:'journey_lines',mark:{type:'line',clip:true,strokeWidth:2.8}},
     {mark:{type:'point',clip:true,filled:true,size:42}}
    ]},
-  {name:'journey_overview',title:'Drag to select a season range',width:900,height:90,
-   mark:{type:'line',strokeWidth:1.8},
-   encoding:{x:field('season','quantitative',{scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:years,grid:false}}),y:{...rankAxis,axis:{title:null,values:[1,18]}},color:journeyColor,opacity:journeyOpacity}},
-  {name:'journey_summary',title:'Games won in the selected seasons',width:900,height:145,
+  {name:'journey_summary',title:journeyTitle('Games won in the selected seasons',['Games won in the','selected seasons']),width:900,height:145,
    transform:[{filter:{param:'seasonBrush'}},{aggregate:[{op:'sum',field:'wins',as:'wins'},{op:'sum',field:'played',as:'games'},{op:'count',as:'seasons'},{op:'min',field:'season',as:'first'},{op:'max',field:'season',as:'last'}],groupby:['team']},{calculate:'datum.wins / datum.games * 100',as:'period_win_rate'},{window:[{op:'rank',as:'period_rank'}],sort:[{field:'period_win_rate',order:'descending'}]}],
    encoding:{y:field('team','nominal',{scale:{domain:journeyTeams},axis:{title:null,ticks:false,labelLimit:150}}),x:field('period_win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:'Games won (%)',values:[0,25,50,75,100]}}),color:{...journeyColor,legend:{...journeyColor.legend,symbolType:'square',symbolSize:80}},opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('seasons','Seasons'),tip('wins','Wins'),tip('games','Games played'),tip('period_win_rate','Win rate (%)','.1f')]},
-   layer:[{name:'journey_bars',mark:{type:'bar',size:19}},{transform:[{filter:'datum.period_rank === 1'}],mark:{type:'text',align:'right',dx:-7,fontSize:15,fontWeight:600,color:'#ffffff'},encoding:{text:{value:'Best'},color:{value:'#ffffff'}}}]}
+   layer:[{name:'journey_bars',mark:{type:'bar',size:19}},{transform:[{filter:'datum.period_rank === 1'}],mark:{type:'text',align:'right',dx:-7,fontSize:15,fontWeight:600,color:'#ffffff'},encoding:{text:{value:'Best'},color:{value:'#ffffff'}}}]},
+  {name:'journey_overview',title:journeyTitle('Drag to select a season range',['Drag to select','a season range']),width:900,height:90,
+   mark:{type:'line',strokeWidth:1.8},
+   encoding:{x:field('season','quantitative',{scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:years,grid:false}}),y:{...rankAxis,axis:{title:null,values:[1,18]}},color:journeyColor,opacity:journeyOpacity}}
  ]
 });
 

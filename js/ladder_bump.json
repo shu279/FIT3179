@@ -122,7 +122,11 @@
   "vconcat": [
     {
       "name": "journey_detail",
-      "title": "Ladder positions in the selected period",
+      "title": {
+        "text": {
+          "expr": "width < 200 ? [\"Ladder positions in\",\"the selected period\"] : \"Ladder positions in the selected period\""
+        }
+      },
       "width": 900,
       "height": 260,
       "encoding": {
@@ -239,97 +243,12 @@
       ]
     },
     {
-      "name": "journey_overview",
-      "title": "Drag to select a season range",
-      "width": 900,
-      "height": 90,
-      "mark": {
-        "type": "line",
-        "strokeWidth": 1.8
-      },
-      "encoding": {
-        "x": {
-          "field": "season",
-          "type": "quantitative",
-          "scale": {
-            "domain": [
-              2012,
-              2025
-            ],
-            "nice": false,
-            "zero": false
-          },
-          "axis": {
-            "title": null,
-            "format": "d",
-            "values": [
-              2012,
-              2015,
-              2018,
-              2021,
-              2025
-            ],
-            "grid": false
-          }
-        },
-        "y": {
-          "field": "rank",
-          "type": "quantitative",
-          "scale": {
-            "domain": [
-              18.5,
-              0.5
-            ],
-            "nice": false
-          },
-          "axis": {
-            "title": null,
-            "values": [
-              1,
-              18
-            ]
-          }
-        },
-        "color": {
-          "field": "team",
-          "type": "nominal",
-          "scale": {
-            "domain": [
-              "Geelong",
-              "Hawthorn",
-              "Richmond",
-              "Brisbane Lions"
-            ],
-            "range": [
-              "#31553b",
-              "#ad8b42",
-              "#777f76",
-              "#c96636"
-            ]
-          },
-          "legend": {
-            "title": null,
-            "orient": "top",
-            "columns": {
-              "expr": "width < 385 ? 1 : 2"
-            },
-            "symbolType": "stroke",
-            "symbolStrokeWidth": 3,
-            "labelLimit": 180
-          }
-        },
-        "opacity": {
-          "condition": {
-            "param": "journeyClub",
-            "value": 1
-          },
-          "value": 0.15
-        }
-      }
-    },
-    {
       "name": "journey_summary",
-      "title": "Games won in the selected seasons",
+      "title": {
+        "text": {
+          "expr": "width < 200 ? [\"Games won in the\",\"selected seasons\"] : \"Games won in the selected seasons\""
+        }
+      },
       "width": 900,
       "height": 145,
       "transform": [
@@ -535,6 +454,99 @@
           }
         }
       ]
+    },
+    {
+      "name": "journey_overview",
+      "title": {
+        "text": {
+          "expr": "width < 200 ? [\"Drag to select\",\"a season range\"] : \"Drag to select a season range\""
+        }
+      },
+      "width": 900,
+      "height": 90,
+      "mark": {
+        "type": "line",
+        "strokeWidth": 1.8
+      },
+      "encoding": {
+        "x": {
+          "field": "season",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              2012,
+              2025
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": {
+            "title": null,
+            "format": "d",
+            "values": [
+              2012,
+              2015,
+              2018,
+              2021,
+              2025
+            ],
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "rank",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              18.5,
+              0.5
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": null,
+            "values": [
+              1,
+              18
+            ]
+          }
+        },
+        "color": {
+          "field": "team",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Geelong",
+              "Hawthorn",
+              "Richmond",
+              "Brisbane Lions"
+            ],
+            "range": [
+              "#31553b",
+              "#ad8b42",
+              "#777f76",
+              "#c96636"
+            ]
+          },
+          "legend": {
+            "title": null,
+            "orient": "top",
+            "columns": {
+              "expr": "width < 385 ? 1 : 2"
+            },
+            "symbolType": "stroke",
+            "symbolStrokeWidth": 3,
+            "labelLimit": 180
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "journeyClub",
+            "value": 1
+          },
+          "value": 0.15
+        }
+      }
     }
   ]
 }
