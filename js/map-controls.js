@@ -7,7 +7,6 @@ async function initialiseMapControls(chartViews, renderCity) {
   const controller=chartViews.get(names[0])?.view;
   let symbols=chartViews.get(names[1])?.view;
   const status=document.querySelector('#map-season-summary');
-  const periodStatus=document.querySelector('#map-period-summary');
   const flowStatus=document.querySelector('#map-final-summary');
   const flowContext=document.querySelector('#map-final-context');
   const play=document.querySelector('#play-map');
@@ -41,8 +40,6 @@ async function initialiseMapControls(chartViews, renderCity) {
     singleMode.checked=!period;periodMode.checked=period;
     singleControls.hidden=period;periodControls.hidden=!period;
     periodFrom.value=first;periodTo.value=last;
-    periodStatus.textContent=!period?`City finalists in ${controller.signal('selectedSeason')}`:
-      first===last?`City finalists in ${first}`:`City finalists, ${first}–${last}`;
   }
   function updateSeason(){
     const year=controller.signal('selectedSeason');

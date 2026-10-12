@@ -155,7 +155,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
   }
  }
  const elements=new Map();
- for(const id of ['#map-season-summary','#map-period-summary','#map-final-summary','#map-final-context','#play-map','#reset-map',
+ for(const id of ['#map-season-summary','#map-final-summary','#map-final-context','#play-map','#reset-map',
   '#city-mode-single','#city-mode-period','#city-single-controls','#city-period-controls','#city-period-from','#city-period-to'])elements.set(id,{
   textContent:'',attributes:{},listeners:{},setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,fn){this.listeners[name]=fn;},checkValidity(){return true;}
  });
@@ -236,7 +236,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  assert.equal(elements.get('#city-single-controls').hidden,true);
  assert.equal(elements.get('#city-period-controls').hidden,false);
  await symbols.change('mapTimeBrush_store',vega.changeset().insert([{unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[2017,2020]]}])).runAsync();await settle();
- assert.equal(symbols.signal('usePeriod'),true);assert.match(elements.get('#map-period-summary').textContent,/2017–2020/);
+ assert.equal(symbols.signal('usePeriod'),true);assert.equal(elements.get('#city-period-from').value,2017);assert.equal(elements.get('#city-period-to').value,2020);
  const restoredSpec=read('js/premiership_symbols.json');layout(restoredSpec,1000);restoreCityMapState(restoredSpec,captureCityMapState(symbols));
  const restored=new vega.View(vega.parse(vl.compile(restoredSpec).spec),{renderer:'none',loader,logger});await restored.runAsync();
  assert.deepEqual(restored.signal('mapTimeBrush').season,[2017,2020]);assert.equal(restored.signal('usePeriod'),true);
@@ -248,12 +248,12 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  restoreCityMapState(restoredSpec,captureCityMapState(symbols),true);
  assert.equal(restoredSpec.vconcat[1].params[0].value,undefined);assert.equal(restoredSpec.params.find(p=>p.name==='usePeriod').value,false);
  await controller.signal('selectedSeason',2024).runAsync();await settle();
- assert.equal(symbols.signal('usePeriod'),true);assert.match(elements.get('#map-period-summary').textContent,/2017–2020/);
+ assert.equal(symbols.signal('usePeriod'),true);assert.equal(elements.get('#city-period-from').value,2017);assert.equal(elements.get('#city-period-to').value,2020);
  await play.listeners.click();await settle();
  assert.equal(symbols.signal('usePeriod'),true,'Play must not override the explicit Compare period mode');
  await play.listeners.click();await settle();
  await elements.get('#city-mode-single').listeners.change();await settle();
- assert.equal(symbols.signal('usePeriod'),false);assert.match(elements.get('#map-period-summary').textContent,/2024/);
+ assert.equal(symbols.signal('usePeriod'),false);assert.equal(symbols.signal('selectedSeason'),2024);assert.equal(elements.get('#city-single-controls').hidden,false);
  const singleSpec=read('js/premiership_symbols.json');
  restoreCityMapState(singleSpec,captureCityMapState(symbols));configureCityMapMode(singleSpec);layout(singleSpec,320);
  assert.equal(singleSpec.vconcat.length,1,'Single season has no timeline');
