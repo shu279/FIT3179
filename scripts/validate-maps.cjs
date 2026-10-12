@@ -167,14 +167,12 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
   }
  }
  const elements=new Map();
- for(const id of ['#map-season-summary','#map-final-year','#map-final-result','#map-final-context','#play-map','#reset-map',
+ for(const id of ['#map-season-summary','#map-final-year','#map-final-result','#map-final-context','#reset-map',
   '#city-mode-single','#city-mode-period','#city-single-controls','#city-period-controls','#city-size-legend-title','.city-map-frame'])elements.set(id,{
   textContent:'',attributes:{},listeners:{},setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,fn){this.listeners[name]=fn;},checkValidity(){return true;}
  });
- let pending=null;
  const context={console,vega,fetch:async()=>({ok:true,json:async()=>read('data/grand_finals.json')}),
-  setTimeout:fn=>{pending=fn;return 1;},clearTimeout:()=>{pending=null;},
-  document:{querySelector:id=>elements.get(id),addEventListener(){}},window:{addEventListener(){}}};
+  document:{querySelector:id=>elements.get(id)}};
  const initialise=vm.runInNewContext(fs.readFileSync(path.join(root,'js/map-controls.js'),'utf8')+'\n;initialiseMapControls',context);
  const controls=await initialise(chartViews);
  assert.equal(elements.get('#city-mode-single').checked,true);
@@ -242,10 +240,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  await elements.get('#reset-map').listeners.click();await settle();
  for(const {view} of chartViews.values()){assert.equal(view.signal('selectedSeason'),2025);assert.equal(view.signal('showPhysical'),true);}
  assert.equal(symbols.signal('mapZoom'),1);assert.deepEqual(Array.from(symbols.signal('mapPan')),[0,0]);
- const play=elements.get('#play-map');await play.listeners.click();await settle();
- assert.equal(controller.signal('selectedSeason'),2012);assert.equal(play.attributes['aria-pressed'],'true');
- await pending();await settle();assert.equal(controller.signal('selectedSeason'),2013);
- await play.listeners.click();assert.equal(play.attributes['aria-pressed'],'false');assert.equal(pending,null);
+ await controller.signal('selectedSeason',2013).runAsync();await settle();
  assert.equal(elements.get('#map-final-year').textContent,'2013:');
  assert.equal(elements.get('#map-final-result').textContent,'Hawthorn defeated Fremantle.');
  assert.match(elements.get('#map-final-context').textContent,/does not represent travel/);
@@ -270,9 +265,6 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  assert.equal(restoredSpec.vconcat[1].params[0].value,undefined);assert.equal(restoredSpec.params.find(p=>p.name==='usePeriod').value,false);
  await controller.signal('selectedSeason',2024).runAsync();await settle();
  assert.equal(symbols.signal('usePeriod'),true);assert.equal(elements.get('#city-period-controls').textContent,'2017–2020 · 4 seasons');
- await play.listeners.click();await settle();
- assert.equal(symbols.signal('usePeriod'),true,'Play must not override the explicit Compare period mode');
- await play.listeners.click();await settle();
  await elements.get('#city-mode-single').listeners.change();await settle();
  assert.equal(symbols.signal('usePeriod'),false);assert.equal(symbols.signal('selectedSeason'),2024);assert.equal(elements.get('#city-single-controls').hidden,false);
  assertSizeLegend(false);
@@ -300,5 +292,5 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  navigation.destroy();
  for(const {view} of chartViews.values())view.finalize();
  assert.deepEqual(errors,[],'No Vega runtime errors');
- console.log('Map checks passed: 14 seasons, fixed class boundaries, no-club regions, layers, zoom, whole-year brushes, independent period mode, mode restoration, shared controls, play/pause and reset.');
+ console.log('Map checks passed: 14 seasons, fixed class boundaries, no-club regions, layers, zoom, whole-year brushes, independent period mode, mode restoration, shared controls and reset.');
 };

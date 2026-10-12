@@ -23,7 +23,6 @@ async function embedChart(element, {resetMapPeriod=false,cityMode,cityPeriod,pre
   } : null;
   if(cityState && cityMode!==undefined)cityState.usePeriod=cityMode;
   if(cityState && cityPeriod)cityState.mapTimeBrush={season:cityPeriod};
-  if(cityState)mapControls?.pause();
   previous?.navigation?.destroy();
   previous?.readingAnnotations?.destroy();
   chartViews.get(name)?.view.finalize();

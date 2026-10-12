@@ -1,6 +1,6 @@
 /* Vega-Lite creates the Studio-style inputs from params.bind in the JSON.
- * Plain JavaScript shares their signals between the three embedded maps and
- * supplies an opt-in play/pause button. Brushing itself is defined in JSON. */
+ * Plain JavaScript shares their signals between the three embedded maps.
+ * Brushing itself is defined in JSON. */
 async function initialiseMapControls(chartViews, renderCity) {
   const names=['state_choropleth','premiership_symbols','grand_final_flows'];
   const sharedSignals=['selectedSeason','mapCentre','showPhysical','showCultural'];
@@ -10,7 +10,6 @@ async function initialiseMapControls(chartViews, renderCity) {
   const flowYear=document.querySelector('#map-final-year');
   const flowResult=document.querySelector('#map-final-result');
   const flowContext=document.querySelector('#map-final-context');
-  const play=document.querySelector('#play-map');
   const reset=document.querySelector('#reset-map');
   const singleMode=document.querySelector('#city-mode-single');
   const periodMode=document.querySelector('#city-mode-period');
@@ -19,7 +18,7 @@ async function initialiseMapControls(chartViews, renderCity) {
   const sizeLegendTitle=document.querySelector('#city-size-legend-title');
   const cityFrame=document.querySelector('.city-map-frame');
   if(!controller || !symbols || names.some(name=>!chartViews.has(name))){
-    play.disabled=true;reset.disabled=true;
+    reset.disabled=true;
     status.textContent='The maps could not load. Reload the page to try again.';
     return;
   }
@@ -29,11 +28,6 @@ async function initialiseMapControls(chartViews, renderCity) {
     if(!response.ok)throw Error('Grand Final summary could not load');
     finals=await response.json();
   } catch(error){console.error(error);}
-  let playing=false,timer=null,closed=false;
-  const stop=()=>{
-    playing=false;clearTimeout(timer);timer=null;
-    play.textContent='Play';play.setAttribute('aria-pressed','false');
-  };
   function updatePeriod(){
     const period=symbols.signal('usePeriod');
     const first=symbols.signal('periodStart');
@@ -78,14 +72,12 @@ async function initialiseMapControls(chartViews, renderCity) {
   }
   function attachBrush(){
     symbols.addSignalListener('mapTimeBrush',()=>{
-      if(symbols.signal('usePeriod'))stop();
       // Read the rounded endpoints after the selection's dataflow settles.
       Promise.resolve().then(updatePeriod).catch(console.error);
     });
     symbols.addSignalListener('usePeriod',updatePeriod);
   }
   async function changeMode(period){
-    stop();
     if(renderCity)await renderCity({cityMode:period});
     else await symbols.signal('usePeriod',period).runAsync();
     updatePeriod();
@@ -95,23 +87,7 @@ async function initialiseMapControls(chartViews, renderCity) {
   names.forEach(name=>attachSharedInputs(name,chartViews.get(name).view));
   attachBrush();
   singleMode.disabled=false;periodMode.disabled=false;
-  async function tick(){
-    if(!playing || closed)return;
-    const current=controller.signal('selectedSeason');
-    if(current>=2025){stop();return;}
-    try{
-      await controller.signal('selectedSeason',current+1).runAsync();
-      if(playing && !closed)timer=setTimeout(tick,1100);
-    } catch(error){stop();console.error(error);}
-  }
-  play.addEventListener('click',async()=>{
-    if(playing){stop();return;}
-    playing=true;play.textContent='Pause';play.setAttribute('aria-pressed','true');
-    if(controller.signal('selectedSeason')>=2025)await controller.signal('selectedSeason',2012).runAsync();
-    timer=setTimeout(tick,1100);
-  });
   reset.addEventListener('click',async()=>{
-    stop();
     await controller.signal('selectedSeason',2025).signal('mapZoom',1).signal('mapCentre',[0,-28])
       .signal('showPhysical',true).signal('showCultural',true).runAsync();
     await symbols.signal('mapZoom',1).signal('mapPan',[0,0]).runAsync();
@@ -120,10 +96,8 @@ async function initialiseMapControls(chartViews, renderCity) {
     else await symbols.change('mapTimeBrush_store',vega.changeset().remove(()=>true)).signal('usePeriod',false).runAsync();
     updateSeason();
   });
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
-  window.addEventListener('pagehide',()=>{closed=true;stop();},{once:true});
   updateSeason();
-  return {pause:stop,replaceCityView(view){
+  return {replaceCityView(view){
     symbols=view;attachSharedInputs('premiership_symbols',view);attachBrush();
     // A reader may change another map while this one is being re-embedded.
     for(const name of sharedSignals)view.signal(name,controller.signal(name));
