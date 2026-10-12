@@ -274,6 +274,338 @@
           "value": "#21372b"
         }
       }
+    },
+    {
+      "name": "titles_note_elbow",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "(width < 500 ? width - 38 : width * .68 + 90) + 8"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "width < 500 ? height - 35 : height * .6"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "width - 4"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "width < 500 ? height - 35 : height * .6"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_leader",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width - 4"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "width < 500 ? height - 35 : height * .6"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "width - 4"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') + 4"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_branch_0",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width - 4"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') + 4"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') + 4"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_stem_0",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') + 4"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') / 2 + min(26, bandwidth('y') * .8) / 2 + 3"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_arrow_0",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "point",
+        "shape": "triangle-up",
+        "filled": true,
+        "color": "#21372b",
+        "size": 35,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Hawthorn') + bandwidth('y') / 2 + min(26, bandwidth('y') * .8) / 2 + 3"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_branch_1",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width - 4"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Richmond') + bandwidth('y') + 4"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Richmond') + bandwidth('y') + 4"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_stem_1",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Richmond') + bandwidth('y') + 4"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "scale('y','Richmond') + bandwidth('y') / 2 + min(26, bandwidth('y') * .8) / 2 + 3"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_arrow_1",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "point",
+        "shape": "triangle-up",
+        "filled": true,
+        "color": "#21372b",
+        "size": 35,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',3) - 12"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "scale('y','Richmond') + bandwidth('y') / 2 + min(26, bandwidth('y') * .8) / 2 + 3"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
     }
   ]
 }
