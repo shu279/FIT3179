@@ -114,21 +114,33 @@ async function main(){
          assert.equal(label.datum.share,startingGroup.filter(d=>d.to_finals===label.datum.to).length/startingGroup.length);
        }
      }
-     if(name==='success_radar.json'){
+     if(name==='success_comparison.json'){
        const profiles=view.data('profiles');
-       assert.deepEqual(profiles.map(d=>d.team).sort(),['Geelong','Hawthorn']);
+       assert.equal(profiles.length,10,'Two clubs across five independent measures');
+       assert.deepEqual([...new Set(profiles.map(d=>d.team))].sort(),['Geelong','Hawthorn']);
        assert.equal(view.data('metrics').length,5);
-       assert.deepEqual(view.data('rings').map(d=>d.value),[25,50,75,100]);
+       assert.equal(view.data('metrics').find(d=>d.metric==='top_four').label,'Top-four finishes (%)');
+       assert.deepEqual(view.scale('percentage').domain(),[0,100]);
+       assert.equal(items(view,item=>item.mark?.name==='profile_bars').length,10);
+       assert.equal(items(view,item=>['line','path'].includes(item.mark?.marktype)).length,0,'No lines connect different measures');
        for(const d of profiles){
          const clubRows=rows.filter(r=>r.team===d.team);
-         assert.ok(Math.abs(d.win_rate-sum(clubRows,'wins')/sum(clubRows,'played')*100)<0.006);
-         assert.ok(Math.abs(d.finals_rate-sum(clubRows,'finalist')/clubRows.length*100)<0.006);
-         assert.equal(d.top_four_rate,clubRows.filter(r=>r.rank<=4).length/clubRows.length*100);
-         assert.equal(d.grand_final_rate,(sum(clubRows,'premier')+sum(clubRows,'runner_up'))/clubRows.length*100);
-         assert.equal(d.premiership_rate,sum(clubRows,'premier')/clubRows.length*100);
+         const counts={wins:sum(clubRows,'wins'),finals:sum(clubRows,'finalist'),top_four:clubRows.filter(r=>r.rank<=4).length,
+           grand_finals:sum(clubRows,'premier')+sum(clubRows,'runner_up'),premierships:sum(clubRows,'premier')};
+         assert.equal(d.numerator,counts[d.metric]);
+         assert.equal(d.denominator,d.metric==='wins'?sum(clubRows,'played'):14);
+         assert.equal(d.rate,d.numerator/d.denominator*100);
+         assert.equal(d.value_label,`${d.rate.toFixed(1)}% · ${d.numerator}/${d.denominator}`);
        }
-       await view.width(300).runAsync();
-       assert.ok(view.signal('radius')>0);
+       assert.equal(profiles.find(d=>d.team==='Geelong'&&d.metric==='top_four').value_label,'71.4% · 10/14');
+       assert.equal(profiles.find(d=>d.team==='Hawthorn'&&d.metric==='top_four').value_label,'42.9% · 6/14');
+       const bars=items(view,item=>item.mark?.name==='profile_bars');
+       for(const bar of bars)assert.ok(Math.abs(bar.width-view.scale('percentage')(bar.datum.rate))<1e-8);
+       await view.width(276).runAsync();
+       assert.ok(view.signal('plotWidth')>0);
+       const narrowLabels=items(view,item=>item.mark?.name==='profile_values');
+       assert.equal(narrowLabels.length,10);
+       assert.ok(narrowLabels.every(label=>label.x>=0&&label.bounds.x2<=view.width()),'Direct labels fit a narrow screen');
        await view.width(width).runAsync();
      }
      if(name==='state_choropleth.json'){

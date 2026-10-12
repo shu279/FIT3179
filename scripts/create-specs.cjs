@@ -203,59 +203,62 @@ save('era_change',{
  ]
 });
 
-// Radar axes all use percentages with a fixed 0–100 scale, never per-axis maxima.
-const radarMetrics=[
- {field:'win_rate',label:'Games won'},
- {field:'finals_rate',label:'Finals'},
- {field:'top_four_rate',label:'Top four'},
- {field:'grand_final_rate',label:'Grand Finals'},
- {field:'premiership_rate',label:'Premierships'}
-].map((d,i)=>({...d,angle:i*2*Math.PI/5-Math.PI/2}));
-const polygonPath=ratio=>radarMetrics.map((d,i)=>
- `'${i?'L':'M'}' + (cx + radius * (${ratio(d)}) * cos(${d.angle})) + ',' + (cy + radius * (${ratio(d)}) * sin(${d.angle}))`
-).join(" + ' ' + ")+" + ' Z'";
-const successRadar={
+// Paired bars compare clubs within each metric, without joining unrelated measures.
+const successMetrics=[
+ {metric:'wins',label:'Games won (%)'},
+ {metric:'finals',label:'Finals appearances (%)'},
+ {metric:'top_four',label:'Top-four finishes (%)'},
+ {metric:'grand_finals',label:'Grand Final appearances (%)'},
+ {metric:'premierships',label:'Premierships (%)'}
+].map((d,order)=>({...d,order}));
+const comparisonY="datum.order * 100 + (datum.team === 'Geelong' ? 30 : 60)";
+const comparisonTip="{'Club':datum.team,'Measure':datum.label,'Percentage':format(datum.rate / 100,'.1%'),'Count':datum.numerator + ' / ' + datum.denominator,'Denominator':datum.metric === 'wins' ? 'Regular-season games played' : 'Completed seasons (2012–2025)'}";
+const successComparison={
  '$schema':'https://vega.github.io/schema/vega/v5.json',
- description:'Five measures of sustained success for Geelong and Hawthorn in 2012–2025. All axes use percentages from zero at the centre to 100 at the outer ring.',
- width:700,height:420,padding:0,autosize:{type:'none',resize:true},background:'transparent',
- signals:[{name:'cx',update:'width / 2'},{name:'cy',update:'height / 2'},
-  {name:'radius',update:'max(50, min(160, (width - 160) / 2))'}],
+ description:'Paired horizontal bars compare Geelong and Hawthorn on five separate measures in 2012–2025. All bars share a fixed 0–100% scale, with percentages and counts directly labelled. Top-four finishes means regular-season ladder ranks 1–4 out of 14 seasons. Games won uses games played; all other measures use seasons.',
+ width:700,height:540,padding:{top:4,left:16,right:4,bottom:36},autosize:{type:'none',contains:'padding',resize:true},background:'transparent',
+ signals:[{name:'plotWidth',update:'max(80, width - 160)'}],
  data:[
-  {name:'profiles',url:'data/team_summary.json',transform:[
+  {name:'metrics',values:successMetrics},
+  {name:'profiles',url:'data/team_seasons.json',transform:[
    {type:'filter',expr:"datum.team === 'Geelong' || datum.team === 'Hawthorn'"},
-   {type:'formula',expr:'datum.top_four / datum.seasons * 100',as:'top_four_rate'},
-   {type:'formula',expr:'datum.grand_finals / datum.seasons * 100',as:'grand_final_rate'},
-   {type:'formula',expr:'datum.premierships / datum.seasons * 100',as:'premiership_rate'}
-  ]},
-  {name:'metrics',values:radarMetrics},
-  {name:'rings',values:[{value:25},{value:50},{value:75},{value:100}]},
-  {name:'tickLabels',source:'rings',transform:[{type:'filter',expr:'datum.value === 50 || datum.value === 100'}]}
+   {type:'formula',expr:'datum.rank <= 4 ? 1 : 0',as:'top_four'},
+   {type:'formula',expr:'datum.premier + datum.runner_up',as:'grand_final'},
+   {type:'aggregate',groupby:['team'],fields:['wins','played','finalist','top_four','grand_final','premier',null],
+    ops:['sum','sum','sum','sum','sum','sum','count'],as:['wins','played','finals','top_four','grand_finals','premierships','seasons']},
+   {type:'fold',fields:successMetrics.map(d=>d.metric),as:['metric','numerator']},
+   {type:'lookup',from:'metrics',key:'metric',fields:['metric'],values:['label','order']},
+   {type:'formula',expr:"datum.metric === 'wins' ? datum.played : datum.seasons",as:'denominator'},
+   {type:'formula',expr:'datum.numerator / datum.denominator * 100',as:'rate'},
+   {type:'formula',expr:"format(datum.rate / 100, '.1%') + ' · ' + datum.numerator + '/' + datum.denominator",as:'value_label'}
+  ]}
  ],
- scales:[{name:'clubColor',type:'ordinal',domain:['Geelong','Hawthorn'],range:[green,orange]}],
+ scales:[
+  {name:'percentage',type:'linear',domain:[0,100],range:[0,{signal:'plotWidth'}],zero:true,nice:false},
+  {name:'clubColor',type:'ordinal',domain:['Geelong','Hawthorn'],range:[green,orange]}
+ ],
+ axes:[{scale:'percentage',orient:'bottom',values:{signal:'width < 400 ? [0,50,100] : [0,25,50,75,100]'},domain:false,grid:false,tickColor:grid,labelPadding:9,
+  labelFont:'Helvetica Neue, Arial, sans-serif',labelFontSize:15,labelColor:ink,encode:{labels:{update:{text:{signal:"datum.value + '%'"}}}}}],
  marks:[
-  {type:'path',from:{data:'rings'},encode:{update:{
-   path:{signal:polygonPath(()=> 'datum.value / 100')},fill:{value:null},stroke:{value:grid},strokeWidth:{value:1}
+  {name:'metric_labels',type:'text',interactive:false,from:{data:'metrics'},encode:{update:{
+   x:{value:0},y:{signal:'datum.order * 100'},text:{field:'label'},baseline:{value:'top'},
+   font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:600},fill:{value:ink}
   }}},
-  {type:'rule',from:{data:'metrics'},encode:{update:{
-   x:{signal:'cx'},y:{signal:'cy'},x2:{signal:'cx + radius * cos(datum.angle)'},y2:{signal:'cy + radius * sin(datum.angle)'},stroke:{value:grid},strokeWidth:{value:1}
+  {type:'rect',interactive:false,from:{data:'profiles'},encode:{update:{
+   x:{value:0},x2:{signal:'plotWidth'},y:{signal:comparisonY},height:{value:20},fill:{value:'#e4e6da'},fillOpacity:{value:0.5}
   }}},
-  {type:'path',name:'clubProfiles',from:{data:'profiles'},encode:{update:{
-   path:{signal:polygonPath(d=>`datum.${d.field} / 100`)},
-   fill:{scale:'clubColor',field:'team'},fillOpacity:{value:0.1},stroke:{scale:'clubColor',field:'team'},strokeWidth:{value:3},
-   strokeDash:{signal:"datum.team === 'Hawthorn' ? [7,4] : [1,0]"},
-   tooltip:{signal:"{'Club':datum.team,'Games won':format(datum.win_rate / 100,'.1%'),'Seasons reaching finals':format(datum.finals / datum.seasons,'.1%'),'Seasons in top four':format(datum.top_four_rate / 100,'.1%'),'Seasons reaching Grand Final':format(datum.grand_final_rate / 100,'.1%'),'Seasons winning premiership':format(datum.premiership_rate / 100,'.1%')}"}
-  },hover:{fillOpacity:{value:0.22},strokeWidth:{value:4}}}},
-  {type:'text',from:{data:'tickLabels'},encode:{update:{
-   x:{signal:'cx - 7'},align:{value:'right'},y:{signal:'cy - radius * datum.value / 100'},text:{signal:"datum.value + '%'"},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:muted},baseline:{value:'middle'}
-  }}},
-  {type:'text',from:{data:'metrics'},encode:{update:{
-   x:{signal:'cx + (radius + 30) * cos(datum.angle)'},y:{signal:'cy + (radius + 30) * sin(datum.angle)'},
-   text:{field:'label'},lineBreak:{value:'\n'},lineHeight:{value:18},align:{value:'center'},baseline:{value:'middle'},
-   font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:ink}
+  {name:'profile_bars',type:'rect',from:{data:'profiles'},encode:{update:{
+   x:{value:0},x2:{scale:'percentage',field:'rate'},y:{signal:comparisonY},height:{value:20},fill:{scale:'clubColor',field:'team'},
+   fillOpacity:{value:1},tooltip:{signal:comparisonTip},aria:{value:true},
+   description:{signal:"datum.team + ', ' + datum.label + ': ' + datum.value_label"}
+  },hover:{fillOpacity:{value:0.8}}}},
+  {name:'profile_values',type:'text',from:{data:'profiles'},encode:{update:{
+   x:{scale:'percentage',field:'rate',offset:8},y:{signal:comparisonY+' + 10'},text:{field:'value_label'},baseline:{value:'middle'},
+   font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:ink},tooltip:{signal:comparisonTip}
   }}}
  ]
 };
-fs.writeFileSync(path.join(root,'js/success_radar.json'),JSON.stringify(successRadar,null,2)+'\n');
+fs.writeFileSync(path.join(root,'js/success_comparison.json'),JSON.stringify(successComparison,null,2)+'\n');
 
 const tree=[{team:'AFL',parent:null,premierships:0},...summary.filter(d=>d.premierships).map(d=>({team:d.team,parent:'AFL',premierships:d.premierships,short_name:d.id,
  title_years:seasons.filter(row=>row.team===d.team&&row.premier).map(row=>row.season).join(', ')}))];

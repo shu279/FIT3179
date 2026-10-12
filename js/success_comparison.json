@@ -1,0 +1,354 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Paired horizontal bars compare Geelong and Hawthorn on five separate measures in 2012–2025. All bars share a fixed 0–100% scale, with percentages and counts directly labelled. Top-four finishes means regular-season ladder ranks 1–4 out of 14 seasons. Games won uses games played; all other measures use seasons.",
+  "width": 700,
+  "height": 540,
+  "padding": {
+    "top": 4,
+    "left": 16,
+    "right": 4,
+    "bottom": 36
+  },
+  "autosize": {
+    "type": "none",
+    "contains": "padding",
+    "resize": true
+  },
+  "background": "transparent",
+  "signals": [
+    {
+      "name": "plotWidth",
+      "update": "max(80, width - 160)"
+    }
+  ],
+  "data": [
+    {
+      "name": "metrics",
+      "values": [
+        {
+          "metric": "wins",
+          "label": "Games won (%)",
+          "order": 0
+        },
+        {
+          "metric": "finals",
+          "label": "Finals appearances (%)",
+          "order": 1
+        },
+        {
+          "metric": "top_four",
+          "label": "Top-four finishes (%)",
+          "order": 2
+        },
+        {
+          "metric": "grand_finals",
+          "label": "Grand Final appearances (%)",
+          "order": 3
+        },
+        {
+          "metric": "premierships",
+          "label": "Premierships (%)",
+          "order": 4
+        }
+      ]
+    },
+    {
+      "name": "profiles",
+      "url": "data/team_seasons.json",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.team === 'Geelong' || datum.team === 'Hawthorn'"
+        },
+        {
+          "type": "formula",
+          "expr": "datum.rank <= 4 ? 1 : 0",
+          "as": "top_four"
+        },
+        {
+          "type": "formula",
+          "expr": "datum.premier + datum.runner_up",
+          "as": "grand_final"
+        },
+        {
+          "type": "aggregate",
+          "groupby": [
+            "team"
+          ],
+          "fields": [
+            "wins",
+            "played",
+            "finalist",
+            "top_four",
+            "grand_final",
+            "premier",
+            null
+          ],
+          "ops": [
+            "sum",
+            "sum",
+            "sum",
+            "sum",
+            "sum",
+            "sum",
+            "count"
+          ],
+          "as": [
+            "wins",
+            "played",
+            "finals",
+            "top_four",
+            "grand_finals",
+            "premierships",
+            "seasons"
+          ]
+        },
+        {
+          "type": "fold",
+          "fields": [
+            "wins",
+            "finals",
+            "top_four",
+            "grand_finals",
+            "premierships"
+          ],
+          "as": [
+            "metric",
+            "numerator"
+          ]
+        },
+        {
+          "type": "lookup",
+          "from": "metrics",
+          "key": "metric",
+          "fields": [
+            "metric"
+          ],
+          "values": [
+            "label",
+            "order"
+          ]
+        },
+        {
+          "type": "formula",
+          "expr": "datum.metric === 'wins' ? datum.played : datum.seasons",
+          "as": "denominator"
+        },
+        {
+          "type": "formula",
+          "expr": "datum.numerator / datum.denominator * 100",
+          "as": "rate"
+        },
+        {
+          "type": "formula",
+          "expr": "format(datum.rate / 100, '.1%') + ' · ' + datum.numerator + '/' + datum.denominator",
+          "as": "value_label"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "percentage",
+      "type": "linear",
+      "domain": [
+        0,
+        100
+      ],
+      "range": [
+        0,
+        {
+          "signal": "plotWidth"
+        }
+      ],
+      "zero": true,
+      "nice": false
+    },
+    {
+      "name": "clubColor",
+      "type": "ordinal",
+      "domain": [
+        "Geelong",
+        "Hawthorn"
+      ],
+      "range": [
+        "#31553b",
+        "#c96636"
+      ]
+    }
+  ],
+  "axes": [
+    {
+      "scale": "percentage",
+      "orient": "bottom",
+      "values": {
+        "signal": "width < 400 ? [0,50,100] : [0,25,50,75,100]"
+      },
+      "domain": false,
+      "grid": false,
+      "tickColor": "#dedfd4",
+      "labelPadding": 9,
+      "labelFont": "Helvetica Neue, Arial, sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#21372b",
+      "encode": {
+        "labels": {
+          "update": {
+            "text": {
+              "signal": "datum.value + '%'"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "marks": [
+    {
+      "name": "metric_labels",
+      "type": "text",
+      "interactive": false,
+      "from": {
+        "data": "metrics"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "value": 0
+          },
+          "y": {
+            "signal": "datum.order * 100"
+          },
+          "text": {
+            "field": "label"
+          },
+          "baseline": {
+            "value": "top"
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fontWeight": {
+            "value": 600
+          },
+          "fill": {
+            "value": "#21372b"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "interactive": false,
+      "from": {
+        "data": "profiles"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "value": 0
+          },
+          "x2": {
+            "signal": "plotWidth"
+          },
+          "y": {
+            "signal": "datum.order * 100 + (datum.team === 'Geelong' ? 30 : 60)"
+          },
+          "height": {
+            "value": 20
+          },
+          "fill": {
+            "value": "#e4e6da"
+          },
+          "fillOpacity": {
+            "value": 0.5
+          }
+        }
+      }
+    },
+    {
+      "name": "profile_bars",
+      "type": "rect",
+      "from": {
+        "data": "profiles"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "value": 0
+          },
+          "x2": {
+            "scale": "percentage",
+            "field": "rate"
+          },
+          "y": {
+            "signal": "datum.order * 100 + (datum.team === 'Geelong' ? 30 : 60)"
+          },
+          "height": {
+            "value": 20
+          },
+          "fill": {
+            "scale": "clubColor",
+            "field": "team"
+          },
+          "fillOpacity": {
+            "value": 1
+          },
+          "tooltip": {
+            "signal": "{'Club':datum.team,'Measure':datum.label,'Percentage':format(datum.rate / 100,'.1%'),'Count':datum.numerator + ' / ' + datum.denominator,'Denominator':datum.metric === 'wins' ? 'Regular-season games played' : 'Completed seasons (2012–2025)'}"
+          },
+          "aria": {
+            "value": true
+          },
+          "description": {
+            "signal": "datum.team + ', ' + datum.label + ': ' + datum.value_label"
+          }
+        },
+        "hover": {
+          "fillOpacity": {
+            "value": 0.8
+          }
+        }
+      }
+    },
+    {
+      "name": "profile_values",
+      "type": "text",
+      "from": {
+        "data": "profiles"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "scale": "percentage",
+            "field": "rate",
+            "offset": 8
+          },
+          "y": {
+            "signal": "datum.order * 100 + (datum.team === 'Geelong' ? 30 : 60) + 10"
+          },
+          "text": {
+            "field": "value_label"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Helvetica Neue, Arial, sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fill": {
+            "value": "#21372b"
+          },
+          "tooltip": {
+            "signal": "{'Club':datum.team,'Measure':datum.label,'Percentage':format(datum.rate / 100,'.1%'),'Count':datum.numerator + ' / ' + datum.denominator,'Denominator':datum.metric === 'wins' ? 'Regular-season games played' : 'Completed seasons (2012–2025)'}"
+          }
+        }
+      }
+    }
+  ]
+}
