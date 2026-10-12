@@ -16,6 +16,8 @@ async function initialiseMapControls(chartViews, renderCity) {
   const periodMode=document.querySelector('#city-mode-period');
   const singleControls=document.querySelector('#city-single-controls');
   const periodControls=document.querySelector('#city-period-controls');
+  const sizeLegendTitle=document.querySelector('#city-size-legend-title');
+  const cityFrame=document.querySelector('.city-map-frame');
   if(!controller || !symbols || names.some(name=>!chartViews.has(name))){
     play.disabled=true;reset.disabled=true;
     status.textContent='The maps could not load. Reload the page to try again.';
@@ -38,6 +40,8 @@ async function initialiseMapControls(chartViews, renderCity) {
     const last=symbols.signal('periodEnd');
     singleMode.checked=!period;periodMode.checked=period;
     singleControls.hidden=period;periodControls.hidden=!period;
+    sizeLegendTitle.textContent=period?'Average finalists per season':'Finalists';
+    cityFrame.setAttribute('data-time-mode',period?'period':'single');
     periodControls.textContent=first===last?`${first} · 1 season`:`${first}–${last} · ${last-first+1} seasons`;
   }
   function updateSeason(){

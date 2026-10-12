@@ -115,6 +115,7 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
  .city-map-legend,.state-map-legend{left:12px}
  .city-map-frame{padding-top:204px;background:linear-gradient(#e4eff0 0 210px,transparent 210px)}
  .city-map-symbol-key{right:12px}
+ .city-map-frame[data-time-mode="period"] .city-map-symbol-key{top:42px}
 }
 @container(max-width:700px){
  .state-map-legend{left:12px}

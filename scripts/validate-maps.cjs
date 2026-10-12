@@ -168,7 +168,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  }
  const elements=new Map();
  for(const id of ['#map-season-summary','#map-final-year','#map-final-result','#map-final-context','#play-map','#reset-map',
-  '#city-mode-single','#city-mode-period','#city-single-controls','#city-period-controls'])elements.set(id,{
+  '#city-mode-single','#city-mode-period','#city-single-controls','#city-period-controls','#city-size-legend-title','.city-map-frame'])elements.set(id,{
   textContent:'',attributes:{},listeners:{},setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,fn){this.listeners[name]=fn;},checkValidity(){return true;}
  });
  let pending=null;
@@ -179,6 +179,11 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  const controls=await initialise(chartViews);
  assert.equal(elements.get('#city-mode-single').checked,true);
  assert.equal(elements.get('#city-period-controls').hidden,true);
+ const assertSizeLegend=period=>{
+  assert.equal(elements.get('#city-size-legend-title').textContent,period?'Average finalists per season':'Finalists');
+  assert.equal(elements.get('.city-map-frame').attributes['data-time-mode'],period?'period':'single');
+ };
+ assertSizeLegend(false);
  const settle=()=>Promise.all([...chartViews.values()].map(entry=>entry.view.runAsync()));
  const symbols=chartViews.get('premiership_symbols').view;
  // Exercise the actual navigation handlers with screen coordinates at 1:1 scale.
@@ -249,6 +254,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  await elements.get('#city-mode-period').listeners.change();await settle();
  assert.equal(elements.get('#city-single-controls').hidden,true);
  assert.equal(elements.get('#city-period-controls').hidden,false);
+ assertSizeLegend(true);
  await symbols.change('mapTimeBrush_store',vega.changeset().insert([{unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[2017,2020]]}])).runAsync();await settle();
  assert.equal(symbols.signal('usePeriod'),true);assert.equal(elements.get('#city-period-controls').textContent,'2017–2020 · 4 seasons');
  const restoredSpec=read('js/premiership_symbols.json');layout(restoredSpec,1000);restoreCityMapState(restoredSpec,captureCityMapState(symbols));
@@ -258,6 +264,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  controls.replaceCityView(restored);await restored.runAsync();await Promise.resolve();
  assert.equal(restored.signal('mapZoom'),4,'Re-embedding must not overwrite local zoom with another map');
  assert.deepEqual(Array.from(restored.signal('mapPan')),[0.2,-0.15]);
+ assertSizeLegend(true);
  controls.replaceCityView(symbols);await settle();restored.finalize();
  restoreCityMapState(restoredSpec,captureCityMapState(symbols),true);
  assert.equal(restoredSpec.vconcat[1].params[0].value,undefined);assert.equal(restoredSpec.params.find(p=>p.name==='usePeriod').value,false);
@@ -268,6 +275,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  await play.listeners.click();await settle();
  await elements.get('#city-mode-single').listeners.change();await settle();
  assert.equal(symbols.signal('usePeriod'),false);assert.equal(symbols.signal('selectedSeason'),2024);assert.equal(elements.get('#city-single-controls').hidden,false);
+ assertSizeLegend(false);
  const singleSpec=read('js/premiership_symbols.json');
  restoreCityMapState(singleSpec,captureCityMapState(symbols));configureCityMapMode(singleSpec);layout(singleSpec,320);
  assert.equal(singleSpec.vconcat.length,1,'Single season has no timeline');
@@ -286,7 +294,9 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  await symbols.change('mapTimeBrush_store',vega.changeset().remove(()=>true).insert([{unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[2022.1,2022.4]]}])).runAsync();await settle();
  assert.equal(symbols.signal('periodStart'),2022);assert.equal(symbols.signal('periodEnd'),2022);
  assert.equal(elements.get('#city-period-controls').textContent,'2022 · 1 season','The brush readout reflects rounded whole-season endpoints');
+ assertSizeLegend(true);
  await elements.get('#reset-map').listeners.click();await settle();
+ assertSizeLegend(false);
  navigation.destroy();
  for(const {view} of chartViews.values())view.finalize();
  assert.deepEqual(errors,[],'No Vega runtime errors');
