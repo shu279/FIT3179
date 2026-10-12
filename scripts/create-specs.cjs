@@ -203,7 +203,7 @@ save('era_change',{
  height:475,data:data('team_summary'),layer:[
   {mark:{type:'bar',size:17},encoding:{
    y:field('team','nominal',{sort:{field:'change',order:'descending'},axis:{title:null,ticks:false}}),
-   x:field('change','quantitative',{scale:{domain:[-45,45],nice:false},axis:{title:'Change (pp)',values:[-40,-20,0,20,40],format:'+d'}}),
+   x:field('change','quantitative',{scale:{domain:[-45,45],nice:false},axis:{title:['Change (pp)','2012–2018 to 2019–2025'],titleLineHeight:19,titleX:{expr:'min(width / 2, width - 90)'},values:[-40,-20,0,20,40],format:'+d'}}),
    color:{condition:{test:'datum.change >= 0',value:orange},value:green},
    tooltip:[tip('team','Club'),tip('early_rate','2012–2018 win rate (%)','.1f'),tip('recent_rate','2019–2025 win rate (%)','.1f'),tip('change','Change (percentage points)','+.1f')]
   }},
