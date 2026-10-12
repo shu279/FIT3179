@@ -47,8 +47,7 @@ function chartLayout(spec, availableWidth) {
     if(mapHeight) spec.vconcat[0].height = mapHeight;
     return {type:'concat', plotWidth, mapHeight};
   }
-  const mapHeight = spec.usermeta?.layout === 'connection-map' ? Math.max(240,Math.min(560,Math.round(available*0.82))) :
-    spec.usermeta?.layout === 'map' ? Math.max(240,Math.min(400,Math.round(available*0.6))) : null;
+  const mapHeight = ['map','connection-map'].includes(spec.usermeta?.layout) ? Math.max(240,Math.min(400,Math.round(available*0.6))) : null;
   if(mapHeight) spec.height = mapHeight;
   return {type:'single', plotWidth:available, mapHeight};
 }
