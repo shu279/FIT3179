@@ -9,9 +9,16 @@ function chartLayout(spec, availableWidth) {
     return {type:'facet', columns, plotWidth};
   }
   if (spec.vconcat) {
-    const plotWidth = Math.max(120, available - (spec.usermeta?.layout === 'map-timeline' ? (spec.vconcat.length===1 ? 10 : 75) : 175));
+    const journey = spec.usermeta?.layout === 'journey';
+    const sideLegend = journey && available >= 600;
+    const plotWidth = Math.max(120, available - (spec.usermeta?.layout === 'map-timeline' ? (spec.vconcat.length===1 ? 10 : 75) : sideLegend ? 300 : 175));
     spec.vconcat.forEach(view => {
       view.width = plotWidth;
+      if (journey) {
+        // Reserve a side column on wide screens; preserve the plot width on phones.
+        view.encoding.color.legend.orient = sideLegend ? 'right' : 'top';
+        view.encoding.color.legend.columns = sideLegend ? 1 : {expr:'width < 385 ? 1 : 2'};
+      }
     });
     const mapHeight = spec.usermeta?.layout === 'map-timeline' ? Math.max(220,Math.min(440,Math.round(available*0.55))) : null;
     if(mapHeight) spec.vconcat[0].height = mapHeight;

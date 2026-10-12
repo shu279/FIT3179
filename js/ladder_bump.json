@@ -58,6 +58,9 @@
     }
   },
   "description": "Drag a season range in the overview to zoom the rank detail and compare pooled win rates for the same seasons. Legend selection highlights clubs across views.",
+  "usermeta": {
+    "layout": "journey"
+  },
   "data": {
     "url": "data/team_seasons.json"
   },
@@ -74,7 +77,7 @@
       }
     }
   ],
-  "spacing": 32,
+  "spacing": 24,
   "params": [
     {
       "name": "journeyClub",
@@ -188,10 +191,11 @@
           },
           "legend": {
             "title": null,
-            "orient": "top",
-            "columns": {
-              "expr": "width < 385 ? 1 : 2"
-            },
+            "orient": "right",
+            "columns": 1,
+            "offset": 16,
+            "padding": 0,
+            "rowPadding": 4,
             "symbolType": "stroke",
             "symbolStrokeWidth": 3,
             "labelLimit": 180
@@ -364,10 +368,11 @@
           },
           "legend": {
             "title": null,
-            "orient": "top",
-            "columns": {
-              "expr": "width < 385 ? 1 : 2"
-            },
+            "orient": "right",
+            "columns": 1,
+            "offset": 16,
+            "padding": 0,
+            "rowPadding": 4,
             "symbolType": "square",
             "symbolStrokeWidth": 3,
             "labelLimit": 180,
@@ -530,10 +535,11 @@
           },
           "legend": {
             "title": null,
-            "orient": "top",
-            "columns": {
-              "expr": "width < 385 ? 1 : 2"
-            },
+            "orient": "right",
+            "columns": 1,
+            "offset": 16,
+            "padding": 0,
+            "rowPadding": 4,
             "symbolType": "stroke",
             "symbolStrokeWidth": 3,
             "labelLimit": 180

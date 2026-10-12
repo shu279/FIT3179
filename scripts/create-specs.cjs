@@ -146,14 +146,15 @@ const multiConfig={...config,title:{fontSize:15,fontWeight:600,anchor:'start',co
 const saveMultiple=(name,spec)=>fs.writeFileSync(path.join(root,'js',name+'.json'),JSON.stringify({
  '$schema':base.$schema,padding:5,autosize:{type:'pad',resize:true},config:multiConfig,...spec
 },null,2)+'\n');
-const journeyColor={field:'team',type:'nominal',scale:{domain:journeyTeams,range:journeyColors},legend:{title:null,orient:'top',columns:{expr:'width < 385 ? 1 : 2'},symbolType:'stroke',symbolStrokeWidth:3,labelLimit:180}};
+const journeyColor={field:'team',type:'nominal',scale:{domain:journeyTeams,range:journeyColors},legend:{title:null,orient:'right',columns:1,offset:16,padding:0,rowPadding:4,symbolType:'stroke',symbolStrokeWidth:3,labelLimit:180}};
 const rankAxis={field:'rank',type:'quantitative',scale:{domain:[18.5,0.5],nice:false},axis:{title:'Ladder position',values:[1,4,8,12,18]}};
 const journeyOpacity={condition:{param:'journeyClub',value:1},value:0.15};
 // Wrap long panel titles on narrow screens to avoid scaling the SVG and its brush.
 const journeyTitle=(text,lines)=>({text:{expr:'width < 200 ? '+JSON.stringify(lines)+' : '+JSON.stringify(text)}});
 saveMultiple('ladder_bump',{
  description:'Drag a season range in the overview to zoom the rank detail and compare pooled win rates for the same seasons. Legend selection highlights clubs across views.',
- data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:journeyTeams}}],spacing:32,
+ usermeta:{layout:'journey'},
+ data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:journeyTeams}}],spacing:24,
  params:[{name:'journeyClub',select:{type:'point',fields:['team']},bind:'legend',views:['journey_lines','journey_overview','journey_bars']},
   {name:'seasonBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.12,stroke:green}},views:['journey_overview']}],
  // Repeat the shared colour key beside every view, keeping selection linked.
