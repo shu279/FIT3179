@@ -289,11 +289,13 @@ const totalsVersion=crypto.createHash('sha256').update(totalsJSON).digest('hex')
 const titlesNoteRight='width < 500 ? width - 38 : width * .68 + 90';
 const titlesNoteY='width < 500 ? height - 35 : height * .6';
 const titlesSharedX="width < 500 ? width - 24 : (scale('x',1) + width) / 2";
-const titlesSharedY='width < 500 ? height - 77 : height * .88';
+const titlesLastRow="scale('y', '"+titleTotals.at(-1).team+"') + bandwidth('y') / 2";
+const titlesPreviousRow="scale('y', '"+titleTotals.at(-2).team+"') + bandwidth('y') / 2";
+const titlesSharedY='width < 500 ? height - 77 : (('+titlesPreviousRow+') + ('+titlesLastRow+')) / 2';
 const titlesSharedFromX="width < 500 ? scale('x',1) - 12 : ("+titlesSharedX+") - 170";
 const titlesSharedFromY='width < 500 ? ('+titlesSharedY+') - 12 : ('+titlesSharedY+')';
 const titlesSharedTipX="scale('x',1) - 12";
-const titlesSharedTipY="scale('y', '"+titleTotals.at(-1).team+"') + bandwidth('y') / 2 + (width < 500 ? 1 : -1) * (min(26, bandwidth('y') * .8) / 2 + 3)";
+const titlesSharedTipY=titlesLastRow+" + (width < 500 ? 1 : -1) * (min(26, bandwidth('y') * .8) / 2 + 3)";
 save('premiership_bars',{
  description:'Horizontal bars show the nine premiership-winning clubs in 2012–2025, ordered by title count. Hawthorn and Richmond each won three titles and are highlighted in orange. Bar lengths start at zero; direct labels show the count and tooltips list winning years.',
  height:380,data:{url:'data/premiership_totals.json?v='+totalsVersion},
@@ -307,8 +309,9 @@ save('premiership_bars',{
   {name:'title_counts',mark:{type:'text',align:'left',dx:8,fontSize:15,fontWeight:500,color:ink},encoding:{text:field('premierships')}},
   {name:'winning_years',transform:[{filter:'datum.premierships >= 2 && width >= 400'}],mark:{type:'text',align:'left',fontSize:15,color:'#ffffff'},encoding:{x:{value:10},text:field('title_years','nominal')}},
   note('titles_shared_note',{expr:"width >= 500 ? 'Nine clubs shared the fourteen premierships.' : 'Nine clubs shared the\\nfourteen premierships.'"},titlesSharedX,titlesSharedY,{align:{expr:"width < 500 ? 'right' : 'center'"},baseline:'middle'}),
-  leader('titles_shared_leader',titlesSharedFromX,titlesSharedFromY,titlesSharedTipX,titlesSharedTipY),
-  {name:'titles_shared_arrow',data:{values:[{}]},mark:{type:'point',shape:'triangle-up',filled:true,color:ink,size:35,angle:{expr:'atan2(('+titlesSharedTipY+') - ('+titlesSharedFromY+'), ('+titlesSharedTipX+') - ('+titlesSharedFromX+')) * 180 / PI + 90'}},encoding:{x:{value:{expr:titlesSharedTipX}},y:{value:{expr:titlesSharedTipY}},tooltip:{value:null},opacity:{value:1},color:{value:ink}}},
+  leader('titles_shared_leader',titlesSharedFromX,titlesSharedFromY,titlesSharedTipX,titlesSharedFromY),
+  leader('titles_shared_stem',titlesSharedTipX,titlesSharedFromY,titlesSharedTipX,titlesSharedTipY),
+  {name:'titles_shared_arrow',data:{values:[{}]},mark:{type:'point',shape:'triangle-up',filled:true,color:ink,size:35,angle:{expr:'width < 500 ? 0 : 180'}},encoding:{x:{value:{expr:titlesSharedTipX}},y:{value:{expr:titlesSharedTipY}},tooltip:{value:null},opacity:{value:1},color:{value:ink}}},
   note('titles_note',{expr:"width >= 500 ? 'Joint leaders, 6 of 14 titles.' : '6 of 14 titles.'"},titlesNoteRight,titlesNoteY,{align:'right',baseline:'middle'}),
   leader('titles_note_elbow','('+titlesNoteRight+') + 8',titlesNoteY,'width - 4',titlesNoteY),
   leader('titles_leader','width - 4',titlesNoteY,'width - 4',"scale('y','Hawthorn') + bandwidth('y') + 4"),

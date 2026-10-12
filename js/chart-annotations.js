@@ -52,7 +52,6 @@ function initialiseReadingAnnotations(element, name) {
     state_choropleth:[
       {text:d=>`${d.finals} finalist${d.finals===1?'':'s'} / ${d.clubs} clubs`,at:target('.state_count_labels_marks text',d=>d?.state==='WA',.5,1)}
     ],
-    premiership_bars:[{text:'Bar length = titles',at:target('.title_bars_marks path',team('Hawthorn'),.95)}],
     season_boxplot:[
       {text:'Box = middle 50% of seasons',at:target('.layer_4_marks path',team('Geelong'),.25,0)},
       {text:'Line = median',at:target('.layer_5_marks path',team('Geelong'),.5,0)}

@@ -212,7 +212,7 @@
         },
         "y": {
           "value": {
-            "expr": "width < 500 ? height - 77 : height * .88"
+            "expr": "width < 500 ? height - 77 : ((scale('y', 'West Coast') + bandwidth('y') / 2) + (scale('y', 'Western Bulldogs') + bandwidth('y') / 2)) / 2"
           }
         },
         "text": {
@@ -251,7 +251,51 @@
         },
         "y": {
           "value": {
-            "expr": "width < 500 ? (width < 500 ? height - 77 : height * .88) - 12 : (width < 500 ? height - 77 : height * .88)"
+            "expr": "width < 500 ? (width < 500 ? height - 77 : ((scale('y', 'West Coast') + bandwidth('y') / 2) + (scale('y', 'Western Bulldogs') + bandwidth('y') / 2)) / 2) - 12 : (width < 500 ? height - 77 : ((scale('y', 'West Coast') + bandwidth('y') / 2) + (scale('y', 'Western Bulldogs') + bandwidth('y') / 2)) / 2)"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "scale('x',1) - 12"
+          }
+        },
+        "y2": {
+          "value": {
+            "expr": "width < 500 ? (width < 500 ? height - 77 : ((scale('y', 'West Coast') + bandwidth('y') / 2) + (scale('y', 'Western Bulldogs') + bandwidth('y') / 2)) / 2) - 12 : (width < 500 ? height - 77 : ((scale('y', 'West Coast') + bandwidth('y') / 2) + (scale('y', 'Western Bulldogs') + bandwidth('y') / 2)) / 2)"
+          }
+        },
+        "tooltip": {
+          "value": null
+        },
+        "opacity": {
+          "value": 1
+        },
+        "color": {
+          "value": "#21372b"
+        }
+      }
+    },
+    {
+      "name": "titles_shared_stem",
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#21372b",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "scale('x',1) - 12"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "width < 500 ? (width < 500 ? height - 77 : ((scale('y', 'West Coast') + bandwidth('y') / 2) + (scale('y', 'Western Bulldogs') + bandwidth('y') / 2)) / 2) - 12 : (width < 500 ? height - 77 : ((scale('y', 'West Coast') + bandwidth('y') / 2) + (scale('y', 'Western Bulldogs') + bandwidth('y') / 2)) / 2)"
           }
         },
         "x2": {
@@ -289,7 +333,7 @@
         "color": "#21372b",
         "size": 35,
         "angle": {
-          "expr": "atan2((scale('y', 'Western Bulldogs') + bandwidth('y') / 2 + (width < 500 ? 1 : -1) * (min(26, bandwidth('y') * .8) / 2 + 3)) - (width < 500 ? (width < 500 ? height - 77 : height * .88) - 12 : (width < 500 ? height - 77 : height * .88)), (scale('x',1) - 12) - (width < 500 ? scale('x',1) - 12 : (width < 500 ? width - 24 : (scale('x',1) + width) / 2) - 170)) * 180 / PI + 90"
+          "expr": "width < 500 ? 0 : 180"
         }
       },
       "encoding": {
