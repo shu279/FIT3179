@@ -9,7 +9,7 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=c94a90d44295">
+  <link rel="stylesheet" href="css/style.css?v=c632c6bf419b">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -48,7 +48,7 @@
         </div>
         <figure>
           <div class="figure-heading"><div><h3>Every club’s ladder position from 2012 to 2025.</h3></div></div>
-          <div class="chart-legend"><span><i class="legend-square green"></i> Top four</span><span><i class="legend-square sage"></i> 5th–8th</span><span><i class="legend-square neutral"></i> 9th–18th</span><span><i class="legend-square champion-outline"></i> Season champion</span></div>
+          <div class="chart-legend"><span><i class="legend-square green"></i> Top four</span><span><i class="legend-square sage"></i> 5th–8th</span><span><i class="legend-square lower-ladder"></i> 9th–18th</span><span><i class="legend-square champion-outline"></i> Season champion</span></div>
           <div class="chart" data-spec="ladder_heatmap" aria-label="Heatmap of ladder positions for all 18 AFL clubs in each season from 2012 to 2025. Cell fill shows regular-season ladder position; orange outlines mark Grand Final winners."></div>
           <figcaption>The grid has 252 cells: 18 clubs across 14 seasons, 2012–2025. Every cell’s fill shows its regular-season ladder group, with the exact rank shown as a number. An orange outline marks the Grand Final winner. Clubs are ordered by finals appearances, then win rate. Hover or tap a cell for its record.</figcaption>
           <p id="club-summary" class="selection-summary" aria-live="polite">Geelong and Sydney set the standard for returning to finals.</p>
@@ -62,7 +62,7 @@
 
             <h3>Geelong spent ten seasons in the top four.</h3>
             <p class="chart-deck">Each bar contains fourteen seasons. The darker segment shows how often a club finished near the top of the regular-season ladder.</p>
-            <div class="chart-legend"><span><i class="legend-square green"></i> Top four</span><span><i class="legend-square sage"></i> 5th–8th</span><span><i class="legend-square neutral"></i> 9th–18th</span></div>
+            <div class="chart-legend"><span><i class="legend-square green"></i> Top four</span><span><i class="legend-square sage"></i> 5th–8th</span><span><i class="legend-square lower-ladder"></i> 9th–18th</span></div>
             <div class="chart" data-spec="rank_profiles" aria-label="Stacked bars showing seasons in the top four, fifth to eighth and ninth to eighteenth for each club."></div>
             <figcaption>These groups describe ladder positions, rather than actual finals participation. Essendon finished ninth in 2013 following its exclusion from finals.</figcaption>
           </figure>

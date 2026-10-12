@@ -180,7 +180,7 @@ async function main(){
          const cells=items(view,item=>item.mark?.name==='ladder_cells_marks');
          const outlines=items(view,item=>item.mark?.name==='champion_outlines_marks');
          assert.equal(cells.length,252);assert.equal(outlines.length,14);
-         for(const cell of cells)assert.equal(cell.fill,cell.datum.rank<=4?'#31553b':cell.datum.rank<=8?'#a8bd9c':'#e4e6da','Ladder fill remains visible for every club, including champions');
+         for(const cell of cells)assert.equal(cell.fill,cell.datum.rank<=4?'#31553b':cell.datum.rank<=8?'#a8bd9c':'#c1c6b7','Ladder fill remains visible for every club, including champions');
          for(const outline of outlines){
            const cell=cells.find(item=>item.datum.team===outline.datum.team&&item.datum.season===outline.datum.season);
            assert.equal(cell.datum.premier,1);assert.equal(outline.fill,null);assert.equal(outline.stroke,'#c96636');

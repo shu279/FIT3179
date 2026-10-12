@@ -7,7 +7,7 @@ const root = path.resolve(__dirname,'..');
 const summary = require('../data/team_summary.json');
 const seasons = require('../data/team_seasons.json');
 const order=summary.map(d=>d.team);
-const ink='#21372b',green='#31553b',sage='#a8bd9c',orange='#c96636',muted=ink,grid='#dedfd4';
+const ink='#21372b',green='#31553b',sage='#a8bd9c',orange='#c96636',lowerLadder='#c1c6b7',muted=ink,grid='#dedfd4';
 const config={background:'transparent',font:'Helvetica Neue, Arial, sans-serif',view:{stroke:null},axis:{domain:false,tickColor:grid,gridColor:grid,labelColor:muted,titleColor:muted,titleFontWeight:'normal',labelFontSize:15,titleFontSize:15,labelPadding:9,titlePadding:14,labelOverlap:true,labelLimit:150},legend:{labelColor:ink,titleColor:muted,labelFontSize:15,titleFontSize:15,orient:'bottom',titleFontWeight:'normal',padding:8},range:{category:[green,orange,'#aa9148','#838c76','#637963']}};
 const base={ '$schema':'https://vega.github.io/schema/vega-lite/v5.json',width:'container',height:360,autosize:{type:'fit',contains:'padding',resize:true},padding:5,config};
 const data=url=>({url:'data/'+url+'.json'});
@@ -42,7 +42,7 @@ save('rank_profiles',{
  encoding:{
   y:field('team','nominal',{sort:order,axis:{title:null,ticks:false}}),
   x:{aggregate:'count',type:'quantitative',stack:'zero',scale:{domain:[0,14]},axis:{title:'Seasons',values:[0,2,4,6,8,10,12,14]}},
-  color:field('band','nominal',{scale:{domain:['Top four','5th–8th','9th–18th'],range:[green,sage,'#d6dace']},legend:null}),
+  color:field('band','nominal',{scale:{domain:['Top four','5th–8th','9th–18th'],range:[green,sage,lowerLadder]},legend:null}),
   order:field('band_order'),
   tooltip:[tip('team','Club'),tip('band','Ladder group'),{aggregate:'count',type:'quantitative',title:'Seasons'}]
  }
@@ -109,7 +109,7 @@ save('ladder_heatmap',{description:'Regular-season ladder position, sorted by se
   tooltip:[tip('team','Club'),tip('season','Season'),tip('rank','Ladder position'),tip('wins','Wins'),tip('win_rate','Win rate (%)','.1f'),{field:'won_premiership',type:'nominal',title:'Season champion'}]},
  layer:[
   {name:'ladder_cells',mark:{type:'rect',stroke:'#f4f3eb',strokeWidth:3,cornerRadius:2},encoding:{
-   color:field('band','nominal',{scale:{domain:['Top four','5th–8th','9th–18th'],range:[green,sage,'#e4e6da']},legend:null}),
+   color:field('band','nominal',{scale:{domain:['Top four','5th–8th','9th–18th'],range:[green,sage,lowerLadder]},legend:null}),
    opacity:focused
   }},
   {name:'champion_outlines',transform:[{filter:'datum.premier === 1'}],mark:{type:'rect',fill:null,stroke:orange,strokeWidth:2.5,cornerRadius:2},encoding:{opacity:focused}},
