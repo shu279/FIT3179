@@ -104,7 +104,8 @@
           2,
           3
         ],
-        "format": "d"
+        "format": "d",
+        "grid": false
       }
     },
     "tooltip": [
@@ -191,26 +192,32 @@
       },
       "mark": {
         "type": "text",
-        "align": "right",
+        "align": "center",
         "baseline": "top",
-        "fontSize": 15,
-        "lineHeight": 19,
+        "fontSize": {
+          "expr": "width >= 460 ? 22 : width >= 180 ? 18 : 16"
+        },
+        "lineHeight": {
+          "expr": "width >= 460 ? 29 : width >= 180 ? 24 : 21"
+        },
         "lineBreak": "\n",
         "color": "#21372b"
       },
       "encoding": {
         "x": {
           "value": {
-            "expr": "width - 6"
+            "expr": "width < 350 ? width / 2 : width * .68"
           }
         },
         "y": {
           "value": {
-            "expr": "width < 350 ? height - 85 : height * .7"
+            "expr": "width < 350 ? height - 85 : height * .6"
           }
         },
         "text": {
-          "value": "Hawthorn and\nRichmond won\n6 of 14 titles."
+          "value": {
+            "expr": "width >= 460 ? 'Hawthorn and Richmond\\nwon 6 of 14 titles.' : 'Hawthorn and\\nRichmond won\\n6 of 14 titles.'"
+          }
         },
         "tooltip": {
           "value": null

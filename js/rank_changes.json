@@ -68,26 +68,32 @@
       },
       "mark": {
         "type": "text",
-        "align": "left",
+        "align": "center",
         "baseline": "top",
-        "fontSize": 15,
-        "lineHeight": 19,
+        "fontSize": {
+          "expr": "width >= 650 ? 22 : width >= 300 ? 18 : 16"
+        },
+        "lineHeight": {
+          "expr": "width >= 650 ? 28 : width >= 300 ? 23 : 20"
+        },
         "lineBreak": "\n",
         "color": "#21372b"
       },
       "encoding": {
         "x": {
           "value": {
-            "expr": "8"
+            "expr": "width / 2"
           }
         },
         "y": {
           "value": {
-            "expr": "8"
+            "expr": "6"
           }
         },
         "text": {
-          "value": "55% of changes\nwere within ±3 places.\n129 of 234 comparisons"
+          "value": {
+            "expr": "width >= 650 ? '55% of yearly changes were within ±3 places.\\n129 of 234 club-season comparisons' : '55% of changes\\nwere within ±3 places.\\n129 of 234 comparisons'"
+          }
         },
         "tooltip": {
           "value": null
@@ -115,12 +121,12 @@
       "encoding": {
         "x": {
           "value": {
-            "expr": "min(190, width * .7)"
+            "expr": "width / 2"
           }
         },
         "y": {
           "value": {
-            "expr": "69"
+            "expr": "width >= 650 ? 66 : width >= 300 ? 80 : 71"
           }
         },
         "x2": {

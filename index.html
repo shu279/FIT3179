@@ -9,7 +9,7 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=684451247fd6">
+  <link rel="stylesheet" href="css/style.css?v=4af7312fd998">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -30,7 +30,7 @@
         <div class="hero-copy">
           <h1 id="page-title">Staying at the <span class="hero-emphasis">Top</span> of AFL</h1>
           <p class="hero-subtitle">From Season Results to Lasting Success</p>
-          <p class="hero-description">I compared all 18 AFL clubs across 14 seasons (2012–2025). Which teams stayed near the top, and how did that consistency translate into premierships?</p>
+          <p class="hero-description">I compared all 18 AFL clubs across 14 seasons (2012–2025) to explore which teams stayed near the top and how that consistency translated into premierships. Following their ladder positions, finals appearances and titles reveals different paths to success, from years of regular contention to a few outstanding seasons.</p>
         </div>
       </section>
 
@@ -44,7 +44,7 @@
       <section class="chapter" aria-labelledby="chapter-one">
         <div class="section-intro pure-g">
           <div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-one">Finals appearances vary across clubs.</h2></div>
-          <div class="pure-u-1 pure-u-md-2-5 intro-copy reading-notes"><p>The ladder puts every club’s journey on the same scale.</p><p class="micro">The ladder ranks regular-season results; first is best. The finals series decides the season champion.</p></div>
+          <div class="pure-u-1 pure-u-md-2-5 intro-copy reading-notes"><p>A season can be a breakthrough, a rebuild or a missed opportunity. The ladder puts every club’s journey on the same scale, revealing who kept returning to the top and whose strong seasons were separated by longer periods of struggle. Start with the full fourteen-year picture, then look at how often those clubs reached finals.</p><p class="micro">The ladder ranks clubs after the regular season; first is best. The finals series follows the regular season and decides the premiership winner, so a high ladder finish and a title are different achievements.</p></div>
         </div>
         <figure>
           <div class="figure-heading"><div><h3>Every club’s ladder position from 2012 to 2025.</h3></div></div>
@@ -54,13 +54,14 @@
           <p id="club-summary" class="micro" aria-live="polite">Geelong and Sydney set the standard for returning to finals.</p>
         </figure>
         <div class="pure-g two-up">
-          <figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Geelong had the most finals appearances.</h3><div class="chart" data-spec="finals_frequency" aria-label="Lollipop chart ranking clubs by number of finals seasons."></div><figcaption>Finals participation counts once per season, regardless of how many finals a club played.</figcaption></figure>
-          <figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Three clubs reached finals seven years in a row.</h3><div class="chart" data-spec="finals_streaks" aria-label="Timeline of uninterrupted runs of finals appearances by club."></div><figcaption>Each bar is an uninterrupted finals run. The slider hides shorter runs; club rows and years stay fixed.</figcaption></figure>
+          <figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Geelong had the most finals appearances.</h3><p class="chart-deck">Geelong and Sydney made finals a regular part of their seasons. Counting appearances shows how often each club earned a chance at the title, even when that chance did not end in a premiership.</p><div class="chart" data-spec="finals_frequency" aria-label="Lollipop chart ranking clubs by number of finals seasons."></div><figcaption>Finals participation counts once per season, regardless of how many finals a club played.</figcaption></figure>
+          <figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Three clubs reached finals seven years in a row.</h3><p class="chart-deck">The same number of finals appearances can tell different stories. For Geelong, Sydney and Brisbane, long uninterrupted runs show when repeated qualification became sustained contention.</p><div class="chart" data-spec="finals_streaks" aria-label="Timeline of uninterrupted runs of finals appearances by club."></div><figcaption>Each bar is an uninterrupted finals run. The slider hides shorter runs; club rows and years stay fixed.</figcaption></figure>
         </div>
         <div class="pure-g two-up">
           <figure class="pure-u-1 pure-u-lg-1-2 chart-column">
 
             <h3>Geelong claimed ten of the 56 top-four places.</h3>
+            <p class="chart-deck">Reaching finals is one threshold; finishing in the top four is a higher one. Only twelve clubs reached that group during these fourteen seasons, and Geelong occupied the largest share of its places.</p>
 
             <div class="chart" data-spec="top_four_treemap" aria-label="Treemap of 56 top-four ladder finishes across twelve clubs, with area proportional to the number of finishes. Geelong is highlighted in orange."></div>
             <figcaption>Area shows each club’s share of 56 top-four places. Numbers count seasons; orange highlights Geelong. Hover or tap for full names and years.</figcaption>
@@ -68,6 +69,7 @@
           <figure class="pure-u-1 pure-u-lg-1-2 chart-column">
 
             <h3>Finalists returned the next year 62.5% of the time.</h3>
+            <p class="chart-deck">Clubs already in finals were more likely to qualify the next year than those trying to enter, whose qualification rate was 30%. Yet the flows in both directions show that a finals place was far from secure.</p>
 
             <div class="chart-legend"><span><i class="legend-square orange"></i> Reached finals again</span><span><i class="legend-square green"></i> Dropped out</span><span><i class="legend-square sage"></i> Entered finals</span><span><i class="legend-square neutral"></i> Missed both years</span></div>
             <div class="chart" data-spec="finals_return" aria-label="Sankey diagram of 234 club-season transitions. Of 104 starting in finals, 65 stayed (62.5%) and 39 dropped out (37.5%). Of 130 starting outside finals, 39 entered (30%) and 91 missed again (70%)."></div>
@@ -76,7 +78,7 @@
         </div>
         <figure class="figure-wide journey-figure">
           <h3>Club rankings and win rates change over time.</h3>
-          <p class="chart-deck">Select a period in the timeline to compare rankings and win rates.</p>
+          <p class="chart-deck">Geelong, Hawthorn, Richmond and Brisbane show how differently successful clubs can move through the ladder. Select a period in the timeline to compare their rankings and win rates during the same years, rather than relying on a fourteen-season average.</p>
           <div class="chart-actions"><button type="button" id="reset-journey">Show all seasons</button></div>
           <p id="journey-summary" class="micro" aria-live="polite">2012–2025 · 14 seasons included in the win-rate comparison.</p>
           <div class="chart" data-spec="ladder_bump" aria-label="Linked views: drag a season range in the overview to zoom four clubs’ ladder journeys and update their win-rate bars."></div>
@@ -85,10 +87,10 @@
       </section>
 
       <section class="chapter geography" aria-labelledby="chapter-two">
-        <div class="section-intro pure-g"><div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-two">Success varies across states and cities.</h2></div><div class="pure-u-1 pure-u-md-2-5 intro-copy reading-notes"><p>Victoria has ten clubs; the other competing states each have two.</p><p class="micro">Compare percentages alongside counts to account for these different totals.</p></div></div>
+        <div class="section-intro pure-g"><div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-two">Success varies across states and cities.</h2></div><div class="pure-u-1 pure-u-md-2-5 intro-copy reading-notes"><p>The club stories also have a geography. Victoria has ten clubs, while each other state represented in the competition has two, giving Victoria more opportunities to supply finalists. Comparing each state’s share of clubs reaching finals shows how widely success was spread relative to its club base.</p><p>Read the percentages alongside the counts: one finalist out of two clubs and five out of ten both mean 50%, but represent different numbers of teams.</p></div></div>
         <figure class="figure-wide map-study state-map-study">
           <h3 id="map-season-summary" aria-live="polite">Clubs reaching finals by state in 2025</h3>
-          <div class="map-story-copy"><p>Darker greens mean a higher share of clubs reached finals.</p><p>Fractions show the actual counts: <strong>1/2</strong> means one of two clubs.</p><p>Classes stay fixed across years. Grey means no clubs.</p></div>
+          <div class="map-story-copy"><p>Follow the changing shades to see where finals qualification was most widespread in each season. Darker greens mean a higher share of local clubs reached finals.</p><p>The fractions keep the club base visible: <strong>1/2</strong> means one finalist out of two clubs. Colour classes stay fixed across years; grey means no clubs.</p></div>
           <div class="map-with-legend">
             <div class="map-panel">
               <div class="chart" data-spec="state_choropleth" aria-label="State choropleth with season selection. Colour shows the percentage of clubs reaching finals; fraction labels show finalists out of all clubs in each state."></div>
@@ -108,7 +110,7 @@
           <figcaption class="city-map-caption">
             <h3 id="map-period-summary">Finals appearances by home city</h3>
             <div class="map-story-copy">
-              <p>Single season follows the shared year. Compare period uses its own timeline selection.</p>
+              <p>Melbourne is home to nine clubs, while Geelong has one. Read circle size alongside colour to distinguish a large number of finalists from a high qualification rate among local clubs.</p><p>Single season follows the shared year. Compare period uses its own timeline selection to show whether a city’s finals presence lasted across several seasons.</p>
               <p>In Compare period, circles show average finalists per season. Colour shows finals appearances ÷ club-seasons; both scales stay fixed.</p>
               <p>The orange annotation identifies each season’s champion. Perth includes Fremantle. Hover or tap for records; zoom and drag to separate nearby cities.</p>
             </div>
@@ -153,7 +155,7 @@
           <figcaption class="map-story-copy">
             <h3 id="map-final-summary" aria-live="polite">2025: Brisbane Lions (Brisbane) defeated Geelong (Geelong).</h3>
             <p id="map-final-context" class="chart-deck">The line connects club home cities; it does not represent travel.</p>
-            <p>A loop connects clubs sharing a home city, as in 2021. Club labels identify both teams and their results.</p>
+            <p>Thirteen of the fourteen Grand Finals paired clubs from different home cities. In 2021, Melbourne and the Western Bulldogs both represented Melbourne. A loop keeps that same-city contest visible, with both clubs and their results labelled on the map.</p>
           </figcaption>
           <div class="map-story-visual">
             <div class="chart" data-spec="grand_final_flows" aria-label="Time-selectable connection map between Grand Final opponents’ home cities. Lines connect different cities; a loop and club labels show a same-city matchup, with premier and runner-up markers."></div>
@@ -166,10 +168,11 @@
       </section>
 
       <section class="chapter" aria-labelledby="chapter-three">
-        <div class="section-intro pure-g"><div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-three">More finals appearances do not guarantee titles.</h2></div><div class="pure-u-1 pure-u-md-2-5 intro-copy reading-notes"><p>Getting to finals keeps the door open. Winning the premiership is a different test.</p></div></div>
+        <div class="section-intro pure-g"><div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-three">More finals appearances do not guarantee titles.</h2></div><div class="pure-u-1 pure-u-md-2-5 intro-copy reading-notes"><p>Getting to finals keeps the door open, but winning the premiership is a different test. Hawthorn and Richmond each won three titles during this period, while Geelong reached finals more often than either and won once. The clubs that stayed in contention longest were not always the ones that collected the most trophies.</p></div></div>
         <div class="trophy-section">
           <figure>
             <h3>Hawthorn and Richmond won six of fourteen titles.</h3>
+            <p class="chart-deck">Nine clubs shared the fourteen premierships, but almost half went to just two teams. Hawthorn’s three came consecutively in 2013–2015; Richmond’s arrived across four seasons, in 2017, 2019 and 2020.</p>
 
             <div class="chart premiership-bars" data-spec="premiership_bars" aria-label="Horizontal bar chart of premiership totals: Hawthorn and Richmond won three each, Brisbane Lions won two, and six clubs won one each."></div>
             <figcaption>Bar length counts titles; orange highlights the joint leaders. Only title-winning clubs are shown. Hover or tap for winning years.</figcaption>
@@ -182,6 +185,7 @@
         <figure class="figure-wide profile-feature">
 
           <h3>Geelong reached more finals, but Hawthorn won more titles.</h3>
+          <p class="chart-deck">Geelong leads this comparison on regular-season wins, finals appearances and top-four finishes. Hawthorn leads on Grand Final appearances and premierships. Reading the measures together shows why sustained strength and title-winning success can produce different leaders.</p>
 
           <div class="chart-legend"><span><i class="legend-square green"></i> Geelong</span><span><i class="legend-square orange"></i> Hawthorn</span></div>
           <div class="chart" data-spec="success_comparison" aria-label="Paired horizontal bars comparing Geelong and Hawthorn on five separate measures, each from zero to 100 percent. Labels show percentages and counts. Top-four finishes means regular-season ladder ranks one to four out of fourteen seasons."></div>
@@ -190,10 +194,10 @@
       </section>
 
       <section class="chapter final-chapter" aria-labelledby="chapter-four">
-        <div class="section-intro pure-g"><div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-four">Club win rates rise and fall over time.</h2></div><div class="pure-u-1 pure-u-md-2-5 intro-copy reading-notes"><p>One average can hide a changing club. Compare individual seasons, then two seven-season periods.</p><p class="micro">A steady record can mean sustained success—or sustained struggle. Read consistency alongside performance.</p></div></div>
+        <div class="section-intro pure-g"><div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-four">Club win rates rise and fall over time.</h2></div><div class="pure-u-1 pure-u-md-2-5 intro-copy reading-notes"><p>A fourteen-season average can hide the order in which success arrived. Brisbane’s later rise and West Coast’s decline are easier to see when the seasons stay in sequence. Compare those paths first, then the spread of each club’s results and the change between two equal seven-season periods.</p><p>A steady record can mean sustained success or sustained struggle. To understand consistency, consider both how much results varied and whether the club usually finished near the top.</p></div></div>
         <figure class="figure-wide horizon-figure">
           <h3>Brisbane’s rise contrasts with West Coast’s decline.</h3>
-          <p class="chart-deck">These six title-winning clubs highlight the most finals appearances, most titles and largest win-rate changes.</p>
+          <p class="chart-deck">These six title-winning clubs show three sides of success: Geelong and Sydney reached finals most often, Hawthorn and Richmond won the most titles, and Brisbane and West Coast had the largest rise and fall in win rate among premiership winners. Their season-by-season paths show what those totals leave out.</p>
           <p class="micro"><strong>Games won (%)</strong></p>
           <div class="chart-legend horizon-legend" aria-label="Win rate from zero to one hundred percent">
             <span><i class="legend-square" style="background:#d6dace"></i> 0–25%</span>
@@ -205,16 +209,17 @@
           <div class="chart" data-spec="club_horizon" aria-label="Horizon chart of six clubs’ annual win rates from zero to one hundred percent, folded into four twenty-five-point bands. Pale green shows zero to twenty-five percent, sage over twenty-five to fifty, dark green over fifty to seventy-five, and orange over seventy-five to one hundred. Hover or tap a season to compare exact win rates across all six clubs."></div>
           <figcaption>Hover or tap a season to compare all six rates. Rise and fall compare title-winning clubs across 2012–2018 and 2019–2025. Rates use pooled wins ÷ games; pp means percentage points. The heatmap and boxplots include all eighteen clubs.</figcaption>
         </figure>
-        <div class="pure-g two-up"><figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Each club’s win rate varied from season to season.</h3><div class="chart" data-spec="season_boxplot" aria-label="Boxplots showing the distribution of season win rates for each club."></div><figcaption>The box contains the middle half of seasons; its line marks the median. Whiskers span the lowest and highest win rates.</figcaption></figure><figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Brisbane had the largest increase in win rate.</h3><div class="chart-legend"><span><i class="legend-square orange"></i> Improved</span><span><i class="legend-square green"></i> Declined</span></div><div class="chart" data-spec="era_change" aria-label="Diverging bars showing the change in each club’s win rate from 2012–2018 to 2019–2025; bars to the right show improvement."></div><figcaption>Change compares 2019–2025 with 2012–2018, in percentage points. Each rate uses total wins ÷ games played. Hover or tap for both period rates.</figcaption></figure></div>
+        <div class="pure-g two-up"><figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Each club’s win rate varied from season to season.</h3><p class="chart-deck">The timelines show when results changed; these boxes show how widely they varied. A narrow box means more similar seasons, but its position tells you whether those seasons were usually strong or weak.</p><div class="chart" data-spec="season_boxplot" aria-label="Boxplots showing the distribution of season win rates for each club."></div><figcaption>The box contains the middle half of seasons; its line marks the median. Whiskers span the lowest and highest win rates.</figcaption></figure><figure class="pure-u-1 pure-u-lg-1-2 chart-column"><h3>Brisbane had the largest increase in win rate.</h3><p class="chart-deck">Splitting the study into 2012–2018 and 2019–2025 reveals a shift in fortunes. Brisbane’s improvement was the largest across all eighteen clubs, while several earlier contenders won a smaller share of games in the later period.</p><div class="chart-legend"><span><i class="legend-square orange"></i> Improved</span><span><i class="legend-square green"></i> Declined</span></div><div class="chart" data-spec="era_change" aria-label="Diverging bars showing the change in each club’s win rate from 2012–2018 to 2019–2025; bars to the right show improvement."></div><figcaption>Change compares 2019–2025 with 2012–2018, in percentage points. Each rate uses total wins ÷ games played. Hover or tap for both period rates.</figcaption></figure></div>
         <figure class="figure-wide journey-figure">
 
           <h3>Most yearly rank changes were three places or fewer.</h3>
+          <p class="chart-deck">Large turnarounds stand out in a club’s story, but smaller moves were more common across the league. This distribution puts those dramatic rises and falls in context by comparing every club with its own previous season.</p>
 
           <div class="chart-legend"><span><i class="legend-square green"></i> Moved down</span><span><i class="legend-square sage"></i> Same position</span><span><i class="legend-square orange"></i> Moved up</span></div>
           <div class="chart" data-spec="rank_changes" aria-label="Histogram of year-to-year ladder changes across 234 club-season comparisons; positive changes indicate improvement."></div>
           <figcaption>Each bar counts year-to-year comparisons from 2012–2013 through 2024–2025. Positive values mean improvement: tenth to fourth is +6 places.</figcaption>
         </figure>
-        <div class="closing pure-g"><div class="pure-u-1 pure-u-md-2-3"><h2>Different clubs lead on different measures of success.</h2></div><div class="pure-u-1 pure-u-md-1-3"><p>Geelong leads for finals appearances. Hawthorn and Richmond lead for titles. Brisbane shows how much a club can change.</p><p><strong>There is more than one way to build a successful era.</strong></p></div></div>
+        <div class="closing pure-g"><div class="pure-u-1 pure-u-md-2-3"><h2>Different clubs lead on different measures of success.</h2></div><div class="pure-u-1 pure-u-md-1-3"><p>Geelong’s repeated finals appearances show sustained contention; Hawthorn and Richmond’s titles show how much a club can achieve in a concentrated period. Brisbane’s rise to consecutive premierships in 2024 and 2025 adds another path: success built after years near the bottom. Who stayed at the top depends on whether we value regular contention, winning the biggest games, or improvement over time.</p><p><strong>There is more than one way to build a successful era.</strong></p></div></div>
       </section>
 
       <section class="sources" aria-labelledby="sources-title">

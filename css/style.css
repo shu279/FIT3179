@@ -104,24 +104,25 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
  .city-map-frame{padding-top:154px;background:linear-gradient(#e4eff0 0 160px,transparent 160px)}
 }
 
-/* Keep prose to a short reading measure; chart labels carry the numerical story. */
-.hero-description,.chapter p,.chapter figcaption,.sources p,.sources li{max-width:48ch}
-.hero-description{margin-left:0}
-.chapter .chart-deck{min-height:0}
-.section-intro .intro-copy{display:grid;grid-template-columns:repeat(2,minmax(0,48ch));gap:24px 40px;justify-content:center}
-.reading-notes p{margin:0}
+/* Introductions span their section; map notes and technical captions stay local. */
+.chapter figcaption,.map-story-copy p,.sources p,.sources li{max-width:48ch}
+.hero-description{max-width:none;margin-left:0}
+.chapter .chart-deck{max-width:none;min-height:0}
+.section-intro .intro-copy{display:block}
+.reading-notes p{margin:0 0 14px}
+.reading-notes p:last-child{margin-bottom:0}
 .chapter figcaption.city-map-caption{max-width:none}
 .state-map-study{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:24px 32px;align-items:start}
 .state-map-study>h3{grid-column:1/-1}
 .state-map-study>.map-story-copy p:first-child{margin-top:0}
 .state-map-study>.map-with-legend{grid-template-columns:minmax(0,1fr) 165px;gap:20px}
 .state-map-study>figcaption{grid-column:2}
-.trophy-note{max-width:48ch}
-.horizon-figure{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);column-gap:40px;align-items:start}
-.horizon-figure>h3,.horizon-figure>.chart,.horizon-figure>figcaption{grid-column:1/-1}
-.horizon-figure>.chart-deck{grid-column:1;grid-row:2/5}
-.horizon-figure>.micro,.horizon-figure>.horizon-legend{grid-column:2;margin-top:0}
+.trophy-note{max-width:none}
+.horizon-figure>.micro{margin-top:0}
 .horizon-figure>.chart{margin-top:12px}
+.closing{display:block}
+.closing>div:first-child,.closing>div:last-child{width:100%;padding:0}
+.closing h2{margin-bottom:18px}
 .sources ul{display:grid;grid-template-columns:repeat(2,minmax(0,48ch));gap:0 40px}
 .sources li{padding-right:12px}
 @media(max-width:1023px){
@@ -131,9 +132,8 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
  .state-map-study>.map-story-copy p{max-width:32ch;margin:0}
 }
 @media(max-width:700px){
- .section-intro .intro-copy,.sources ul{grid-template-columns:1fr;gap:16px}
+ .sources ul{grid-template-columns:1fr;gap:16px}
  .state-map-study>.map-with-legend{grid-template-columns:1fr}
- .horizon-figure{display:block}
  .horizon-figure>.chart-deck{margin-bottom:20px}
  .horizon-figure>.horizon-legend{margin:12px 0}
 }

@@ -191,26 +191,32 @@
       },
       "mark": {
         "type": "text",
-        "align": "right",
+        "align": "center",
         "baseline": "top",
-        "fontSize": 15,
-        "lineHeight": 19,
+        "fontSize": {
+          "expr": "width >= 300 ? 18 : 16"
+        },
+        "lineHeight": {
+          "expr": "width >= 300 ? 24 : 21"
+        },
         "lineBreak": "\n",
         "color": "#21372b"
       },
       "encoding": {
         "x": {
           "value": {
-            "expr": "width - 2"
+            "expr": "width < 300 ? width / 2 : width * .66"
           }
         },
         "y": {
           "value": {
-            "expr": "width < 300 ? height - 65 : height * .72"
+            "expr": "width < 300 ? height - 70 : height * .68"
           }
         },
         "text": {
-          "value": "Geelong missed\nonly 2015\nand 2023."
+          "value": {
+            "expr": "width >= 300 ? 'Geelong missed finals\\nonly in 2015 and 2023.' : 'Geelong missed\\nonly 2015\\nand 2023.'"
+          }
         },
         "tooltip": {
           "value": null
