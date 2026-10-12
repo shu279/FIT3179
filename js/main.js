@@ -19,7 +19,7 @@ async function embedChart(element, {resetMapPeriod=false,cityMode,cityPeriod,pre
   const previous=chartViews.get(name);
   const cityState=name==='premiership_symbols' && previous ? captureCityMapState(previous.view) : null;
   const journeyState=preserveJourney && name==='ladder_bump' && previous ? {
-    brush:previous.view.signal('seasonBrush'),clubs:previous.view.signal('journeyClub')
+    brush:previous.view.signal('seasonBrush')
   } : null;
   if(cityState && cityMode!==undefined)cityState.usePeriod=cityMode;
   if(cityState && cityPeriod)cityState.mapTimeBrush={season:cityPeriod};
@@ -36,7 +36,6 @@ async function embedChart(element, {resetMapPeriod=false,cityMode,cityPeriod,pre
     const spec = await response.json();
     if(journeyState){
       if(journeyState.brush.season)spec.params.find(param=>param.name==='seasonBrush').value={season:journeyState.brush.season};
-      if(journeyState.clubs.team?.length)spec.params.find(param=>param.name==='journeyClub').value=journeyState.clubs.team.map(team=>({team}));
     }
     if(cityState)restoreCityMapState(spec,cityState,resetMapPeriod);
     if(name==='premiership_symbols')configureCityMapMode(spec);

@@ -258,11 +258,11 @@ async function main(){
          assert.ok(best.length>0);
          assert.ok(best.every(item=>item.datum.period_win_rate===highest));
        }
-       await view.signal('journeyClub_team_legend','Geelong').runAsync();
        const lines=items(view,item=>item.mark?.marktype==='line'&&item.datum?.team);
        assert.ok(lines.length>0);
-       for(const item of [...lines,...bars()])assert.equal(item.opacity,item.datum.team==='Geelong'?1:0.15);
-       await view.signal('journeyClub_team_legend',null).runAsync();
+       const clubColors={'Geelong':'#31553b','Hawthorn':'#ad8b42','Richmond':'#777f76','Brisbane Lions':'#c96636'};
+       for(const item of lines)assert.equal(item.stroke,clubColors[item.datum.team]);
+       for(const item of bars())assert.equal(item.fill,clubColors[item.datum.team]);
      }
      // Save render output only as a local QA artifact, outside the webpage.
      fs.mkdirSync('/private/tmp/ass2-chart-renders',{recursive:true});
@@ -276,6 +276,6 @@ async function main(){
  await require('./validate-maps.cjs')({vega,vl,loader,root,read,rows,stateSeasons,cities,items});
  const total=fs.readdirSync(path.join(root,'data')).reduce((s,f)=>s+fs.statSync(path.join(root,'data',f)).size,0);
  assert.ok(total<1000000,`Prepared data over budget: ${total}`);
- console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',streak_filter:'passed',legend_highlighting:'passed',brush_aggregates:'passed',year_map_joins:'passed',win_rate_areas:'passed',treemap_areas:'passed',data_bytes:total,charts:report},null,2));
+ console.log(JSON.stringify({data_checks:'passed',specs_rendered:report.length,widths:[1000,340],club_highlighting:'passed',streak_filter:'passed',journey_shared_colours:'passed',brush_aggregates:'passed',year_map_joins:'passed',win_rate_areas:'passed',treemap_areas:'passed',data_bytes:total,charts:report},null,2));
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

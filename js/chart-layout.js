@@ -10,21 +10,13 @@ function chartLayout(spec, availableWidth) {
   }
   if (spec.vconcat) {
     const journey = spec.usermeta?.layout === 'journey';
-    const sideLegend = journey && available >= 600;
-    const plotWidth = Math.max(120, available - (spec.usermeta?.layout === 'map-timeline' ? (spec.vconcat.length===1 ? 10 : 75) : sideLegend ? 300 : 175));
+    const plotWidth = Math.max(120, available - (spec.usermeta?.layout === 'map-timeline' ? (spec.vconcat.length===1 ? 10 : 75) : 140));
     // Flatten the previous arrangement before a resize chooses a new one.
     const panels = journey ? spec.vconcat.flatMap(view=>view.hconcat||[view]) : spec.vconcat;
     panels.forEach(view => {
       view.width = plotWidth;
       if (journey) {
-        // Reserve a side column on wide screens; preserve the plot width on phones.
-        const legend = view.encoding.color.legend;
-        if (legend) {
-          legend.orient = sideLegend ? 'right' : 'top';
-          legend.columns = sideLegend ? 1 : {expr:'width < 385 ? 1 : 2'};
-        }
         if(view.name!=='journey_overview'){
-          if (legend) legend.offset=16;
           // Only the win-rate panel needs space for its reading note.
           view.title.offset=view.name==='journey_summary'?60:14;
         }
@@ -42,12 +34,14 @@ function chartLayout(spec, availableWidth) {
         summary.encoding.y.scale.range=[46,260];
       }else delete summary.encoding.y.scale.range;
       if(sideBySide){
-        // Leave room for axes, the line legend and the gap between panels.
-        const plotBudget=available-365;
+        // Leave room for axes and the gap between panels.
+        const plotBudget=available-225;
         detail.width=Math.floor(plotBudget*.62);
         summary.width=plotBudget-detail.width;
-        spec.vconcat=[{hconcat:[detail,summary],spacing:32,resolve:{scale:{x:'independent',y:'independent',color:'shared'},legend:{color:'independent'}}},overview];
+        overview.width=available-85;
+        spec.vconcat=[{hconcat:[detail,summary],spacing:32,resolve:{scale:{x:'independent',y:'independent',color:'shared'}}},overview];
       }else spec.vconcat=panels;
+      summary.encoding.x.axis.values=summary.width<200?[0,50,100]:[0,25,50,75,100];
       for(const panel of panels){
         const text=Array.isArray(panel.title.text)?panel.title.text.join(' '):panel.title.text;
         const lines=[''];

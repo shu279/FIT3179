@@ -148,32 +148,30 @@ const multiConfig={...config,title:{fontSize:15,fontWeight:600,anchor:'start',co
 const saveMultiple=(name,spec)=>fs.writeFileSync(path.join(root,'js',name+'.json'),JSON.stringify({
  '$schema':base.$schema,padding:5,autosize:{type:'pad',resize:true},config:multiConfig,...spec
 },null,2)+'\n');
-const journeyColor={field:'team',type:'nominal',scale:{domain:journeyTeams,range:journeyColors},legend:{title:null,orient:'right',columns:1,offset:16,padding:0,rowPadding:4,symbolType:'stroke',symbolStrokeWidth:3,labelLimit:180}};
+const journeyColor={field:'team',type:'nominal',scale:{domain:journeyTeams,range:journeyColors},legend:null};
 const rankAxis={field:'rank',type:'quantitative',scale:{domain:[18.5,0.5],nice:false},axis:{title:'Ladder position',values:[1,4,8,12,18]}};
-const journeyOpacity={condition:{param:'journeyClub',value:1},value:0.15};
 // Responsive layout wraps these titles using each panel's actual width.
 saveMultiple('ladder_bump',{
- description:'Drag a season range in the overview to zoom the rank detail and compare pooled win rates for the same seasons. Legend selection highlights clubs across views.',
+ description:'Drag a season range in the overview to zoom the rank detail and compare pooled win rates for the same seasons. Club colours match the directly labelled win-rate bars across all three views.',
  usermeta:{layout:'journey'},
  data:data('team_seasons'),transform:[{filter:{field:'team',oneOf:journeyTeams}}],spacing:24,
- params:[{name:'journeyClub',select:{type:'point',fields:['team']},bind:'legend',views:['journey_lines','journey_overview','journey_bars']},
-  {name:'seasonBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.12,stroke:green}},views:['journey_overview']}],
- // Repeat the shared colour key for the line views; bars already name each club.
- resolve:{scale:{x:'independent',y:'independent',color:'shared'},legend:{color:'independent'}},
+ params:[{name:'seasonBrush',select:{type:'interval',encodings:['x'],mark:{fill:green,fillOpacity:0.12,stroke:green}},views:['journey_overview']}],
+ // The labelled bars identify the same club colours used in both line views.
+ resolve:{scale:{x:'independent',y:'independent',color:'shared'}},
  vconcat:[
   {name:'journey_detail',title:{text:'Ladder positions in the selected period'},width:900,height:260,
-   encoding:{x:field('season','quantitative',{scale:{domain:{param:'seasonBrush'},nice:false,zero:false},axis:{title:null,format:'d',tickMinStep:1,tickCount:6,grid:false}}),y:rankAxis,color:journeyColor,opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('season','Season','d'),tip('rank','Ladder position')]},
+   encoding:{x:field('season','quantitative',{scale:{domain:{param:'seasonBrush'},nice:false,zero:false},axis:{title:null,format:'d',tickMinStep:1,tickCount:6,grid:false}}),y:rankAxis,color:journeyColor,tooltip:[tip('team','Club'),tip('season','Season','d'),tip('rank','Ladder position')]},
    layer:[
     {name:'journey_lines',mark:{type:'line',clip:true,strokeWidth:2.8}},
     {mark:{type:'point',clip:true,filled:true,size:42}}
    ]},
   {name:'journey_summary',title:{text:'Games won in the selected seasons',offset:60},width:900,height:145,
    transform:[{filter:{param:'seasonBrush'}},{aggregate:[{op:'sum',field:'wins',as:'wins'},{op:'sum',field:'played',as:'games'},{op:'count',as:'seasons'},{op:'min',field:'season',as:'first'},{op:'max',field:'season',as:'last'}],groupby:['team']},{calculate:'datum.wins / datum.games * 100',as:'period_win_rate'},{window:[{op:'rank',as:'period_rank'}],sort:[{field:'period_win_rate',order:'descending'}]}],
-   encoding:{y:field('team','nominal',{scale:{domain:journeyTeams},axis:{title:null,ticks:false,labelLimit:150}}),x:field('period_win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:'Games won (%)',values:[0,25,50,75,100]}}),color:{...journeyColor,legend:null},opacity:journeyOpacity,tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('seasons','Seasons'),tip('wins','Wins'),tip('games','Games played'),tip('period_win_rate','Win rate (%)','.1f')]},
+   encoding:{y:field('team','nominal',{scale:{domain:journeyTeams},axis:{title:null,ticks:false,labelLimit:150}}),x:field('period_win_rate','quantitative',{scale:{domain:[0,100]},axis:{title:'Games won (%)',values:[0,25,50,75,100]}}),color:journeyColor,tooltip:[tip('team','Club'),tip('first','First season','d'),tip('last','Last season','d'),tip('seasons','Seasons'),tip('wins','Wins'),tip('games','Games played'),tip('period_win_rate','Win rate (%)','.1f')]},
    layer:[{name:'journey_bars',mark:{type:'bar',size:19}},{transform:[{filter:'datum.period_rank === 1'}],mark:{type:'text',align:'right',dx:-7,fontSize:15,fontWeight:600,color:'#ffffff'},encoding:{text:{value:'Best'},color:{value:'#ffffff'}}}]},
   {name:'journey_overview',title:{text:'Drag to select a season range'},width:900,height:90,
    mark:{type:'line',strokeWidth:1.8},
-   encoding:{x:field('season','quantitative',{scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:years,grid:false}}),y:{...rankAxis,axis:{title:null,values:[1,18]}},color:journeyColor,opacity:journeyOpacity}}
+   encoding:{x:field('season','quantitative',{scale:{domain:[2012,2025],nice:false,zero:false},axis:{title:null,format:'d',values:years,grid:false}}),y:{...rankAxis,axis:{title:null,values:[1,18]}},color:journeyColor}}
  ]
 });
 

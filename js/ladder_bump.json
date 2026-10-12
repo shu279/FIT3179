@@ -57,7 +57,7 @@
       "titleFontSize": 15
     }
   },
-  "description": "Drag a season range in the overview to zoom the rank detail and compare pooled win rates for the same seasons. Legend selection highlights clubs across views.",
+  "description": "Drag a season range in the overview to zoom the rank detail and compare pooled win rates for the same seasons. Club colours match the directly labelled win-rate bars across all three views.",
   "usermeta": {
     "layout": "journey"
   },
@@ -79,21 +79,6 @@
   ],
   "spacing": 24,
   "params": [
-    {
-      "name": "journeyClub",
-      "select": {
-        "type": "point",
-        "fields": [
-          "team"
-        ]
-      },
-      "bind": "legend",
-      "views": [
-        "journey_lines",
-        "journey_overview",
-        "journey_bars"
-      ]
-    },
     {
       "name": "seasonBrush",
       "select": {
@@ -117,9 +102,6 @@
       "x": "independent",
       "y": "independent",
       "color": "shared"
-    },
-    "legend": {
-      "color": "independent"
     }
   },
   "vconcat": [
@@ -187,24 +169,7 @@
               "#c96636"
             ]
           },
-          "legend": {
-            "title": null,
-            "orient": "right",
-            "columns": 1,
-            "offset": 16,
-            "padding": 0,
-            "rowPadding": 4,
-            "symbolType": "stroke",
-            "symbolStrokeWidth": 3,
-            "labelLimit": 180
-          }
-        },
-        "opacity": {
-          "condition": {
-            "param": "journeyClub",
-            "value": 1
-          },
-          "value": 0.15
+          "legend": null
         },
         "tooltip": [
           {
@@ -365,13 +330,6 @@
           },
           "legend": null
         },
-        "opacity": {
-          "condition": {
-            "param": "journeyClub",
-            "value": 1
-          },
-          "value": 0.15
-        },
         "tooltip": [
           {
             "field": "team",
@@ -517,24 +475,7 @@
               "#c96636"
             ]
           },
-          "legend": {
-            "title": null,
-            "orient": "right",
-            "columns": 1,
-            "offset": 16,
-            "padding": 0,
-            "rowPadding": 4,
-            "symbolType": "stroke",
-            "symbolStrokeWidth": 3,
-            "labelLimit": 180
-          }
-        },
-        "opacity": {
-          "condition": {
-            "param": "journeyClub",
-            "value": 1
-          },
-          "value": 0.15
+          "legend": null
         }
       }
     }
