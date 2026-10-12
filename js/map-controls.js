@@ -43,7 +43,6 @@ async function initialiseMapControls(chartViews, renderCity) {
   function updateSeason(){
     const year=controller.signal('selectedSeason');
     const final=finals.find(row=>row.season===year);
-    status.textContent=`Clubs reaching finals by state in ${year}`;
     flowYear.textContent=`${year}:`;
     flowResult.textContent=final?`${final.winner} defeated ${final.runner_up}.`:
       'Grand Final opponents';
