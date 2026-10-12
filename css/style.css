@@ -47,18 +47,18 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .map-controls-row .vega-bindings{margin:0;padding:0;gap:0}
 .map-controls-row .chart-actions{margin:0;gap:8px;flex-wrap:nowrap}
 .city-time-mode{display:flex;flex-wrap:wrap;gap:12px 24px;border:0;padding:0;margin:20px 0 12px;font-size:15px}
-.city-time-mode legend{padding:0;margin-bottom:8px}
-.city-time-mode label,.city-period-inputs label{display:flex;align-items:center;gap:8px}
+.city-time-mode label{display:flex;align-items:center;gap:8px}
 .city-time-mode input{width:18px;height:18px;margin:0;accent-color:var(--green)}
-.city-period-inputs{display:flex;flex-wrap:wrap;gap:12px 24px;font-size:15px}
-.city-period-inputs input{width:88px;min-height:42px;padding:7px 8px;border:1px solid #9fac95;border-radius:0;background:var(--paper);color:var(--ink);font:15px var(--body)}
-.city-time-mode input:focus-visible,.city-period-inputs input:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
-.city-period-controls .micro{margin:8px 0 16px}
+.city-time-mode input:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
 #city-single-controls[hidden],#city-period-controls[hidden]{display:none}
 .map-final-controls{gap:12px 28px}
 .map-final-controls .chart-legend{margin:0}
 .city-map-study{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);gap:32px;align-items:start}
-.city-map-study .city-time-mode{margin-top:0}
+.city-map-caption{display:contents}
+.city-map-caption h3{grid-column:1/-1;margin:0;white-space:nowrap;font-size:clamp(17px,4.6vw,26px)}
+.city-map-caption .map-story-copy p:first-child{margin-top:0}
+.city-map-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin:18px 0 24px}
+.city-map-tools .city-time-mode,.city-map-tools .map-controls-row,.city-map-tools .micro{margin:0}
 .grand-final-study{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:40px;align-items:center}
 .map-story-copy{margin:0}
 .map-story-copy .chart-deck{min-height:0;margin:16px 0}
@@ -85,3 +85,8 @@ body::before{content:"";position:absolute;top:0;left:0;right:0;height:clamp(340p
 .map-key{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:12px 0}
 .map-study .chart-actions button:disabled{opacity:.5;cursor:default}
 @media(max-width:700px){.map-with-legend{grid-template-columns:1fr;gap:12px}.map-legend{max-width:240px;margin-top:0}}
+
+/* City legends sit below the enlarged map; both scales retain vertical keys. */
+.city-map-legend{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;max-width:420px;margin:0}
+.city-map-legend .micro{margin:0 0 12px}
+.city-map-legend .map-size-legend{margin:0}

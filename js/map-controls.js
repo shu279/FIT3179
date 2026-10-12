@@ -15,8 +15,6 @@ async function initialiseMapControls(chartViews, renderCity) {
   const periodMode=document.querySelector('#city-mode-period');
   const singleControls=document.querySelector('#city-single-controls');
   const periodControls=document.querySelector('#city-period-controls');
-  const periodFrom=document.querySelector('#city-period-from');
-  const periodTo=document.querySelector('#city-period-to');
   if(!controller || !symbols || names.some(name=>!chartViews.has(name))){
     play.disabled=true;reset.disabled=true;
     status.textContent='The maps could not load. Reload the page to try again.';
@@ -39,7 +37,7 @@ async function initialiseMapControls(chartViews, renderCity) {
     const last=symbols.signal('periodEnd');
     singleMode.checked=!period;periodMode.checked=period;
     singleControls.hidden=period;periodControls.hidden=!period;
-    periodFrom.value=first;periodTo.value=last;
+    periodControls.textContent=first===last?`${first} · 1 season`:`${first}–${last} · ${last-first+1} seasons`;
   }
   function updateSeason(){
     const year=controller.signal('selectedSeason');
@@ -89,19 +87,6 @@ async function initialiseMapControls(chartViews, renderCity) {
   }
   singleMode.addEventListener('change',()=>changeMode(false).catch(console.error));
   periodMode.addEventListener('change',()=>changeMode(true).catch(console.error));
-  async function changePeriod(changed){
-    stop();
-    // Native number inputs also make the brush accessible from the keyboard.
-    if(!changed.checkValidity() || changed.value===''){updatePeriod();return;}
-    let first=Number(periodFrom.value),last=Number(periodTo.value);
-    if(first>last){if(changed===periodFrom)last=first;else first=last;}
-    if(renderCity)await renderCity({cityMode:true,cityPeriod:[first,last]});
-    else await symbols.change('mapTimeBrush_store',vega.changeset().remove(()=>true).insert([
-      {unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[first,last]]}
-    ])).runAsync();
-    updatePeriod();
-  }
-  for(const input of [periodFrom,periodTo])input.addEventListener('change',()=>changePeriod(input).catch(console.error));
   names.forEach(name=>attachSharedInputs(name,chartViews.get(name).view));
   attachBrush();
   singleMode.disabled=false;periodMode.disabled=false;

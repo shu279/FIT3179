@@ -156,7 +156,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  }
  const elements=new Map();
  for(const id of ['#map-season-summary','#map-final-summary','#map-final-context','#play-map','#reset-map',
-  '#city-mode-single','#city-mode-period','#city-single-controls','#city-period-controls','#city-period-from','#city-period-to'])elements.set(id,{
+  '#city-mode-single','#city-mode-period','#city-single-controls','#city-period-controls'])elements.set(id,{
   textContent:'',attributes:{},listeners:{},setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,fn){this.listeners[name]=fn;},checkValidity(){return true;}
  });
  let pending=null;
@@ -236,7 +236,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  assert.equal(elements.get('#city-single-controls').hidden,true);
  assert.equal(elements.get('#city-period-controls').hidden,false);
  await symbols.change('mapTimeBrush_store',vega.changeset().insert([{unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[2017,2020]]}])).runAsync();await settle();
- assert.equal(symbols.signal('usePeriod'),true);assert.equal(elements.get('#city-period-from').value,2017);assert.equal(elements.get('#city-period-to').value,2020);
+ assert.equal(symbols.signal('usePeriod'),true);assert.equal(elements.get('#city-period-controls').textContent,'2017–2020 · 4 seasons');
  const restoredSpec=read('js/premiership_symbols.json');layout(restoredSpec,1000);restoreCityMapState(restoredSpec,captureCityMapState(symbols));
  const restored=new vega.View(vega.parse(vl.compile(restoredSpec).spec),{renderer:'none',loader,logger});await restored.runAsync();
  assert.deepEqual(restored.signal('mapTimeBrush').season,[2017,2020]);assert.equal(restored.signal('usePeriod'),true);
@@ -248,7 +248,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  restoreCityMapState(restoredSpec,captureCityMapState(symbols),true);
  assert.equal(restoredSpec.vconcat[1].params[0].value,undefined);assert.equal(restoredSpec.params.find(p=>p.name==='usePeriod').value,false);
  await controller.signal('selectedSeason',2024).runAsync();await settle();
- assert.equal(symbols.signal('usePeriod'),true);assert.equal(elements.get('#city-period-from').value,2017);assert.equal(elements.get('#city-period-to').value,2020);
+ assert.equal(symbols.signal('usePeriod'),true);assert.equal(elements.get('#city-period-controls').textContent,'2017–2020 · 4 seasons');
  await play.listeners.click();await settle();
  assert.equal(symbols.signal('usePeriod'),true,'Play must not override the explicit Compare period mode');
  await play.listeners.click();await settle();
@@ -269,8 +269,9 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  assert.equal(comparisonView.signal('periodStart'),2017);assert.equal(comparisonView.signal('periodEnd'),2020);
  singleView.finalize();comparisonView.finalize();
  await elements.get('#city-mode-period').listeners.change();await settle();
- elements.get('#city-period-from').value='2022';await elements.get('#city-period-from').listeners.change();await settle();
- assert.equal(symbols.signal('periodStart'),2022);assert.equal(symbols.signal('periodEnd'),2022,'Crossed endpoints select a single season');
+ await symbols.change('mapTimeBrush_store',vega.changeset().remove(()=>true).insert([{unit:'map_overview',fields:[{field:'season',channel:'x',type:'R'}],values:[[2022.1,2022.4]]}])).runAsync();await settle();
+ assert.equal(symbols.signal('periodStart'),2022);assert.equal(symbols.signal('periodEnd'),2022);
+ assert.equal(elements.get('#city-period-controls').textContent,'2022 · 1 season','The brush readout reflects rounded whole-season endpoints');
  await elements.get('#reset-map').listeners.click();await settle();
  navigation.destroy();
  for(const {view} of chartViews.values())view.finalize();
