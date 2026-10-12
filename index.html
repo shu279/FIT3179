@@ -9,14 +9,14 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=eadff5d3d89b">
+  <link rel="stylesheet" href="css/style.css?v=9f2f654c27a7">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
   <script defer src="js/chart-layout.js?v=69a19c5621db"></script>
   <script defer src="js/map-controls.js?v=62037d26da7c"></script>
   <script defer src="js/city-map-navigation.js?v=03f4ed95991a"></script>
-  <script defer src="js/chart-annotations.js?v=3721b6d02220"></script>
+  <script defer src="js/chart-annotations.js?v=0f83aeb4f690"></script>
   <script defer src="js/main.js?v=680e6c394f4c"></script>
 </head>
 <body>
@@ -180,8 +180,11 @@
         <figure class="figure-wide profile-feature">
 
           <h3>Geelong reached more finals, but Hawthorn won more titles.</h3>
-          <div class="chart-story chart-story--copy-right">
-            <p class="chart-deck chart-story-copy">Winning titles does not always mean staying near the top every year. Geelong leads this comparison on regular-season wins, finals appearances and top-four finishes. Hawthorn leads on Grand Final appearances and premierships. Reading the measures together shows why sustained strength and title-winning success can produce different leaders.</p>
+          <div class="chart-story chart-story--copy-right chart-story--annotated">
+            <div class="chart-deck chart-story-copy chart-story-points">
+              <p data-story-point="geelong">Winning titles does not always mean staying near the top every year. Geelong leads this comparison on regular-season wins, finals appearances and top-four finishes.</p>
+              <p data-story-point="hawthorn">Hawthorn leads on Grand Final appearances and premierships. Reading the measures together shows why sustained strength and title-winning success can produce different leaders.</p>
+            </div>
             <div class="chart-story-visual">
               <div class="chart-legend"><span><i class="legend-square green"></i> Geelong</span><span><i class="legend-square orange"></i> Hawthorn</span></div>
               <div class="chart" data-spec="success_comparison" aria-label="Paired horizontal bars comparing Geelong and Hawthorn on five separate measures, each from zero to 100 percent. Labels show counts. Top-four finishes means regular-season ladder ranks one to four out of fourteen seasons."></div>
@@ -194,8 +197,12 @@
         <div class="section-intro pure-g"><div class="pure-u-1 pure-u-md-3-5"><h2 id="chapter-four">Club win rates rise and fall over time.</h2></div><div class="pure-u-1 pure-u-md-2-5 intro-copy reading-notes"><p>A fourteen-season average can hide the order in which success arrived. Brisbane’s later rise and West Coast’s decline are easier to see when the seasons stay in sequence. Compare those paths first, then the spread of each club’s results and the change between two equal seven-season periods.</p></div></div>
         <figure class="figure-wide horizon-figure">
           <h3>Brisbane’s rise contrasts with West Coast’s decline.</h3>
-          <div class="chart-story chart-story--copy-left">
-            <p class="chart-deck chart-story-copy">These six title-winning clubs show three sides of success: Geelong and Sydney reached finals most often, Hawthorn and Richmond won the most titles, and Brisbane and West Coast had the largest rise and fall in win rate among premiership winners. Their season-by-season paths show what those totals leave out.</p>
+          <div class="chart-story chart-story--copy-left chart-story--annotated">
+            <div class="chart-deck chart-story-copy chart-story-points">
+              <p data-story-point="finals">These six title-winning clubs show three sides of success. Geelong and Sydney reached finals most often.</p>
+              <p data-story-point="titles">Hawthorn and Richmond won the most titles.</p>
+              <p data-story-point="turnarounds">Brisbane and West Coast had the largest rise and fall in win rate among premiership winners. Their season-by-season paths show what those totals leave out.</p>
+            </div>
             <div class="chart-story-visual">
               <div class="chart-legend horizon-legend" aria-label="Win rate from zero to one hundred percent">
                 <span><i class="legend-square green"></i> Games won</span>

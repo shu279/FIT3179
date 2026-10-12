@@ -1,6 +1,7 @@
 /* Reading notes point to rendered marks, so resizing and filtering keep them attached. */
 'use strict';
 function initialiseReadingAnnotations(element, name) {
+  if(element.closest('.chart-story')?.querySelector('[data-story-point]'))return initialiseStoryAnnotations(element,name);
   const ns='http://www.w3.org/2000/svg';
   const ink='#21372b',paper='#f3f2e9';
   const svgElement=(tag,attributes={},text)=>{
@@ -135,4 +136,75 @@ function initialiseReadingAnnotations(element, name) {
   const resize=new ResizeObserver(schedule);resize.observe(element);
   schedule();
   return {destroy(){closed=true;cancelAnimationFrame(frame);observer.disconnect();resize.disconnect();overlay.remove();element.style.paddingTop='';element.style.paddingBottom='';}};
+}
+
+// Connect narrative paragraphs to rendered evidence, keeping leaders out of the
+// text columns and routing branches through the gaps between chart rows.
+function initialiseStoryAnnotations(element,name){
+  const story=element.closest('.chart-story');
+  const points=[...story.querySelectorAll('[data-story-point]')];
+  const ns='http://www.w3.org/2000/svg',ink='#21372b';
+  const make=(tag,attributes={})=>{
+    const node=document.createElementNS(ns,tag);
+    for(const [key,value] of Object.entries(attributes))node.setAttribute(key,value);
+    return node;
+  };
+  const overlay=make('svg',{'class':'story-annotations','aria-hidden':'true'});
+  story.append(overlay);
+  const markerId='story-arrow-'+name;
+  const find=(selector,test=()=>true)=>[...element.querySelectorAll(selector)].find(node=>test(node.__data__?.datum));
+  const horizonTargets={
+    finals:[['Geelong',0,2022],['Sydney',1,2014]],
+    titles:[['Hawthorn',2,2014],['Richmond',3,2019]],
+    turnarounds:[['Brisbane Lions',4,2024],['West Coast',5,2023]]
+  };
+  let frame,closed=false;
+  function draw(){
+    if(closed)return;
+    const origin=story.getBoundingClientRect();
+    const rect=node=>{
+      const r=node.getBoundingClientRect();
+      return {left:r.left-origin.left,right:r.right-origin.left,top:r.top-origin.top,bottom:r.bottom-origin.top,width:r.width,height:r.height};
+    };
+    const chart=rect(element),copy=rect(points[0].parentElement);
+    const stacked=copy.bottom<=chart.top;
+    const fromLeft=!stacked&&copy.right<=chart.left;
+    overlay.setAttribute('viewBox',`0 0 ${origin.width} ${origin.height}`);
+    overlay.replaceChildren();
+    const defs=make('defs'),marker=make('marker',{id:markerId,viewBox:'0 0 8 8',refX:8,refY:4,markerWidth:6,markerHeight:6,orient:'auto',markerUnits:'userSpaceOnUse'});
+    marker.append(make('path',{d:'M0 0 L8 4 L0 8 Z',fill:ink}));defs.append(marker);overlay.append(defs);
+    const line=(d,point,target)=>overlay.append(make('path',{
+      d,fill:'none',stroke:ink,'stroke-width':1,'stroke-linejoin':'round',
+      'data-story-point':point,...(target?{'data-target':target,'marker-end':`url(#${markerId})`}:{})
+    }));
+    points.forEach((point,index)=>{
+      const key=point.dataset.storyPoint,p=rect(point);
+      const targets=name==='success_comparison'?
+        [...element.querySelectorAll('.profile_bars path')].filter(node=>{
+          const d=node.__data__.datum;
+          return key==='geelong'?d.team==='Geelong'&&d.order<3:d.team==='Hawthorn'&&d.order>=3;
+        }).map(node=>{
+          const r=rect(node),d=node.__data__.datum;
+          return {x:r.right-Math.min(8,r.width/4),y:r.top,routeY:r.top-3,label:`${d.team}: ${d.label}`};
+        }):horizonTargets[key].map(([team,row,season])=>{
+          const node=find('.season_targets path',d=>d?.team===team&&d.season===season);
+          const background=find(`.win_rate_background_${row} path`);
+          if(!node||!background)return null;
+          const r=rect(node),b=rect(background),d=node.__data__.datum;
+          return {x:(r.left+r.right)/2,y:b.bottom-b.height*d.wins/d.played,routeY:b.top-8,label:`${team}: ${season}`};
+        }).filter(Boolean);
+      if(!targets.length)return;
+      const from={x:fromLeft||stacked?p.right+6:p.left-6,y:(p.top+p.bottom)/2};
+      const rail=stacked?origin.width-8-index*7:fromLeft?chart.left-14:chart.right+10;
+      const ys=[from.y,...targets.map(t=>t.routeY)];
+      line(`M${from.x},${from.y} H${rail} M${rail},${Math.min(...ys)} V${Math.max(...ys)}`,key);
+      targets.forEach(t=>line(`M${rail},${t.routeY} H${t.x} V${t.y}`,key,t.label));
+    });
+  }
+  function schedule(){cancelAnimationFrame(frame);frame=requestAnimationFrame(draw);}
+  const source=element.querySelector('.vega-embed svg');
+  const observer=new MutationObserver(schedule);observer.observe(source,{subtree:true,attributes:true,childList:true,characterData:true});
+  const resize=new ResizeObserver(schedule);resize.observe(story);points.forEach(point=>resize.observe(point));
+  schedule();
+  return {destroy(){closed=true;cancelAnimationFrame(frame);observer.disconnect();resize.disconnect();overlay.remove();}};
 }
