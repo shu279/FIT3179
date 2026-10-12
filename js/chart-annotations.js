@@ -24,6 +24,29 @@ function initialiseReadingAnnotations(element, name) {
     const p={x:r.left-o.left+r.width*x,y:r.top-o.top+r.height*y,node};
     return inView(p)?p:null;
   };
+  function coastlineTarget(from,to){
+    const state=to.node.__data__?.datum?.state;
+    const coast=find('.state_rates_marks path',d=>d?.state===state);
+    const matrix=coast?.getScreenCTM();
+    if(!matrix||!coast.isPointInFill)return to;
+    const inverse=matrix.inverse(),origin=element.getBoundingClientRect();
+    const dx=to.x-from.x,dy=to.y-from.y;
+    const point=t=>new DOMPoint(origin.left+from.x+dx*t,origin.top+from.y+dy*t).matrixTransform(inverse);
+    const inside=t=>coast.isPointInFill(point(t));
+    if(inside(0)||!inside(1))return to;
+    // Stop at the first coastline crossing, using the rendered projection.
+    const steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/2));
+    for(let step=1;step<=steps;step++){
+      if(!inside(step/steps))continue;
+      let low=(step-1)/steps,high=step/steps;
+      for(let i=0;i<10;i++){
+        const middle=(low+high)/2;
+        if(inside(middle))high=middle;else low=middle;
+      }
+      return {...to,x:from.x+dx*high,y:from.y+dy*high};
+    }
+    return to;
+  }
   const guides={
     ladder_bump:[],
     state_choropleth:[
@@ -71,7 +94,7 @@ function initialiseReadingAnnotations(element, name) {
     const mapFooter=map&&width<650;
     element.style.paddingBottom=mapFooter?(annotations.length*26+24)+'px':'0px';
     overlay.replaceChildren();
-    const defs=svgElement('defs'),marker=svgElement('marker',{id:markerId,viewBox:'0 0 8 8',refX:7,refY:4,markerWidth:6,markerHeight:6,orient:'auto',markerUnits:'userSpaceOnUse'});
+    const defs=svgElement('defs'),marker=svgElement('marker',{id:markerId,viewBox:'0 0 8 8',refX:map?8:7,refY:4,markerWidth:6,markerHeight:6,orient:'auto',markerUnits:'userSpaceOnUse'});
     marker.append(svgElement('path',{d:'M0 0 L8 4 L0 8 Z',fill:ink}));defs.append(marker);overlay.append(defs);
     overlay.setAttribute('width',width);overlay.setAttribute('height',element.offsetHeight);
     overlay.setAttribute('viewBox',`0 0 ${width} ${element.offsetHeight}`);
@@ -104,7 +127,7 @@ function initialiseReadingAnnotations(element, name) {
       if(map){from={x:x+Math.min(length-8,40+i*80),y:y-7};lane=undefined;}
       if(name==='rank_changes'&&!histogramInset)lane=width-5;
       // Put the arrow below the label layer to keep text legible at intersections.
-      arrow(from,a.at,lane);
+      arrow(from,map?coastlineTarget(from,a.at):a.at,lane);
       if(a.also){const second=a.also();if(second)arrow(from,second,lane);}
     });
     nodes.forEach(({t})=>overlay.append(t));
