@@ -9,7 +9,7 @@
   <meta property="og:title" content="Staying at the Top of AFL">
   <link rel="stylesheet" href="vendor/pure-min.css">
   <link rel="stylesheet" href="vendor/grids-responsive-min.css">
-  <link rel="stylesheet" href="css/style.css?v=439dbdff1d1f">
+  <link rel="stylesheet" href="css/style.css?v=4060cef578da">
   <script defer src="vendor/vega.min.js"></script>
   <script defer src="vendor/vega-lite.min.js"></script>
   <script defer src="vendor/vega-embed.min.js"></script>
@@ -137,6 +137,10 @@
                   </ul>
                 </div>
               </aside>
+              <div class="chart-legend map-symbol-key city-map-symbol-key" role="group" aria-label="City map symbols">
+                <span><i class="legend-diamond" aria-hidden="true"></i> Season champion</span>
+                <span><i class="legend-circle hollow" aria-hidden="true"></i> No finalists</span>
+              </div>
             </div>
             <div class="city-map-tools">
               <fieldset class="city-time-mode" aria-label="City map time mode">
@@ -152,7 +156,6 @@
                 <div id="city-zoom-control" class="vega-bindings"></div>
               </div>
             </div>
-            <p class="map-key micro"><i class="legend-diamond" aria-hidden="true"></i> Season champion · Small empty ring: no finalists.</p>
           </div>
         </figure>
         <figure class="figure-wide map-study grand-final-study">
@@ -162,9 +165,11 @@
             <p>Thirteen of the fourteen Grand Finals paired clubs from different home cities. In 2021, Melbourne and the Western Bulldogs both represented Melbourne. A loop keeps that same-city contest visible, with both clubs and their results labelled on the map.</p>
           </figcaption>
           <div class="map-story-visual">
-            <div class="chart" data-spec="grand_final_flows" aria-label="Time-selectable connection map between Grand Final opponents’ home cities. Lines connect different cities; a loop and club labels show a same-city matchup, with premier and runner-up markers."></div>
+            <div class="grand-final-map-frame">
+              <div class="chart" data-spec="grand_final_flows" aria-label="Time-selectable connection map between Grand Final opponents’ home cities. Lines connect different cities; a loop and club labels show a same-city matchup, with premier and runner-up markers."></div>
+              <div class="chart-legend map-symbol-key grand-final-map-legend" role="group" aria-label="Grand Final results"><span><i class="legend-circle hollow" aria-hidden="true"></i> Runner-up</span><span><i class="legend-diamond" aria-hidden="true"></i> Premier</span></div>
+            </div>
             <div class="map-controls-row map-final-controls">
-              <div class="chart-legend" role="group" aria-label="Grand Final results"><span><i class="legend-circle hollow" aria-hidden="true"></i> Runner-up</span><span><i class="legend-diamond" aria-hidden="true"></i> Premier</span></div>
               <div id="map-final-season-control" class="vega-bindings"></div>
             </div>
           </div>
