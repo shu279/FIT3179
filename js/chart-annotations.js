@@ -171,11 +171,12 @@ function initialiseStoryAnnotations(element,name){
     const fromLeft=!stacked&&copy.right<=chart.left;
     overlay.setAttribute('viewBox',`0 0 ${origin.width} ${origin.height}`);
     overlay.replaceChildren();
-    const defs=make('defs'),marker=make('marker',{id:markerId,viewBox:'0 0 8 8',refX:8,refY:4,markerWidth:6,markerHeight:6,orient:'auto',markerUnits:'userSpaceOnUse'});
+    const arrowSize=name==='club_horizon'?8:6;
+    const defs=make('defs'),marker=make('marker',{id:markerId,viewBox:'0 0 8 8',refX:8,refY:4,markerWidth:arrowSize,markerHeight:arrowSize,orient:'auto',markerUnits:'userSpaceOnUse'});
     marker.append(make('path',{d:'M0 0 L8 4 L0 8 Z',fill:ink}));defs.append(marker);overlay.append(defs);
-    const line=(d,point,target)=>overlay.append(make('path',{
-      d,fill:'none',stroke:ink,'stroke-width':1,'stroke-linejoin':'round',
-      'data-story-point':point,...(target?{'data-target':target,'marker-end':`url(#${markerId})`}:{})
+    const line=(d,point,target,kind='leader')=>overlay.append(make('path',{
+      d,fill:'none',stroke:ink,'stroke-width':name==='club_horizon'?1.5:1,'stroke-linejoin':'round','stroke-linecap':'round',
+      'data-story-point':point,'data-annotation-kind':kind,...(target?{'data-target':target,'marker-end':`url(#${markerId})`}:{})
     }));
     points.forEach((point,index)=>{
       const key=point.dataset.storyPoint,p=rect(point);
@@ -191,10 +192,26 @@ function initialiseStoryAnnotations(element,name){
           const background=find(`.win_rate_background_${row} path`);
           if(!node||!background)return null;
           const r=rect(node),b=rect(background),d=node.__data__.datum;
-          return {x:(r.left+r.right)/2,y:b.bottom-b.height*d.wins/d.played,routeY:b.top-8,label:`${team}: ${season}`};
+          return {x:(r.left+r.right)/2,y:b.bottom-b.height*d.wins/d.played,rowTop:b.top,rowBottom:b.bottom,label:`${team}: ${season}`};
         }).filter(Boolean);
       if(!targets.length)return;
       const from={x:fromLeft||stacked?p.right+6:p.left-6,y:(p.top+p.bottom)/2};
+      if(name==='club_horizon'){
+        const top=targets[0].rowTop-4,bottom=targets.at(-1).rowBottom+4;
+        const bracketX=stacked?chart.right+7:chart.left-14;
+        const cap=stacked?-10:12;
+        line(`M${bracketX+cap},${top} H${bracketX} V${bottom} H${bracketX+cap}`,key,null,'group-bracket');
+        if(stacked){
+          const rail=origin.width-8-index*7;
+          line(`M${from.x},${from.y} H${rail} V${(top+bottom)/2} H${bracketX}`,key,null,'description-connector');
+        }else{
+          const joinY=Math.max(top+8,Math.min(bottom-8,from.y));
+          line(`M${from.x},${from.y} H${bracketX-6} V${joinY} H${bracketX}`,key,null,'description-connector');
+        }
+        // Local arrows highlight the data without long lines crossing the strips.
+        targets.forEach(t=>line(`M${t.x},${t.y-22} V${t.y}`,key,t.label,'focus-arrow'));
+        return;
+      }
       const rail=stacked?origin.width-8-index*7:fromLeft?chart.left-14:chart.right+10;
       const ys=[from.y,...targets.map(t=>t.routeY)];
       line(`M${from.x},${from.y} H${rail} M${rail},${Math.min(...ys)} V${Math.max(...ys)}`,key);
