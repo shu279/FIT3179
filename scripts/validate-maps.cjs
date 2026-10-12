@@ -228,7 +228,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  assert.equal(controller.signal('selectedSeason'),2012);assert.equal(play.attributes['aria-pressed'],'true');
  await pending();await settle();assert.equal(controller.signal('selectedSeason'),2013);
  await play.listeners.click();assert.equal(play.attributes['aria-pressed'],'false');assert.equal(pending,null);
- assert.equal(elements.get('#map-final-summary').textContent,'2013: Hawthorn (Melbourne) defeated Fremantle (Perth).');
+ assert.equal(elements.get('#map-final-summary').textContent,'2013: Hawthorn defeated Fremantle.');
  assert.match(elements.get('#map-final-context').textContent,/does not represent travel/);
  await symbols.signal('mapZoom',4).runAsync();await settle();
  await symbols.signal('mapPan',[0.2,-0.15]).runAsync();

@@ -43,7 +43,7 @@ async function initialiseMapControls(chartViews, renderCity) {
     const year=controller.signal('selectedSeason');
     const final=finals.find(row=>row.season===year);
     status.textContent=`Clubs reaching finals by state in ${year}`;
-    flowStatus.textContent=final?`${year}: ${final.winner} (${final.winner_city}) defeated ${final.runner_up} (${final.runner_city}).`:
+    flowStatus.textContent=final?`${year}: ${final.winner} defeated ${final.runner_up}.`:
       `${year}: Grand Final opponents`;
     flowContext.textContent=final && final.winner_city===final.runner_city?
       'The loop marks opponents based in the same city; it does not represent travel.':
