@@ -148,7 +148,7 @@ async function main(){
            assert.ok(d.geo?.geometry,'Every year-state must have its geometry');
            assert.equal(d.finals_rate,stateSeasons.find(r=>r.season===year&&r.state_code===d.state_code).finals_rate);
          }
-         assert.deepEqual(view.scale('color').domain(),[20,40,60,80]);
+         assert.deepEqual(view.scale('color').domain(),[30,40,50,100]);
        }
        await view.signal('mapZoom',3).signal('mapCentre',[13,-33]).runAsync();
        assert.ok(!/\bNaN\b|\bInfinity\b/.test(await view.toSVG()));

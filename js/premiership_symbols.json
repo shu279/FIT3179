@@ -357,17 +357,17 @@
               "scale": {
                 "type": "threshold",
                 "domain": [
-                  20,
+                  30,
                   40,
-                  60,
-                  80
+                  50,
+                  100
                 ],
                 "range": [
-                  "#ffffcc",
-                  "#a1dab4",
-                  "#41b6c4",
-                  "#2c7fb8",
-                  "#253494"
+                  "#edf8e9",
+                  "#bae4b3",
+                  "#74c476",
+                  "#31a354",
+                  "#006d2c"
                 ]
               },
               "legend": null

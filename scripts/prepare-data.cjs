@@ -94,7 +94,7 @@ manifest.home_city_groupings=cityData.map(d=>({city:d.city,clubs:clubs.filter(c=
 manifest.location_method='Author-assigned home-city groups represent club bases, not stadiums or match venues. Fremantle is grouped with Perth; Geelong is separate from Melbourne.';
 manifest.corrections='corrections.json';
 manifest.sources.natural_earth='https://www.naturalearthdata.com/downloads/';
-manifest.sources.colorbrewer='https://colorbrewer2.org/#type=sequential&scheme=YlGnBu&n=5';
+manifest.sources.colorbrewer='https://colorbrewer2.org/#type=sequential&scheme=Greens&n=5';
 manifest.map_preparation='map_sources.json';
 manifest.legacy_boundary_file='australia_states.topojson is the earlier ABS boundary file, retained for provenance; the current maps use natural_earth_states.topojson and natural_earth_physical.topojson.';
 write('team_seasons',complete);write('team_summary',summaries);write('states',states);write('cities',cityData);write('grand_finals',grandFinals);write('finals_connections',flows);write('streaks',streaks);write('manifest',manifest);

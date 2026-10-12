@@ -139,7 +139,7 @@
       }
     ],
     "natural_earth": "https://www.naturalearthdata.com/downloads/",
-    "colorbrewer": "https://colorbrewer2.org/#type=sequential&scheme=YlGnBu&n=5"
+    "colorbrewer": "https://colorbrewer2.org/#type=sequential&scheme=Greens&n=5"
   },
   "home_city_groupings": [
     {

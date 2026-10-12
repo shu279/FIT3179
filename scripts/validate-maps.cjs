@@ -6,6 +6,10 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
  const errors=[];
  const logger={level(){return this;},warn(){},info(){},debug(){},error(...args){errors.push(args.map(String).join(' '));}};
  const palette=read('data/map_sources.json').colour;
+ const colourIndex=rate=>palette.thresholds.filter(threshold=>rate>=threshold).length;
+ const stateClassCounts=Array(palette.classes).fill(0);
+ for(const state of stateSeasons.filter(d=>d.clubs>0))stateClassCounts[colourIndex(state.finals_rate)]++;
+ assert.deepEqual(stateClassCounts,[14,2,6,38,10],'Every class is used and 40% is separated from 50%');
  const topology=read('data/natural_earth_states.topojson');
  assert.deepEqual(topology.objects.states.geometries.map(d=>d.properties.state_code).sort(),['1','2','3','4','5','6','7','8']);
  assert.deepEqual(Object.keys(read('data/natural_earth_physical.topojson').objects).sort(),['graticules','ocean']);
@@ -52,17 +56,17 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
      for(const label of labels){
       const expected=stateSeasons.find(d=>d.state_code===label.datum.state_code&&d.season===year);
       assert.equal(label.text,`${expected.finals}/${expected.clubs}`);
-      assert.equal(label.fill,expected.finals_rate<20?'#000000':'#ffffff');
+      assert.equal(label.fill,expected.finals_rate<100?'#000000':'#ffffff');
      }
      assert.equal(labels.reduce((total,label)=>total+label.datum.finals,0),8);
      assert.equal(labels.reduce((total,label)=>total+label.datum.clubs,0),18);
      for(const item of shapes){
       const rate=item.datum.finals_rate;
-      assert.equal(item.fill,rate===null?'#dedfd5':palette.colours[Math.min(4,Math.floor(rate/20))]);
+      assert.equal(item.fill,rate===null?'#dedfd5':palette.colours[colourIndex(rate)]);
      }
     }
     const scale=view.scale('color');
-    for(const rate of [0,19.999,20,39.999,40,59.999,60,79.999,80,100])assert.equal(scale(rate),palette.colours[Math.min(4,Math.floor(rate/20))]);
+    for(const [rate,expectedClass] of [[0,0],[29.999,0],[30,1],[39.999,1],[40,2],[49.999,2],[50,3],[99.999,3],[100,4]])assert.equal(scale(rate),palette.colours[expectedClass]);
    }
    if(name==='premiership_symbols'){
     const circles=()=>items(view,i=>i.mark?.marktype==='symbol'&&Number.isFinite(i.datum?.finals_per_season));
@@ -82,6 +86,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
      const table=circles().filter(i=>i.datum.finals>0 || i.size===35);
      assert.equal(table.length,7);
      assert.equal(table.reduce((n,i)=>n+i.datum.finals,0),8);
+     for(const item of table.filter(i=>i.datum.finals>0))assert.equal(item.fill,palette.colours[colourIndex(item.datum.finals_rate)]);
      assert.ok(Math.max(...table.map(i=>i.y))-Math.min(...table.map(i=>i.y))>40,'Projected cities must not collapse onto one point');
      checkChampion(year);
     }
@@ -98,6 +103,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
       assert.equal(item.datum.finals,finalists);
       assert.equal(item.datum.finals_per_season,finalists/(range[1]-range[0]+1));
       assert.equal(item.datum.finals_rate,finalists/expected.length*100);
+      if(finalists>0)assert.equal(item.fill,palette.colours[colourIndex(item.datum.finals_rate)]);
      }
     }
     await brush([2014.2,2014.8]);assert.equal(circles().length,0);assert.equal(annotations().length,0);assert.equal(championMarkers().length,0);

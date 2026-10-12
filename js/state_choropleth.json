@@ -50,7 +50,7 @@
   "usermeta": {
     "layout": "map"
   },
-  "description": "State choropleth with fixed percentage classes and year selection. Labels show clubs reaching finals / all clubs in each state, so states with different numbers of clubs can be compared. States without clubs remain grey and have no fraction label.",
+  "description": "State choropleth with a five-class ColorBrewer Greens palette and fixed, unequal thresholds at 30%, 40%, 50% and 100%, separating all observed state rates. Labels show clubs reaching finals / all clubs in each state. States without clubs remain grey and have no fraction label.",
   "params": [
     {
       "name": "selectedSeason",
@@ -256,17 +256,17 @@
           "scale": {
             "type": "threshold",
             "domain": [
-              20,
+              30,
               40,
-              60,
-              80
+              50,
+              100
             ],
             "range": [
-              "#ffffcc",
-              "#a1dab4",
-              "#41b6c4",
-              "#2c7fb8",
-              "#253494"
+              "#edf8e9",
+              "#bae4b3",
+              "#74c476",
+              "#31a354",
+              "#006d2c"
             ]
           },
           "legend": null,
@@ -448,7 +448,7 @@
         ],
         "color": {
           "condition": {
-            "test": "datum.clubs > 0 && datum.finals_rate < 20",
+            "test": "datum.finals_rate < 100",
             "value": "#000000"
           },
           "value": "#ffffff"
