@@ -65,14 +65,14 @@ save('rank_changes',{
 // A two-stage Sankey: band width represents actual club-season transitions.
 const finalsReturn={
  '$schema':'https://vega.github.io/schema/vega/v5.json',description:'Finals participation in one season and the next, pooling 2012–2013 through 2024–2025. Every flow is labelled with its transition count and percentage of the starting group.',
- width:700,height:420,padding:0,autosize:{type:'none',resize:true},background:'transparent',
+ width:700,height:360,padding:0,autosize:{type:'none',resize:true},background:'transparent',
  signals:[
-  {name:'top',value:66},{name:'gap',value:56},
+  {name:'top',value:34},{name:'gap',value:28},
   {name:'unit',update:`(height - top - gap - 12) / ${transitions.length}`},
-  {name:'left',value:12},{name:'right',update:'width - 12'},{name:'barWidth',value:10},
+  {name:'left',value:32},{name:'right',update:'width - 32'},{name:'barWidth',value:10},
   {name:'missedStart',update:`top + ${sourceOffsets[1]} * unit + gap`},
   // Locate labels on each cubic curve before the two changing-outcome flows cross.
-  {name:'labelT',update:'width < 360 ? 0.15 : 0.25'},
+  {name:'labelT',update:'width < 360 ? 0.2 : 0.25'},
   {name:'labelX',update:'pow(1-labelT,3)*(left+barWidth) + 3*pow(1-labelT,2)*labelT*width*.45 + 3*(1-labelT)*pow(labelT,2)*width*.55 + pow(labelT,3)*(right-barWidth)'}
  ],
  data:[
@@ -94,10 +94,10 @@ const finalsReturn={
    fill:{field:'color'},fillOpacity:{value:0.82},stroke:{value:'#f3f2e9'},strokeWidth:{value:1},
    tooltip:{signal:"{'Outcome':datum.label,'Club-season transitions':datum.count,'Starting-group transitions':datum.source_total,'Share of starting group':format(datum.share,'.1%')}"}
   },hover:{fillOpacity:{value:1}}}},
-  {type:'rect',from:{data:'nodes'},encode:{update:{x:{signal:'datum.stage ? right-barWidth : left'},width:{signal:'barWidth'},y:{signal:'datum.finalist ? top : missedStart'},height:{signal:'datum.count * unit'},fill:{signal:"datum.finalist ? '#c96636' : '#a8bd9c'"}}}},
+  {name:'flow_nodes',type:'rect',from:{data:'nodes'},encode:{update:{x:{signal:'datum.stage ? right-barWidth : left'},width:{signal:'barWidth'},y:{signal:'datum.finalist ? top : missedStart'},height:{signal:'datum.count * unit'},fill:{signal:"datum.finalist ? '#c96636' : '#a8bd9c'"}}}},
   {name:'flow_values',type:'text',interactive:false,from:{data:'links'},encode:{update:{x:{signal:'labelX'},y:{field:'label_y'},align:{value:'center'},baseline:{value:'middle'},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:600},fill:{signal:"datum.from && !datum.to ? '#ffffff' : '#21372b'"},text:{field:'value_label'}}}},
   {type:'text',from:{data:'headers'},encode:{update:{x:{signal:'datum.stage ? right : left'},y:{value:15},align:{signal:"datum.stage ? 'right' : 'left'"},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:600},fill:{value:ink},text:{field:'label'}}}},
-  {type:'text',from:{data:'nodes'},encode:{update:{x:{signal:'datum.stage ? right : left'},y:{signal:'(datum.finalist ? top : missedStart) - 13'},align:{signal:"datum.stage ? 'right' : 'left'"},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:ink},text:{field:'label'}}}}
+  {name:'node_labels',type:'text',interactive:false,from:{data:'nodes'},encode:{update:{x:{signal:'datum.stage ? right + 16 : left - 16'},y:{signal:'(datum.finalist ? top : missedStart) + datum.count * unit / 2'},align:{value:'center'},baseline:{value:'middle'},angle:{signal:'datum.stage ? 90 : 270'},font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:ink},text:{field:'label'}}}}
  ]
 };
 fs.writeFileSync(path.join(root,'js/finals_return.json'),JSON.stringify(finalsReturn,null,2)+'\n');
