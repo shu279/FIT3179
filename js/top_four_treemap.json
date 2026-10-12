@@ -87,6 +87,9 @@
           "fill": {
             "signal": "datum.team === 'Geelong' ? '#c96636' : '#31553b'"
           },
+          "fillOpacity": {
+            "value": 1
+          },
           "stroke": {
             "value": "#f3f2e9"
           },

@@ -34,7 +34,7 @@ module.exports=({root,seasons,ink,green,orange,sage})=>{
   marks:[
    {name:'top_four_tiles',type:'rect',from:{data:'leaves'},encode:{update:{
     x:{field:'x0'},x2:{field:'x1'},y:{field:'y0'},y2:{field:'y1'},
-    fill:{signal:"datum.team === 'Geelong' ? '"+orange+"' : '"+green+"'"},stroke:{value:'#f3f2e9'},strokeWidth:{value:3},tooltip:{signal:treeTip},
+    fill:{signal:"datum.team === 'Geelong' ? '"+orange+"' : '"+green+"'"},fillOpacity:{value:1},stroke:{value:'#f3f2e9'},strokeWidth:{value:3},tooltip:{signal:treeTip},
     description:{signal:"datum.team + ': ' + datum.count + ' top-four finishes, in ' + datum.years"}
    },hover:{fillOpacity:{value:0.85}}}},
    {name:'top_four_counts',type:'text',interactive:false,from:{data:'leaves'},encode:{update:{
