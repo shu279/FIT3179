@@ -56,7 +56,7 @@ module.exports=async function({vega,vl,loader,root,read,rows,stateSeasons,cities
      for(const label of labels){
       const expected=stateSeasons.find(d=>d.state_code===label.datum.state_code&&d.season===year);
       assert.equal(label.text,`${expected.finals}/${expected.clubs}`);
-      assert.equal(label.fill,expected.finals_rate<palette.light_labels_from?'#000000':'#ffffff');
+      assert.equal(label.fill,'#ffffff','State counts stay white in every season');
      }
      assert.equal(labels.reduce((total,label)=>total+label.datum.finals,0),8);
      assert.equal(labels.reduce((total,label)=>total+label.datum.clubs,0),18);

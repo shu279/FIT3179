@@ -93,7 +93,7 @@ module.exports=function({base,config,multiConfig,ink,green,orange}){
      tooltip:[{field:'state_name',type:'nominal',title:'State'},{field:'season',type:'quantitative',format:'d',title:'Season'},
       {field:'finals',type:'quantitative',title:'Clubs reaching finals'},{field:'clubs',type:'quantitative',title:'All clubs in state'},
       {field:'finals_rate',type:'quantitative',format:'.1f',title:'Finals rate (%)'}],
-     color:{condition:{test:`datum.finals_rate < ${palette.light_labels_from}`,value:'#000000'},value:'#ffffff'}}}
+     color:{value:'#ffffff'}}}
   ]
  });
  // Resolve continuous brush edges to inclusive, whole seasons. Even a narrow
