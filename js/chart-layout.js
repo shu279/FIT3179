@@ -17,11 +17,14 @@ function chartLayout(spec, availableWidth) {
       view.width = plotWidth;
       if (journey) {
         // Reserve a side column on wide screens; preserve the plot width on phones.
-        view.encoding.color.legend.orient = sideLegend ? 'right' : 'top';
-        view.encoding.color.legend.columns = sideLegend ? 1 : {expr:'width < 385 ? 1 : 2'};
+        const legend = view.encoding.color.legend;
+        if (legend) {
+          legend.orient = sideLegend ? 'right' : 'top';
+          legend.columns = sideLegend ? 1 : {expr:'width < 385 ? 1 : 2'};
+        }
         if(view.name!=='journey_overview'){
-          view.encoding.color.legend.offset=sideLegend?16:54;
-          view.title.offset=sideLegend?60:14;
+          if (legend) legend.offset=sideLegend?16:54;
+          view.title.offset=sideLegend||!legend?60:14;
         }
       }
     });

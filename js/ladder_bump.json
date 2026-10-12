@@ -367,18 +367,7 @@
               "#c96636"
             ]
           },
-          "legend": {
-            "title": null,
-            "orient": "right",
-            "columns": 1,
-            "offset": 16,
-            "padding": 0,
-            "rowPadding": 4,
-            "symbolType": "square",
-            "symbolStrokeWidth": 3,
-            "labelLimit": 180,
-            "symbolSize": 80
-          }
+          "legend": null
         },
         "opacity": {
           "condition": {
