@@ -214,21 +214,27 @@ save('era_change',{
 
 // Paired bars compare clubs within each metric, without joining unrelated measures.
 const successMetrics=[
- {metric:'wins',label:'Games won (%)'},
- {metric:'finals',label:'Finals appearances (%)'},
- {metric:'top_four',label:'Top-four finishes (%)'},
- {metric:'grand_finals',label:'Grand Final appearances (%)'},
- {metric:'premierships',label:'Premierships (%)'}
+ {metric:'wins',label:'Games won (%)',side_label:'Games won (%)',small_label:'Games won\n(%)'},
+ {metric:'finals',label:'Finals appearances (%)',side_label:'Finals\nappearances (%)',small_label:'Finals\nappearances\n(%)'},
+ {metric:'top_four',label:'Top-four finishes (%)',side_label:'Top-four finishes\n(%)',small_label:'Top-four\nfinishes (%)'},
+ {metric:'grand_finals',label:'Grand Final appearances (%)',side_label:'Grand Final\nappearances (%)',small_label:'Grand Final\nappearances\n(%)'},
+ {metric:'premierships',label:'Premierships (%)',side_label:'Premierships (%)',small_label:'Premierships\n(%)'}
 ].map((d,order)=>({...d,order}));
-const comparisonY="datum.order * 100 + (datum.team === 'Geelong' ? 30 : 60)";
+const comparisonY="datum.order * 64 + (datum.team === 'Geelong' ? (compact ? 4 : 5) : (compact ? 34 : 29))";
 const comparisonTip="{'Club':datum.team,'Measure':datum.label,'Percentage':format(datum.rate / 100,'.1%'),'Count':datum.numerator + ' / ' + datum.denominator,'Denominator':datum.metric === 'wins' ? 'Regular-season games played' : 'Completed seasons (2012–2025)'}";
 const successComparison={
  '$schema':'https://vega.github.io/schema/vega/v5.json',
  description:'Paired horizontal bars compare Geelong and Hawthorn on five separate measures in 2012–2025. All bars share a fixed 0–100% scale, with percentages and counts directly labelled. Top-four finishes means regular-season ladder ranks 1–4 out of 14 seasons. Games won uses games played; all other measures use seasons.',
- width:700,height:540,padding:{top:4,left:16,right:4,bottom:36},autosize:{type:'none',contains:'padding',resize:true},background:'transparent',
- signals:[{name:'plotWidth',update:'max(80, width - 160)'}],
+ width:700,height:360,padding:{top:4,left:4,right:4,bottom:36},autosize:{type:'none',contains:'padding',resize:true},background:'transparent',
+ signals:[
+  {name:'compact',update:'width < 600'},
+  {name:'plotStart',update:'compact ? (width < 440 ? 110 : 160) : 240'},
+  {name:'plotEnd',update:'compact ? width : width - 142'},
+  {name:'plotWidth',update:'plotEnd - plotStart'},
+  {name:'barHeight',update:'compact ? 10 : 18'}
+ ],
  data:[
-  {name:'metrics',values:successMetrics},
+  {name:'metrics',values:successMetrics,transform:[{type:'formula',expr:'compact ? (width < 440 ? datum.small_label : datum.side_label) : datum.label',as:'display_label'}]},
   {name:'profiles',url:'data/team_seasons.json',transform:[
    {type:'filter',expr:"datum.team === 'Geelong' || datum.team === 'Hawthorn'"},
    {type:'formula',expr:'datum.rank <= 4 ? 1 : 0',as:'top_four'},
@@ -243,26 +249,26 @@ const successComparison={
   ]}
  ],
  scales:[
-  {name:'percentage',type:'linear',domain:[0,100],range:[0,{signal:'plotWidth'}],zero:true,nice:false},
+  {name:'percentage',type:'linear',domain:[0,100],range:[{signal:'plotStart'},{signal:'plotEnd'}],zero:true,nice:false},
   {name:'clubColor',type:'ordinal',domain:['Geelong','Hawthorn'],range:[green,orange]}
  ],
- axes:[{scale:'percentage',orient:'bottom',values:{signal:'width < 400 ? [0,50,100] : [0,25,50,75,100]'},domain:false,grid:false,tickColor:grid,labelPadding:9,
-  labelFont:'Helvetica Neue, Arial, sans-serif',labelFontSize:15,labelColor:ink,encode:{labels:{update:{text:{signal:"datum.value + '%'"}}}}}],
+ axes:[{scale:'percentage',orient:'bottom',values:{signal:'plotWidth < 210 ? [0,50,100] : [0,25,50,75,100]'},domain:false,grid:false,tickColor:grid,labelPadding:9,
+  labelFont:'Helvetica Neue, Arial, sans-serif',labelFontSize:15,labelColor:ink,encode:{labels:{update:{text:{signal:"datum.value + '%'"},align:{signal:"datum.value === 0 ? 'left' : datum.value === 100 ? 'right' : 'center'"}}}}}],
  marks:[
   {name:'metric_labels',type:'text',interactive:false,from:{data:'metrics'},encode:{update:{
-   x:{value:0},y:{signal:'datum.order * 100'},text:{field:'label'},baseline:{value:'top'},
+   x:{signal:'plotStart - 14'},y:{signal:"datum.order * 64 + (compact ? 32 : 26) - (length(split(datum.display_label,'\\n')) - 1) * 9"},text:{field:'display_label'},baseline:{value:'middle'},align:{value:'right'},lineBreak:{value:'\n'},lineHeight:{value:18},
    font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fontWeight:{value:600},fill:{value:ink}
   }}},
   {type:'rect',interactive:false,from:{data:'profiles'},encode:{update:{
-   x:{value:0},x2:{signal:'plotWidth'},y:{signal:comparisonY},height:{value:20},fill:{value:'#e4e6da'},fillOpacity:{value:0.5}
+   x:{signal:'plotStart'},x2:{signal:'plotEnd'},y:{signal:comparisonY},height:{signal:'barHeight'},fill:{value:'#e4e6da'},fillOpacity:{value:0.5}
   }}},
   {name:'profile_bars',type:'rect',from:{data:'profiles'},encode:{update:{
-   x:{value:0},x2:{scale:'percentage',field:'rate'},y:{signal:comparisonY},height:{value:20},fill:{scale:'clubColor',field:'team'},
+   x:{signal:'plotStart'},x2:{scale:'percentage',field:'rate'},y:{signal:comparisonY},height:{signal:'barHeight'},fill:{scale:'clubColor',field:'team'},
    fillOpacity:{value:1},tooltip:{signal:comparisonTip},aria:{value:true},
    description:{signal:"datum.team + ', ' + datum.label + ': ' + datum.value_label"}
   },hover:{fillOpacity:{value:0.8}}}},
   {name:'profile_values',type:'text',from:{data:'profiles'},encode:{update:{
-   x:{scale:'percentage',field:'rate',offset:8},y:{signal:comparisonY+' + 10'},text:{field:'value_label'},baseline:{value:'middle'},
+   x:{signal:"compact ? plotStart : scale('percentage',datum.rate) + 8"},y:{signal:comparisonY+' + (compact ? 19 : 9)'},text:{field:'value_label'},baseline:{value:'middle'},
    font:{value:'Helvetica Neue, Arial, sans-serif'},fontSize:{value:15},fill:{value:ink},tooltip:{signal:comparisonTip}
   }}}
  ]

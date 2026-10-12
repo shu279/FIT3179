@@ -2,10 +2,10 @@
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "description": "Paired horizontal bars compare Geelong and Hawthorn on five separate measures in 2012–2025. All bars share a fixed 0–100% scale, with percentages and counts directly labelled. Top-four finishes means regular-season ladder ranks 1–4 out of 14 seasons. Games won uses games played; all other measures use seasons.",
   "width": 700,
-  "height": 540,
+  "height": 360,
   "padding": {
     "top": 4,
-    "left": 16,
+    "left": 4,
     "right": 4,
     "bottom": 36
   },
@@ -17,8 +17,24 @@
   "background": "transparent",
   "signals": [
     {
+      "name": "compact",
+      "update": "width < 600"
+    },
+    {
+      "name": "plotStart",
+      "update": "compact ? (width < 440 ? 110 : 160) : 240"
+    },
+    {
+      "name": "plotEnd",
+      "update": "compact ? width : width - 142"
+    },
+    {
       "name": "plotWidth",
-      "update": "max(80, width - 160)"
+      "update": "plotEnd - plotStart"
+    },
+    {
+      "name": "barHeight",
+      "update": "compact ? 10 : 18"
     }
   ],
   "data": [
@@ -28,27 +44,44 @@
         {
           "metric": "wins",
           "label": "Games won (%)",
+          "side_label": "Games won (%)",
+          "small_label": "Games won\n(%)",
           "order": 0
         },
         {
           "metric": "finals",
           "label": "Finals appearances (%)",
+          "side_label": "Finals\nappearances (%)",
+          "small_label": "Finals\nappearances\n(%)",
           "order": 1
         },
         {
           "metric": "top_four",
           "label": "Top-four finishes (%)",
+          "side_label": "Top-four finishes\n(%)",
+          "small_label": "Top-four\nfinishes (%)",
           "order": 2
         },
         {
           "metric": "grand_finals",
           "label": "Grand Final appearances (%)",
+          "side_label": "Grand Final\nappearances (%)",
+          "small_label": "Grand Final\nappearances\n(%)",
           "order": 3
         },
         {
           "metric": "premierships",
           "label": "Premierships (%)",
+          "side_label": "Premierships (%)",
+          "small_label": "Premierships\n(%)",
           "order": 4
+        }
+      ],
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "compact ? (width < 440 ? datum.small_label : datum.side_label) : datum.label",
+          "as": "display_label"
         }
       ]
     },
@@ -156,9 +189,11 @@
         100
       ],
       "range": [
-        0,
         {
-          "signal": "plotWidth"
+          "signal": "plotStart"
+        },
+        {
+          "signal": "plotEnd"
         }
       ],
       "zero": true,
@@ -182,7 +217,7 @@
       "scale": "percentage",
       "orient": "bottom",
       "values": {
-        "signal": "width < 400 ? [0,50,100] : [0,25,50,75,100]"
+        "signal": "plotWidth < 210 ? [0,50,100] : [0,25,50,75,100]"
       },
       "domain": false,
       "grid": false,
@@ -196,6 +231,9 @@
           "update": {
             "text": {
               "signal": "datum.value + '%'"
+            },
+            "align": {
+              "signal": "datum.value === 0 ? 'left' : datum.value === 100 ? 'right' : 'center'"
             }
           }
         }
@@ -213,16 +251,25 @@
       "encode": {
         "update": {
           "x": {
-            "value": 0
+            "signal": "plotStart - 14"
           },
           "y": {
-            "signal": "datum.order * 100"
+            "signal": "datum.order * 64 + (compact ? 32 : 26) - (length(split(datum.display_label,'\\n')) - 1) * 9"
           },
           "text": {
-            "field": "label"
+            "field": "display_label"
           },
           "baseline": {
-            "value": "top"
+            "value": "middle"
+          },
+          "align": {
+            "value": "right"
+          },
+          "lineBreak": {
+            "value": "\n"
+          },
+          "lineHeight": {
+            "value": 18
           },
           "font": {
             "value": "Helvetica Neue, Arial, sans-serif"
@@ -248,16 +295,16 @@
       "encode": {
         "update": {
           "x": {
-            "value": 0
+            "signal": "plotStart"
           },
           "x2": {
-            "signal": "plotWidth"
+            "signal": "plotEnd"
           },
           "y": {
-            "signal": "datum.order * 100 + (datum.team === 'Geelong' ? 30 : 60)"
+            "signal": "datum.order * 64 + (datum.team === 'Geelong' ? (compact ? 4 : 5) : (compact ? 34 : 29))"
           },
           "height": {
-            "value": 20
+            "signal": "barHeight"
           },
           "fill": {
             "value": "#e4e6da"
@@ -277,17 +324,17 @@
       "encode": {
         "update": {
           "x": {
-            "value": 0
+            "signal": "plotStart"
           },
           "x2": {
             "scale": "percentage",
             "field": "rate"
           },
           "y": {
-            "signal": "datum.order * 100 + (datum.team === 'Geelong' ? 30 : 60)"
+            "signal": "datum.order * 64 + (datum.team === 'Geelong' ? (compact ? 4 : 5) : (compact ? 34 : 29))"
           },
           "height": {
-            "value": 20
+            "signal": "barHeight"
           },
           "fill": {
             "scale": "clubColor",
@@ -322,12 +369,10 @@
       "encode": {
         "update": {
           "x": {
-            "scale": "percentage",
-            "field": "rate",
-            "offset": 8
+            "signal": "compact ? plotStart : scale('percentage',datum.rate) + 8"
           },
           "y": {
-            "signal": "datum.order * 100 + (datum.team === 'Geelong' ? 30 : 60) + 10"
+            "signal": "datum.order * 64 + (datum.team === 'Geelong' ? (compact ? 4 : 5) : (compact ? 34 : 29)) + (compact ? 19 : 9)"
           },
           "text": {
             "field": "value_label"
