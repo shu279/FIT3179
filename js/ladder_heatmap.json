@@ -47,7 +47,7 @@
       ]
     }
   },
-  "description": "Regular-season ladder position, sorted by seasons reaching finals. Orange cells identify the season champion; numbers retain regular-season ranks. Highlight a club using the bound dropdown.",
+  "description": "Regular-season ladder position, sorted by seasons reaching finals. Every cell is filled by ladder position; an orange outline separately identifies the season champion. Highlight a club using the bound dropdown.",
   "data": {
     "url": "data/team_seasons.json"
   },
@@ -128,10 +128,44 @@
         "ticks": false,
         "labelLimit": 150
       }
-    }
+    },
+    "tooltip": [
+      {
+        "field": "team",
+        "title": "Club",
+        "type": "nominal"
+      },
+      {
+        "field": "season",
+        "title": "Season",
+        "type": "quantitative"
+      },
+      {
+        "field": "rank",
+        "title": "Ladder position",
+        "type": "quantitative"
+      },
+      {
+        "field": "wins",
+        "title": "Wins",
+        "type": "quantitative"
+      },
+      {
+        "field": "win_rate",
+        "title": "Win rate (%)",
+        "format": ".1f",
+        "type": "quantitative"
+      },
+      {
+        "field": "won_premiership",
+        "type": "nominal",
+        "title": "Season champion"
+      }
+    ]
   },
   "layer": [
     {
+      "name": "ladder_cells",
       "mark": {
         "type": "rect",
         "stroke": "#f4f3eb",
@@ -140,10 +174,6 @@
       },
       "encoding": {
         "color": {
-          "condition": {
-            "test": "datum.premier === 1",
-            "value": "#c96636"
-          },
           "field": "band",
           "type": "nominal",
           "scale": {
@@ -166,40 +196,31 @@
             "value": 1
           },
           "value": 0.22
-        },
-        "tooltip": [
-          {
-            "field": "team",
-            "title": "Club",
-            "type": "nominal"
+        }
+      }
+    },
+    {
+      "name": "champion_outlines",
+      "transform": [
+        {
+          "filter": "datum.premier === 1"
+        }
+      ],
+      "mark": {
+        "type": "rect",
+        "fill": null,
+        "stroke": "#c96636",
+        "strokeWidth": 2.5,
+        "cornerRadius": 2
+      },
+      "encoding": {
+        "opacity": {
+          "condition": {
+            "test": "focusTeam === 'All clubs' || datum.team === focusTeam",
+            "value": 1
           },
-          {
-            "field": "season",
-            "title": "Season",
-            "type": "quantitative"
-          },
-          {
-            "field": "rank",
-            "title": "Ladder position",
-            "type": "quantitative"
-          },
-          {
-            "field": "wins",
-            "title": "Wins",
-            "type": "quantitative"
-          },
-          {
-            "field": "win_rate",
-            "title": "Win rate (%)",
-            "format": ".1f",
-            "type": "quantitative"
-          },
-          {
-            "field": "won_premiership",
-            "type": "nominal",
-            "title": "Season champion"
-          }
-        ]
+          "value": 0.22
+        }
       }
     },
     {
@@ -218,16 +239,10 @@
           "value": ""
         },
         "color": {
-          "condition": [
-            {
-              "test": "datum.premier === 1",
-              "value": "#111111"
-            },
-            {
-              "test": "datum.rank <= 4",
-              "value": "#ffffff"
-            }
-          ],
+          "condition": {
+            "test": "datum.rank <= 4",
+            "value": "#ffffff"
+          },
           "value": "#21372b"
         },
         "opacity": {

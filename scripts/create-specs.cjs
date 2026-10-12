@@ -93,20 +93,21 @@ const finalsReturn={
 fs.writeFileSync(path.join(root,'js/finals_return.json'),JSON.stringify(finalsReturn,null,2)+'\n');
 
 
-save('ladder_heatmap',{description:'Regular-season ladder position, sorted by seasons reaching finals. Orange cells identify the season champion; numbers retain regular-season ranks. Highlight a club using the bound dropdown.',height:530,data:data('team_seasons'),
+save('ladder_heatmap',{description:'Regular-season ladder position, sorted by seasons reaching finals. Every cell is filled by ladder position; an orange outline separately identifies the season champion. Highlight a club using the bound dropdown.',height:530,data:data('team_seasons'),
  // Week 9: a JSON parameter creates the dropdown; opacity highlights the selected club.
  params:[{...focus[0],bind:{input:'select',options:['All clubs',...order.slice().sort()],name:'Highlight a club: '}}],
  transform:[{calculate:"datum.premier === 1 ? 'Yes' : 'No'",as:'won_premiership'}],
- encoding:{x:field('season','ordinal',{axis:{title:null,labelAngle:0,labelFontSize:15,labelExpr:"width < 420 ? (datum.value == 2012 || datum.value == 2018 || datum.value == 2025 ? datum.label : '') : datum.label"}}),y:field('team','nominal',{sort:order,axis:{title:null,labelFontSize:15,ticks:false,labelLimit:150}})},
+ encoding:{x:field('season','ordinal',{axis:{title:null,labelAngle:0,labelFontSize:15,labelExpr:"width < 420 ? (datum.value == 2012 || datum.value == 2018 || datum.value == 2025 ? datum.label : '') : datum.label"}}),y:field('team','nominal',{sort:order,axis:{title:null,labelFontSize:15,ticks:false,labelLimit:150}}),
+  tooltip:[tip('team','Club'),tip('season','Season'),tip('rank','Ladder position'),tip('wins','Wins'),tip('win_rate','Win rate (%)','.1f'),{field:'won_premiership',type:'nominal',title:'Season champion'}]},
  layer:[
-  {mark:{type:'rect',stroke:'#f4f3eb',strokeWidth:3,cornerRadius:2},encoding:{
-   color:{condition:{test:'datum.premier === 1',value:orange},...field('band','nominal',{scale:{domain:['Top four','5th–8th','9th–18th'],range:[green,sage,'#e4e6da']},legend:null})},
-   opacity:focused,
-   tooltip:[tip('team','Club'),tip('season','Season'),tip('rank','Ladder position'),tip('wins','Wins'),tip('win_rate','Win rate (%)','.1f'),{field:'won_premiership',type:'nominal',title:'Season champion'}]
+  {name:'ladder_cells',mark:{type:'rect',stroke:'#f4f3eb',strokeWidth:3,cornerRadius:2},encoding:{
+   color:field('band','nominal',{scale:{domain:['Top four','5th–8th','9th–18th'],range:[green,sage,'#e4e6da']},legend:null}),
+   opacity:focused
   }},
+  {name:'champion_outlines',transform:[{filter:'datum.premier === 1'}],mark:{type:'rect',fill:null,stroke:orange,strokeWidth:2.5,cornerRadius:2},encoding:{opacity:focused}},
   {mark:{type:'text',fontSize:15,fontWeight:500},encoding:{
    text:{condition:{test:'width >= 420',field:'rank',type:'quantitative'},value:''},
-   color:{condition:[{test:'datum.premier === 1',value:'#111111'},{test:'datum.rank <= 4',value:'#ffffff'}],value:ink},
+   color:{condition:{test:'datum.rank <= 4',value:'#ffffff'},value:ink},
    opacity:focused
   }}
  ]
