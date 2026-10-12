@@ -1,0 +1,155 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 380,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "padding": 5,
+  "config": {
+    "background": "transparent",
+    "font": "Helvetica Neue, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "tickColor": "#dedfd4",
+      "gridColor": "#dedfd4",
+      "labelColor": "#21372b",
+      "titleColor": "#21372b",
+      "titleFontWeight": "normal",
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "labelPadding": 9,
+      "titlePadding": 14,
+      "labelOverlap": true,
+      "labelLimit": 150
+    },
+    "legend": {
+      "labelColor": "#21372b",
+      "titleColor": "#21372b",
+      "labelFontSize": 15,
+      "titleFontSize": 15,
+      "orient": "bottom",
+      "titleFontWeight": "normal",
+      "padding": 8
+    },
+    "range": {
+      "category": [
+        "#31553b",
+        "#c96636",
+        "#aa9148",
+        "#838c76",
+        "#637963"
+      ]
+    }
+  },
+  "description": "Horizontal bars show the nine premiership-winning clubs in 2012–2025, ordered by title count. Hawthorn and Richmond each won three titles and are highlighted in orange. Bar lengths start at zero; direct labels show the count and tooltips list winning years.",
+  "data": {
+    "url": "data/premiership_totals.json?v=a31f3a3597d7"
+  },
+  "encoding": {
+    "y": {
+      "field": "team",
+      "type": "nominal",
+      "sort": [
+        "Hawthorn",
+        "Richmond",
+        "Brisbane Lions",
+        "Collingwood",
+        "Geelong",
+        "Melbourne",
+        "Sydney",
+        "West Coast",
+        "Western Bulldogs"
+      ],
+      "axis": {
+        "title": null,
+        "ticks": false,
+        "labelLimit": 180
+      }
+    },
+    "x": {
+      "field": "premierships",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          0,
+          3
+        ],
+        "range": [
+          0,
+          {
+            "expr": "width - 24"
+          }
+        ],
+        "nice": false
+      },
+      "axis": {
+        "title": "Premierships",
+        "values": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "format": "d"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "team",
+        "title": "Club",
+        "type": "nominal"
+      },
+      {
+        "field": "premierships",
+        "title": "Premierships",
+        "type": "quantitative"
+      },
+      {
+        "field": "title_years",
+        "type": "nominal",
+        "title": "Winning years"
+      }
+    ]
+  },
+  "layer": [
+    {
+      "name": "title_bars",
+      "mark": {
+        "type": "bar",
+        "size": 26
+      },
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.premierships === 3",
+            "value": "#c96636"
+          },
+          "value": "#31553b"
+        }
+      }
+    },
+    {
+      "name": "title_counts",
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 8,
+        "fontSize": 15,
+        "fontWeight": 500,
+        "color": "#21372b"
+      },
+      "encoding": {
+        "text": {
+          "field": "premierships",
+          "type": "quantitative"
+        }
+      }
+    }
+  ]
+}

@@ -260,29 +260,23 @@ const successComparison={
 };
 fs.writeFileSync(path.join(root,'js/success_comparison.json'),JSON.stringify(successComparison,null,2)+'\n');
 
-const tree=[{team:'AFL',parent:null,premierships:0},...summary.filter(d=>d.premierships).map(d=>({team:d.team,parent:'AFL',premierships:d.premierships,short_name:d.id,
- title_years:seasons.filter(row=>row.team===d.team&&row.premier).map(row=>row.season).join(', ')}))];
-const treeJSON=JSON.stringify(tree,null,2)+'\n';
-fs.writeFileSync(path.join(root,'data/premiership_tree.json'),treeJSON);
-const treeVersion=crypto.createHash('sha256').update(treeJSON).digest('hex').slice(0,12);
-const bubbleTip="{'Club':datum.team,'Premierships':datum.premierships,'Winning years':datum.title_years,'Share of titles':format(datum.premierships/14,'.1%')}";
-const bubbleText={signal:"datum.premierships === 3 ? '#111111' : '#fffdf4'"};
-const bubbles={
- '$schema':'https://vega.github.io/schema/vega/v5.json',description:'Packed bubbles showing nine premiership-winning clubs in 2012–2025. Circle area is proportional to titles. Hawthorn and Richmond are highlighted in orange.',width:600,padding:0,autosize:{type:'none',resize:true},background:'transparent',
- signals:[{name:'height',update:'min(width, 640)'}],
- data:[{name:'tree',url:'data/premiership_tree.json?v='+treeVersion,transform:[{type:'stratify',key:'team',parentKey:'parent'},
-  {type:'pack',field:'premierships',sort:{field:['value','data.team'],order:['descending','ascending']},size:[{signal:'width'},{signal:'height'}],padding:6}]},
-  {name:'leaves',source:'tree',transform:[{type:'filter',expr:'!datum.children'}]}],
- marks:[
-  {name:'title_bubbles',type:'symbol',from:{data:'leaves'},encode:{enter:{shape:{value:'circle'},cursor:{value:'pointer'}},
-   update:{x:{field:'x'},y:{field:'y'},size:{signal:'4 * datum.r * datum.r'},fill:[{test:'datum.premierships === 3',value:orange},{value:green}],
-    stroke:{value:ink},strokeWidth:{value:0},tooltip:{signal:bubbleTip},aria:{value:true},description:{signal:"datum.team + ': ' + datum.premierships + ' premierships, won in ' + datum.title_years"}},
-   hover:{strokeWidth:{value:2}}}},
-  {type:'text',interactive:false,from:{data:'leaves'},encode:{enter:{font:{value:'Helvetica Neue, Arial, sans-serif'},fontWeight:{value:700},align:{value:'center'},baseline:{value:'middle'}},
-   update:{x:{field:'x'},y:{field:'y'},dy:{signal:'datum.r < 50 ? -10 : -18'},fontSize:{signal:'max(22, min(52, datum.r * 0.55))'},fill:bubbleText,text:{field:'premierships'}}}},
-  {type:'text',interactive:false,from:{data:'leaves'},encode:{enter:{font:{value:'Helvetica Neue, Arial, sans-serif'},fontWeight:{value:500},align:{value:'center'},baseline:{value:'middle'},lineHeight:{value:20}},
-   update:{x:{field:'x'},y:{field:'y'},dy:{signal:'datum.r < 50 ? 14 : 18'},fontSize:{signal:'width < 500 ? 15 : 18'},fill:bubbleText,
-    text:{signal:"datum.r < 50 ? datum.short_name : (datum.team === 'Brisbane Lions' || datum.team === 'Western Bulldogs') ? split(datum.team, ' ') : datum.team"}}}}
- ]};
-fs.writeFileSync(path.join(root,'js/premiership_bubbles.json'),JSON.stringify(bubbles,null,2)+'\n');
+const titleTotals=summary.filter(d=>d.premierships>0).map(d=>({team:d.team,premierships:d.premierships,
+ title_years:seasons.filter(row=>row.team===d.team&&row.premier).map(row=>row.season).join(', ')}))
+ .sort((a,b)=>b.premierships-a.premierships || a.team.localeCompare(b.team));
+const totalsJSON=JSON.stringify(titleTotals,null,2)+'\n';
+fs.writeFileSync(path.join(root,'data/premiership_totals.json'),totalsJSON);
+const totalsVersion=crypto.createHash('sha256').update(totalsJSON).digest('hex').slice(0,12);
+save('premiership_bars',{
+ description:'Horizontal bars show the nine premiership-winning clubs in 2012–2025, ordered by title count. Hawthorn and Richmond each won three titles and are highlighted in orange. Bar lengths start at zero; direct labels show the count and tooltips list winning years.',
+ height:380,data:{url:'data/premiership_totals.json?v='+totalsVersion},
+ encoding:{
+  y:field('team','nominal',{sort:titleTotals.map(d=>d.team),axis:{title:null,ticks:false,labelLimit:180}}),
+  x:field('premierships','quantitative',{scale:{domain:[0,3],range:[0,{expr:'width - 24'}],nice:false},axis:{title:'Premierships',values:[0,1,2,3],format:'d'}}),
+  tooltip:[tip('team','Club'),tip('premierships','Premierships'),{field:'title_years',type:'nominal',title:'Winning years'}]
+ },
+ layer:[
+  {name:'title_bars',mark:{type:'bar',size:26},encoding:{color:{condition:{test:'datum.premierships === 3',value:orange},value:green}}},
+  {name:'title_counts',mark:{type:'text',align:'left',dx:8,fontSize:15,fontWeight:500,color:ink},encoding:{text:field('premierships')}}
+ ]
+});
 console.log('Created 15 chart specs.');

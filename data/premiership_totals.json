@@ -1,0 +1,47 @@
+[
+  {
+    "team": "Hawthorn",
+    "premierships": 3,
+    "title_years": "2013, 2014, 2015"
+  },
+  {
+    "team": "Richmond",
+    "premierships": 3,
+    "title_years": "2017, 2019, 2020"
+  },
+  {
+    "team": "Brisbane Lions",
+    "premierships": 2,
+    "title_years": "2024, 2025"
+  },
+  {
+    "team": "Collingwood",
+    "premierships": 1,
+    "title_years": "2023"
+  },
+  {
+    "team": "Geelong",
+    "premierships": 1,
+    "title_years": "2022"
+  },
+  {
+    "team": "Melbourne",
+    "premierships": 1,
+    "title_years": "2021"
+  },
+  {
+    "team": "Sydney",
+    "premierships": 1,
+    "title_years": "2012"
+  },
+  {
+    "team": "West Coast",
+    "premierships": 1,
+    "title_years": "2018"
+  },
+  {
+    "team": "Western Bulldogs",
+    "premierships": 1,
+    "title_years": "2016"
+  }
+]
